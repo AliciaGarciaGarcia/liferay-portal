@@ -179,38 +179,6 @@ public class GoogleCloudNaturalLanguageDocumentAssetAutoTagProvider
 					SERVICE_NAME));
 	}
 
-	private void _processTagNames(
-		JSONArray jsonArray, Predicate<JSONObject> predicate,
-		Consumer<String> consumer) {
-
-		if (jsonArray == null) {
-			return;
-		}
-
-		for (int i = 0; i < jsonArray.length(); i++) {
-			JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-			if (predicate.test(jsonObject)) {
-				String tagName = StringUtil.removeChars(
-					jsonObject.getString("name"), CharPool.APOSTROPHE,
-					CharPool.DASH);
-
-				Stream.of(
-					tagName.split(StringPool.AMPERSAND, -1)
-				).flatMap(
-					element -> Stream.of(
-						element.split(StringPool.FORWARD_SLASH, 0))
-				).map(
-					String::trim
-				).filter(
-					_negate(String::isEmpty)
-				).forEach(
-					consumer
-				);
-			}
-		}
-	}
-
 	private String _getFileEntryContent(FileEntry fileEntry)
 		throws IOException, PortalException {
 
@@ -279,6 +247,38 @@ public class GoogleCloudNaturalLanguageDocumentAssetAutoTagProvider
 			StringBundler.concat(
 				"Cannot generate tags with Google Natural Language service",
 				response.getResponseCode(), ": ", errorMessage));
+	}
+
+	private void _processTagNames(
+		JSONArray jsonArray, Predicate<JSONObject> predicate,
+		Consumer<String> consumer) {
+
+		if (jsonArray == null) {
+			return;
+		}
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+			if (predicate.test(jsonObject)) {
+				String tagName = StringUtil.removeChars(
+					jsonObject.getString("name"), CharPool.APOSTROPHE,
+					CharPool.DASH);
+
+				Stream.of(
+					tagName.split(StringPool.AMPERSAND, -1)
+				).flatMap(
+					element -> Stream.of(
+						element.split(StringPool.FORWARD_SLASH, 0))
+				).map(
+					String::trim
+				).filter(
+					_negate(String::isEmpty)
+				).forEach(
+					consumer
+				);
+			}
+		}
 	}
 
 	private static final int _MINIMUM_PAYLOAD_SIZE;
