@@ -24,11 +24,11 @@ import java.nio.charset.StandardCharsets;
  */
 public class GoogleCloudNaturalLanguageUtil {
 
-	public static String getDocumentPayload(String content, String textType) {
+	public static String getDocumentPayload(String content, String type) {
 		JSONObject jsonObject = JSONUtil.put(
 			"document",
 			JSONUtil.put(
-				"type", textType
+				"type", type
 			).put(
 				"content", content
 			));
