@@ -136,7 +136,6 @@ public class DLFileEntryMetadataLocalServiceTest {
 			serviceContext);
 	}
 
-	@Ignore
 	@Test
 	public void testGetMismatchedCompanyIdFileEntryMetadatas()
 		throws Exception {

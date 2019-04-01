@@ -104,7 +104,6 @@ public class DLServiceVerifyProcessTest extends BaseVerifyProcessTestCase {
 		_group = GroupTestUtil.addGroup();
 	}
 
-	@Ignore
 	@Test
 	public void testDeleteMismatchCompanyIdDLFileEntryMetadatas()
 		throws Exception {
