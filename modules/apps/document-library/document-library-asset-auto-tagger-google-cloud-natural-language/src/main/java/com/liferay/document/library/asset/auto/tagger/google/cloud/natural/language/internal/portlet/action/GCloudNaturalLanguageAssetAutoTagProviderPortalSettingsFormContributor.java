@@ -1,11 +1,11 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
- *
+ * <p>
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *
+ * <p>
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
@@ -16,6 +16,7 @@ package com.liferay.document.library.asset.auto.tagger.google.cloud.natural.lang
 
 import com.liferay.document.library.asset.auto.tagger.google.cloud.natural.language.internal.constants.GCloudNaturalLanguageAssetAutoTagProviderConstants;
 import com.liferay.document.library.asset.auto.tagger.google.cloud.natural.language.internal.constants.PortalSettingsGCloudNaturalLanguageAssetAutoTagProviderConstants;
+
 import com.liferay.portal.settings.portlet.action.PortalSettingsFormContributor;
 
 import java.util.Optional;
@@ -31,8 +32,8 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(immediate = true, service = PortalSettingsFormContributor.class)
 public class
-	GCloudNaturalLanguageAssetAutoTagProviderPortalSettingsFormContributor
-		implements PortalSettingsFormContributor {
+GCloudNaturalLanguageAssetAutoTagProviderPortalSettingsFormContributor
+	implements PortalSettingsFormContributor {
 
 	@Override
 	public Optional<String> getDeleteMVCActionCommandNameOptional() {
@@ -49,7 +50,7 @@ public class
 	public Optional<String> getSaveMVCActionCommandNameOptional() {
 		return Optional.of(
 			"/portal_settings/document_library_asset_auto_tagger_google_" +
-				"cloud_natural_language");
+			"cloud_natural_language");
 	}
 
 	@Override
@@ -59,8 +60,10 @@ public class
 
 	@Override
 	public void validateForm(
-			ActionRequest actionRequest, ActionResponse actionResponse)
+		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws PortletException {
+
 	}
+
 
 }
