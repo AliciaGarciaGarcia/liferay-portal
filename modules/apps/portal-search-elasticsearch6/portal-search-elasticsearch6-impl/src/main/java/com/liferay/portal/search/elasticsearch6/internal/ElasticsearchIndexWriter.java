@@ -1,11 +1,11 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
- *
+ * <p>
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *
+ * <p>
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
@@ -360,10 +360,18 @@ public class ElasticsearchIndexWriter extends BaseIndexWriter {
 			_searchEngineAdapter.execute(bulkDocumentRequest);
 
 		if (bulkDocumentResponse.hasErrors()) {
-			System.out.println("ALICIA");
-			System.out.println(document);
+			System.out.println("ALICIA ElasticsearchIndexWriter");
+			System.out.println(document.toString());
 			System.out.println(searchContext);
-			System.out.println(bulkDocumentResponse.getBulkDocumentItemResponses());
+			bulkDocumentResponse.getBulkDocumentItemResponses().stream().forEach(
+				bulk -> {
+					System.out.println(
+						"FailureMessage: " + bulk.getFailureMessage());
+					System.out.println(
+						"Cause: " + bulk.getCause());
+					System.out.println(
+						"Result: " + bulk.getResult());
+				});
 			if (_logExceptionsOnly) {
 				_log.error("Update failed");
 			}
