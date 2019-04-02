@@ -360,6 +360,10 @@ public class ElasticsearchIndexWriter extends BaseIndexWriter {
 			_searchEngineAdapter.execute(bulkDocumentRequest);
 
 		if (bulkDocumentResponse.hasErrors()) {
+			System.out.println("ALICIA");
+			System.out.println(document);
+			System.out.println(searchContext);
+			System.out.println(bulkDocumentResponse.getBulkDocumentItemResponses());
 			if (_logExceptionsOnly) {
 				_log.error("Update failed");
 			}

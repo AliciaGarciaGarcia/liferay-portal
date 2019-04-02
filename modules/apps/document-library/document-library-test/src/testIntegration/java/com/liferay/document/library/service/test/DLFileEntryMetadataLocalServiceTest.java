@@ -240,7 +240,10 @@ public class DLFileEntryMetadataLocalServiceTest {
 	private DDMFormDeserializer _ddmFormDeserializer;
 
 	private DDMStructure _ddmStructure;
+
 	private DLFileEntry _dlFileEntry;
+
+	@DeleteAfterTestRun
 	private DLFileEntryType _dlFileEntryType;
 
 	@DeleteAfterTestRun
