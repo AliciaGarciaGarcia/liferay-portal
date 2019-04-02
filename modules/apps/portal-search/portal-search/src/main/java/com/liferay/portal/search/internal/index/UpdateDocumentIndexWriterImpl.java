@@ -84,10 +84,12 @@ public class UpdateDocumentIndexWriterImpl
 			indexWriter.updateDocument(searchContext, document);
 		}
 		catch (SearchException se) {
-			System.out.println("ALICIA");
-			System.out.println(document);
-			System.out.println(searchContext);
+			System.out.println("ALICIA UpdateDocumentIndexWriterImpl");
+			System.out.println(document.toString());
+			System.out.println(searchContext.toString());
+			System.out.println(" {{{ printStackTrace ");
 			se.printStackTrace();
+			System.out.println(" }}} ");
 			throw new SystemException(se);
 		}
 	}
