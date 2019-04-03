@@ -361,14 +361,25 @@ public class ElasticsearchIndexWriter extends BaseIndexWriter {
 
 		if (bulkDocumentResponse.hasErrors()) {
 			System.out.println("ALICIA ElasticsearchIndexWriter");
-			System.out.println(document.toString());
-			System.out.println(searchContext);
+			System.out.println("indexName: "+indexName);
+			System.out.println("document: "+document.toString());
+			System.out.println(
+				"getSearchEngineId: " + searchContext.getSearchEngineId());
+			System.out.println("getCompanyId: " + searchContext.getCompanyId());
+			System.out.println("getUserId: " + searchContext.getUserId());
+			System.out.println(
+				"getAttributes: " + searchContext.getAttributes().toString());
 			bulkDocumentResponse.getBulkDocumentItemResponses().stream().forEach(
 				bulk -> {
+					System.out.println(
+						"Index: " + bulk.getIndex());
+					System.out.println(
+						"Id: " + bulk.getId());
 					System.out.println(
 						"FailureMessage: " + bulk.getFailureMessage());
 					System.out.println(
 						"Cause: " + bulk.getCause());
+					bulk.getCause().printStackTrace();
 					System.out.println(
 						"Result: " + bulk.getResult());
 				});
