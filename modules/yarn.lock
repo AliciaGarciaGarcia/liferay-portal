@@ -16218,22 +16218,10 @@ send@0.17.1:
     range-parser "~1.2.1"
     statuses "~1.5.0"
 
-senna@3.0.0-milestone.1:
-  version "3.0.0-milestone.1"
-  resolved "https://registry.yarnpkg.com/senna/-/senna-3.0.0-milestone.1.tgz#35e65878aebac0a51494bd2c9cfad9b9f2d8f6df"
-  integrity sha512-pOKALagw4nFu8hpsrOhUiU4by/ViixI43PTFUkny124arlFWFqtZiQbBbwh3/1V1Fu1ZnRhMtQxupjquIt/eGQ==
-  dependencies:
-    bootstrap "^3.3.6"
-    metal "^2.16.5"
-    metal-dom "^2.16.8"
-    metal-events "^2.16.5"
-    metal-path-parser "^1.0.3"
-    metal-uri "^2.2.6"
-
-senna@3.0.0-milestone.2:
-  version "3.0.0-milestone.2"
-  resolved "https://registry.yarnpkg.com/senna/-/senna-3.0.0-milestone.2.tgz#b8478701266b274e3ce4f91f4331aee51895fedf"
-  integrity sha512-xwFJIADI7OSvBxcXt8mCkAYiGy/tNW0B4ByWdl42Mq1d3a8ZifEoiwFvSIIalZy7R9iGHPwiNb0Yc9SZC0XOVg==
+senna@3.0.0-milestone.1, senna@3.0.0-milestone.4:
+  version "3.0.0-milestone.4"
+  resolved "https://registry.yarnpkg.com/senna/-/senna-3.0.0-milestone.4.tgz#64cefd7a31342980b15c1ece0c74243f45d43ac8"
+  integrity sha512-Z+q7pyHCppv7FivAGPjtD4nWRJ6UOI5Z2d2H98pXGco0yExcPz71KOa9o9CXOYBI347QtQwEYvr4CDOCiMKRlA==
   dependencies:
     bootstrap "^3.3.6"
     metal "^2.16.5"
