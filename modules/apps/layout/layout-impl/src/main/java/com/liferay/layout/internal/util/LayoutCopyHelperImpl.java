@@ -514,6 +514,7 @@ public class LayoutCopyHelperImpl implements LayoutCopyHelper {
 					layoutSEOEntry.getCanonicalURLMap(),
 					layoutSEOEntry.isOpenGraphDescriptionEnabled(),
 					layoutSEOEntry.getOpenGraphDescriptionMap(),
+					layoutSEOEntry.getOpenGraphImageAltMap(),
 					layoutSEOEntry.getOpenGraphImageFileEntryId(),
 					layoutSEOEntry.isOpenGraphTitleEnabled(),
 					layoutSEOEntry.getOpenGraphTitleMap(), serviceContext);
