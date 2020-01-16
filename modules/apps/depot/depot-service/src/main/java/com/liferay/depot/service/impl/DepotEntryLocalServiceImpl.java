@@ -146,22 +146,26 @@ public class DepotEntryLocalServiceImpl extends DepotEntryLocalServiceBaseImpl {
 		_groupLocalService.updateGroup(
 			group.getGroupId(), currentTypeSettingsProperties.toString());
 
-		for (String portletId : depotAppCustomizationMap.keySet()) {
+		for (Map.Entry<String, Boolean> customization :
+				depotAppCustomizationMap.entrySet()) {
+
+			String portletId = customization.getKey();
+
 			DepotAppCustomization depotAppCustomization =
 				_depotAppCustomizationLocalService.fetchDepotAppCustomization(
 					depotEntryId, portletId);
 
+			Boolean enabled = customization.getValue();
+
 			if (depotAppCustomization != null) {
-				depotAppCustomization.setEnabled(
-					depotAppCustomizationMap.get(portletId));
+				depotAppCustomization.setEnabled(enabled);
 
 				_depotAppCustomizationLocalService.updateDepotAppCustomization(
 					depotAppCustomization);
 			}
 
 			_depotAppCustomizationLocalService.addDepotAppCustomization(
-				depotEntryId, portletId,
-				depotAppCustomizationMap.get(portletId));
+				depotEntryId, portletId, enabled);
 		}
 
 		return depotEntryPersistence.update(depotEntry);
