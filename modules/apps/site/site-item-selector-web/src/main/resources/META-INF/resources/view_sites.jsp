@@ -157,12 +157,12 @@ GroupSearch groupSearch = siteItemSelectorViewDisplayContext.getGroupSearch();
 									</div>
 
 									<div class="autofit-col autofit-col-expand autofit-col-gutters">
-										<aui:a cssClass="card-title selector-button text-truncate" data="<%= data %>" href="javascript:;">
+										<aui:a cssClass="card-title selector-button text-truncate" data="<%= data %>" href="javascript:;" title="<%= siteVerticalCard.getSubtitle() %>">
 											<%= siteVerticalCard.getTitle() %>
 										</aui:a>
 
 										<c:if test="<%= siteItemSelectorViewDisplayContext.isShowChildSitesLink() %>">
-											<aui:a cssClass='<%= "card-subtitle text-truncate selector-button " + (!childGroups.isEmpty() ? "text-default" : "text-muted") %>' data="<%= linkData %>" href="<%= childGroupsHREF %>">
+											<aui:a cssClass='<%= "card-subtitle text-truncate selector-button " + (!childGroups.isEmpty() ? "text-default" : "text-muted") %>' data="<%= linkData %>" href="<%= childGroupsHREF %>" title="<%= siteVerticalCard.getSubtitle() %>">
 												<%= siteVerticalCard.getSubtitle() %>
 											</aui:a>
 										</c:if>
