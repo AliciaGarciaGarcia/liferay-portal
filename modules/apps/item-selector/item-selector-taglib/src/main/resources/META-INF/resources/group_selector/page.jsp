@@ -73,6 +73,35 @@ Set<String> groupTypes = groupSelectorDisplayContext.getGroupTypes();
 						</c:choose>
 					</liferay-frontend:horizontal-card-col>
 				</liferay-frontend:horizontal-card>
+
+				<a class="card card-horizontal card-interactive card-interactive-primary" href="<%= groupSelectorDisplayContext.getViewGroupURL(curGroup) %>">
+					<div class="card-body">
+						<div class="card-row">
+							<div class="autofit-col">
+								<span class="sticker sticker-rounded">
+									<c:choose>
+										<c:when test="<%= Validator.isNotNull(curGroup.getLogoURL(themeDisplay, false)) %>">
+											<span class="sticker-overlay">
+												<img alt="" class="sticker-img" src="<%= curGroup.getLogoURL(themeDisplay, false) %>" />
+											</span>
+										</c:when>
+										<c:otherwise>
+											<clay:icon
+												symbol="<%= groupSelectorDisplayContext.getGroupItemSelectorIcon() %>"
+											/>
+										</c:otherwise>
+									</c:choose>
+								</span>
+							</div>
+
+							<div class="autofit-col autofit-col-expand autofit-col-gutters">
+								<div class="card-title text-truncate">
+									<%= curGroup.getDescriptiveName(locale) %>
+								</div>
+							</div>
+						</div>
+					</div>
+				</a>
 			</liferay-ui:search-container-column-text>
 		</liferay-ui:search-container-row>
 
