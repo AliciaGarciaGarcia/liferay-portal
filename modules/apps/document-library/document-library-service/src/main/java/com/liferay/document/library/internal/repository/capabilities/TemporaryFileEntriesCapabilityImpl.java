@@ -87,8 +87,8 @@ public class TemporaryFileEntriesCapabilityImpl
 
 			return _documentRepository.addFileEntry(
 				temporaryFileEntriesScope.getUserId(), folder.getFolderId(),
-				fileName, mimeType, fileName, StringPool.BLANK,
-				StringPool.BLANK, file, serviceContext);
+				fileName, mimeType, FileUtil.stripExtension(fileName),
+				StringPool.BLANK, StringPool.BLANK, file, serviceContext);
 		}
 		catch (IOException ioException) {
 			throw new SystemException(
