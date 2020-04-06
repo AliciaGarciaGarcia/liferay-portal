@@ -36,6 +36,16 @@ public interface BlogsFileUploadsConfiguration {
 	)
 	public String[] imageExtensions();
 
+	/**
+	 * Sets the supported mime types that generate adaptive media images.
+	 */
+	@Meta.AD(
+		deflt = "image/gif|image/jpeg|image/pjpeg|image/png|image/x-citrix-jpeg|image/x-citrix-png|image/x-ms-bmp|image/x-png",
+		description = "blogs-allowed-image-file-mime-types-description",
+		name = "blogs-allowed-image-file-mime-types", required = false
+	)
+	public String[] supportedMimeTypes();
+
 	@Meta.AD(
 		deflt = "5242880",
 		description = "blogs-image-maximum-file-size-description",
