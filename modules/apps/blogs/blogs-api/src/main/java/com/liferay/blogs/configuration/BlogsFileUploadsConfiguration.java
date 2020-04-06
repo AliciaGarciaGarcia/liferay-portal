@@ -29,6 +29,11 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
 )
 public interface BlogsFileUploadsConfiguration {
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #supportedMimeTypes()}
+	 */
+	@Deprecated
 	@Meta.AD(
 		deflt = ".gif,.jpeg,.jpg,.png",
 		description = "blogs-allowed-image-file-extensions-description",
