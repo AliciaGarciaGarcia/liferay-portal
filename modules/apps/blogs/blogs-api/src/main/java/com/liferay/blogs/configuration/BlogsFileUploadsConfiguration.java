@@ -29,12 +29,27 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
 )
 public interface BlogsFileUploadsConfiguration {
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #supportedMimeTypes()}
+	 */
+	@Deprecated
 	@Meta.AD(
 		deflt = ".gif,.jpeg,.jpg,.png",
 		description = "blogs-allowed-image-file-extensions-description",
 		name = "blogs-allowed-image-file-extensions", required = false
 	)
 	public String[] imageExtensions();
+
+	/**
+	 * Sets the supported mime types that generate adaptive media images.
+	 */
+	@Meta.AD(
+		deflt = "image/gif|image/jpeg|image/pjpeg|image/png|image/x-citrix-jpeg|image/x-citrix-png|image/x-ms-bmp|image/x-png",
+		description = "blogs-allowed-image-file-mime-types-description",
+		name = "blogs-allowed-image-file-mime-types", required = false
+	)
+	public String[] supportedMimeTypes();
 
 	@Meta.AD(
 		deflt = "5242880",
