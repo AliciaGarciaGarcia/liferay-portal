@@ -204,6 +204,14 @@ public class RedirectNotFoundEntriesManagementToolbarDisplayContext
 		).build();
 	}
 
+	public PortletURL getIteratorURL() {
+		PortletURL iteratorURL = searchContainer.getIteratorURL();
+
+		iteratorURL.setParameter("navigation", "404-urls");
+
+		return iteratorURL;
+	}
+
 	@Override
 	public String getSearchActionURL() {
 		PortletURL searchActionURL = getPortletURL();
