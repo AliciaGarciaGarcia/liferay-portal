@@ -91,7 +91,9 @@ else {
 		%>
 
 		<div class="destination-url">
-			<aui:input name="destinationURL" value="<%= destinationURL %>" />
+			<aui:input name="destinationURL" value="<%= destinationURL %>">
+				<aui:validator name="url" />
+			</aui:input>
 
 			<react:component
 				data="<%= data %>"
