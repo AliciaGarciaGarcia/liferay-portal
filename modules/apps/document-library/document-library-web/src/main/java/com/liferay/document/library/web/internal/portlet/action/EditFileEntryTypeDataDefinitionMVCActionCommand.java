@@ -34,7 +34,7 @@ import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLink;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLinkLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
+import com.liferay.portal.kernel.portlet.bridges.mvc.BaseTransactionalMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -75,10 +75,10 @@ import org.osgi.service.component.annotations.Reference;
 	service = MVCActionCommand.class
 )
 public class EditFileEntryTypeDataDefinitionMVCActionCommand
-	extends BaseMVCActionCommand {
+	extends BaseTransactionalMVCActionCommand {
 
 	@Override
-	protected void doProcessAction(
+	protected void doTransactionalCommand(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
@@ -112,7 +112,7 @@ public class EditFileEntryTypeDataDefinitionMVCActionCommand
 					ParamUtil.getString(actionRequest, "redirect"));
 
 				if (Validator.isNotNull(redirect)) {
-					sendRedirect(actionRequest, actionResponse, redirect);
+					actionResponse.sendRedirect(redirect);
 				}
 			}
 		}
