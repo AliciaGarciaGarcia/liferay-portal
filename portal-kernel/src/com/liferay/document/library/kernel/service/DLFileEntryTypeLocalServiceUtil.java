@@ -86,6 +86,20 @@ public class DLFileEntryTypeLocalServiceUtil {
 
 	public static com.liferay.document.library.kernel.model.DLFileEntryType
 			addFileEntryType(
+				long userId, long groupId, long dataDefinitionId,
+				String fileEntryTypeKey,
+				java.util.Map<java.util.Locale, String> nameMap,
+				java.util.Map<java.util.Locale, String> descriptionMap,
+				com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().addFileEntryType(
+			userId, groupId, dataDefinitionId, fileEntryTypeKey, nameMap,
+			descriptionMap, serviceContext);
+	}
+
+	public static com.liferay.document.library.kernel.model.DLFileEntryType
+			addFileEntryType(
 				long userId, long groupId, String fileEntryTypeKey,
 				java.util.Map<java.util.Locale, String> nameMap,
 				java.util.Map<java.util.Locale, String> descriptionMap,
