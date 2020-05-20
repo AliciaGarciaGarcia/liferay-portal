@@ -38,60 +38,60 @@ renderResponse.setTitle((fileEntryType == null) ? LanguageUtil.get(request, "new
 </portlet:actionURL>
 
 <aui:form action="<%= editFileEntryTypeURL %>" cssClass="edit-metadata-type-form" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveStructure();" %>'>
-		<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= (fileEntryType == null) ? Constants.ADD : Constants.UPDATE %>" />
-		<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
-		<aui:input name="fileEntryTypeId" type="hidden" value="<%= fileEntryTypeId %>" />
-		<aui:input name="dataDefinitionId" type="hidden" value="<%= ddmStructureId %>" />
-		<aui:input name="dataDefinition" type="hidden" />
-		<aui:input name="dataLayout" type="hidden" />
+	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= (fileEntryType == null) ? Constants.ADD : Constants.UPDATE %>" />
+	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+	<aui:input name="fileEntryTypeId" type="hidden" value="<%= fileEntryTypeId %>" />
+	<aui:input name="dataDefinitionId" type="hidden" value="<%= ddmStructureId %>" />
+	<aui:input name="dataDefinition" type="hidden" />
+	<aui:input name="dataLayout" type="hidden" />
 
-		<liferay-ui:error exception="<%= DuplicateFileEntryTypeException.class %>" message="please-enter-a-unique-document-type-name" />
-		<liferay-ui:error exception="<%= NoSuchMetadataSetException.class %>" message="please-enter-a-valid-metadata-set-or-enter-a-metadata-field" />
-		<liferay-ui:error exception="<%= StorageFieldRequiredException.class %>" message="please-fill-out-all-required-fields" />
-		<liferay-ui:error exception="<%= StructureDefinitionException.class %>" message="please-enter-a-valid-definition" />
-		<liferay-ui:error exception="<%= StructureDuplicateElementException.class %>" message="please-enter-unique-metadata-field-names-(including-field-names-inherited-from-the-parent)" />
-		<liferay-ui:error exception="<%= StructureNameException.class %>" message="please-enter-a-valid-name" />
+	<liferay-ui:error exception="<%= DuplicateFileEntryTypeException.class %>" message="please-enter-a-unique-document-type-name" />
+	<liferay-ui:error exception="<%= NoSuchMetadataSetException.class %>" message="please-enter-a-valid-metadata-set-or-enter-a-metadata-field" />
+	<liferay-ui:error exception="<%= StorageFieldRequiredException.class %>" message="please-fill-out-all-required-fields" />
+	<liferay-ui:error exception="<%= StructureDefinitionException.class %>" message="please-enter-a-valid-definition" />
+	<liferay-ui:error exception="<%= StructureDuplicateElementException.class %>" message="please-enter-unique-metadata-field-names-(including-field-names-inherited-from-the-parent)" />
+	<liferay-ui:error exception="<%= StructureNameException.class %>" message="please-enter-a-valid-name" />
 
-		<aui:model-context bean="<%= fileEntryType %>" model="<%= DLFileEntryType.class %>" />
+	<aui:model-context bean="<%= fileEntryType %>" model="<%= DLFileEntryType.class %>" />
 
-		<nav class="component-tbar subnav-tbar-light tbar tbar-metadata-type">
-			<clay:container-fluid>
-				<ul class="tbar-nav">
-					<li class="tbar-item tbar-item-expand">
-						<aui:input cssClass="form-control-inline" defaultLanguageId="<%= LocaleUtil.toLanguageId(LocaleUtil.getSiteDefault()) %>" label="" name="name" placeholder='<%= LanguageUtil.format(request, "untitled", "structure") %>' wrapperCssClass="article-content-title mb-0" />
-					</li>
-					<li class="tbar-item tbar-item-expand"></li>
-					<li class="tbar-item">
-						<div class="metadata-type-button-row tbar-section text-right">
-							<aui:button cssClass="btn-secondary btn-sm mr-3" href="<%= redirect %>" type="cancel" />
+	<nav class="component-tbar subnav-tbar-light tbar tbar-metadata-type">
+		<clay:container-fluid>
+			<ul class="tbar-nav">
+				<li class="tbar-item tbar-item-expand">
+					<aui:input cssClass="form-control-inline" defaultLanguageId="<%= LocaleUtil.toLanguageId(LocaleUtil.getSiteDefault()) %>" label="" name="name" placeholder='<%= LanguageUtil.format(request, "untitled", "structure") %>' wrapperCssClass="article-content-title mb-0" />
+				</li>
+				<li class="tbar-item tbar-item-expand"></li>
+				<li class="tbar-item">
+					<div class="metadata-type-button-row tbar-section text-right">
+						<aui:button cssClass="btn-secondary btn-sm mr-3" href="<%= redirect %>" type="cancel" />
 
-							<aui:button cssClass="btn-sm mr-3" type="submit" />
-						</div>
-					</li>
-				</ul>
-			</clay:container-fluid>
-		</nav>
-
-		<clay:container-fluid
-			className="container-view"
-		>
-
-			<%
-			DLEditFileEntryTypeDisplayContext dlEditFileEntryTypeDisplayContext = (DLEditFileEntryTypeDisplayContext)request.getAttribute(DLWebKeys.DOCUMENT_LIBRARY_EDIT_EDIT_FILE_ENTRY_TYPE_DISPLAY_CONTEXT);
-			%>
-
-			<liferay-data-engine:data-layout-builder
-				additionalPanels="<%= dlEditFileEntryTypeDisplayContext.getAdditionalPanels(npmResolvedPackageName) %>"
-				componentId='<%= renderResponse.getNamespace() + "dataLayoutBuilder" %>'
-				contentType="document-library"
-				dataDefinitionId="<%= ddmStructureId %>"
-				dataLayoutInputId="dataLayout"
-				groupId="<%= scopeGroupId %>"
-				localizable="<%= true %>"
-				namespace="<%= renderResponse.getNamespace() %>"
-			/>
+						<aui:button cssClass="btn-sm mr-3" type="submit" />
+					</div>
+				</li>
+			</ul>
 		</clay:container-fluid>
-	</aui:form>
+	</nav>
+
+	<clay:container-fluid
+		className="container-view"
+	>
+
+		<%
+		DLEditFileEntryTypeDisplayContext dlEditFileEntryTypeDisplayContext = (DLEditFileEntryTypeDisplayContext)request.getAttribute(DLWebKeys.DOCUMENT_LIBRARY_EDIT_EDIT_FILE_ENTRY_TYPE_DISPLAY_CONTEXT);
+		%>
+
+		<liferay-data-engine:data-layout-builder
+			additionalPanels="<%= dlEditFileEntryTypeDisplayContext.getAdditionalPanels(npmResolvedPackageName) %>"
+			componentId='<%= renderResponse.getNamespace() + "dataLayoutBuilder" %>'
+			contentType="document-library"
+			dataDefinitionId="<%= ddmStructureId %>"
+			dataLayoutInputId="dataLayout"
+			groupId="<%= scopeGroupId %>"
+			localizable="<%= true %>"
+			namespace="<%= renderResponse.getNamespace() %>"
+		/>
+	</clay:container-fluid>
+</aui:form>
 
 <aui:script>
 function <portlet:namespace />getInputLocalizedValues(field) {
