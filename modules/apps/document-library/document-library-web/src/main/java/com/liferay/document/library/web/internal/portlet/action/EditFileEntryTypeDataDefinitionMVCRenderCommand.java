@@ -102,7 +102,7 @@ public class EditFileEntryTypeDataDefinitionMVCRenderCommand
 
 			renderRequest.setAttribute(
 				WebKeys.DOCUMENT_LIBRARY_DYNAMIC_DATA_MAPPING_STRUCTURE,
-				_getDDMStructure(dlFileEntryType));
+				_fetchDDMStructure(dlFileEntryType));
 
 			return "/document_library/edit_file_entry_type.jsp";
 		}
@@ -116,22 +116,21 @@ public class EditFileEntryTypeDataDefinitionMVCRenderCommand
 		}
 	}
 
-	private DDMStructure _getDDMStructure(DLFileEntryType dlFileEntryType)
+	private DDMStructure _fetchDDMStructure(DLFileEntryType dlFileEntryType)
 		throws PortalException {
 
-		DDMStructure ddmStructure = null;
-		List<DDMStructureLink> structureLinks =
+		List<DDMStructureLink> ddmStructureLinks =
 			_ddmStructureLinkLocalService.getStructureLinks(
 				_portal.getClassNameId(DLFileEntryType.class),
 				dlFileEntryType.getFileEntryTypeId());
 
-		if (ListUtil.isNotEmpty(structureLinks)) {
-			DDMStructureLink ddmStructureLink = structureLinks.get(0);
-
-			ddmStructure = ddmStructureLink.getStructure();
+		if (ListUtil.isEmpty(ddmStructureLinks)) {
+			return null;
 		}
 
-		return ddmStructure;
+		DDMStructureLink ddmStructureLink = ddmStructureLinks.get(0);
+
+		return ddmStructureLink.getStructure();
 	}
 
 	@Reference

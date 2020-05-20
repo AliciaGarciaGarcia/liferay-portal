@@ -162,20 +162,18 @@ public class EditFileEntryTypeDataDefinitionMVCActionCommand
 				themeDisplay.getScopeGroupId(), "document-library",
 				dataDefinition);
 
-		long[] dataDefinitionIds = {dataDefinition.getId()};
+		Map<Locale, String> nameMap = LocalizationUtil.getLocalizationMap(
+			actionRequest, "name");
 
 		Map<Locale, String> descriptionMap =
 			LocalizationUtil.getLocalizationMap(actionRequest, "description");
-
-		Map<Locale, String> nameMap = LocalizationUtil.getLocalizationMap(
-			actionRequest, "name");
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			DLFileEntryType.class.getName(), actionRequest);
 
 		_dlFileEntryTypeService.addFileEntryType(
 			themeDisplay.getScopeGroupId(), null, nameMap, descriptionMap,
-			dataDefinitionIds, serviceContext);
+			new long[] {dataDefinition.getId()}, serviceContext);
 	}
 
 	private void _deleteFileEntryType(ActionRequest actionRequest)
@@ -187,32 +185,23 @@ public class EditFileEntryTypeDataDefinitionMVCActionCommand
 		long fileEntryTypeId = ParamUtil.getLong(
 			actionRequest, "fileEntryTypeId");
 
-		List<DDMStructureLink> structureLinks =
-			_ddmStructureLinkLocalService.getStructureLinks(
-				_portal.getClassNameId(DLFileEntryType.class), fileEntryTypeId);
-
-		Set<Long> deleteDataDefinitionIds = new HashSet<>();
-
-		if (ListUtil.isNotEmpty(structureLinks)) {
-			for (DDMStructureLink ddmStructureLink : structureLinks) {
-				DDMStructure ddmStructure = ddmStructureLink.getStructure();
-
-				deleteDataDefinitionIds.add(ddmStructure.getStructureId());
-
-				_ddmStructureLinkLocalService.deleteStructureLink(
-					_portal.getClassNameId(DLFileEntryType.class),
-					fileEntryTypeId, ddmStructure.getStructureId());
-			}
-		}
-
 		DataDefinitionResource dataDefinitionResource =
 			DataDefinitionResource.builder(
 			).user(
 				themeDisplay.getUser()
 			).build();
 
-		for (long deleteDataDefinitionId : deleteDataDefinitionIds) {
-			dataDefinitionResource.deleteDataDefinition(deleteDataDefinitionId);
+		List<DDMStructureLink> ddmStructureLinks =
+			_ddmStructureLinkLocalService.getStructureLinks(
+				_portal.getClassNameId(DLFileEntryType.class), fileEntryTypeId);
+
+		for (DDMStructureLink ddmStructureLink : ddmStructureLinks) {
+			_ddmStructureLinkLocalService.deleteStructureLink(
+				_portal.getClassNameId(DLFileEntryType.class),
+				fileEntryTypeId, ddmStructureLink.getStructureId());
+
+			dataDefinitionResource.deleteDataDefinition(
+				ddmStructureLink.getStructureId());
 		}
 
 		_dlFileEntryTypeService.deleteFileEntryType(fileEntryTypeId);
@@ -269,19 +258,18 @@ public class EditFileEntryTypeDataDefinitionMVCActionCommand
 			ParamUtil.getLong(actionRequest, "dataDefinitionId"),
 			dataDefinition);
 
-		long[] dataDefinitionIds = {dataDefinition.getId()};
+		Map<Locale, String> nameMap = LocalizationUtil.getLocalizationMap(
+			actionRequest, "name");
 
 		Map<Locale, String> descriptionMap =
 			LocalizationUtil.getLocalizationMap(actionRequest, "description");
-
-		Map<Locale, String> nameMap = LocalizationUtil.getLocalizationMap(
-			actionRequest, "name");
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			DLFileEntryType.class.getName(), actionRequest);
 
 		_dlFileEntryTypeService.updateFileEntryType(
-			fileEntryTypeId, nameMap, descriptionMap, dataDefinitionIds,
+			fileEntryTypeId, nameMap, descriptionMap,
+			new long[]{dataDefinition.getId()},
 			serviceContext);
 	}
 
