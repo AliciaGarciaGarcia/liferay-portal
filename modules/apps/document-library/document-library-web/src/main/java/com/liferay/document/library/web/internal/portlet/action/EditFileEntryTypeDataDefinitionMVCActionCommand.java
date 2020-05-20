@@ -44,7 +44,6 @@ import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
@@ -53,11 +52,9 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
+
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -80,9 +77,10 @@ import org.osgi.service.component.annotations.Reference;
 )
 public class EditFileEntryTypeDataDefinitionMVCActionCommand
 	extends BaseMVCActionCommand {
+
 	@Override
 	protected void doProcessAction(
-		ActionRequest actionRequest, ActionResponse actionResponse)
+			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException, PortalException {
 
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
@@ -105,7 +103,7 @@ public class EditFileEntryTypeDataDefinitionMVCActionCommand
 				SessionMessages.add(
 					actionRequest,
 					_portal.getPortletId(actionRequest) +
-					SessionMessages.KEY_SUFFIX_REFRESH_PORTLET,
+						SessionMessages.KEY_SUFFIX_REFRESH_PORTLET,
 					DLPortletKeys.DOCUMENT_LIBRARY);
 
 				String redirect = _portal.escapeRedirect(
@@ -117,9 +115,9 @@ public class EditFileEntryTypeDataDefinitionMVCActionCommand
 			}
 		}
 		catch (DuplicateFileEntryTypeException | NoSuchMetadataSetException |
-			RequiredStructureException | StructureDefinitionException |
-			StructureDuplicateElementException | StructureNameException
-			exception) {
+			   RequiredStructureException | StructureDefinitionException |
+			   StructureDuplicateElementException | StructureNameException
+				   exception) {
 
 			SessionErrors.add(actionRequest, exception.getClass());
 		}
@@ -130,7 +128,7 @@ public class EditFileEntryTypeDataDefinitionMVCActionCommand
 			actionResponse.setRenderParameter("navigation", "file_entry_types");
 		}
 		catch (NoSuchFileEntryTypeException | NoSuchStructureException |
-			PrincipalException exception) {
+			   PrincipalException exception) {
 
 			SessionErrors.add(actionRequest, exception.getClass());
 
