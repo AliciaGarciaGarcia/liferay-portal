@@ -30,7 +30,6 @@ import com.liferay.dynamic.data.mapping.kernel.RequiredStructureException;
 import com.liferay.dynamic.data.mapping.kernel.StructureDefinitionException;
 import com.liferay.dynamic.data.mapping.kernel.StructureDuplicateElementException;
 import com.liferay.dynamic.data.mapping.kernel.StructureNameException;
-import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLink;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLinkLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -43,18 +42,15 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Constants;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -197,8 +193,8 @@ public class EditFileEntryTypeDataDefinitionMVCActionCommand
 
 		for (DDMStructureLink ddmStructureLink : ddmStructureLinks) {
 			_ddmStructureLinkLocalService.deleteStructureLink(
-				_portal.getClassNameId(DLFileEntryType.class),
-				fileEntryTypeId, ddmStructureLink.getStructureId());
+				_portal.getClassNameId(DLFileEntryType.class), fileEntryTypeId,
+				ddmStructureLink.getStructureId());
 
 			dataDefinitionResource.deleteDataDefinition(
 				ddmStructureLink.getStructureId());
@@ -269,8 +265,7 @@ public class EditFileEntryTypeDataDefinitionMVCActionCommand
 
 		_dlFileEntryTypeService.updateFileEntryType(
 			fileEntryTypeId, nameMap, descriptionMap,
-			new long[]{dataDefinition.getId()},
-			serviceContext);
+			new long[] {dataDefinition.getId()}, serviceContext);
 	}
 
 	@Reference
