@@ -60,6 +60,21 @@ public class DLFileEntryTypeServiceImpl extends DLFileEntryTypeServiceBaseImpl {
 
 	@Override
 	public DLFileEntryType addFileEntryType(
+			long groupId, long dataDefinitionId, String fileEntryTypeKey,
+			Map<Locale, String> nameMap, Map<Locale, String> descriptionMap,
+			ServiceContext serviceContext)
+		throws PortalException {
+
+		_portletResourcePermission.check(
+			getPermissionChecker(), groupId, ActionKeys.ADD_DOCUMENT_TYPE);
+
+		return dlFileEntryTypeLocalService.addFileEntryType(
+			getUserId(), groupId, dataDefinitionId, fileEntryTypeKey, nameMap,
+			descriptionMap, serviceContext);
+	}
+
+	@Override
+	public DLFileEntryType addFileEntryType(
 			long groupId, String name, String description,
 			long[] ddmStructureIds, ServiceContext serviceContext)
 		throws PortalException {
