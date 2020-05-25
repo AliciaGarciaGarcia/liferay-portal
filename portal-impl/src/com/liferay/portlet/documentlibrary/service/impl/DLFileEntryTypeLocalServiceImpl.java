@@ -155,6 +155,10 @@ public class DLFileEntryTypeLocalServiceImpl
 		return dlFileEntryType;
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
 	@Override
 	public DLFileEntryType addFileEntryType(
 			long userId, long groupId, String fileEntryTypeKey,
@@ -226,6 +230,10 @@ public class DLFileEntryTypeLocalServiceImpl
 		return dlFileEntryType;
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
 	@Override
 	public DLFileEntryType addFileEntryType(
 			long userId, long groupId, String name, String description,
@@ -566,6 +574,10 @@ public class DLFileEntryTypeLocalServiceImpl
 			defaultFileEntryTypeId, null, null, null, 0, serviceContext);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
 	@Override
 	public void updateFileEntryType(
 			long userId, long fileEntryTypeId, Map<Locale, String> nameMap,
@@ -604,6 +616,10 @@ public class DLFileEntryTypeLocalServiceImpl
 			fileEntryTypeId, SetUtil.fromArray(ddmStructureIds));
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
 	@Override
 	public void updateFileEntryType(
 			long userId, long fileEntryTypeId, String name, String description,
