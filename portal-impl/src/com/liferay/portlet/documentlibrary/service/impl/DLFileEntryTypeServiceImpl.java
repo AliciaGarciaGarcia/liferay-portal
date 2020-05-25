@@ -58,6 +58,10 @@ public class DLFileEntryTypeServiceImpl extends DLFileEntryTypeServiceBaseImpl {
 			descriptionMap, serviceContext);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
 	@Override
 	public DLFileEntryType addFileEntryType(
 			long groupId, String fileEntryTypeKey, Map<Locale, String> nameMap,
@@ -73,6 +77,10 @@ public class DLFileEntryTypeServiceImpl extends DLFileEntryTypeServiceBaseImpl {
 			ddmStructureIds, serviceContext);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
 	@Override
 	public DLFileEntryType addFileEntryType(
 			long groupId, String name, String description,
@@ -195,6 +203,10 @@ public class DLFileEntryTypeServiceImpl extends DLFileEntryTypeServiceBaseImpl {
 			fileEntryTypeId, nameMap, descriptionMap);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
 	@Override
 	public void updateFileEntryType(
 			long fileEntryTypeId, Map<Locale, String> nameMap,
@@ -210,6 +222,10 @@ public class DLFileEntryTypeServiceImpl extends DLFileEntryTypeServiceBaseImpl {
 			ddmStructureIds, serviceContext);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
 	@Override
 	public void updateFileEntryType(
 			long fileEntryTypeId, String name, String description,
