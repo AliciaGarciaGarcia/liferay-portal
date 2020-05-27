@@ -183,7 +183,7 @@ public class DLFileEntryTypeServiceImpl extends DLFileEntryTypeServiceBaseImpl {
 	}
 
 	@Override
-	public void updateFileEntryType(
+	public DLFileEntryType updateFileEntryType(
 			long fileEntryTypeId, Map<Locale, String> nameMap,
 			Map<Locale, String> descriptionMap)
 		throws PortalException {
@@ -191,7 +191,7 @@ public class DLFileEntryTypeServiceImpl extends DLFileEntryTypeServiceBaseImpl {
 		_dlFileEntryTypeModelResourcePermission.check(
 			getPermissionChecker(), fileEntryTypeId, ActionKeys.UPDATE);
 
-		dlFileEntryTypeLocalService.updateFileEntryType(
+		return dlFileEntryTypeLocalService.updateFileEntryType(
 			fileEntryTypeId, nameMap, descriptionMap);
 	}
 

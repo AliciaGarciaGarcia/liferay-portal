@@ -613,7 +613,7 @@ public class DLFileEntryTypeLocalServiceImpl
 	}
 
 	@Override
-	public void updateFileEntryType(
+	public DLFileEntryType updateFileEntryType(
 			long fileEntryTypeId, Map<Locale, String> nameMap,
 			Map<Locale, String> descriptionMap)
 		throws PortalException {
@@ -630,7 +630,7 @@ public class DLFileEntryTypeLocalServiceImpl
 		dlFileEntryType.setNameMap(nameMap);
 		dlFileEntryType.setDescriptionMap(descriptionMap);
 
-		dlFileEntryTypePersistence.update(dlFileEntryType);
+		return dlFileEntryTypePersistence.update(dlFileEntryType);
 	}
 
 	@Override
