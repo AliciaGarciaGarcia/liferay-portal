@@ -743,13 +743,13 @@ public class DLFileEntryTypeLocalServiceWrapper
 	}
 
 	@Override
-	public void updateFileEntryType(
+	public DLFileEntryType updateFileEntryType(
 			long fileEntryTypeId,
 			java.util.Map<java.util.Locale, String> nameMap,
 			java.util.Map<java.util.Locale, String> descriptionMap)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		_dlFileEntryTypeLocalService.updateFileEntryType(
+		return _dlFileEntryTypeLocalService.updateFileEntryType(
 			fileEntryTypeId, nameMap, descriptionMap);
 	}
 

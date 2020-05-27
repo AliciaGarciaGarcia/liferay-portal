@@ -481,7 +481,7 @@ public interface DLFileEntryTypeLocalService
 			long[] ddmStructureIds, ServiceContext serviceContext)
 		throws PortalException;
 
-	public void updateFileEntryType(
+	public DLFileEntryType updateFileEntryType(
 			long fileEntryTypeId, Map<Locale, String> nameMap,
 			Map<Locale, String> descriptionMap)
 		throws PortalException;

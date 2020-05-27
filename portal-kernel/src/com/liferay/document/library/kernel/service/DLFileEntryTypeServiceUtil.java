@@ -165,13 +165,14 @@ public class DLFileEntryTypeServiceUtil {
 			companyId, groupIds, keywords, includeBasicFileEntryType);
 	}
 
-	public static void updateFileEntryType(
-			long fileEntryTypeId,
-			java.util.Map<java.util.Locale, String> nameMap,
-			java.util.Map<java.util.Locale, String> descriptionMap)
+	public static com.liferay.document.library.kernel.model.DLFileEntryType
+			updateFileEntryType(
+				long fileEntryTypeId,
+				java.util.Map<java.util.Locale, String> nameMap,
+				java.util.Map<java.util.Locale, String> descriptionMap)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		getService().updateFileEntryType(
+		return getService().updateFileEntryType(
 			fileEntryTypeId, nameMap, descriptionMap);
 	}
 

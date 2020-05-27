@@ -67,37 +67,6 @@ public class DLFileEntryTypeServiceSoap {
 
 	public static com.liferay.document.library.kernel.model.DLFileEntryTypeSoap
 			addFileEntryType(
-				long groupId, String fileEntryTypeKey,
-				String[] nameMapLanguageIds, String[] nameMapValues,
-				String[] descriptionMapLanguageIds,
-				String[] descriptionMapValues, long[] ddmStructureIds,
-				com.liferay.portal.kernel.service.ServiceContext serviceContext)
-		throws RemoteException {
-
-		try {
-			Map<Locale, String> nameMap = LocalizationUtil.getLocalizationMap(
-				nameMapLanguageIds, nameMapValues);
-			Map<Locale, String> descriptionMap =
-				LocalizationUtil.getLocalizationMap(
-					descriptionMapLanguageIds, descriptionMapValues);
-
-			com.liferay.document.library.kernel.model.DLFileEntryType
-				returnValue = DLFileEntryTypeServiceUtil.addFileEntryType(
-					groupId, fileEntryTypeKey, nameMap, descriptionMap,
-					ddmStructureIds, serviceContext);
-
-			return com.liferay.document.library.kernel.model.
-				DLFileEntryTypeSoap.toSoapModel(returnValue);
-		}
-		catch (Exception exception) {
-			_log.error(exception, exception);
-
-			throw new RemoteException(exception.getMessage());
-		}
-	}
-
-	public static com.liferay.document.library.kernel.model.DLFileEntryTypeSoap
-			addFileEntryType(
 				long groupId, long dataDefinitionId, String fileEntryTypeKey,
 				String[] nameMapLanguageIds, String[] nameMapValues,
 				String[] descriptionMapLanguageIds,
@@ -116,6 +85,37 @@ public class DLFileEntryTypeServiceSoap {
 				returnValue = DLFileEntryTypeServiceUtil.addFileEntryType(
 					groupId, dataDefinitionId, fileEntryTypeKey, nameMap,
 					descriptionMap, serviceContext);
+
+			return com.liferay.document.library.kernel.model.
+				DLFileEntryTypeSoap.toSoapModel(returnValue);
+		}
+		catch (Exception exception) {
+			_log.error(exception, exception);
+
+			throw new RemoteException(exception.getMessage());
+		}
+	}
+
+	public static com.liferay.document.library.kernel.model.DLFileEntryTypeSoap
+			addFileEntryType(
+				long groupId, String fileEntryTypeKey,
+				String[] nameMapLanguageIds, String[] nameMapValues,
+				String[] descriptionMapLanguageIds,
+				String[] descriptionMapValues, long[] ddmStructureIds,
+				com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		throws RemoteException {
+
+		try {
+			Map<Locale, String> nameMap = LocalizationUtil.getLocalizationMap(
+				nameMapLanguageIds, nameMapValues);
+			Map<Locale, String> descriptionMap =
+				LocalizationUtil.getLocalizationMap(
+					descriptionMapLanguageIds, descriptionMapValues);
+
+			com.liferay.document.library.kernel.model.DLFileEntryType
+				returnValue = DLFileEntryTypeServiceUtil.addFileEntryType(
+					groupId, fileEntryTypeKey, nameMap, descriptionMap,
+					ddmStructureIds, serviceContext);
 
 			return com.liferay.document.library.kernel.model.
 				DLFileEntryTypeSoap.toSoapModel(returnValue);
@@ -351,10 +351,11 @@ public class DLFileEntryTypeServiceSoap {
 		}
 	}
 
-	public static void updateFileEntryType(
-			long fileEntryTypeId, String[] nameMapLanguageIds,
-			String[] nameMapValues, String[] descriptionMapLanguageIds,
-			String[] descriptionMapValues)
+	public static com.liferay.document.library.kernel.model.DLFileEntryTypeSoap
+			updateFileEntryType(
+				long fileEntryTypeId, String[] nameMapLanguageIds,
+				String[] nameMapValues, String[] descriptionMapLanguageIds,
+				String[] descriptionMapValues)
 		throws RemoteException {
 
 		try {
@@ -364,8 +365,12 @@ public class DLFileEntryTypeServiceSoap {
 				LocalizationUtil.getLocalizationMap(
 					descriptionMapLanguageIds, descriptionMapValues);
 
-			DLFileEntryTypeServiceUtil.updateFileEntryType(
-				fileEntryTypeId, nameMap, descriptionMap);
+			com.liferay.document.library.kernel.model.DLFileEntryType
+				returnValue = DLFileEntryTypeServiceUtil.updateFileEntryType(
+					fileEntryTypeId, nameMap, descriptionMap);
+
+			return com.liferay.document.library.kernel.model.
+				DLFileEntryTypeSoap.toSoapModel(returnValue);
 		}
 		catch (Exception exception) {
 			_log.error(exception, exception);
