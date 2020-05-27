@@ -199,6 +199,31 @@ public class DLFileEntryTypeLocalServiceImpl
 		dlFileEntryType.setNameMap(nameMap);
 		dlFileEntryType.setDescriptionMap(descriptionMap);
 
+		if (ddmStructureIds.length == 1) {
+			dlFileEntryType.setDataDefinitionId(ddmStructureIds[0]);
+		}
+		else {
+			long ddmStructureId = GetterUtil.getLong(
+				serviceContext.getAttribute("ddmStructureId"));
+
+			if (ddmStructureId != 0) {
+				dlFileEntryType.setDataDefinitionId(ddmStructureId);
+			}
+			else {
+				DDMStructure ddmStructure =
+					DDMStructureManagerUtil.fetchStructure(
+						groupId,
+						classNameLocalService.getClassNameId(
+							DLFileEntryMetadata.class),
+						DLUtil.getDDMStructureKey(fileEntryTypeUuid));
+
+				if (ddmStructure != null) {
+					dlFileEntryType.setDataDefinitionId(
+						ddmStructure.getStructureId());
+				}
+			}
+		}
+
 		dlFileEntryType = dlFileEntryTypePersistence.update(dlFileEntryType);
 
 		addDDMStructureLinks(
