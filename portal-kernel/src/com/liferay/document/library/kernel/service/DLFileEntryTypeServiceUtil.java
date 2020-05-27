@@ -48,6 +48,10 @@ public class DLFileEntryTypeServiceUtil {
 			descriptionMap, serviceContext);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
 	public static com.liferay.document.library.kernel.model.DLFileEntryType
 			addFileEntryType(
 				long groupId, String fileEntryTypeKey,
@@ -62,6 +66,10 @@ public class DLFileEntryTypeServiceUtil {
 			serviceContext);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
 	public static com.liferay.document.library.kernel.model.DLFileEntryType
 			addFileEntryType(
 				long groupId, String name, String description,
@@ -176,6 +184,10 @@ public class DLFileEntryTypeServiceUtil {
 			fileEntryTypeId, nameMap, descriptionMap);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
 	public static void updateFileEntryType(
 			long fileEntryTypeId,
 			java.util.Map<java.util.Locale, String> nameMap,
@@ -189,6 +201,10 @@ public class DLFileEntryTypeServiceUtil {
 			serviceContext);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
 	public static void updateFileEntryType(
 			long fileEntryTypeId, String name, String description,
 			long[] ddmStructureIds,

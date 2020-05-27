@@ -101,6 +101,10 @@ public class DLFileEntryTypeLocalServiceWrapper
 			descriptionMap, serviceContext);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
 	@Override
 	public DLFileEntryType addFileEntryType(
 			long userId, long groupId, String fileEntryTypeKey,
@@ -115,6 +119,10 @@ public class DLFileEntryTypeLocalServiceWrapper
 			ddmStructureIds, serviceContext);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
 	@Override
 	public DLFileEntryType addFileEntryType(
 			long userId, long groupId, String name, String description,
@@ -716,6 +724,10 @@ public class DLFileEntryTypeLocalServiceWrapper
 			dlFileEntry, serviceContext);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
 	@Override
 	public void updateFileEntryType(
 			long userId, long fileEntryTypeId,
@@ -730,6 +742,10 @@ public class DLFileEntryTypeLocalServiceWrapper
 			serviceContext);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
 	@Override
 	public void updateFileEntryType(
 			long userId, long fileEntryTypeId, String name, String description,

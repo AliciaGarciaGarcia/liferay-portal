@@ -96,6 +96,10 @@ public class DLFileEntryTypeServiceSoap {
 		}
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
 	public static com.liferay.document.library.kernel.model.DLFileEntryTypeSoap
 			addFileEntryType(
 				long groupId, String fileEntryTypeKey,
@@ -127,6 +131,10 @@ public class DLFileEntryTypeServiceSoap {
 		}
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
 	public static com.liferay.document.library.kernel.model.DLFileEntryTypeSoap
 			addFileEntryType(
 				long groupId, String name, String description,
@@ -379,6 +387,10 @@ public class DLFileEntryTypeServiceSoap {
 		}
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
 	public static void updateFileEntryType(
 			long fileEntryTypeId, String[] nameMapLanguageIds,
 			String[] nameMapValues, String[] descriptionMapLanguageIds,
@@ -404,6 +416,10 @@ public class DLFileEntryTypeServiceSoap {
 		}
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
 	public static void updateFileEntryType(
 			long fileEntryTypeId, String name, String description,
 			long[] ddmStructureIds,
