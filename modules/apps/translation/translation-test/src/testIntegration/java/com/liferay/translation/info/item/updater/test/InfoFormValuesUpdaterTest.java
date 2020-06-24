@@ -316,8 +316,10 @@ public class InfoFormValuesUpdaterTest {
 		String availableLanguageIds = rootElement.attributeValue(
 			"available-locales");
 
-		if (!availableLanguageIds.contains(LocaleUtil.toLanguageId(sourceLocale)) ||
-			!availableLanguageIds.contains(LocaleUtil.toLanguageId(targetLocale))) {
+		if (!availableLanguageIds.contains(
+				LocaleUtil.toLanguageId(sourceLocale)) ||
+			!availableLanguageIds.contains(
+				LocaleUtil.toLanguageId(targetLocale))) {
 
 			return StringPool.BLANK;
 		}
