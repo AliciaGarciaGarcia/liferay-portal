@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.model.BaseModelListener;
 import com.liferay.portal.kernel.model.LayoutFriendlyURL;
 import com.liferay.portal.kernel.model.ModelListener;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
+import com.liferay.portal.kernel.util.Http;
 import com.liferay.staging.StagingGroupHelper;
 
 import java.util.Collections;
@@ -62,7 +63,7 @@ public class LayoutFriendlyURLModelListener
 					layoutFriendlyURL.getPlid(),
 					Collections.singletonMap(
 						layoutFriendlyURL.getLanguageId(),
-						layoutFriendlyURL.getFriendlyURL()),
+						_http.decodeURL(layoutFriendlyURL.getFriendlyURL())),
 					ServiceContextThreadLocal.getServiceContext());
 			}
 		}
@@ -73,6 +74,9 @@ public class LayoutFriendlyURLModelListener
 
 	@Reference
 	private FriendlyURLEntryLocalService _friendlyURLEntryLocalService;
+
+	@Reference
+	private Http _http;
 
 	@Reference
 	private LayoutFriendlyURLEntryHelper _layoutFriendlyURLEntryHelper;
