@@ -24,6 +24,7 @@ import com.liferay.info.item.provider.InfoItemDetailsProvider;
 import com.liferay.info.item.provider.InfoItemFieldValuesProvider;
 import com.liferay.info.item.provider.InfoItemFormProvider;
 import com.liferay.info.item.provider.InfoItemFormVariationsProvider;
+import com.liferay.info.item.provider.InfoItemLanguagesProvider;
 import com.liferay.info.item.provider.InfoItemObjectProvider;
 import com.liferay.layout.display.page.LayoutDisplayPageProvider;
 import com.liferay.layout.page.template.info.item.capability.DisplayPageInfoItemCapability;
@@ -150,6 +151,7 @@ public class InfoDisplayContributorTrackerImpl
 									InfoItemFormProvider.class.getName(),
 									InfoItemFormVariationsProvider.class.
 										getName(),
+									InfoItemLanguagesProvider.class.getName(),
 									InfoItemObjectProvider.class.getName()
 								},
 								infoDisplayContributorWrapper,

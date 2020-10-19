@@ -23,6 +23,7 @@ import com.liferay.info.item.InfoItemReference;
 import com.liferay.info.item.InfoItemServiceTracker;
 import com.liferay.info.item.provider.InfoItemFieldValuesProvider;
 import com.liferay.info.item.provider.InfoItemFormProvider;
+import com.liferay.info.item.provider.InfoItemLanguagesProvider;
 import com.liferay.info.item.provider.InfoItemObjectProvider;
 import com.liferay.info.item.provider.InfoItemPermissionProvider;
 import com.liferay.petra.string.StringPool;
@@ -44,6 +45,7 @@ import com.liferay.translation.model.TranslationEntry;
 import com.liferay.translation.service.TranslationEntryLocalService;
 import com.liferay.translation.web.internal.constants.TranslationWebConstants;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -96,14 +98,16 @@ public class TranslateMVCRenderCommand implements MVCRenderCommand {
 
 			Object infoItem = infoItemObjectProvider.getInfoItem(classPK);
 
-			InfoForm infoForm = infoItemFormProvider.getInfoForm(infoItem);
-
 			InfoItemFieldValues sourceInfoItemFieldValues =
 				_getSourceInfoItemFieldValues(className, infoItem);
 
+			InfoItemLanguagesProvider<Object> infoItemLanguagesProvider =
+				_infoItemServiceTracker.getFirstInfoItemService(
+					InfoItemLanguagesProvider.class, className);
+
 			String sourceLanguageId = ParamUtil.getString(
 				renderRequest, "sourceLanguageId"
-				//,				article.getDefaultLanguageId()
+				,infoItemLanguagesProvider.getDefaultLanguageId(infoItem)
 			);
 
 			List<String> availableTargetLanguageIds =
@@ -114,12 +118,12 @@ public class TranslateMVCRenderCommand implements MVCRenderCommand {
 				renderRequest, "targetLanguageId",
 				_getDefaultTargetLanguageId(availableTargetLanguageIds));
 
-			//	List<String> availableSourceLanguageIds = Arrays.asList(
-			//		article.getAvailableLanguageIds());
+				List<String> availableSourceLanguageIds = Arrays.asList(
+					infoItemLanguagesProvider.getAvailableLanguageIds(infoItem));
 
-			//	renderRequest.setAttribute(
-			//		TranslationWebConstants.AVAILABLE_SOURCE_LANGUAGE_IDS,
-			//		availableSourceLanguageIds);
+				renderRequest.setAttribute(
+					TranslationWebConstants.AVAILABLE_SOURCE_LANGUAGE_IDS,
+					availableSourceLanguageIds);
 			renderRequest.setAttribute(
 				TranslationWebConstants.AVAILABLE_TARGET_LANGUAGE_IDS,
 				availableTargetLanguageIds);
