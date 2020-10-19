@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.translation.web.internal.constants;
+package com.liferay.translation.constants;
 
 /**
  * @author Alicia Garcia
@@ -20,6 +20,6 @@ package com.liferay.translation.web.internal.constants;
 public class TranslationPortletKeys {
 
 	public static final String TRANSLATION =
-		"com_liferay_translation_web_internal_portlet_TranslationPortlet";
+		"com_liferay_translation_portlet_TranslationPortlet";
 
 }
