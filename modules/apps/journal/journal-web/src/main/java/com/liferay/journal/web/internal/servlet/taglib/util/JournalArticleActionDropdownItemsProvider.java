@@ -46,6 +46,8 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
+import com.liferay.portal.kernel.portlet.PortletProvider;
+import com.liferay.portal.kernel.portlet.PortletProviderUtil;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.service.permission.GroupPermissionUtil;
@@ -144,6 +146,9 @@ public class JournalArticleActionDropdownItemsProvider {
 		).add(
 			() -> hasViewPermission && !singleLanguageSite,
 			_getTranslateActionUnsafeConsumer()
+		).add(
+			() -> hasViewPermission && !singleLanguageSite,
+			_getTranslateActionUnsafeConsumerTranslationModule()
 		).add(
 			() -> hasViewPermission && !singleLanguageSite,
 			_getExportForTranslationActionUnsafeConsumer()
@@ -700,6 +705,28 @@ public class JournalArticleActionDropdownItemsProvider {
 				_article.getVersion());
 			dropdownItem.setLabel(
 				LanguageUtil.get(_httpServletRequest, "translate"));
+		};
+	}
+
+	private UnsafeConsumer<DropdownItem, Exception>
+		_getTranslateActionUnsafeConsumerTranslationModule() {
+
+		return dropdownItem -> {
+			PortletURL portletURL = PortletProviderUtil.getPortletURL(
+				_liferayPortletRequest, JournalArticle.class.getName(),
+				PortletProvider.Action.TRANSLATE);
+
+			dropdownItem.setHref(
+				portletURL, "mvcRenderCommandName", "/translation/translate",
+				"redirect", _getRedirect(), "referringPortletResource",
+				_getReferringPortletResource(), "groupId",
+				_article.getGroupId(), "folderId", _article.getFolderId(),
+				"articleId", _article.getArticleId(), "version",
+				_article.getVersion(), "className",
+				JournalArticle.class.getName(), "classPK",
+				_article.getResourcePrimKey());
+			dropdownItem.setLabel(
+				LanguageUtil.get(_httpServletRequest, "translate-Translation-module"));
 		};
 	}
 
