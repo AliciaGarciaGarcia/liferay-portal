@@ -14,31 +14,8 @@
 
 package com.liferay.portal.kernel.portlet;
 
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.model.Group;
-
-import javax.portlet.PortletURL;
-
-import javax.servlet.http.HttpServletRequest;
-
 /**
- * @author Eudaldo Alonso
+ * @author Alicia García
  */
-public interface PortletProvider {
-
-	public String getPortletName();
-
-	public PortletURL getPortletURL(HttpServletRequest httpServletRequest)
-		throws PortalException;
-
-	public PortletURL getPortletURL(
-			HttpServletRequest httpServletRequest, Group group)
-		throws PortalException;
-
-	public enum Action {
-
-		ADD, BROWSE, EDIT, MANAGE, PREVIEW, TRANSLATE, VIEW
-
-	}
-
+public interface TranslatePortletProvider extends PortletProvider {
 }

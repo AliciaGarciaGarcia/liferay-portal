@@ -112,6 +112,9 @@ public class PortletProviderUtil {
 		else if (action.equals(PortletProvider.Action.PREVIEW)) {
 			return getPortletProvider(className, _previewServiceTrackerMap);
 		}
+		else if (action.equals(PortletProvider.Action.TRANSLATE)) {
+			return getPortletProvider(className, _translateServiceTrackerMap);
+		}
 		else if (action.equals(PortletProvider.Action.VIEW)) {
 			return getPortletProvider(className, _viewServiceTrackerMap);
 		}
@@ -163,6 +166,10 @@ public class PortletProviderUtil {
 		_previewServiceTrackerMap =
 			ServiceTrackerCollections.openSingleValueMap(
 				PreviewPortletProvider.class, "model.class.name");
+	private static final ServiceTrackerMap<String, TranslatePortletProvider>
+		_translateServiceTrackerMap =
+			ServiceTrackerCollections.openSingleValueMap(
+				TranslatePortletProvider.class, "model.class.name");
 	private static final ServiceTrackerMap<String, ViewPortletProvider>
 		_viewServiceTrackerMap = ServiceTrackerCollections.openSingleValueMap(
 			ViewPortletProvider.class, "model.class.name");
