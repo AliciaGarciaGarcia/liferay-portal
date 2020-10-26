@@ -1043,7 +1043,12 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 				 cmd.equals(Constants.ADD_DYNAMIC)) &&
 				(size == 0)) {
 
-				contentType = MimeTypesUtil.getContentType(fileName);
+				if (Validator.isNotNull(fileName)) {
+					contentType = MimeTypesUtil.getContentType(fileName);
+				}
+				else {
+					contentType = MimeTypesUtil.getContentType(title);
+				}
 			}
 
 			if (cmd.equals(Constants.ADD) ||

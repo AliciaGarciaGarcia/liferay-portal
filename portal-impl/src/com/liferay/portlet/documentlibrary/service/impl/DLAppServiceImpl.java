@@ -312,11 +312,12 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		if ((file == null) || !file.exists() || (file.length() == 0)) {
 			return addFileEntry(
-				repositoryId, folderId, sourceFileName, mimeType, title,
-				description, changeLog, null, 0, serviceContext);
+				repositoryId, folderId, sourceFileName, fileName, mimeType,
+				title, description, changeLog, null, 0, serviceContext);
 		}
 
-		mimeType = DLAppUtil.getMimeType(sourceFileName, mimeType, title, file);
+		mimeType = DLAppUtil.getMimeType(
+			sourceFileName, mimeType, fileName, file);
 
 		Repository repository = getRepository(repositoryId);
 
@@ -343,7 +344,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 			if (size == 0) {
 				String extension = DLAppUtil.getExtension(
-					title, sourceFileName);
+					fileName, sourceFileName);
 
 				mimeType = MimeTypesUtil.getExtensionContentType(extension);
 			}
@@ -354,8 +355,9 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 					file = FileUtil.createTempFile(inputStream);
 
 					return addFileEntry(
-						repositoryId, folderId, sourceFileName, mimeType, title,
-						description, changeLog, file, serviceContext);
+						repositoryId, folderId, sourceFileName, fileName,
+						mimeType, title, description, changeLog, file,
+						serviceContext);
 				}
 				catch (IOException ioException) {
 					throw new SystemException(
