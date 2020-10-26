@@ -281,6 +281,130 @@ public class DLFileEntryLocalServiceImpl
 	}
 
 	@Override
+	public DLFileEntry addFileEntry(
+			long userId, long groupId, long repositoryId, long folderId,
+			String sourceFileName, String fileName, String mimeType,
+			String title, String description, String changeLog,
+			long fileEntryTypeId, Map<String, DDMFormValues> ddmFormValuesMap,
+			File file, InputStream inputStream, long size,
+			ServiceContext serviceContext)
+		throws PortalException {
+
+		if (Validator.isNull(title)) {
+			throw new FileNameException(
+				StringBundler.concat(
+					"Unable to add file entry with file name ", sourceFileName,
+					" because title is null"));
+		}
+
+		// File entry
+
+		User user = userPersistence.findByPrimaryKey(userId);
+
+		folderId = DLFolderLocalServiceImpl.getFolderId(
+			dlFolderPersistence, user.getCompanyId(), folderId);
+
+		String name = String.valueOf(
+			counterLocalService.increment(DLFileEntry.class.getName()));
+
+		String extension = DLAppUtil.getExtension(title, sourceFileName);
+
+		String fileName = DLUtil.getSanitizedFileName(title, extension);
+
+		if (fileEntryTypeId == -1) {
+			fileEntryTypeId =
+				dlFileEntryTypeLocalService.getDefaultFileEntryTypeId(folderId);
+		}
+
+		validateFileEntryTypeId(
+			PortalUtil.getCurrentAndAncestorSiteGroupIds(groupId), folderId,
+			fileEntryTypeId);
+
+		validateFile(
+			groupId, folderId, 0, sourceFileName, fileName, extension, title);
+
+		long fileEntryId = counterLocalService.increment();
+
+		DLFileEntry dlFileEntry = dlFileEntryPersistence.create(fileEntryId);
+
+		dlFileEntry.setUuid(serviceContext.getUuid());
+		dlFileEntry.setGroupId(groupId);
+		dlFileEntry.setCompanyId(user.getCompanyId());
+		dlFileEntry.setUserId(user.getUserId());
+		dlFileEntry.setUserName(user.getFullName());
+
+		DLFolder repositoryDLFolder = null;
+
+		if (repositoryId != groupId) {
+			Repository repository = repositoryPersistence.findByPrimaryKey(
+				repositoryId);
+
+			repositoryDLFolder = dlFolderPersistence.findByPrimaryKey(
+				repository.getDlFolderId());
+		}
+
+		long classNameId = 0;
+		long classPK = 0;
+
+		if ((repositoryDLFolder != null) && repositoryDLFolder.isHidden()) {
+			classNameId = classNameLocalService.getClassNameId(
+				(String)serviceContext.getAttribute("className"));
+			classPK = ParamUtil.getLong(serviceContext, "classPK");
+		}
+
+		dlFileEntry.setClassNameId(classNameId);
+		dlFileEntry.setClassPK(classPK);
+		dlFileEntry.setRepositoryId(repositoryId);
+		dlFileEntry.setFolderId(folderId);
+		dlFileEntry.setTreePath(dlFileEntry.buildTreePath());
+		dlFileEntry.setName(name);
+		dlFileEntry.setFileName(fileName);
+		dlFileEntry.setExtension(extension);
+		dlFileEntry.setMimeType(mimeType);
+		dlFileEntry.setTitle(title);
+		dlFileEntry.setDescription(description);
+		dlFileEntry.setFileEntryTypeId(fileEntryTypeId);
+		dlFileEntry.setVersion(DLFileEntryConstants.VERSION_DEFAULT);
+		dlFileEntry.setSize(size);
+
+		dlFileEntry = dlFileEntryPersistence.update(dlFileEntry);
+
+		// Resources
+
+		addFileEntryResources(dlFileEntry, serviceContext);
+
+		// File version
+
+		addFileVersion(
+			user, dlFileEntry, fileName, extension, mimeType, title,
+			description, changeLog, StringPool.BLANK, fileEntryTypeId,
+			ddmFormValuesMap, DLFileEntryConstants.VERSION_DEFAULT, size,
+			WorkflowConstants.STATUS_DRAFT, serviceContext);
+
+		// Folder
+
+		if (folderId != DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
+			dlFolderLocalService.updateLastPostDate(
+				dlFileEntry.getFolderId(), dlFileEntry.getModifiedDate());
+		}
+
+		// File
+
+		if (file != null) {
+			DLStoreUtil.addFile(
+				user.getCompanyId(), dlFileEntry.getDataRepositoryId(), name,
+				false, file);
+		}
+		else {
+			DLStoreUtil.addFile(
+				user.getCompanyId(), dlFileEntry.getDataRepositoryId(), name,
+				false, inputStream);
+		}
+
+		return dlFileEntry;
+	}
+
+	@Override
 	public DLFileVersion cancelCheckOut(long userId, long fileEntryId)
 		throws PortalException {
 
@@ -1911,7 +2035,7 @@ public class DLFileEntryLocalServiceImpl
 			(dlFileEntry.getFileEntryId() != fileEntryId)) {
 
 			throw new DuplicateFileEntryException(
-				"A file entry already exists with file name " + title);
+				"A file entry already exists with file name " + fileName);
 		}
 	}
 
