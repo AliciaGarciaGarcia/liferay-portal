@@ -86,6 +86,7 @@ import java.io.InputStream;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -699,8 +700,7 @@ public class DLWebDAVStorageImpl extends BaseWebDAVStorageImpl {
 					_dlAppService.updateFileEntry(
 						destFileEntry.getFileEntryId(),
 						destFileEntry.getFileName(),
-						destFileEntry.getMimeType(),
-						destFileEntry.getFileName(),
+						destFileEntry.getMimeType(), destFileEntry.getTitle(),
 						destFileEntry.getDescription(), StringPool.BLANK,
 						DLVersionNumberIncrease.MINOR, file, serviceContext);
 
@@ -718,9 +718,15 @@ public class DLWebDAVStorageImpl extends BaseWebDAVStorageImpl {
 
 			populateServiceContext(serviceContext, fileEntry);
 
+			String title = fileEntry.getTitle();
+
+			if (!Objects.equals(fileEntry.getFileName(), fileName)) {
+				title = FileUtil.stripExtension(fileName);
+			}
+
 			_dlAppService.updateFileEntry(
 				fileEntry.getFileEntryId(), fileName, fileEntry.getMimeType(),
-				fileName, fileEntry.getDescription(), StringPool.BLANK,
+				title, fileEntry.getDescription(), StringPool.BLANK,
 				DLVersionNumberIncrease.MINOR, file, serviceContext);
 
 			if (fileEntry.getFolderId() != newParentFolderId) {
@@ -800,8 +806,14 @@ public class DLWebDAVStorageImpl extends BaseWebDAVStorageImpl {
 
 				serviceContext.setCommand(Constants.UPDATE_WEBDAV);
 
+				String title = fileEntry.getTitle();
+
+				if (!Objects.equals(fileEntry.getFileName(), fileName)) {
+					title = FileUtil.stripExtension(fileName);
+				}
+
 				_dlAppService.updateFileEntry(
-					fileEntry.getFileEntryId(), fileName, contentType, fileName,
+					fileEntry.getFileEntryId(), fileName, contentType, title,
 					fileEntry.getDescription(), StringPool.BLANK,
 					DLVersionNumberIncrease.MINOR, file, serviceContext);
 			}
