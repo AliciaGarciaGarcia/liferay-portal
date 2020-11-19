@@ -16,8 +16,16 @@
 
 <%@ include file="/html/portal/init.jsp" %>
 
+<%
+Boolean is404Page = (Boolean)request.getAttribute("IS_404_PAGE");
+
+if (is404Page == null) {
+	is404Page = Boolean.FALSE;
+}
+%>
+
 <c:choose>
-	<c:when test="<%= SessionErrors.contains(request, NoSuchLayoutException.class) %>">
+	<c:when test="<%= SessionErrors.contains(request, NoSuchLayoutException.class) && !is404Page %>">
 		<div class="container pb-3 pt-3">
 			<%@ include file="/html/portal/status.jsp" %>
 		</div>

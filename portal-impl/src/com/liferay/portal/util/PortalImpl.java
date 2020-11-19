@@ -6670,6 +6670,8 @@ public class PortalImpl implements Portal {
 					 PropsValues.LAYOUT_FRIENDLY_URL_PAGE_NOT_FOUND)) {
 
 			redirect = PropsValues.LAYOUT_FRIENDLY_URL_PAGE_NOT_FOUND;
+
+			httpServletRequest.setAttribute("IS_404_PAGE", Boolean.TRUE);
 		}
 		else if (PropsValues.LAYOUT_SHOW_HTTP_STATUS) {
 			DynamicServletRequest dynamicRequest = new DynamicServletRequest(
