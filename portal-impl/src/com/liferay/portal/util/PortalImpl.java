@@ -6695,6 +6695,13 @@ public class PortalImpl implements Portal {
 				_log.warn("Unable to redirect to missing URI: " + redirect);
 			}
 
+			if ((exception instanceof NoSuchLayoutException) &&
+				Validator.isNotNull(
+					PropsValues.LAYOUT_FRIENDLY_URL_PAGE_NOT_FOUND)) {
+
+				httpServletRequest.removeAttribute("IS_404_PAGE");
+			}
+
 			redirect = null;
 		}
 
