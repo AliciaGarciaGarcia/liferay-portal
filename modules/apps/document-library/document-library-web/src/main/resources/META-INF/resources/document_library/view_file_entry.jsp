@@ -19,6 +19,7 @@
 <liferay-util:dynamic-include key="com.liferay.document.library.web#/document_library/view_file_entry.jsp#pre" />
 
 <%
+DDMFormValuesToMapConverter ddmFormValuesToMapConverter = (DDMFormValuesToMapConverter)request.getAttribute(DDMFormValuesToMapConverter.class.getName());
 DLViewFileEntryDisplayContext dlViewFileEntryDisplayContext = (DLViewFileEntryDisplayContext)request.getAttribute(DLViewFileEntryDisplayContext.class.getName());
 
 FileEntry fileEntry = dlViewFileEntryDisplayContext.getFileEntry();
@@ -83,6 +84,7 @@ if (portletTitleBasedNavigation) {
 			<liferay-frontend:sidebar-panel>
 
 				<%
+				request.setAttribute(DDMFormValuesToMapConverter.class.getName(), ddmFormValuesToMapConverter);
 				request.setAttribute("info_panel.jsp-fileEntry", dlViewFileEntryDisplayContext.getFileEntry());
 				request.setAttribute("info_panel.jsp-fileVersion", dlViewFileEntryDisplayContext.getFileVersion());
 				%>

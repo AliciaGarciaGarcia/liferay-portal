@@ -27,6 +27,7 @@ import com.liferay.document.library.util.DLAssetHelper;
 import com.liferay.document.library.web.internal.display.context.DLAdminDisplayContext;
 import com.liferay.document.library.web.internal.display.context.DLAdminDisplayContextProvider;
 import com.liferay.document.library.web.internal.display.context.DLViewFileEntryDisplayContext;
+import com.liferay.dynamic.data.mapping.util.DDMFormValuesToMapConverter;
 import com.liferay.portal.kernel.exception.NoSuchRepositoryEntryException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.Language;
@@ -158,6 +159,9 @@ public class ViewFileEntryMVCRenderCommand
 				_language, _portal, renderRequest, renderResponse);
 
 		renderRequest.setAttribute(
+			DDMFormValuesToMapConverter.class.getName(),
+			_ddmFormValuesToMapConverter);
+		renderRequest.setAttribute(
 			DLViewFileEntryDisplayContext.class.getName(),
 			dlViewFileEntryDisplayContext);
 
@@ -177,6 +181,9 @@ public class ViewFileEntryMVCRenderCommand
 
 	@Reference
 	private AssetEntryLocalService _assetEntryLocalService;
+
+	@Reference
+	private DDMFormValuesToMapConverter _ddmFormValuesToMapConverter;
 
 	@Reference
 	private DLAdminDisplayContextProvider _dlAdminDisplayContextProvider;
