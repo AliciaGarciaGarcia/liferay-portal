@@ -19,6 +19,7 @@ import com.liferay.bulk.selection.BulkSelectionFactory;
 import com.liferay.document.library.constants.DLPortletKeys;
 import com.liferay.document.library.web.internal.constants.DLWebKeys;
 import com.liferay.document.library.web.internal.helper.DLTrashHelper;
+import com.liferay.dynamic.data.mapping.util.DDMFormValuesToMapConverter;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCResourceCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.repository.model.RepositoryModel;
@@ -67,6 +68,9 @@ public class InfoPanelMVCResourceCommand extends BaseMVCResourceCommand {
 		}
 
 		resourceRequest.setAttribute(
+			DDMFormValuesToMapConverter.class.getName(),
+			_ddmFormValuesToMapConverter);
+		resourceRequest.setAttribute(
 			DLWebKeys.DOCUMENT_LIBRARY_TRASH_HELPER, _dlTrashHelper);
 		resourceRequest.setAttribute(
 			WebKeys.DOCUMENT_LIBRARY_FILE_ENTRIES,
@@ -82,6 +86,9 @@ public class InfoPanelMVCResourceCommand extends BaseMVCResourceCommand {
 			resourceRequest, resourceResponse,
 			"/document_library/info_panel.jsp");
 	}
+
+	@Reference
+	private DDMFormValuesToMapConverter _ddmFormValuesToMapConverter;
 
 	@Reference
 	private DLTrashHelper _dlTrashHelper;
