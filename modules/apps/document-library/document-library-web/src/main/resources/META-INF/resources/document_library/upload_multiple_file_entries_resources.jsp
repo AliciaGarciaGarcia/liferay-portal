@@ -132,11 +132,7 @@ else {
 				>
 					<aui:input name="fileEntryTypeId" type="hidden" value="<%= (fileEntryTypeId > 0) ? fileEntryTypeId : 0 %>" />
 
-					<%
-					String defaultLanguageId = LocaleUtil.toLanguageId(LocaleUtil.getSiteDefault());
-					%>
-
-					<aui:input name="defaultLanguageId" type="hidden" value="<%= defaultLanguageId %>" />
+					<aui:input name="defaultLanguageId" type="hidden" value="<%= LocaleUtil.toLanguageId(LocaleUtil.getSiteDefault()) %>" />
 
 					<div class="document-type-selector" id="<portlet:namespace />documentTypeSelector">
 						<liferay-ui:icon-menu
@@ -174,6 +170,8 @@ else {
 					<%
 					if (fileEntryTypeId > 0) {
 						try {
+							DDMFormValuesToMapConverter ddmFormValuesToMapConverter = (DDMFormValuesToMapConverter)request.getAttribute(DDMFormValuesToMapConverter.class.getName());
+
 							List<DDMStructure> ddmStructures = fileEntryType.getDDMStructures();
 
 							for (DDMStructure ddmStructure : ddmStructures) {
@@ -195,16 +193,11 @@ else {
 								<aui:input name="ddmFormFieldNamespace" type="hidden" value="<%= String.valueOf(ddmStructure.getPrimaryKey()) %>" />
 
 								<div class="document-type-fields">
-									<liferay-ddm:html
-										classNameId="<%= PortalUtil.getClassNameId(com.liferay.dynamic.data.mapping.model.DDMStructure.class) %>"
-										classPK="<%= ddmStructure.getPrimaryKey() %>"
-										ddmFormValues="<%= ddmFormValues %>"
-										defaultEditLocale="<%= LocaleUtil.fromLanguageId(defaultLanguageId) %>"
-										fieldsNamespace="<%= String.valueOf(ddmStructure.getPrimaryKey()) %>"
-										groupId="<%= groupId %>"
-										localizable="<%= true %>"
-										requestedLocale="<%= locale %>"
-										synchronousFormSubmission="<%= false %>"
+									<liferay-data-engine:data-layout-renderer
+										containerId='<%= liferayPortletResponse.getNamespace() + "dataEngineLayoutRenderer" %>'
+										dataDefinitionId="<%= ddmStructure.getStructureId() %>"
+										dataRecordValues="<%= ddmFormValuesToMapConverter.convert(ddmFormValues, DDMStructureLocalServiceUtil.getStructure(ddmStructure.getStructureId())) %>"
+										namespace="<%= liferayPortletResponse.getNamespace() + ddmStructure.getStructureId() %>"
 									/>
 								</div>
 
