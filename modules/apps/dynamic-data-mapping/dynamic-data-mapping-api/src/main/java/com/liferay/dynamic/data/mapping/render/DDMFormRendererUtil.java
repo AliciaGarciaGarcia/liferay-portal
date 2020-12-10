@@ -62,9 +62,11 @@ public class DDMFormRendererUtil {
 				DDMFormFieldRendererRegistryUtil.getDDMFormFieldRenderer(
 					ddmFormField.getType());
 
-			sb.append(
-				ddmFormFieldRenderer.render(
-					ddmFormField, ddmFormFieldRenderingContext));
+			if (ddmFormFieldRenderer != null) {
+				sb.append(
+					ddmFormFieldRenderer.render(
+						ddmFormField, ddmFormFieldRenderingContext));
+			}
 		}
 
 		_clearDDMFieldsCounter(ddmFormFieldRenderingContext);
