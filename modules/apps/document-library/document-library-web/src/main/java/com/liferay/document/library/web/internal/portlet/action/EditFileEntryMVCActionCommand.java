@@ -174,6 +174,17 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 		PortletConfig portletConfig = getPortletConfig(actionRequest);
 
 		try {
+			if (Validator.isNull(cmd)) {
+				SessionMessages.add(
+					actionRequest,
+					_portal.getPortletId(actionRequest) +
+						SessionMessages.KEY_SUFFIX_FORCE_SEND_REDIRECT);
+
+				hideDefaultSuccessMessage(actionRequest);
+
+				return;
+			}
+
 			UploadException uploadException =
 				(UploadException)actionRequest.getAttribute(
 					WebKeys.UPLOAD_EXCEPTION);
