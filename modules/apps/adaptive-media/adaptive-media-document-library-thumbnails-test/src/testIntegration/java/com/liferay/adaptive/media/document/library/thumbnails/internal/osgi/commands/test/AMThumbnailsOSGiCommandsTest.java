@@ -143,7 +143,7 @@ public class AMThumbnailsOSGiCommandsTest {
 		_amImageConfigurationHelper.forceDeleteAMImageConfigurationEntry(
 			_company.getCompanyId(), _THUMBNAIL_CONFIGURATION + 300);
 
-		FileVersion latestFileVersion = _pngFileEntry.getFileVersion();
+		FileVersion latestFileVersion = _addJPGFileEntry.getFileVersion();
 
 		AMImageEntryLocalServiceUtil.deleteAMImageEntryFileVersion(
 			latestFileVersion);
@@ -161,13 +161,13 @@ public class AMThumbnailsOSGiCommandsTest {
 
 		int count = _getThumbnailCount();
 
-		_addPNGFileEntry();
+		_addJPGFileEntry();
 
-		Assert.assertEquals(count + 1, _getThumbnailCount());
+		Assert.assertEquals("before _cleanUp", count + 1, _getThumbnailCount());
 
 		_cleanUp();
 
-		Assert.assertEquals(count, _getThumbnailCount());
+		Assert.assertEquals("before _cleanUp", count, _getThumbnailCount());
 	}
 
 	@Test
@@ -177,7 +177,7 @@ public class AMThumbnailsOSGiCommandsTest {
 		int count = _getThumbnailCount();
 
 		_addPDFFileEntry();
-		_addPNGFileEntry();
+		_addJPGFileEntry();
 
 		Assert.assertEquals(count + 2, _getThumbnailCount());
 
@@ -191,7 +191,7 @@ public class AMThumbnailsOSGiCommandsTest {
 		int count = _getThumbnailCount();
 
 		_addPDFFileEntry();
-		_addPNGFileEntry();
+		_addJPGFileEntry();
 
 		Assert.assertEquals(count + 2, _getThumbnailCount());
 
@@ -209,12 +209,12 @@ public class AMThumbnailsOSGiCommandsTest {
 				"DL_FILE_ENTRY_THUMBNAIL_CUSTOM_1_MAX_WIDTH", 100)) {
 
 			FileEntry pdfFileEntry = _addPDFFileEntry();
-			FileEntry pngFileEntry = _addPNGFileEntry();
+			FileEntry jpgFileEntry = _addJPGFileEntry();
 
 			_migrate();
 
 			Assert.assertEquals(0, _getAdaptiveMediaCount(pdfFileEntry));
-			Assert.assertEquals(2, _getAdaptiveMediaCount(pngFileEntry));
+			Assert.assertEquals(2, _getAdaptiveMediaCount(jpgFileEntry));
 		}
 	}
 
@@ -227,7 +227,7 @@ public class AMThumbnailsOSGiCommandsTest {
 			PropsValuesReplacer propsValuesReplacer2 = new PropsValuesReplacer(
 				"DL_FILE_ENTRY_THUMBNAIL_MAX_HEIGHT", 999)) {
 
-			_addPNGFileEntry();
+			_addJPGFileEntry();
 
 			_migrate();
 		}
@@ -335,14 +335,14 @@ public class AMThumbnailsOSGiCommandsTest {
 			ContentTypes.APPLICATION_PDF, _read("sample.pdf"), _serviceContext);
 	}
 
-	private FileEntry _addPNGFileEntry() throws Exception {
-		_pngFileEntry = DLAppLocalServiceUtil.addFileEntry(
+	private FileEntry _addJPGFileEntry() throws Exception {
+		_addJPGFileEntry = DLAppLocalServiceUtil.addFileEntry(
 			_user.getUserId(), _group.getGroupId(),
 			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
-			RandomTestUtil.randomString() + ".png", ContentTypes.IMAGE_PNG,
-			_read("sample.png"), _serviceContext);
+			RandomTestUtil.randomString() + ".jpg", ContentTypes.IMAGE_JPEG,
+			_read("sample.jpg"), _serviceContext);
 
-		return _pngFileEntry;
+		return _addJPGFileEntry;
 	}
 
 	private void _cleanUp() throws Exception {
@@ -412,7 +412,7 @@ public class AMThumbnailsOSGiCommandsTest {
 
 	private Company _company;
 	private Group _group;
-	private FileEntry _pngFileEntry;
+	private FileEntry _addJPGFileEntry;
 	private ServiceContext _serviceContext;
 	private User _user;
 
