@@ -156,11 +156,9 @@ const DatePicker = ({
 				showMask: true,
 			});
 
-			if (initialValueMemoized) {
-				inputRef.current.value = moment(initialValueMemoized).format(
-					dateMask.toUpperCase()
-				);
-			}
+			inputRef.current.value = moment(
+				initialValueMemoized || inputRef.current.value
+			).format(dateMask.toUpperCase());
 
 			maskInstance.current.update(inputRef.current.value);
 		}
