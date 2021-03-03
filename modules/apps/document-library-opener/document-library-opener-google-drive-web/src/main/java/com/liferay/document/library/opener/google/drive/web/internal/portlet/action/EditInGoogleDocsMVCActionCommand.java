@@ -25,6 +25,7 @@ import com.liferay.document.library.opener.google.drive.web.internal.util.Google
 import com.liferay.document.library.opener.upload.UniqueFileEntryTitleProvider;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.repository.model.FileEntry;
@@ -95,7 +96,8 @@ public class EditInGoogleDocsMVCActionCommand extends BaseMVCActionCommand {
 
 		String title = _uniqueFileEntryTitleProvider.provide(
 			serviceContext.getScopeGroupId(), folderId,
-			serviceContext.getLocale());
+			DLOpenerMimeTypes.getMimeTypeExtension(contentType),
+			_language.get(serviceContext.getLocale(), "untitled"));
 
 		serviceContext.setWorkflowAction(WorkflowConstants.ACTION_SAVE_DRAFT);
 
@@ -227,6 +229,9 @@ public class EditInGoogleDocsMVCActionCommand extends BaseMVCActionCommand {
 	@Reference
 	private GoogleDrivePortletRequestAuthorizationHelper
 		_googleDrivePortletRequestAuthorizationHelper;
+
+	@Reference
+	private Language _language;
 
 	private final TransactionConfig _transactionConfig =
 		TransactionConfig.Factory.create(
