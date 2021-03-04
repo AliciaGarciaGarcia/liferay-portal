@@ -18,6 +18,7 @@ import com.liferay.data.engine.field.type.util.LocalizedValueUtil;
 import com.liferay.data.engine.rest.dto.v2_0.DataDefinition;
 import com.liferay.data.engine.rest.dto.v2_0.DataDefinitionField;
 import com.liferay.dynamic.data.mapping.form.field.type.DDMFormFieldTypeServicesTracker;
+import com.liferay.dynamic.data.mapping.form.field.type.constants.DDMFormFieldTypeConstants;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldOptions;
@@ -203,7 +204,11 @@ public class DataDefinitionDDMFormUtil {
 				dataDefinitionField.getLabel(),
 				LocaleUtil.fromLanguageId(languageId)));
 		ddmFormField.setLocalizable(
-			GetterUtil.getBoolean(dataDefinitionField.getLocalizable()));
+			GetterUtil.getBoolean(
+				dataDefinitionField.getLocalizable(),
+				Objects.equals(
+					DDMFormFieldTypeConstants.FIELDSET,
+					dataDefinitionField.getFieldType())));
 		ddmFormField.setName(dataDefinitionField.getName());
 		ddmFormField.setNestedDDMFormFields(
 			_toDDMFormFields(
