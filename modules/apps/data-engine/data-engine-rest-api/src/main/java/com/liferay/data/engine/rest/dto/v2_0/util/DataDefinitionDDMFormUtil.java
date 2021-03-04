@@ -203,7 +203,7 @@ public class DataDefinitionDDMFormUtil {
 				dataDefinitionField.getLabel(),
 				LocaleUtil.fromLanguageId(languageId)));
 		ddmFormField.setLocalizable(
-			GetterUtil.getBoolean(dataDefinitionField.getLocalizable()));
+			GetterUtil.getBoolean(dataDefinitionField.getLocalizable(), true));
 		ddmFormField.setName(dataDefinitionField.getName());
 		ddmFormField.setNestedDDMFormFields(
 			_toDDMFormFields(
