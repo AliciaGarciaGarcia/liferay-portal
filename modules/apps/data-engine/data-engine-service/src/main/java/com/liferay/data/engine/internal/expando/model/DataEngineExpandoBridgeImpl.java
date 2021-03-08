@@ -586,6 +586,8 @@ public class DataEngineExpandoBridgeImpl implements ExpandoBridge {
 				"en_US", defaultValue
 			).build());
 		dataDefinitionField.setFieldType(fieldType);
+		dataDefinitionField.setLocalizable(
+			settingsDDMFormField.isLocalizable());
 		dataDefinitionField.setName(name);
 
 		return dataDefinitionField;
