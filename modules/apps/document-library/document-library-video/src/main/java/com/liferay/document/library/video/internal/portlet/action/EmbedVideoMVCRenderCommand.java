@@ -71,7 +71,9 @@ public class EmbedVideoMVCRenderCommand implements MVCRenderCommand {
 				renderRequest.setAttribute(
 					FileVersion.class.getName(), fileVersion);
 
-				if (_isPreviewFailure(fileVersion)) {
+				if (_isPreviewFailure(fileVersion) ||
+					!_videoProcessor.isVideoSupported(fileVersion)) {
+
 					return "/embed/error.jsp";
 				}
 				else if (!_videoProcessor.hasVideo(fileVersion)) {

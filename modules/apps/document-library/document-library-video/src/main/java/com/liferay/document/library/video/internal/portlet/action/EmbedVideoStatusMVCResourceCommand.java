@@ -76,7 +76,9 @@ public class EmbedVideoStatusMVCResourceCommand extends BaseMVCResourceCommand {
 				ParamUtil.getLong(resourceRequest, "fileVersionId"));
 
 			if (fileVersion != null) {
-				if (_isPreviewFailure(fileVersion)) {
+				if (_isPreviewFailure(fileVersion) ||
+					!_videoProcessor.isVideoSupported(fileVersion)) {
+
 					return HttpServletResponse.SC_SERVICE_UNAVAILABLE;
 				}
 				else if (!_videoProcessor.hasVideo(fileVersion)) {
