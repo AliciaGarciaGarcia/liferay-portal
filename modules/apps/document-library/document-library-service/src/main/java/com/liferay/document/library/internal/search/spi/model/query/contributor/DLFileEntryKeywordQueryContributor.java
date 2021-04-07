@@ -14,9 +14,14 @@
 
 package com.liferay.document.library.internal.search.spi.model.query.contributor;
 
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.ParseException;
 import com.liferay.portal.kernel.search.SearchContext;
+import com.liferay.portal.kernel.search.generic.BooleanQueryImpl;
+import com.liferay.portal.kernel.search.generic.MatchQuery;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.query.QueryHelper;
 import com.liferay.portal.search.spi.model.query.contributor.KeywordQueryContributor;
@@ -58,11 +63,43 @@ public class DLFileEntryKeywordQueryContributor
 			booleanQuery, searchContext, "extension", false);
 		queryHelper.addSearchTerm(
 			booleanQuery, searchContext, "fileEntryTypeId", false);
-		queryHelper.addSearchTerm(
-			booleanQuery, searchContext, "fileName", false);
 		queryHelper.addSearchTerm(booleanQuery, searchContext, "path", false);
 		queryHelper.addSearchLocalizedTerm(
 			booleanQuery, searchContext, Field.CONTENT, false);
+
+		try {
+			BooleanQuery fileNameBooleanQuery = new BooleanQueryImpl();
+
+			BooleanQuery fileNameShouldNameBooleanQuery =
+				new BooleanQueryImpl();
+
+			fileNameShouldNameBooleanQuery.add(
+				new MatchQuery("fileName", keywords),
+				BooleanClauseOccur.SHOULD);
+
+			MatchQuery matchPhrasePrefixQuery = new MatchQuery(
+				"fileName", keywords);
+
+			matchPhrasePrefixQuery.setType(MatchQuery.Type.PHRASE_PREFIX);
+
+			fileNameShouldNameBooleanQuery.add(
+				matchPhrasePrefixQuery, BooleanClauseOccur.SHOULD);
+
+			fileNameBooleanQuery.add(
+				fileNameShouldNameBooleanQuery, BooleanClauseOccur.MUST);
+
+			MatchQuery matchPhraseQuery = new MatchQuery("fileName", keywords);
+
+			matchPhraseQuery.setType(MatchQuery.Type.PHRASE);
+
+			fileNameBooleanQuery.add(
+				matchPhraseQuery, BooleanClauseOccur.SHOULD);
+
+			booleanQuery.add(fileNameBooleanQuery, BooleanClauseOccur.SHOULD);
+		}
+		catch (ParseException parseException) {
+			throw new SystemException(parseException);
+		}
 	}
 
 	@Reference
