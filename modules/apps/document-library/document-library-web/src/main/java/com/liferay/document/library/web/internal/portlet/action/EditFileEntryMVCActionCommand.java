@@ -355,9 +355,14 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 		String[] selectedFileNames = ParamUtil.getParameterValues(
 			actionRequest, "selectedFileName", new String[0], false);
 
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(
+			DLFileEntry.class.getName(), actionRequest);
+
+		_setUpDDMFormValues(serviceContext);
+
 		for (String selectedFileName : selectedFileNames) {
 			_addMultipleFileEntries(
-				portletConfig, actionRequest, selectedFileName,
+				portletConfig, actionRequest, selectedFileName, serviceContext,
 				validFileNameKVPs, invalidFileNameKVPs);
 		}
 
@@ -399,7 +404,8 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 
 	private void _addMultipleFileEntries(
 			PortletConfig portletConfig, ActionRequest actionRequest,
-			String selectedFileName, List<KeyValuePair> validFileNameKVPs,
+			String selectedFileName, ServiceContext serviceContext,
+			List<KeyValuePair> validFileNameKVPs,
 			List<KeyValuePair> invalidFileNameKVPs)
 		throws PortalException {
 
@@ -425,17 +431,13 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 			String uniqueFileName = DLUtil.getUniqueFileName(
 				tempFileEntry.getGroupId(), folderId, originalSelectedFileName);
 
-			String mimeType = tempFileEntry.getMimeType();
 			InputStream inputStream = tempFileEntry.getContentStream();
-			long size = tempFileEntry.getSize();
-
-			ServiceContext serviceContext = ServiceContextFactory.getInstance(
-				DLFileEntry.class.getName(), actionRequest);
 
 			FileEntry fileEntry = _dlAppService.addFileEntry(
-				repositoryId, folderId, uniqueFileName, mimeType,
+				repositoryId, folderId, uniqueFileName,
+				tempFileEntry.getMimeType(),
 				FileUtil.stripExtension(uniqueFileName), description, changeLog,
-				inputStream, size, serviceContext);
+				inputStream, tempFileEntry.getSize(), serviceContext);
 
 			_assetDisplayPageEntryFormProcessor.process(
 				FileEntry.class.getName(), fileEntry.getFileEntryId(),
