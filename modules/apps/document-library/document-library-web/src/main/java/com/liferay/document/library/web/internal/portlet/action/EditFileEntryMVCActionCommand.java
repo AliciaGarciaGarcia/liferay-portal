@@ -52,6 +52,7 @@ import com.liferay.dynamic.data.mapping.service.DDMStructureLinkLocalService;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLocalService;
 import com.liferay.dynamic.data.mapping.storage.DDMFormValues;
 import com.liferay.dynamic.data.mapping.util.DDMBeanTranslator;
+import com.liferay.dynamic.data.mapping.validator.DDMFormValuesValidationException;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -735,6 +736,11 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 					vocabularyTitle);
 			}
 		}
+		else if (exception instanceof DDMFormValuesValidationException) {
+			errorMessage = _language.get(
+				_portal.getHttpServletRequest(actionRequest),
+				"field-validation-failed");
+		}
 		else if (exception instanceof DLStorageQuotaExceededException) {
 			errorMessage = _language.format(
 				themeDisplay.getLocale(),
@@ -872,6 +878,7 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 			SessionErrors.add(actionRequest, exception.getClass(), exception);
 		}
 		else if (exception instanceof AntivirusScannerException ||
+				 exception instanceof DDMFormValuesValidationException ||
 				 exception instanceof DLStorageQuotaExceededException ||
 				 exception instanceof DuplicateFileEntryException ||
 				 exception instanceof DuplicateFolderNameException ||
@@ -904,6 +911,7 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 			}
 
 			if (exception instanceof AntivirusScannerException ||
+				exception instanceof DDMFormValuesValidationException ||
 				exception instanceof DLStorageQuotaExceededException ||
 				exception instanceof DuplicateFileEntryException ||
 				exception instanceof FileExtensionException ||
