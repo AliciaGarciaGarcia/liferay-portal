@@ -1178,6 +1178,16 @@ public class UIItemsBuilder {
 		return sb.toString();
 	}
 
+	private String _getEditURL() throws Exception {
+		PortletURL portletURL = _getControlPanelRenderURL(
+			"/document_library/edit_file_entry_image_editor");
+
+		portletURL.setParameter(
+			"fileEntryId", String.valueOf(_fileEntry.getFileEntryId()));
+
+		return portletURL.toString();
+	}
+
 	private LiferayPortletRequest _getLiferayPortletRequest() {
 		PortletRequest portletRequest =
 			(PortletRequest)_httpServletRequest.getAttribute(
