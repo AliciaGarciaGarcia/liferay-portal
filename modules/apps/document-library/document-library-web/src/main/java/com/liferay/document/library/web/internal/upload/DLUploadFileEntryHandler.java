@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.upload.UniqueFileNameProvider;
 import com.liferay.upload.UploadFileEntryHandler;
@@ -68,23 +69,57 @@ public class DLUploadFileEntryHandler implements UploadFileEntryHandler {
 			themeDisplay.getScopeGroupId(), folderId, ActionKeys.ADD_DOCUMENT);
 
 		String fileName = uploadPortletRequest.getFileName(_PARAMETER_NAME);
-		long size = uploadPortletRequest.getSize(_PARAMETER_NAME);
 
-		_dlValidator.validateFileSize(fileName, size);
+		if (Validator.isNotNull(fileName)) {
+			long size = uploadPortletRequest.getSize(_PARAMETER_NAME);
+
+			_dlValidator.validateFileSize(fileName, size);
+
+			try (InputStream inputStream = uploadPortletRequest.getFileAsStream(
+					_PARAMETER_NAME)) {
+
+				String uniqueFileName = _uniqueFileNameProvider.provide(
+					fileName,
+					curFileName -> _exists(
+						themeDisplay.getScopeGroupId(), folderId, curFileName));
+
+				return _dlAppService.addFileEntry(
+					themeDisplay.getScopeGroupId(), folderId, uniqueFileName,
+					uploadPortletRequest.getContentType(_PARAMETER_NAME),
+					uniqueFileName, _getDescription(uploadPortletRequest),
+					StringPool.BLANK, inputStream, size,
+					_getServiceContext(uploadPortletRequest));
+			}
+		}
+
+		return _editImageFileEntry(
+			uploadPortletRequest, themeDisplay, folderId);
+	}
+
+	private FileEntry _editImageFileEntry(
+			UploadPortletRequest uploadPortletRequest,
+			ThemeDisplay themeDisplay, long folderId)
+		throws IOException, PortalException {
 
 		try (InputStream inputStream = uploadPortletRequest.getFileAsStream(
-				_PARAMETER_NAME)) {
+				"imageBlob")) {
+
+			long fileEntryId = ParamUtil.getLong(
+				uploadPortletRequest, "fileEntryId");
+
+			FileEntry fileEntry = _dlAppService.getFileEntry(fileEntryId);
 
 			String uniqueFileName = _uniqueFileNameProvider.provide(
-				fileName,
+				fileEntry.getFileName(),
 				curFileName -> _exists(
 					themeDisplay.getScopeGroupId(), folderId, curFileName));
 
 			return _dlAppService.addFileEntry(
 				themeDisplay.getScopeGroupId(), folderId, uniqueFileName,
-				uploadPortletRequest.getContentType(_PARAMETER_NAME),
+				uploadPortletRequest.getContentType("imageBlob"),
 				uniqueFileName, _getDescription(uploadPortletRequest),
-				StringPool.BLANK, inputStream, size,
+				StringPool.BLANK, inputStream,
+				uploadPortletRequest.getSize("imageBlob"),
 				_getServiceContext(uploadPortletRequest));
 		}
 	}
