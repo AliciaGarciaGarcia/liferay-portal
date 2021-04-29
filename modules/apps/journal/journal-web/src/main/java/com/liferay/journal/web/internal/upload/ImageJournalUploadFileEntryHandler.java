@@ -14,6 +14,7 @@
 
 package com.liferay.journal.web.internal.upload;
 
+import com.liferay.document.library.kernel.service.DLAppService;
 import com.liferay.document.library.kernel.util.DLValidator;
 import com.liferay.journal.configuration.JournalFileUploadsConfiguration;
 import com.liferay.journal.constants.JournalConstants;
@@ -34,6 +35,7 @@ import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.TempFileEntryUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.upload.UniqueFileNameProvider;
 import com.liferay.upload.UploadFileEntryHandler;
@@ -91,21 +93,29 @@ public class ImageJournalUploadFileEntryHandler
 
 		String fileName = uploadPortletRequest.getFileName(_PARAMETER_NAME);
 
-		_validateFile(fileName, uploadPortletRequest.getSize(_PARAMETER_NAME));
+		if (Validator.isNotNull(fileName)) {
+			_validateFile(
+				fileName, uploadPortletRequest.getSize(_PARAMETER_NAME));
 
-		String contentType = uploadPortletRequest.getContentType(
-			_PARAMETER_NAME);
+			String contentType = uploadPortletRequest.getContentType(
+				_PARAMETER_NAME);
 
-		try (InputStream inputStream = uploadPortletRequest.getFileAsStream(
-				_PARAMETER_NAME)) {
+			try (InputStream inputStream = uploadPortletRequest.getFileAsStream(
+					_PARAMETER_NAME)) {
 
-			String uniqueFileName = _uniqueFileNameProvider.provide(
-				fileName, curFileName -> _exists(themeDisplay, curFileName));
+				String uniqueFileName = _uniqueFileNameProvider.provide(
+					fileName,
+					curFileName -> _exists(themeDisplay, curFileName));
 
-			return TempFileEntryUtil.addTempFileEntry(
-				themeDisplay.getScopeGroupId(), themeDisplay.getUserId(),
-				_TEMP_FOLDER_NAME, uniqueFileName, inputStream, contentType);
+				return TempFileEntryUtil.addTempFileEntry(
+					themeDisplay.getScopeGroupId(), themeDisplay.getUserId(),
+					_TEMP_FOLDER_NAME, uniqueFileName, inputStream,
+					contentType);
+			}
 		}
+
+		return _editImageFileEntry(
+			uploadPortletRequest, themeDisplay, fileName);
 	}
 
 	@Activate
@@ -133,6 +143,32 @@ public class ImageJournalUploadFileEntryHandler
 		ModelResourcePermission<JournalFolder> modelResourcePermission) {
 
 		_journalFolderModelResourcePermission = modelResourcePermission;
+	}
+
+	private FileEntry _editImageFileEntry(
+			UploadPortletRequest uploadPortletRequest,
+			ThemeDisplay themeDisplay, String fileName)
+		throws IOException, PortalException {
+
+		try (InputStream inputStream = uploadPortletRequest.getFileAsStream(
+				"imageBlob")) {
+
+			long fileEntryId = ParamUtil.getLong(
+				uploadPortletRequest, "fileEntryId");
+
+			FileEntry fileEntry = _dlAppService.getFileEntry(fileEntryId);
+
+			String contentType = uploadPortletRequest.getContentType(
+				"imageBlob");
+
+			String uniqueFileName = _uniqueFileNameProvider.provide(
+				fileEntry.getFileName(),
+				curFileName -> _exists(themeDisplay, curFileName));
+
+			return TempFileEntryUtil.addTempFileEntry(
+				themeDisplay.getScopeGroupId(), themeDisplay.getUserId(),
+				_TEMP_FOLDER_NAME, uniqueFileName, inputStream, contentType);
+		}
 	}
 
 	private boolean _exists(ThemeDisplay themeDisplay, String curFileName) {
@@ -184,6 +220,9 @@ public class ImageJournalUploadFileEntryHandler
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		ImageJournalUploadFileEntryHandler.class);
+
+	@Reference
+	private DLAppService _dlAppService;
 
 	@Reference
 	private DLValidator _dlValidator;
