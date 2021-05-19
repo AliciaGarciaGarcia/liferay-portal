@@ -286,10 +286,20 @@ public class ImageLocalServiceUtil {
 		return getService().getPersistedModel(primaryKeyObj);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link #moveImage(long, long, byte[])}
+	 */
+	@Deprecated
 	public static Image moveImage(long imageId, byte[] bytes)
 		throws PortalException {
 
 		return getService().moveImage(imageId, bytes);
+	}
+
+	public static Image moveImage(long companyId, long imageId, byte[] bytes)
+		throws PortalException {
+
+		return getService().moveImage(companyId, imageId, bytes);
 	}
 
 	/**

@@ -266,7 +266,14 @@ public interface ImageLocalService
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
 		throws PortalException;
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link #moveImage(long, long, byte[])}
+	 */
+	@Deprecated
 	public Image moveImage(long imageId, byte[] bytes) throws PortalException;
+
+	public Image moveImage(long companyId, long imageId, byte[] bytes)
+		throws PortalException;
 
 	/**
 	 * Updates the image in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

@@ -307,11 +307,22 @@ public class ImageLocalServiceWrapper
 		return _imageLocalService.getPersistedModel(primaryKeyObj);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link #moveImage(long, long, byte[])}
+	 */
+	@Deprecated
 	@Override
 	public Image moveImage(long imageId, byte[] bytes)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _imageLocalService.moveImage(imageId, bytes);
+	}
+
+	@Override
+	public Image moveImage(long companyId, long imageId, byte[] bytes)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _imageLocalService.moveImage(companyId, imageId, bytes);
 	}
 
 	/**
