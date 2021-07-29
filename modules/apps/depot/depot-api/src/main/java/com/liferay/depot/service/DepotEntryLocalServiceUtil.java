@@ -98,6 +98,10 @@ public class DepotEntryLocalServiceUtil {
 		return getService().createPersistedModel(primaryKeyObj);
 	}
 
+	public static void deleteDepotEntriesByCompanyId(long companyId) {
+		getService().deleteDepotEntriesByCompanyId(companyId);
+	}
+
 	/**
 	 * Deletes the depot entry from the database. Also notifies the appropriate model listeners.
 	 *

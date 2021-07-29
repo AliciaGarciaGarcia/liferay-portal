@@ -105,6 +105,8 @@ public interface DepotEntryLocalService
 	public PersistedModel createPersistedModel(Serializable primaryKeyObj)
 		throws PortalException;
 
+	public void deleteDepotEntriesByCompanyId(long companyId);
+
 	/**
 	 * Deletes the depot entry from the database. Also notifies the appropriate model listeners.
 	 *

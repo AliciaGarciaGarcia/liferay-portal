@@ -93,6 +93,11 @@ public class DepotEntryLocalServiceWrapper
 		return _depotEntryLocalService.createPersistedModel(primaryKeyObj);
 	}
 
+	@Override
+	public void deleteDepotEntriesByCompanyId(long companyId) {
+		_depotEntryLocalService.deleteDepotEntriesByCompanyId(companyId);
+	}
+
 	/**
 	 * Deletes the depot entry from the database. Also notifies the appropriate model listeners.
 	 *
