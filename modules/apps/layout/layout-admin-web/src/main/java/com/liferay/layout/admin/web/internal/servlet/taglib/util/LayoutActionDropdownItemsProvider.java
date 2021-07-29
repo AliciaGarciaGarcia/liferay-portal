@@ -39,8 +39,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import javax.portlet.PortletURL;
-
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -279,26 +277,27 @@ public class LayoutActionDropdownItemsProvider {
 										draftLayout, "plid",
 										layout.getPlid())));
 
-							PortletURL portletURL = PortletURLBuilder.create(
-								_translationURLProvider.getExportTranslationURL(
-									layout.getGroupId(),
-									PortalUtil.getClassNameId(
-										Layout.class.getName()),
-									layout.getPlid(),
-									RequestBackedPortletURLFactoryUtil.create(
-										_httpServletRequest))
-							).setRedirect(
-								PortalUtil.getCurrentURL(_httpServletRequest)
-							).setPortletResource(
-								() -> {
-									PortletDisplay portletDisplay =
-										_themeDisplay.getPortletDisplay();
+							dropdownItem.setHref(
+								PortletURLBuilder.create(
+									_translationURLProvider.
+										getExportTranslationURL(
+											layout.getGroupId(),
+											PortalUtil.getClassNameId(
+												Layout.class.getName()),
+											layout.getPlid(),
+											RequestBackedPortletURLFactoryUtil.
+												create(_httpServletRequest))
+								).setRedirect(
+									PortalUtil.getCurrentURL(
+										_httpServletRequest)
+								).setPortletResource(
+									() -> {
+										PortletDisplay portletDisplay =
+											_themeDisplay.getPortletDisplay();
 
-									return portletDisplay.getId();
-								}
-							).buildPortletURL();
-
-							dropdownItem.putData("url", portletURL.toString());
+										return portletDisplay.getId();
+									}
+								).buildString());
 
 							dropdownItem.setLabel(
 								LanguageUtil.get(
