@@ -155,6 +155,16 @@ public class DepotEntryLocalServiceImpl extends DepotEntryLocalServiceBaseImpl {
 	}
 
 	@Override
+	public void deleteDepotEntriesByCompanyId(long companyId) {
+		List<DepotEntry> depotEntries = depotEntryPersistence.findByCompanyId(
+			companyId);
+
+		for (DepotEntry depotEntry : depotEntries) {
+			depotEntryLocalService.deleteDepotEntry(depotEntry);
+		}
+	}
+
+	@Override
 	public DepotEntry fetchGroupDepotEntry(long groupId) {
 		return depotEntryPersistence.fetchByGroupId(groupId);
 	}
