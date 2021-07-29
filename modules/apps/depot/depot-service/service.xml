@@ -56,6 +56,9 @@
 		<finder name="GroupId" return-type="DepotEntry" unique="true">
 			<finder-column name="groupId" />
 		</finder>
+		<finder name="CompanyId" return-type="Collection">
+			<finder-column name="companyId" />
+		</finder>
 
 		<!-- References -->
 
