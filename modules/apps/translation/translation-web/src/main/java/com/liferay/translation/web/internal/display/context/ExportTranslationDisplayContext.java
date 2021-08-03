@@ -14,8 +14,183 @@
 
 package com.liferay.translation.web.internal.display.context;
 
+import com.liferay.info.item.provider.InfoItemWorkflowProvider;
+import com.liferay.info.localized.InfoLocalizedValue;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.json.JSONUtil;
+import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.model.GroupConstants;
+import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
+import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.translation.constants.TranslationPortletKeys;
+import com.liferay.translation.exporter.TranslationInfoItemFieldValuesExporter;
+import com.liferay.translation.exporter.TranslationInfoItemFieldValuesExporterTracker;
+
+import java.util.Collection;
+import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.portlet.ResourceURL;
+
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author Jorge González
  */
 public class ExportTranslationDisplayContext {
+
+	public ExportTranslationDisplayContext(
+		long classNameId, long classPK, long groupId,
+		HttpServletRequest httpServletRequest,
+		InfoItemWorkflowProvider<Object> infoItemWorkflowProvider,
+		LiferayPortletRequest liferayPortletRequest,
+		LiferayPortletResponse liferayPortletResponse, Object model,
+		String title,
+		TranslationInfoItemFieldValuesExporterTracker
+			translationInfoItemFieldValuesExporterTracker) {
+
+		_classNameId = classNameId;
+		_classPK = classPK;
+		_groupId = groupId;
+		_httpServletRequest = httpServletRequest;
+		_infoItemWorkflowProvider = infoItemWorkflowProvider;
+		_liferayPortletResponse = liferayPortletResponse;
+		_model = model;
+		_title = title;
+		_translationInfoItemFieldValuesExporterTracker =
+			translationInfoItemFieldValuesExporterTracker;
+
+		_themeDisplay = (ThemeDisplay)liferayPortletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+	}
+
+	public Map<String, Object> getExportTranslationData() {
+		ResourceURL exportTranslationURL =
+			_liferayPortletResponse.createResourceURL(
+				TranslationPortletKeys.TRANSLATION);
+
+		exportTranslationURL.setParameter(
+			"groupId", String.valueOf(GroupConstants.DEFAULT_PARENT_GROUP_ID));
+		exportTranslationURL.setParameter(
+			"classNameId",
+			String.valueOf(PortalUtil.getClassNameId(Layout.class.getName())));
+		exportTranslationURL.setResourceID("/translation/export_translation");
+
+		ResourceURL getExportTranslationAvailableLocalesURL =
+			_liferayPortletResponse.createResourceURL(
+				TranslationPortletKeys.TRANSLATION);
+
+		getExportTranslationAvailableLocalesURL.setParameter(
+			"groupId", String.valueOf(GroupConstants.DEFAULT_PARENT_GROUP_ID));
+		getExportTranslationAvailableLocalesURL.setParameter(
+			"classNameId",
+			String.valueOf(PortalUtil.getClassNameId(Layout.class.getName())));
+		getExportTranslationAvailableLocalesURL.setResourceID(
+			"/translation/get_export_translation_available_locales");
+
+		return HashMapBuilder.<String, Object>put(
+			"availableExportFileFormats",
+			() -> {
+				Collection<TranslationInfoItemFieldValuesExporter>
+					translationInfoItemFieldValuesExporters =
+						_translationInfoItemFieldValuesExporterTracker.
+							getTranslationInfoItemFieldValuesExporters();
+
+				Stream<TranslationInfoItemFieldValuesExporter>
+					translationInfoItemFieldValuesExporterStream =
+						translationInfoItemFieldValuesExporters.stream();
+
+				return translationInfoItemFieldValuesExporterStream.map(
+					this::_getExportFileFormatJSONObject
+				).collect(
+					Collectors.toList()
+				);
+			}
+		).put(
+			"availableTargetLocales",
+			_getLocalesJSONArray(
+				_themeDisplay.getLocale(),
+				LanguageUtil.getAvailableLocales(
+					_themeDisplay.getSiteGroupId()))
+		).put(
+			"exportTranslationURL", exportTranslationURL.toString()
+		).put(
+			"getExportTranslationAvailableLocalesURL",
+			getExportTranslationAvailableLocalesURL.toString()
+		).put(
+			"pathModule", PortalUtil.getPathModule()
+		).build();
+	}
+
+	public String getRedirect() {
+		if (Validator.isNotNull(_redirect)) {
+			return _redirect;
+		}
+
+		_redirect = ParamUtil.getString(_httpServletRequest, "redirect");
+
+		return _redirect;
+	}
+
+	public String getTitle() throws PortalException {
+		return _title;
+	}
+
+	private JSONObject _getExportFileFormatJSONObject(
+		TranslationInfoItemFieldValuesExporter
+			translationInfoItemFieldValuesExporter) {
+
+		InfoLocalizedValue<String> labelInfoLocalizedValue =
+			translationInfoItemFieldValuesExporter.getLabelInfoLocalizedValue();
+
+		return JSONUtil.put(
+			"displayName",
+			labelInfoLocalizedValue.getValue(_themeDisplay.getLocale())
+		).put(
+			"mimeType", translationInfoItemFieldValuesExporter.getMimeType()
+		);
+	}
+
+	private JSONArray _getLocalesJSONArray(
+		Locale currentLocale, Collection<Locale> locales) {
+
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		locales.forEach(
+			locale -> jsonArray.put(
+				JSONUtil.put(
+					"displayName", locale.getDisplayName(currentLocale)
+				).put(
+					"languageId", LocaleUtil.toLanguageId(locale)
+				)));
+
+		return jsonArray;
+	}
+
+	private final long _classNameId;
+	private final long _classPK;
+	private final long _groupId;
+	private final HttpServletRequest _httpServletRequest;
+	private final InfoItemWorkflowProvider<Object> _infoItemWorkflowProvider;
+	private final LiferayPortletResponse _liferayPortletResponse;
+	private final Object _model;
+	private String _redirect;
+	private final ThemeDisplay _themeDisplay;
+	private final String _title;
+	private final TranslationInfoItemFieldValuesExporterTracker
+		_translationInfoItemFieldValuesExporterTracker;
+
 }

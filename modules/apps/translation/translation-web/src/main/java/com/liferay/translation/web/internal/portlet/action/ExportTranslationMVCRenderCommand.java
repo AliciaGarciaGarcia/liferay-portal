@@ -14,14 +14,30 @@
 
 package com.liferay.translation.web.internal.portlet.action;
 
+import com.liferay.info.field.InfoFieldValue;
+import com.liferay.info.item.InfoItemServiceTracker;
+import com.liferay.info.item.provider.InfoItemFieldValuesProvider;
+import com.liferay.info.item.provider.InfoItemObjectProvider;
+import com.liferay.info.item.provider.InfoItemWorkflowProvider;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.translation.constants.TranslationPortletKeys;
+import com.liferay.translation.exporter.TranslationInfoItemFieldValuesExporterTracker;
+import com.liferay.translation.web.internal.display.context.ExportTranslationDisplayContext;
+
+import java.util.Locale;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Adolfo Pérez
@@ -40,7 +56,73 @@ public class ExportTranslationMVCRenderCommand implements MVCRenderCommand {
 			RenderRequest renderRequest, RenderResponse renderResponse)
 		throws PortletException {
 
-		return "/export_translation.jsp";
+		try {
+			ThemeDisplay themeDisplay =
+				(ThemeDisplay)renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+			long classNameId = ParamUtil.getLong(renderRequest, "classNameId");
+			long classPK = ParamUtil.getLong(renderRequest, "classPK");
+			long groupId = ParamUtil.getLong(renderRequest, "groupId");
+
+			String className = _portal.getClassName(classNameId);
+
+			Object model = _getModel(className, classPK);
+
+			renderRequest.setAttribute(
+				ExportTranslationDisplayContext.class.getName(),
+				new ExportTranslationDisplayContext(
+					classNameId, classPK, groupId,
+					_portal.getHttpServletRequest(renderRequest),
+					_infoItemServiceTracker.getFirstInfoItemService(
+						InfoItemWorkflowProvider.class, className),
+					_portal.getLiferayPortletRequest(renderRequest),
+					_portal.getLiferayPortletResponse(renderResponse), model,
+					_getTitle(className, model, themeDisplay.getLocale()),
+					_translationInfoItemFieldValuesExporterTracker));
+
+			return "/export_translation.jsp";
+		}
+		catch (PortalException portalException) {
+			throw new PortletException(portalException);
+		}
 	}
+
+	private Object _getModel(String className, long classPK)
+		throws PortalException {
+
+		InfoItemObjectProvider<Object> infoItemObjectProvider =
+			_infoItemServiceTracker.getFirstInfoItemService(
+				InfoItemObjectProvider.class, className);
+
+		return infoItemObjectProvider.getInfoItem(classPK);
+	}
+
+	private String _getTitle(String className, Object model, Locale locale) {
+		InfoItemFieldValuesProvider<Object> infoItemFieldValuesProvider =
+			_infoItemServiceTracker.getFirstInfoItemService(
+				InfoItemFieldValuesProvider.class, className);
+
+		InfoFieldValue<Object> infoFieldValue =
+			infoItemFieldValuesProvider.getInfoFieldValue(model, "title");
+
+		if (infoFieldValue == null) {
+			return _language.get(locale, "export-translation");
+		}
+
+		return (String)infoFieldValue.getValue(locale);
+	}
+
+	@Reference
+	private InfoItemServiceTracker _infoItemServiceTracker;
+
+	@Reference
+	private Language _language;
+
+	@Reference
+	private Portal _portal;
+
+	@Reference
+	private TranslationInfoItemFieldValuesExporterTracker
+		_translationInfoItemFieldValuesExporterTracker;
 
 }
