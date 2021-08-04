@@ -59,6 +59,7 @@ const ExportTranslation = ({
 		else {
 			return (
 				<ClaySelect
+					id={`${portletNamespace}sourceLanguageId`}
 					name={`${portletNamespace}sourceLanguageId`}
 					onChange={(event) => {
 						setSourceLanguageId(event.currentTarget.value);
@@ -89,6 +90,7 @@ const ExportTranslation = ({
 		else {
 			return (
 				<ClaySelect
+					id={`${portletNamespace}exportMimeType`}
 					name={`${portletNamespace}exportMimeType`}
 					onChange={(event) => {
 						setExportMimeType(event.currentTarget.value);
@@ -127,23 +129,30 @@ const ExportTranslation = ({
 
 	return (
 		<ClayForm>
-			<h5>{Liferay.Language.get('export-file-format')}</h5>
-
 			<ClayForm.Group className="w-50">
+				<label
+					htmlFor={
+						availableExportFileFormats.length > 1
+							? `${portletNamespace}exportMimeType`
+							: undefined
+					}
+				>
+					{Liferay.Language.get('export-file-format')}
+				</label>
 				<ExportFileFormats />
 			</ClayForm.Group>
 
-			<h5>{Liferay.Language.get('original-language')}</h5>
-
 			<ClayForm.Group>
+				<label htmlFor={`${portletNamespace}sourceLanguageId`}>
+					{Liferay.Language.get('original-language')}
+				</label>
 				<SourceLocales />
 			</ClayForm.Group>
 
-			<h5>
-				<p>{Liferay.Language.get('languages-to-translate-to')}</p>
-			</h5>
-
 			<ClayForm.Group>
+				<label className="mb-2">
+					{Liferay.Language.get('languages-to-translate-to')}
+				</label>
 				<ClayLayout.Row>
 					{availableTargetLocales.map((locale) => (
 						<TargetLocale key={locale.languageId} locale={locale} />
