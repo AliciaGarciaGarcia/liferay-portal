@@ -39,13 +39,13 @@ const ExportTranslation = ({
 
 	const onChangeTarget = (checked, selectedLanguageId) => {
 		if (checked) {
-			setSelectedTargetLanguageIds(
-				selectedTargetLanguageIds.concat(selectedLanguageId)
+			setSelectedTargetLanguageIds((languageIds) =>
+				languageIds.concat(selectedLanguageId)
 			);
 		}
 		else {
-			setSelectedTargetLanguageIds(
-				selectedTargetLanguageIds.filter(
+			setSelectedTargetLanguageIds((languageIds) =>
+				languageIds.filter(
 					(languageId) => languageId != selectedLanguageId
 				)
 			);
