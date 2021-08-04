@@ -16,4 +16,35 @@
 
 <%@ include file="/init.jsp" %>
 
-<h1>Export translation</h1>
+<%
+portletDisplay.setShowBackIcon(true);
+ExportTranslationDisplayContext exportTranslationDisplayContext = (ExportTranslationDisplayContext)request.getAttribute(ExportTranslationDisplayContext.class.getName());
+
+portletDisplay.setURLBack(exportTranslationDisplayContext.getRedirect());
+
+renderResponse.setTitle(exportTranslationDisplayContext.getTitle());
+%>
+
+<div class="translation">
+	<aui:form action="" name="fm">
+		<aui:input name="redirect" type="hidden" value="" />
+		<aui:input name="portletResource" type="hidden" value='<%= ParamUtil.getString(request, "portletResource") %>' />
+
+		<clay:container-fluid
+			cssClass="container-view"
+		>
+			<clay:sheet
+				cssClass="translation-import-body-form"
+			>
+				<div>
+					<react:component
+						module="js/ExportTranslation"
+						props="<%=
+							exportTranslationDisplayContext.getExportTranslationData()
+						%>"
+					/>
+				</div>
+			</clay:sheet>
+		</clay:container-fluid>
+	</aui:form>
+</div>
