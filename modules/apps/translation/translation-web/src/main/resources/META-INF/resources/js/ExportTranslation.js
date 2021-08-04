@@ -38,18 +38,13 @@ const ExportTranslation = ({
 	);
 
 	const onChangeTarget = (checked, selectedLanguageId) => {
-		if (checked) {
-			setSelectedTargetLanguageIds((languageIds) =>
-				languageIds.concat(selectedLanguageId)
-			);
-		}
-		else {
-			setSelectedTargetLanguageIds((languageIds) =>
-				languageIds.filter(
-					(languageId) => languageId != selectedLanguageId
-				)
-			);
-		}
+		setSelectedTargetLanguageIds((languageIds) =>
+			checked
+				? languageIds.concat(selectedLanguageId)
+				: languageIds.filter(
+						(languageId) => languageId != selectedLanguageId
+				  )
+		);
 	};
 
 	const SourceLocales = () => {
