@@ -33,13 +33,20 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.segments.constants.SegmentsExperienceConstants;
+import com.liferay.segments.model.SegmentsExperience;
+import com.liferay.segments.service.SegmentsExperienceServiceUtil;
 import com.liferay.translation.constants.TranslationPortletKeys;
 import com.liferay.translation.exporter.TranslationInfoItemFieldValuesExporter;
 import com.liferay.translation.exporter.TranslationInfoItemFieldValuesExporterTracker;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -77,7 +84,9 @@ public class ExportTranslationDisplayContext {
 			WebKeys.THEME_DISPLAY);
 	}
 
-	public Map<String, Object> getExportTranslationData() {
+	public Map<String, Object> getExportTranslationData()
+		throws PortalException {
+
 		ResourceURL exportTranslationURL =
 			_liferayPortletResponse.createResourceURL(
 				TranslationPortletKeys.TRANSLATION);
@@ -126,6 +135,8 @@ public class ExportTranslationDisplayContext {
 				LanguageUtil.getAvailableLocales(
 					_themeDisplay.getSiteGroupId()))
 		).put(
+			"experiences", _getExperiences()
+		).put(
 			"exportTranslationURL", exportTranslationURL.toString()
 		).put(
 			"getExportTranslationAvailableLocalesURL",
@@ -147,6 +158,59 @@ public class ExportTranslationDisplayContext {
 
 	public String getTitle() throws PortalException {
 		return _title;
+	}
+
+	private List<Map<String, String>> _getExperiences() throws PortalException {
+		if (!Objects.equals(
+				PortalUtil.getClassName(_classNameId),
+				Layout.class.getName())) {
+
+			return null;
+		}
+
+		List<SegmentsExperience> segmentsExperiences =
+			SegmentsExperienceServiceUtil.getSegmentsExperiences(
+				_groupId, PortalUtil.getClassNameId(Layout.class.getName()),
+				_classPK, true);
+
+		boolean addedDefault = false;
+
+		HashMap<String, String> defaultExperience = HashMapBuilder.put(
+			"label",
+			SegmentsExperienceConstants.getDefaultSegmentsExperienceName(
+				_themeDisplay.getLocale())
+		).put(
+			"value",
+			String.valueOf((Object)SegmentsExperienceConstants.ID_DEFAULT)
+		).build();
+
+		List<Map<String, String>> experiences = new ArrayList<>();
+
+		for (SegmentsExperience segmentsExperience : segmentsExperiences) {
+			if ((segmentsExperience.getPriority() <
+					SegmentsExperienceConstants.PRIORITY_DEFAULT) &&
+				!addedDefault) {
+
+				experiences.add(defaultExperience);
+
+				addedDefault = true;
+			}
+
+			experiences.add(
+				HashMapBuilder.put(
+					"label",
+					segmentsExperience.getName(_themeDisplay.getLocale())
+				).put(
+					"value",
+					String.valueOf(segmentsExperience.getSegmentsExperienceId())
+				).build());
+		}
+
+		if (!addedDefault) {
+			experiences.add(defaultExperience);
+		}
+
+		return experiences;
 	}
 
 	private JSONObject _getExportFileFormatJSONObject(
