@@ -116,8 +116,7 @@ public class ExportTranslationDisplayContext {
 		getExportTranslationAvailableLocalesURL.setParameter(
 			"groupId", String.valueOf(GroupConstants.DEFAULT_PARENT_GROUP_ID));
 		getExportTranslationAvailableLocalesURL.setParameter(
-			"classNameId",
-			String.valueOf(PortalUtil.getClassNameId(Layout.class.getName())));
+			"classNameId", String.valueOf(_classNameId));
 		getExportTranslationAvailableLocalesURL.setResourceID(
 			"/translation/get_export_translation_available_locales");
 
