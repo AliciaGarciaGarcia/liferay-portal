@@ -18,6 +18,7 @@
 
 <%
 portletDisplay.setShowBackIcon(true);
+
 ExportTranslationDisplayContext exportTranslationDisplayContext = (ExportTranslationDisplayContext)request.getAttribute(ExportTranslationDisplayContext.class.getName());
 
 portletDisplay.setURLBack(exportTranslationDisplayContext.getRedirect());
