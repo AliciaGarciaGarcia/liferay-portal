@@ -18,7 +18,6 @@ import com.liferay.info.field.InfoFieldValue;
 import com.liferay.info.item.InfoItemServiceTracker;
 import com.liferay.info.item.provider.InfoItemFieldValuesProvider;
 import com.liferay.info.item.provider.InfoItemObjectProvider;
-import com.liferay.info.item.provider.InfoItemWorkflowProvider;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
@@ -73,8 +72,7 @@ public class ExportTranslationMVCRenderCommand implements MVCRenderCommand {
 				new ExportTranslationDisplayContext(
 					classNameId, classPK, groupId,
 					_portal.getHttpServletRequest(renderRequest),
-					_infoItemServiceTracker.getFirstInfoItemService(
-						InfoItemWorkflowProvider.class, className),
+					_infoItemServiceTracker,
 					_portal.getLiferayPortletRequest(renderRequest),
 					_portal.getLiferayPortletResponse(renderResponse), model,
 					_getTitle(className, model, themeDisplay.getLocale()),

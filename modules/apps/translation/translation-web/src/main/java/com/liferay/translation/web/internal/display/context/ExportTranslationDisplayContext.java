@@ -14,6 +14,7 @@
 
 package com.liferay.translation.web.internal.display.context;
 
+import com.liferay.info.item.InfoItemServiceTracker;
 import com.liferay.info.item.provider.InfoItemWorkflowProvider;
 import com.liferay.info.localized.InfoLocalizedValue;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -39,6 +40,7 @@ import com.liferay.segments.service.SegmentsExperienceServiceUtil;
 import com.liferay.translation.constants.TranslationPortletKeys;
 import com.liferay.translation.exporter.TranslationInfoItemFieldValuesExporter;
 import com.liferay.translation.exporter.TranslationInfoItemFieldValuesExporterTracker;
+import com.liferay.translation.info.item.provider.InfoItemLanguagesProvider;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -62,7 +64,7 @@ public class ExportTranslationDisplayContext {
 	public ExportTranslationDisplayContext(
 		long classNameId, long classPK, long groupId,
 		HttpServletRequest httpServletRequest,
-		InfoItemWorkflowProvider<Object> infoItemWorkflowProvider,
+		InfoItemServiceTracker infoItemServiceTracker,
 		LiferayPortletRequest liferayPortletRequest,
 		LiferayPortletResponse liferayPortletResponse, Object model,
 		String title,
@@ -70,15 +72,22 @@ public class ExportTranslationDisplayContext {
 			translationInfoItemFieldValuesExporterTracker) {
 
 		_classNameId = classNameId;
+
+		_className = PortalUtil.getClassName(_classNameId);
+
 		_classPK = classPK;
 		_groupId = groupId;
 		_httpServletRequest = httpServletRequest;
-		_infoItemWorkflowProvider = infoItemWorkflowProvider;
+		_infoItemServiceTracker = infoItemServiceTracker;
 		_liferayPortletResponse = liferayPortletResponse;
 		_model = model;
 		_title = title;
 		_translationInfoItemFieldValuesExporterTracker =
 			translationInfoItemFieldValuesExporterTracker;
+
+		_infoItemWorkflowProvider =
+			_infoItemServiceTracker.getFirstInfoItemService(
+				InfoItemWorkflowProvider.class, _className);
 
 		_themeDisplay = (ThemeDisplay)liferayPortletRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
@@ -135,6 +144,8 @@ public class ExportTranslationDisplayContext {
 				LanguageUtil.getAvailableLocales(
 					_themeDisplay.getSiteGroupId()))
 		).put(
+			"defaultLanguageId", _getDefaultLanguageId()
+		).put(
 			"experiences", _getExperiences()
 		).put(
 			"exportTranslationURL", exportTranslationURL.toString()
@@ -160,11 +171,21 @@ public class ExportTranslationDisplayContext {
 		return _title;
 	}
 
-	private List<Map<String, String>> _getExperiences() throws PortalException {
-		if (!Objects.equals(
-				PortalUtil.getClassName(_classNameId),
-				Layout.class.getName())) {
+	private String _getDefaultLanguageId() {
+		InfoItemLanguagesProvider<Object> infoItemLanguagesProvider =
+			_infoItemServiceTracker.getFirstInfoItemService(
+				InfoItemLanguagesProvider.class, _className);
 
+		if (infoItemLanguagesProvider == null) {
+			return LanguageUtil.getLanguageId(
+				_themeDisplay.getSiteDefaultLocale());
+		}
+
+		return infoItemLanguagesProvider.getDefaultLanguageId(_model);
+	}
+
+	private List<Map<String, String>> _getExperiences() throws PortalException {
+		if (!Objects.equals(_className, Layout.class.getName())) {
 			return null;
 		}
 
@@ -244,10 +265,12 @@ public class ExportTranslationDisplayContext {
 		return jsonArray;
 	}
 
+	private final String _className;
 	private final long _classNameId;
 	private final long _classPK;
 	private final long _groupId;
 	private final HttpServletRequest _httpServletRequest;
+	private final InfoItemServiceTracker _infoItemServiceTracker;
 	private final InfoItemWorkflowProvider<Object> _infoItemWorkflowProvider;
 	private final LiferayPortletResponse _liferayPortletResponse;
 	private final Object _model;
