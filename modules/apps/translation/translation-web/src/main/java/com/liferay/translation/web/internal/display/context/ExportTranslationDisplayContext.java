@@ -43,12 +43,14 @@ import com.liferay.translation.exporter.TranslationInfoItemFieldValuesExporterTr
 import com.liferay.translation.info.item.provider.InfoItemLanguagesProvider;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -138,6 +140,10 @@ public class ExportTranslationDisplayContext {
 				);
 			}
 		).put(
+			"availableSourceLocales",
+			_getLocalesJSONArray(
+				_themeDisplay.getLocale(), _getAvailableSourceLocales())
+		).put(
 			"availableTargetLocales",
 			_getLocalesJSONArray(
 				_themeDisplay.getLocale(),
@@ -169,6 +175,19 @@ public class ExportTranslationDisplayContext {
 
 	public String getTitle() throws PortalException {
 		return _title;
+	}
+
+	private Set<Locale> _getAvailableSourceLocales() throws PortalException {
+		InfoItemLanguagesProvider<Object> infoItemLanguagesProvider =
+			_infoItemServiceTracker.getFirstInfoItemService(
+				InfoItemLanguagesProvider.class, _className);
+
+		Stream<String> stream = Arrays.stream(
+			infoItemLanguagesProvider.getAvailableLanguageIds(_model));
+
+		Stream<Locale> localesStream = stream.map(LocaleUtil::fromLanguageId);
+
+		return localesStream.collect(Collectors.toSet());
 	}
 
 	private String _getDefaultLanguageId() {
