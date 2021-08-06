@@ -16,6 +16,7 @@ package com.liferay.image.service.internal.upgrade;
 
 import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.service.DDMTemplateLocalService;
+import com.liferay.image.company.provider.ImageCompanyIdUpgradeProvider;
 import com.liferay.image.service.internal.upgrade.v1_0_0.ImageCompanyIdUpgradeProcess;
 import com.liferay.image.service.internal.upgrade.v1_0_0.ImageStorageUpgradeProcess;
 import com.liferay.journal.model.JournalArticle;
@@ -47,25 +48,32 @@ public class ImageServiceUpgrade implements UpgradeStepRegistrator {
 			"0.0.0", "1.0.0",
 			new ImageCompanyIdUpgradeProcess<>(
 				_companyLocalService::getActionableDynamicQuery,
-				Company::getCompanyId, Company::getLogoId),
+				Company::getCompanyId, _imageCompanyIdUpgradeProvider,
+				Company::getLogoId),
 			new ImageCompanyIdUpgradeProcess<>(
 				_ddmTemplateLocalService::getActionableDynamicQuery,
-				DDMTemplate::getCompanyId, DDMTemplate::getSmallImageId),
+				DDMTemplate::getCompanyId, _imageCompanyIdUpgradeProvider,
+				DDMTemplate::getSmallImageId),
 			new ImageCompanyIdUpgradeProcess<>(
 				_journalArticleLocalService::getActionableDynamicQuery,
-				JournalArticle::getCompanyId, JournalArticle::getSmallImageId),
+				JournalArticle::getCompanyId, _imageCompanyIdUpgradeProvider,
+				JournalArticle::getSmallImageId),
 			new ImageCompanyIdUpgradeProcess<>(
 				_layoutLocalService::getActionableDynamicQuery,
-				Layout::getCompanyId, Layout::getIconImageId),
+				Layout::getCompanyId, _imageCompanyIdUpgradeProvider,
+				Layout::getIconImageId),
 			new ImageCompanyIdUpgradeProcess<>(
 				_layoutSetLocalService::getActionableDynamicQuery,
-				LayoutSet::getCompanyId, LayoutSet::getLogoId),
+				LayoutSet::getCompanyId, _imageCompanyIdUpgradeProvider,
+				LayoutSet::getLogoId),
 			new ImageCompanyIdUpgradeProcess<>(
 				_layoutSetBranchLocalService::getActionableDynamicQuery,
-				LayoutSetBranch::getCompanyId, LayoutSetBranch::getLogoId),
+				LayoutSetBranch::getCompanyId, _imageCompanyIdUpgradeProvider,
+				LayoutSetBranch::getLogoId),
 			new ImageCompanyIdUpgradeProcess<>(
 				_layoutSetBranchLocalService::getActionableDynamicQuery,
-				LayoutSetBranch::getCompanyId, LayoutSetBranch::getLiveLogoId),
+				LayoutSetBranch::getCompanyId, _imageCompanyIdUpgradeProvider,
+				LayoutSetBranch::getLiveLogoId),
 			new ImageStorageUpgradeProcess(_imageLocalService, _storeFactory));
 	}
 
@@ -74,6 +82,9 @@ public class ImageServiceUpgrade implements UpgradeStepRegistrator {
 
 	@Reference
 	private DDMTemplateLocalService _ddmTemplateLocalService;
+
+	@Reference
+	private ImageCompanyIdUpgradeProvider _imageCompanyIdUpgradeProvider;
 
 	@Reference
 	private ImageLocalService _imageLocalService;
