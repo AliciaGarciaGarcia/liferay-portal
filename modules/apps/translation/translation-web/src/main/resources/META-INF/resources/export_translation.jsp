@@ -27,16 +27,14 @@ renderResponse.setTitle(exportTranslationDisplayContext.getTitle());
 %>
 
 <div class="translation">
-	<aui:form action="" name="fm">
-		<aui:input name="redirect" type="hidden" value="" />
+	<aui:form action="<%= exportTranslationDisplayContext.getExportTranslationURL() %>" cssClass="translation-export" method="post" name="fm">
+		<aui:input name="redirect" type="hidden" value="<%= exportTranslationDisplayContext.getRedirect() %>" />
 		<aui:input name="portletResource" type="hidden" value='<%= ParamUtil.getString(request, "portletResource") %>' />
 
 		<clay:container-fluid
 			cssClass="container-view"
 		>
-			<clay:sheet
-				cssClass="translation-import-body-form"
-			>
+			<clay:sheet>
 				<div>
 					<react:component
 						module="js/ExportTranslation"
