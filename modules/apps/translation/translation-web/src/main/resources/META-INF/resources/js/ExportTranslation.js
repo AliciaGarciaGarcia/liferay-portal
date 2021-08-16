@@ -225,7 +225,11 @@ const ExportTranslation = ({
 				</ClayButton>
 
 				<ClayButton
-					disabled={selectedTargetLanguageIds.length === 0}
+					disabled={
+						selectedTargetLanguageIds.length === 0 ||
+						(experiences?.length > 1 &&
+							selectedExperiencesIds.length === 0)
+					}
 					displayType="primary"
 					type="submit"
 				>
