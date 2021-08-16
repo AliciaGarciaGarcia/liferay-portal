@@ -135,6 +135,7 @@ const ExportTranslation = ({
 					checked={checked}
 					disabled={languageId === sourceLanguageId}
 					label={locale.displayName}
+					name={`${portletNamespace}targetLanguageIds`}
 					onChange={() => {
 						onChangeTargetLanguage(!checked, languageId);
 					}}
@@ -164,6 +165,7 @@ const ExportTranslation = ({
 										<ClayCheckbox
 											checked={checked}
 											label={label}
+											name={`${portletNamespace}experiencesIds`}
 											onChange={() => {
 												onChangeExperience(
 													!checked,
