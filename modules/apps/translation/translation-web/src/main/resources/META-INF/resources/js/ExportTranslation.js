@@ -15,6 +15,7 @@
 import ClayButton from '@clayui/button';
 import ClayForm, {ClayCheckbox, ClayInput, ClaySelect} from '@clayui/form';
 import ClayLayout from '@clayui/layout';
+import ClayList from '@clayui/list';
 import PropTypes from 'prop-types';
 import React, {useState} from 'react';
 
@@ -23,6 +24,7 @@ const ExportTranslation = ({
 	availableSourceLocales,
 	availableTargetLocales,
 	defaultSourceLanguageId,
+	experiences,
 	portletNamespace,
 }) => {
 	const [exportMimeType, setExportMimeType] = useState(
@@ -127,8 +129,38 @@ const ExportTranslation = ({
 		);
 	};
 
+	const Experiences = () => {
+		if (experiences?.length === 1) {
+			return <input type="hidden" value={experiences[0].value} />;
+		}
+		else if (experiences?.length > 1) {
+			return (
+				<>
+					<label className="mb-2">
+						{Liferay.Language.get('select-experiences')}
+					</label>
+					<div className="translation-experiences-wrapper">
+						<ClayList>
+							{experiences.map(({label, value}) => (
+								<ClayList.Item key={label}>
+									<ClayCheckbox
+										defaultChecked
+										label={label}
+										value={value}
+									/>
+								</ClayList.Item>
+							))}
+						</ClayList>
+					</div>
+				</>
+			);
+		}
+
+		return null;
+	};
+
 	return (
-		<ClayForm>
+		<>
 			<ClayForm.Group className="w-50">
 				<label
 					htmlFor={
@@ -160,6 +192,8 @@ const ExportTranslation = ({
 				</ClayLayout.Row>
 			</ClayForm.Group>
 
+			<Experiences />
+
 			<ClayButton.Group spaced>
 				<ClayButton displayType="secondary">
 					{Liferay.Language.get('cancel')}
@@ -173,7 +207,7 @@ const ExportTranslation = ({
 					{Liferay.Language.get('export')}
 				</ClayButton>
 			</ClayButton.Group>
-		</ClayForm>
+		</>
 	);
 };
 
@@ -197,6 +231,12 @@ ExportTranslation.propTypes = {
 		})
 	).isRequired,
 	defaultSourceLanguageId: PropTypes.string.isRequired,
+	experiences: PropTypes.arrayOf(
+		PropTypes.shape({
+			label: PropTypes.string.isRequired,
+			value: PropTypes.string.isRequired,
+		})
+	),
 	keys: PropTypes.array,
 };
 
