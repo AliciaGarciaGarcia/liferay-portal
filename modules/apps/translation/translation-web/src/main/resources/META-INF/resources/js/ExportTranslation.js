@@ -39,7 +39,9 @@ const ExportTranslation = ({
 		[]
 	);
 
-	const [selectedExperiencesIds, setSelectedExperiencesIds] = useState([]);
+	const [selectedExperiencesIds, setSelectedExperiencesIds] = useState(() =>
+		experiences?.length ? experiences.map(({value}) => value) : []
+	);
 
 	const onChangeTargetLanguage = (checked, selectedLanguageId) => {
 		setSelectedTargetLanguageIds((languageIds) =>
