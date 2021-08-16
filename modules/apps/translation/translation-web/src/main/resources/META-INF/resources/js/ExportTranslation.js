@@ -39,12 +39,24 @@ const ExportTranslation = ({
 		[]
 	);
 
-	const onChangeTarget = (checked, selectedLanguageId) => {
+	const [selectedExperiencesIds, setSelectedExperiencesIds] = useState([]);
+
+	const onChangeTargetLanguage = (checked, selectedLanguageId) => {
 		setSelectedTargetLanguageIds((languageIds) =>
 			checked
 				? languageIds.concat(selectedLanguageId)
 				: languageIds.filter(
 						(languageId) => languageId != selectedLanguageId
+				  )
+		);
+	};
+
+	const onChangeExperience = (checked, selectedExperienceId) => {
+		setSelectedExperiencesIds((experiencesIds) =>
+			checked
+				? experiencesIds.concat(selectedExperienceId)
+				: experiencesIds.filter(
+						(experienceId) => experienceId != selectedExperienceId
 				  )
 		);
 	};
@@ -122,7 +134,7 @@ const ExportTranslation = ({
 					disabled={languageId === sourceLanguageId}
 					label={locale.displayName}
 					onChange={() => {
-						onChangeTarget(!checked, languageId);
+						onChangeTargetLanguage(!checked, languageId);
 					}}
 				/>
 			</ClayLayout.Col>
@@ -141,15 +153,26 @@ const ExportTranslation = ({
 					</label>
 					<div className="translation-experiences-wrapper">
 						<ClayList>
-							{experiences.map(({label, value}) => (
-								<ClayList.Item key={label}>
-									<ClayCheckbox
-										defaultChecked
-										label={label}
-										value={value}
-									/>
-								</ClayList.Item>
-							))}
+							{experiences.map(({label, value}) => {
+								const checked =
+									selectedExperiencesIds.indexOf(value) != -1;
+
+								return (
+									<ClayList.Item key={label}>
+										<ClayCheckbox
+											checked={checked}
+											label={label}
+											onChange={() => {
+												onChangeExperience(
+													!checked,
+													value
+												);
+											}}
+											value={value}
+										/>
+									</ClayList.Item>
+								);
+							})}
 						</ClayList>
 					</div>
 				</>
