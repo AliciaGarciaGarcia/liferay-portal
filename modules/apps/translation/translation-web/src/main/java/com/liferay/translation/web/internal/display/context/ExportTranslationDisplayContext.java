@@ -149,7 +149,7 @@ public class ExportTranslationDisplayContext {
 				LanguageUtil.getAvailableLocales(
 					_themeDisplay.getSiteGroupId()))
 		).put(
-			"defaultLanguageId", _getDefaultLanguageId()
+			"defaultSourceLanguageId", _getDefaultSourceLanguageId()
 		).put(
 			"experiences", _getExperiences()
 		).put(
@@ -189,7 +189,7 @@ public class ExportTranslationDisplayContext {
 		return localesStream.collect(Collectors.toSet());
 	}
 
-	private String _getDefaultLanguageId() {
+	private String _getDefaultSourceLanguageId() {
 		InfoItemLanguagesProvider<Object> infoItemLanguagesProvider =
 			_infoItemServiceTracker.getFirstInfoItemService(
 				InfoItemLanguagesProvider.class, _className);
