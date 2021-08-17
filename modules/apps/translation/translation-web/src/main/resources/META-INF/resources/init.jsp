@@ -46,7 +46,8 @@ page import="com.liferay.translation.web.internal.display.context.TranslateDispl
 page import="com.liferay.translation.web.internal.display.context.ViewDisplayContext" %><%@
 page import="com.liferay.translation.web.internal.display.context.ViewTranslationDisplayContext" %>
 
-<%@ page import="java.util.List" %>
+<%@ page import="java.util.List" %><%@
+page import="java.util.Locale" %>
 
 <liferay-frontend:defineObjects />
 
