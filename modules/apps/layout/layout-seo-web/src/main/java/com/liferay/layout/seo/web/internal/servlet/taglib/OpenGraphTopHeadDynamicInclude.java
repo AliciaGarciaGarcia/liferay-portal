@@ -36,7 +36,6 @@ import com.liferay.layout.seo.open.graph.OpenGraphConfiguration;
 import com.liferay.layout.seo.service.LayoutSEOEntryLocalService;
 import com.liferay.layout.seo.service.LayoutSEOSiteLocalService;
 import com.liferay.layout.seo.template.LayoutSEOTemplateProcessor;
-import com.liferay.layout.seo.web.internal.configuration.FFLayoutTranslatedLanguagesConfiguration;
 import com.liferay.layout.seo.web.internal.configuration.FFSEOInlineFieldMapping;
 import com.liferay.layout.seo.web.internal.util.OpenGraphImageProvider;
 import com.liferay.layout.seo.web.internal.util.TitleProvider;
@@ -85,10 +84,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alicia García
  */
 @Component(
-	configurationPid = {
-		"com.liferay.layout.seo.web.internal.configuration.FFLayoutTranslatedLanguagesConfiguration",
-		"com.liferay.layout.seo.web.internal.configuration.FFSEOInlineFieldMapping"
-	},
+	configurationPid = "com.liferay.layout.seo.web.internal.configuration.FFSEOInlineFieldMapping",
 	service = DynamicInclude.class
 )
 public class OpenGraphTopHeadDynamicInclude extends BaseDynamicInclude {
@@ -319,9 +315,6 @@ public class OpenGraphTopHeadDynamicInclude extends BaseDynamicInclude {
 	@Activate
 	@Modified
 	protected void activate(Map<String, Object> properties) {
-		_ffLayoutTranslatedLanguagesConfiguration =
-			ConfigurableUtil.createConfigurable(
-				FFLayoutTranslatedLanguagesConfiguration.class, properties);
 		_ffSEOInlineFieldMapping = ConfigurableUtil.createConfigurable(
 			FFSEOInlineFieldMapping.class, properties);
 
@@ -361,9 +354,7 @@ public class OpenGraphTopHeadDynamicInclude extends BaseDynamicInclude {
 		Set<Locale> siteAvailableLocales = _language.getAvailableLocales(
 			layout.getGroupId());
 
-		if (!_ffLayoutTranslatedLanguagesConfiguration.
-				enableFFLayoutTranslatedLanguages() ||
-			!_openGraphConfiguration.isLayoutTranslatedLanguagesEnabled(
+		if (!_openGraphConfiguration.isLayoutTranslatedLanguagesEnabled(
 				layout.getGroup())) {
 
 			return siteAvailableLocales;
@@ -489,8 +480,6 @@ public class OpenGraphTopHeadDynamicInclude extends BaseDynamicInclude {
 	@Reference
 	private DLURLHelper _dlurlHelper;
 
-	private volatile FFLayoutTranslatedLanguagesConfiguration
-		_ffLayoutTranslatedLanguagesConfiguration;
 	private volatile FFSEOInlineFieldMapping _ffSEOInlineFieldMapping;
 
 	@Reference
