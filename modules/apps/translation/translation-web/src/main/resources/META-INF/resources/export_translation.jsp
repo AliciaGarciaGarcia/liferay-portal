@@ -27,7 +27,7 @@ renderResponse.setTitle(exportTranslationDisplayContext.getTitle());
 %>
 
 <div class="translation">
-	<aui:form action="<%= exportTranslationDisplayContext.getExportTranslationURL() %>" cssClass="translation-export" method="post" name="fm">
+	<aui:form cssClass="translation-export" name="fm">
 		<aui:input name="redirect" type="hidden" value="<%= exportTranslationDisplayContext.getRedirect() %>" />
 		<aui:input name="portletResource" type="hidden" value='<%= ParamUtil.getString(request, "portletResource") %>' />
 

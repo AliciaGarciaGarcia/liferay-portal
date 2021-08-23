@@ -25,6 +25,7 @@ const ExportTranslation = ({
 	availableTargetLocales,
 	defaultSourceLanguageId,
 	experiences,
+	exportTranslationURL,
 	portletNamespace,
 }) => {
 	const [exportMimeType, setExportMimeType] = useState(
@@ -41,6 +42,15 @@ const ExportTranslation = ({
 
 	const [selectedExperiencesIds, setSelectedExperiencesIds] = useState(() =>
 		experiences?.length ? experiences.map(({value}) => value) : []
+	);
+
+	const exportTranslationPortletURL = Liferay.Util.PortletURL.createPortletURL(
+		exportTranslationURL,
+		{
+			exportMimeType,
+			sourceLanguageId,
+			targetLanguageIds: selectedTargetLanguageIds.join(','),
+		}
 	);
 
 	const onChangeTargetLanguage = (checked, selectedLanguageId) => {
@@ -187,7 +197,16 @@ const ExportTranslation = ({
 	};
 
 	return (
-		<>
+		<ClayForm
+			className="export-modal-content"
+			onSubmit={(event) => {
+				event.preventDefault();
+				location.href = Liferay.Util.addParams(
+					'download=true',
+					exportTranslationPortletURL.toString()
+				);
+			}}
+		>
 			<ClayForm.Group className="w-50">
 				<label
 					htmlFor={
@@ -238,7 +257,7 @@ const ExportTranslation = ({
 					{Liferay.Language.get('export')}
 				</ClayButton>
 			</ClayButton.Group>
-		</>
+		</ClayForm>
 	);
 };
 
