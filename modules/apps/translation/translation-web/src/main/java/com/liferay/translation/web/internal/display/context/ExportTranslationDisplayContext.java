@@ -15,7 +15,6 @@
 package com.liferay.translation.web.internal.display.context;
 
 import com.liferay.info.item.InfoItemServiceTracker;
-import com.liferay.info.item.provider.InfoItemWorkflowProvider;
 import com.liferay.info.localized.InfoLocalizedValue;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -87,27 +86,12 @@ public class ExportTranslationDisplayContext {
 		_translationInfoItemFieldValuesExporterTracker =
 			translationInfoItemFieldValuesExporterTracker;
 
-		_infoItemWorkflowProvider =
-			_infoItemServiceTracker.getFirstInfoItemService(
-				InfoItemWorkflowProvider.class, _className);
-
 		_themeDisplay = (ThemeDisplay)liferayPortletRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 	}
 
 	public Map<String, Object> getExportTranslationData()
 		throws PortalException {
-
-		ResourceURL exportTranslationURL =
-			_liferayPortletResponse.createResourceURL(
-				TranslationPortletKeys.TRANSLATION);
-
-		exportTranslationURL.setParameter(
-			"groupId", String.valueOf(GroupConstants.DEFAULT_PARENT_GROUP_ID));
-		exportTranslationURL.setParameter(
-			"classNameId",
-			String.valueOf(PortalUtil.getClassNameId(Layout.class.getName())));
-		exportTranslationURL.setResourceID("/translation/export_translation");
 
 		ResourceURL getExportTranslationAvailableLocalesURL =
 			_liferayPortletResponse.createResourceURL(
@@ -149,11 +133,13 @@ public class ExportTranslationDisplayContext {
 				LanguageUtil.getAvailableLocales(
 					_themeDisplay.getSiteGroupId()))
 		).put(
+			"classPK", _classPK
+		).put(
 			"defaultSourceLanguageId", _getDefaultSourceLanguageId()
 		).put(
 			"experiences", _getExperiences()
 		).put(
-			"exportTranslationURL", exportTranslationURL.toString()
+			"exportTranslationURL", _getExportTranslationURLString()
 		).put(
 			"getExportTranslationAvailableLocalesURL",
 			getExportTranslationAvailableLocalesURL.toString()
@@ -267,6 +253,21 @@ public class ExportTranslationDisplayContext {
 		);
 	}
 
+	private String _getExportTranslationURLString() {
+		ResourceURL exportTranslationURL =
+			_liferayPortletResponse.createResourceURL(
+				TranslationPortletKeys.TRANSLATION);
+
+		exportTranslationURL.setParameter("groupId", String.valueOf(_groupId));
+		exportTranslationURL.setParameter(
+			"classNameId", String.valueOf(_classNameId));
+		exportTranslationURL.setParameter("classPK", String.valueOf(_classPK));
+
+		exportTranslationURL.setResourceID("/translation/export_translation");
+
+		return exportTranslationURL.toString();
+	}
+
 	private JSONArray _getLocalesJSONArray(
 		Locale currentLocale, Collection<Locale> locales) {
 
@@ -289,7 +290,6 @@ public class ExportTranslationDisplayContext {
 	private final long _groupId;
 	private final HttpServletRequest _httpServletRequest;
 	private final InfoItemServiceTracker _infoItemServiceTracker;
-	private final InfoItemWorkflowProvider<Object> _infoItemWorkflowProvider;
 	private final LiferayPortletResponse _liferayPortletResponse;
 	private final Object _model;
 	private String _redirect;
