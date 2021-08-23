@@ -90,6 +90,56 @@ public class ExportTranslationDisplayContext {
 			WebKeys.THEME_DISPLAY);
 	}
 
+	public List<Map<String, String>> getExperiences() throws PortalException {
+		if (!Objects.equals(_className, Layout.class.getName())) {
+			return null;
+		}
+
+		List<SegmentsExperience> segmentsExperiences =
+			SegmentsExperienceServiceUtil.getSegmentsExperiences(
+				_groupId, PortalUtil.getClassNameId(Layout.class.getName()),
+				_classPK, true);
+
+		boolean addedDefault = false;
+
+		HashMap<String, String> defaultExperience = HashMapBuilder.put(
+			"label",
+			SegmentsExperienceConstants.getDefaultSegmentsExperienceName(
+				_themeDisplay.getLocale())
+		).put(
+			"value",
+			String.valueOf((Object)SegmentsExperienceConstants.ID_DEFAULT)
+		).build();
+
+		List<Map<String, String>> experiences = new ArrayList<>();
+
+		for (SegmentsExperience segmentsExperience : segmentsExperiences) {
+			if ((segmentsExperience.getPriority() <
+					SegmentsExperienceConstants.PRIORITY_DEFAULT) &&
+				!addedDefault) {
+
+				experiences.add(defaultExperience);
+
+				addedDefault = true;
+			}
+
+			experiences.add(
+				HashMapBuilder.put(
+					"label",
+					segmentsExperience.getName(_themeDisplay.getLocale())
+				).put(
+					"value",
+					String.valueOf(segmentsExperience.getSegmentsExperienceId())
+				).build());
+		}
+
+		if (!addedDefault) {
+			experiences.add(defaultExperience);
+		}
+
+		return experiences;
+	}
+
 	public Map<String, Object> getExportTranslationData()
 		throws PortalException {
 
@@ -137,7 +187,7 @@ public class ExportTranslationDisplayContext {
 		).put(
 			"defaultSourceLanguageId", _getDefaultSourceLanguageId()
 		).put(
-			"experiences", _getExperiences()
+			"experiences", getExperiences()
 		).put(
 			"exportTranslationURL", _getExportTranslationURLString()
 		).put(
@@ -186,56 +236,6 @@ public class ExportTranslationDisplayContext {
 		}
 
 		return infoItemLanguagesProvider.getDefaultLanguageId(_model);
-	}
-
-	private List<Map<String, String>> _getExperiences() throws PortalException {
-		if (!Objects.equals(_className, Layout.class.getName())) {
-			return null;
-		}
-
-		List<SegmentsExperience> segmentsExperiences =
-			SegmentsExperienceServiceUtil.getSegmentsExperiences(
-				_groupId, PortalUtil.getClassNameId(Layout.class.getName()),
-				_classPK, true);
-
-		boolean addedDefault = false;
-
-		HashMap<String, String> defaultExperience = HashMapBuilder.put(
-			"label",
-			SegmentsExperienceConstants.getDefaultSegmentsExperienceName(
-				_themeDisplay.getLocale())
-		).put(
-			"value",
-			String.valueOf((Object)SegmentsExperienceConstants.ID_DEFAULT)
-		).build();
-
-		List<Map<String, String>> experiences = new ArrayList<>();
-
-		for (SegmentsExperience segmentsExperience : segmentsExperiences) {
-			if ((segmentsExperience.getPriority() <
-					SegmentsExperienceConstants.PRIORITY_DEFAULT) &&
-				!addedDefault) {
-
-				experiences.add(defaultExperience);
-
-				addedDefault = true;
-			}
-
-			experiences.add(
-				HashMapBuilder.put(
-					"label",
-					segmentsExperience.getName(_themeDisplay.getLocale())
-				).put(
-					"value",
-					String.valueOf(segmentsExperience.getSegmentsExperienceId())
-				).build());
-		}
-
-		if (!addedDefault) {
-			experiences.add(defaultExperience);
-		}
-
-		return experiences;
 	}
 
 	private JSONObject _getExportFileFormatJSONObject(

@@ -66,6 +66,40 @@ renderResponse.setTitle(exportTranslationDisplayContext.getTitle());
 						</div>
 					</div>
 
+					<%
+					List<Map<String, String>> experiences = exportTranslationDisplayContext.getExperiences();
+					%>
+
+					<c:if test="<%= Validator.isNotNull(experiences) %>">
+						<div class="form-group">
+							<label class="mb-2"><liferay-ui:message key="select-experiences" /></label>
+
+							<ul class="list-group">
+
+								<%
+								for (Map<String, String> experience : experiences) {
+								%>
+
+									<li class="list-group-item">
+										<div class="custom-checkbox custom-control">
+											<label>
+												<input class="custom-control-input" name="targetLanguageIds" type="checkbox" />
+
+												<span class="custom-control-label">
+													<span class="custom-control-label-text"><%= experience.get("label") %></span>
+												</span>
+											</label>
+										</div>
+									</li>
+
+								<%
+								}
+								%>
+
+							</ul>
+						</div>
+					</c:if>
+
 					<div class="btn-group">
 						<div class="btn-group-item">
 							<aui:button name="cancel" type="cancel" />
