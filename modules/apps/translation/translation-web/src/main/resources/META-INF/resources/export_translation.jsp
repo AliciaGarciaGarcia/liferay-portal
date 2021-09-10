@@ -32,6 +32,90 @@ renderResponse.setTitle(exportTranslationDisplayContext.getTitle());
 	>
 		<clay:sheet>
 			<div>
+				<aui:select label="export-file-format" name="exportMimeType" wrapperCssClass="w-50"></aui:select>
+				<aui:select label="original-language" name="sourceLanguageId"></aui:select>
+				<div class="form-group">
+					<label class="mb-2"><liferay-ui:message key="languages-to-translate-to" /></label>
+
+					<div class="row">
+
+						<%
+						for (Locale availableLocale : LanguageUtil.getAvailableLocales(themeDisplay.getSiteGroupId())) {
+						%>
+
+							<div class="col-md-4 py-2">
+								<div class="custom-checkbox custom-control">
+									<label>
+										<input class="custom-control-input" name="targetLanguageIds" type="checkbox" />
+
+										<span class="custom-control-label">
+											<span class="custom-control-label-text"><%= exportTranslationDisplayContext.getDisplayName(locale, availableLocale) %></span>
+										</span>
+									</label>
+								</div>
+							</div>
+
+						<%
+						}
+						%>
+
+					</div>
+				</div>
+
+				<%
+				List<Map<String, String>> experiences = exportTranslationDisplayContext.getExperiences();
+				%>
+
+				<c:if test="<%= (experiences != null) && (experiences.size() > 1) %>">
+					<div class="form-group">
+						<label class="mb-2"><liferay-ui:message key="select-experiences" /></label>
+
+						<ul class="list-group">
+
+							<%
+							for (Map<String, String> experience : experiences) {
+							%>
+
+								<li class="list-group-item">
+									<div class="custom-checkbox custom-control">
+										<label>
+											<input class="custom-control-input" name="targetLanguageIds" type="checkbox" />
+
+											<span class="custom-control-label">
+												<span class="custom-control-label-text"><%= experience.get("label") %></span>
+											</span>
+										</label>
+									</div>
+								</li>
+
+							<%
+							}
+							%>
+
+						</ul>
+					</div>
+				</c:if>
+
+				<div class="btn-group">
+					<div class="btn-group-item">
+						<clay:button
+							disabled="<%= true %>"
+							displayType="primary"
+							label="export"
+							type="submit"
+						/>
+					</div>
+
+					<div class="btn-group-item">
+						<clay:link
+							displayType="secondary"
+							href="<%= exportTranslationDisplayContext.getRedirect() %>"
+							label="cancel"
+							type="button"
+						/>
+					</div>
+				</div>
+
 				<react:component
 					module="js/ExportTranslation"
 					props="<%=
