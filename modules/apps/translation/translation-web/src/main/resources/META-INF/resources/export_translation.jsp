@@ -16,4 +16,29 @@
 
 <%@ include file="/init.jsp" %>
 
-<h1>Export translation</h1>
+<%
+portletDisplay.setShowBackIcon(true);
+
+ExportTranslationDisplayContext exportTranslationDisplayContext = (ExportTranslationDisplayContext)request.getAttribute(ExportTranslationDisplayContext.class.getName());
+
+portletDisplay.setURLBack(exportTranslationDisplayContext.getRedirect());
+
+renderResponse.setTitle(exportTranslationDisplayContext.getTitle());
+%>
+
+<div class="translation">
+	<clay:container-fluid
+		cssClass="container-view translation-export"
+	>
+		<clay:sheet>
+			<div>
+				<react:component
+					module="js/ExportTranslation"
+					props="<%=
+						exportTranslationDisplayContext.getExportTranslationData()
+					%>"
+				/>
+			</div>
+		</clay:sheet>
+	</clay:container-fluid>
+</div>
