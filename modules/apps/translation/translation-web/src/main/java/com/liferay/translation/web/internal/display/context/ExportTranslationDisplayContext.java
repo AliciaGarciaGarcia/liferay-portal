@@ -15,12 +15,38 @@
 package com.liferay.translation.web.internal.display.context;
 
 import com.liferay.info.item.InfoItemServiceTracker;
+import com.liferay.info.localized.InfoLocalizedValue;
+import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.json.JSONUtil;
+import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.translation.constants.TranslationPortletKeys;
+import com.liferay.translation.exporter.TranslationInfoItemFieldValuesExporter;
 import com.liferay.translation.exporter.TranslationInfoItemFieldValuesExporterTracker;
+import com.liferay.translation.info.item.provider.InfoItemLanguagesProvider;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.portlet.ResourceURL;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -30,8 +56,8 @@ import javax.servlet.http.HttpServletRequest;
 public class ExportTranslationDisplayContext {
 
 	public ExportTranslationDisplayContext(
-		long classNameId, long classPK,
-		long groupId, HttpServletRequest httpServletRequest,
+		long classNameId, long classPK, long groupId,
+		HttpServletRequest httpServletRequest,
 		InfoItemServiceTracker infoItemServiceTracker,
 		LiferayPortletRequest liferayPortletRequest,
 		LiferayPortletResponse liferayPortletResponse, Object model,
@@ -57,6 +83,176 @@ public class ExportTranslationDisplayContext {
 			WebKeys.THEME_DISPLAY);
 	}
 
+	public String getDisplayName(Locale currentLocale, Locale locale) {
+
+		// LPS-138104
+
+		String key = "language." + locale.getLanguage();
+
+		String displayName = LanguageUtil.get(currentLocale, key);
+
+		if (displayName.equals(key)) {
+			return locale.getDisplayName(currentLocale);
+		}
+
+		return StringBundler.concat(
+			displayName, " (", locale.getDisplayCountry(currentLocale), ")");
+	}
+
+	public Map<String, Object> getExportTranslationData()
+		throws PortalException {
+
+		ResourceURL getExportTranslationAvailableLocalesURL =
+			_liferayPortletResponse.createResourceURL(
+				TranslationPortletKeys.TRANSLATION);
+
+		getExportTranslationAvailableLocalesURL.setParameter(
+			"groupId", String.valueOf(GroupConstants.DEFAULT_PARENT_GROUP_ID));
+		getExportTranslationAvailableLocalesURL.setParameter(
+			"classNameId", String.valueOf(_classNameId));
+		getExportTranslationAvailableLocalesURL.setResourceID(
+			"/translation/get_export_translation_available_locales");
+
+		return HashMapBuilder.<String, Object>put(
+			"availableExportFileFormats",
+			() -> {
+				Collection<TranslationInfoItemFieldValuesExporter>
+					translationInfoItemFieldValuesExporters =
+						_translationInfoItemFieldValuesExporterTracker.
+							getTranslationInfoItemFieldValuesExporters();
+
+				Stream<TranslationInfoItemFieldValuesExporter>
+					translationInfoItemFieldValuesExportersStream =
+						translationInfoItemFieldValuesExporters.stream();
+
+				return translationInfoItemFieldValuesExportersStream.map(
+					this::_getExportFileFormatJSONObject
+				).collect(
+					Collectors.toList()
+				);
+			}
+		).put(
+			"availableSourceLocales",
+			_getLocalesJSONArray(
+				_themeDisplay.getLocale(), _getAvailableSourceLocales())
+		).put(
+			"availableTargetLocales",
+			_getLocalesJSONArray(
+				_themeDisplay.getLocale(),
+				LanguageUtil.getAvailableLocales(
+					_themeDisplay.getSiteGroupId()))
+		).put(
+			"classPK", _classPK
+		).put(
+			"defaultSourceLanguageId", _getDefaultSourceLanguageId()
+		).put(
+			"exportTranslationURL", _getExportTranslationURLString()
+		).put(
+			"getExportTranslationAvailableLocalesURL",
+			getExportTranslationAvailableLocalesURL.toString()
+		).put(
+			"pathModule", PortalUtil.getPathModule()
+		).put(
+			"redirectURL", getRedirect()
+		).build();
+	}
+
+	public String getRedirect() {
+		if (Validator.isNotNull(_redirect)) {
+			return _redirect;
+		}
+
+		_redirect = ParamUtil.getString(_httpServletRequest, "redirect");
+
+		return _redirect;
+	}
+
+	public String getTitle() throws PortalException {
+		return _title;
+	}
+
+	private Set<Locale> _getAvailableSourceLocales() throws PortalException {
+		InfoItemLanguagesProvider<Object> infoItemLanguagesProvider =
+			_infoItemServiceTracker.getFirstInfoItemService(
+				InfoItemLanguagesProvider.class, _className);
+
+		Stream<String> stream = Arrays.stream(
+			infoItemLanguagesProvider.getAvailableLanguageIds(_model));
+
+		Stream<Locale> localesStream = stream.map(LocaleUtil::fromLanguageId);
+
+		Set<Locale> availableSourceLocales = localesStream.collect(
+			Collectors.toSet());
+
+		if (!availableSourceLocales.contains(
+				PortalUtil.getSiteDefaultLocale(_groupId))) {
+
+			availableSourceLocales.add(
+				PortalUtil.getSiteDefaultLocale(_groupId));
+		}
+
+		return availableSourceLocales;
+	}
+
+	private String _getDefaultSourceLanguageId() {
+		InfoItemLanguagesProvider<Object> infoItemLanguagesProvider =
+			_infoItemServiceTracker.getFirstInfoItemService(
+				InfoItemLanguagesProvider.class, _className);
+
+		if (infoItemLanguagesProvider == null) {
+			return LanguageUtil.getLanguageId(
+				_themeDisplay.getSiteDefaultLocale());
+		}
+
+		return infoItemLanguagesProvider.getDefaultLanguageId(_model);
+	}
+
+	private JSONObject _getExportFileFormatJSONObject(
+		TranslationInfoItemFieldValuesExporter
+			translationInfoItemFieldValuesExporter) {
+
+		InfoLocalizedValue<String> labelInfoLocalizedValue =
+			translationInfoItemFieldValuesExporter.getLabelInfoLocalizedValue();
+
+		return JSONUtil.put(
+			"displayName",
+			labelInfoLocalizedValue.getValue(_themeDisplay.getLocale())
+		).put(
+			"mimeType", translationInfoItemFieldValuesExporter.getMimeType()
+		);
+	}
+
+	private String _getExportTranslationURLString() {
+		ResourceURL exportTranslationURL =
+			_liferayPortletResponse.createResourceURL(
+				TranslationPortletKeys.TRANSLATION);
+
+		exportTranslationURL.setParameter("groupId", String.valueOf(_groupId));
+		exportTranslationURL.setParameter(
+			"classNameId", String.valueOf(_classNameId));
+		exportTranslationURL.setParameter("classPK", String.valueOf(_classPK));
+
+		exportTranslationURL.setResourceID("/translation/export_translation");
+
+		return exportTranslationURL.toString();
+	}
+
+	private JSONArray _getLocalesJSONArray(
+		Locale currentLocale, Collection<Locale> locales) {
+
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		locales.forEach(
+			locale -> jsonArray.put(
+				JSONUtil.put(
+					"displayName", getDisplayName(currentLocale, locale)
+				).put(
+					"languageId", LocaleUtil.toLanguageId(locale)
+				)));
+
+		return jsonArray;
+	}
+
 	private final String _className;
 	private final long _classNameId;
 	private final long _classPK;
@@ -65,6 +261,7 @@ public class ExportTranslationDisplayContext {
 	private final InfoItemServiceTracker _infoItemServiceTracker;
 	private final LiferayPortletResponse _liferayPortletResponse;
 	private final Object _model;
+	private String _redirect;
 	private final ThemeDisplay _themeDisplay;
 	private final String _title;
 	private final TranslationInfoItemFieldValuesExporterTracker
