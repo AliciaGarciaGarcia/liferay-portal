@@ -997,7 +997,7 @@ public class ContentPageEditorDisplayContext {
 					EditorConfigurationFactoryUtil.getEditorConfiguration(
 						ContentPageEditorPortletKeys.
 							CONTENT_PAGE_EDITOR_PORTLET,
-						"fragmenEntryLinkRichTextEditor", StringPool.BLANK,
+						"fragmentEntryLinkRichTextEditor", StringPool.BLANK,
 						Collections.emptyMap(), themeDisplay,
 						RequestBackedPortletURLFactoryUtil.create(
 							httpServletRequest));
@@ -1011,7 +1011,7 @@ public class ContentPageEditorDisplayContext {
 					EditorConfigurationFactoryUtil.getEditorConfiguration(
 						ContentPageEditorPortletKeys.
 							CONTENT_PAGE_EDITOR_PORTLET,
-						"fragmenEntryLinkEditor", StringPool.BLANK,
+						"fragmentEntryLinkEditor", StringPool.BLANK,
 						Collections.emptyMap(), themeDisplay,
 						RequestBackedPortletURLFactoryUtil.create(
 							httpServletRequest));
