@@ -21,7 +21,7 @@ import com.liferay.portal.kernel.json.JSONUtil;
 import java.util.Objects;
 
 /**
- * @author Jürgen Kappler
+ * @author     Jürgen Kappler
  * @deprecated As of Cavanaugh (7.4.x)
  */
 @Deprecated

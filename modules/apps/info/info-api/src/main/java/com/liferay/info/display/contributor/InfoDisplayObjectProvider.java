@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.util.Locale;
 
 /**
- * @author Jürgen Kappler
+ * @author     Jürgen Kappler
  * @deprecated As of Cavanaugh (7.4.x)
  */
 @Deprecated

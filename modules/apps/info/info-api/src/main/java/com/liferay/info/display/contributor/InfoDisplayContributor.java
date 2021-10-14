@@ -27,10 +27,10 @@ import java.util.Set;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
- * @author Jürgen Kappler
+ * @author     Jürgen Kappler
  * @deprecated As of Athanasius (7.3.x), replaced by {@link
- * com.liferay.info.item.provider.InfoItemObjectProvider and
- * com.liferay.layout.display.page.LayoutDisplayPageProvider}
+ *             com.liferay.info.item.provider.InfoItemObjectProvider and
+ *             com.liferay.layout.display.page.LayoutDisplayPageProvider}
  */
 @Deprecated
 @ProviderType

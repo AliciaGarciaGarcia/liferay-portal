@@ -17,7 +17,7 @@ package com.liferay.info.display.contributor;
 import java.util.List;
 
 /**
- * @author Jürgen Kappler
+ * @author     Jürgen Kappler
  * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
  */
 @Deprecated

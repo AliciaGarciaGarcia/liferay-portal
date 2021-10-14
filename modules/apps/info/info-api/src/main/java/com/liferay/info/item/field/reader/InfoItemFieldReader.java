@@ -23,8 +23,7 @@ import com.liferay.info.field.InfoField;
 public interface InfoItemFieldReader<T> {
 
 	/**
-	 *   @deprecated As of Cavanaugh (7.4.x), replaced by {@link
-	 *          #getInfoField()}
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link #getInfoField()}
 	 */
 	@Deprecated
 	public InfoField getField();

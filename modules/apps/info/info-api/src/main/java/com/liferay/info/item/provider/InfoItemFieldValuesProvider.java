@@ -31,9 +31,9 @@ public interface InfoItemFieldValuesProvider<T> {
 	}
 
 	/**
-	 *   @deprecated As the method name does not match the interface class
-	 *   that is returned , replaced by {@link
-	 *          #getInfoFieldValue(Object, String)} ()}
+	 * @deprecated As of Cavanaugh (7.4.x), As the method name does not match
+	 *             the interface class that is returned , replaced by {@link
+	 *             #getInfoFieldValue(Object, String)} ()}
 	 */
 	@Deprecated
 	public default InfoFieldValue<Object> getInfoItemFieldValue(

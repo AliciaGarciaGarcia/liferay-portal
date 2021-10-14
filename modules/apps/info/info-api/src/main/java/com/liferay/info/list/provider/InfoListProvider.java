@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * @author Jorge Ferrer
+ * @author     Jorge Ferrer
  * @deprecated As of Athanasius (7.3.x), replaced by {@link
  *             com.liferay.info.collection.provider.InfoCollectionProvider}
  */
