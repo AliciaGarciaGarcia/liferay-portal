@@ -216,6 +216,10 @@ public class TranslateDisplayContext {
 									getBooleanValue(
 										infoField, TextInfoFieldType.MULTILINE)
 								).put(
+									"richText",
+									getBooleanValue(
+										infoField, TextInfoFieldType.RICH_TEXT)
+								).put(
 									"sourceContent",
 									getSourceStringValue(
 										infoField, getSourceLocale())
