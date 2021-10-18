@@ -104,6 +104,7 @@ public class DDMFormFieldInfoFieldConverterImpl
 
 			finalStep.attribute(TextInfoFieldType.HTML, true);
 			finalStep.attribute(TextInfoFieldType.MULTILINE, true);
+			finalStep.attribute(TextInfoFieldType.RICH_TEXT, true);
 		}
 
 		return finalStep;

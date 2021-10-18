@@ -64,6 +64,8 @@ public interface JournalArticleInfoItemFields {
 			"description"
 		).attribute(
 			TextInfoFieldType.HTML, true
+		).attribute(
+			TextInfoFieldType.RICH_TEXT, true
 		).labelInfoLocalizedValue(
 			InfoLocalizedValue.localize(
 				JournalArticleInfoItemFields.class, "description")

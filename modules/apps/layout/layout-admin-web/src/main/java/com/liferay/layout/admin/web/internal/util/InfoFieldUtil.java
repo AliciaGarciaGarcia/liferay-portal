@@ -149,11 +149,21 @@ public class InfoFieldUtil {
 			true
 		).attribute(
 			TextInfoFieldType.HTML, _isHtml(type)
+		).attribute(
+			TextInfoFieldType.RICH_TEXT, _isRichText(type)
 		).build();
 	}
 
 	private static boolean _isHtml(String type) {
-		if (type.equals("html") || type.equals("rich-text")) {
+		if (type.equals("html") || _isRichText(type)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private static boolean _isRichText(String type) {
+		if (type.equals("rich-text")) {
 			return true;
 		}
 
