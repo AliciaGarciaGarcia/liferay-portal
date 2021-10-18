@@ -27,6 +27,9 @@ public class TextInfoFieldType implements InfoFieldType {
 	public static final Attribute<TextInfoFieldType, Boolean> MULTILINE =
 		new Attribute<>();
 
+	public static final Attribute<TextInfoFieldType, Boolean> RICH_TEXT =
+		new Attribute<>();
+
 	@Override
 	public String getName() {
 		return "text";
