@@ -19,7 +19,7 @@ import React, {useRef, useState} from 'react';
 
 import MappingPanel from './MappingPanel';
 
-const sanitizeLabel = (label) => label.replace(/:|[\r\n]+/gm, '');
+const sanitizeLabel = (label) => label.replace(/}|[\r\n]+/gm, '');
 const fieldTemplate = (key, label) => ` $\{${key}:${sanitizeLabel(label)}} `;
 
 function MappingInput({
