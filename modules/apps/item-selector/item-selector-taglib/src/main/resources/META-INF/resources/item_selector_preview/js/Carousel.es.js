@@ -101,7 +101,7 @@ const Carousel = ({
 			)}
 
 			{currentItem.returntype === STR_VIDEO_HTML_RETURN_TYPE ? (
-				<PreviewVideo html={currentItem.value} />
+				<PreviewVideo html={JSON.parse(currentItem.value).html} />
 			) : (
 				<PreviewImage
 					src={currentItem.url || currentItem.base64}

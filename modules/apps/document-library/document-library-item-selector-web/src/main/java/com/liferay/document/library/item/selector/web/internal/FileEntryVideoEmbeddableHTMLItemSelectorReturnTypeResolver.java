@@ -51,7 +51,7 @@ public class FileEntryVideoEmbeddableHTMLItemSelectorReturnTypeResolver
 	@Override
 	public String getValue(FileEntry fileEntry, ThemeDisplay themeDisplay)
 		throws PortalException {
-
+		// LOOK LPS-130605
 		return JSONUtil.put(
 			"html",
 			_dlVideoRenderer.renderHTML(
