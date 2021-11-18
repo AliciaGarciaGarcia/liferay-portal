@@ -92,7 +92,9 @@ const Carousel = ({
 	handleClickPrevious,
 	showArrows = true,
 }) => {
-	const isVideo = currentItem.returntype === STR_VIDEO_HTML_RETURN_TYPE;
+	const isVideo =
+		currentItem.returntype === STR_VIDEO_HTML_RETURN_TYPE ||
+		currentItem.mimetype.startsWith('video');
 	let videoHtml = currentItem?.value?.html;
 
 	if (isVideo && typeof currentItem.value === 'string') {

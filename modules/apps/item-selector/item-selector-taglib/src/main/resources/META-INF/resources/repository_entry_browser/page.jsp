@@ -385,6 +385,7 @@ SearchContainer<?> searchContainer = new SearchContainer(renderRequest, itemSele
 									}
 
 									data.put("metadata", itemMedatadaJSONObject.toString());
+									data.put("mimetype", fileEntry.getMimeType());
 									data.put("returnType", ItemSelectorRepositoryEntryBrowserUtil.getItemSelectorReturnTypeClassName(itemSelectorReturnTypeResolver, existingFileEntryReturnType));
 									data.put("title", title);
 									data.put("url", DLURLHelperUtil.getPreviewURL(fileEntry, latestFileVersion, themeDisplay, StringPool.BLANK));
