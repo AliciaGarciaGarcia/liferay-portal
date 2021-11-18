@@ -98,7 +98,10 @@ public class FileEntryFileEntryItemSelectorReturnTypeResolver
 			jsonObject.put(
 				"html",
 				_dlVideoRenderer.renderHTML(
-					fileEntry.getFileVersion(), themeDisplay.getRequest()));
+					fileEntry.getFileVersion(), themeDisplay.getRequest())
+			).put(
+				"isvideo", true
+			);
 		}
 
 		return jsonObject.toString();
