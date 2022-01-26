@@ -306,7 +306,7 @@ const FriendlyURLHistoryModal = ({
 																	urlTitle
 																);
 															}}
-															symbol="reload"
+															symbol="restore"
 														/>
 
 														<ClayList.QuickActionMenu.Item
