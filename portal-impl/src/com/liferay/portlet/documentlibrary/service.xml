@@ -135,6 +135,51 @@
 			<finder-column name="custom2ImageId" />
 		</finder>
 	</entity>
+	<entity change-tracking-enabled="true" local-service="true" name="DLFileEntryFriendlyURL" remote-service="true" uad-dir-path="../modules/apps/document-library/document-library-uad/src/main/java" uad-package-path="com.liferay.document.library" uuid="true">
+
+		<!-- PK fields -->
+
+		<column name="fileEntryFriendlyURLId" primary="true" type="long" />
+
+		<!-- Group instance -->
+
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" uad-anonymize-field-name="fullName" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="fileEntryId" type="long" />
+		<column name="friendlyURL" type="String" />
+		<column name="languageId" type="String" />
+		<column name="lastPublishDate" type="Date" />
+
+		<!-- Finder methods -->
+
+		<finder name="GroupId" return-type="Collection">
+			<finder-column name="groupId" />
+		</finder>
+		<finder name="CompanyId" return-type="Collection">
+			<finder-column name="companyId" />
+		</finder>
+		<finder name="FileEntryId" return-type="Collection">
+			<finder-column name="fileEntryId" />
+		</finder>
+		<finder name="F_F" return-type="Collection">
+			<finder-column name="fileEntryId" />
+			<finder-column name="friendlyURL" />
+		</finder>
+		<finder name="F_L" return-type="Collection" unique="true">
+			<finder-column arrayable-operator="OR" arrayable-pagination="true" name="fileEntryId" />
+			<finder-column name="languageId" />
+		</finder>
+	</entity>
 	<entity human-name="document library file entry metadata" local-service="true" name="DLFileEntryMetadata" remote-service="false" uuid="true">
 
 		<!-- PK fields -->
