@@ -11,30 +11,28 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+package com.liferay.document.library.kernel.exception;
 
-package com.liferay.document.library.uad.constants;
+import com.liferay.portal.kernel.exception.NoSuchModelException;
 
 /**
  * @author Brian Wing Shun Chan
- * @generated
  */
-public class DLUADConstants {
+public class NoSuchFileEntryFriendlyURLException extends NoSuchModelException {
 
-	public static final String[] USER_ID_FIELD_NAMES_DL_FILE_ENTRY = {"userId"};
+	public NoSuchFileEntryFriendlyURLException() {
+	}
 
-	public static final String[]
-		USER_ID_FIELD_NAMES_DL_FILE_ENTRY_FRIENDLY_URL = {"userId"};
+	public NoSuchFileEntryFriendlyURLException(String msg) {
+		super(msg);
+	}
 
-	public static final String[] USER_ID_FIELD_NAMES_DL_FILE_ENTRY_TYPE = {
-		"userId"
-	};
+	public NoSuchFileEntryFriendlyURLException(String msg, Throwable throwable) {
+		super(msg, throwable);
+	}
 
-	public static final String[] USER_ID_FIELD_NAMES_DL_FILE_SHORTCUT = {
-		"userId", "statusByUserId"
-	};
-
-	public static final String[] USER_ID_FIELD_NAMES_DL_FOLDER = {
-		"userId", "statusByUserId"
-	};
+	public NoSuchFileEntryFriendlyURLException(Throwable throwable) {
+		super(throwable);
+	}
 
 }

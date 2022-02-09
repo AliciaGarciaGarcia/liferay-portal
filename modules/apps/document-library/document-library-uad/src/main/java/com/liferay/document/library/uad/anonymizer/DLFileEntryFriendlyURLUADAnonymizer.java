@@ -12,29 +12,16 @@
  * details.
  */
 
-package com.liferay.document.library.uad.constants;
+package com.liferay.document.library.uad.anonymizer;
+
+import com.liferay.user.associated.data.anonymizer.UADAnonymizer;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Brian Wing Shun Chan
- * @generated
  */
-public class DLUADConstants {
-
-	public static final String[] USER_ID_FIELD_NAMES_DL_FILE_ENTRY = {"userId"};
-
-	public static final String[]
-		USER_ID_FIELD_NAMES_DL_FILE_ENTRY_FRIENDLY_URL = {"userId"};
-
-	public static final String[] USER_ID_FIELD_NAMES_DL_FILE_ENTRY_TYPE = {
-		"userId"
-	};
-
-	public static final String[] USER_ID_FIELD_NAMES_DL_FILE_SHORTCUT = {
-		"userId", "statusByUserId"
-	};
-
-	public static final String[] USER_ID_FIELD_NAMES_DL_FOLDER = {
-		"userId", "statusByUserId"
-	};
-
+@Component(immediate = true, service = UADAnonymizer.class)
+public class DLFileEntryFriendlyURLUADAnonymizer
+	extends BaseDLFileEntryFriendlyURLUADAnonymizer {
 }

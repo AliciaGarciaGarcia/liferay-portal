@@ -131,6 +131,15 @@ create index IX_1F89A446 on DLFileEntry (uuid_[$COLUMN_LENGTH:75$], companyId, c
 create index IX_CF17549E on DLFileEntry (uuid_[$COLUMN_LENGTH:75$], ctCollectionId);
 create unique index IX_373340C8 on DLFileEntry (uuid_[$COLUMN_LENGTH:75$], groupId, ctCollectionId);
 
+create index IX_CA82A38A on DLFileEntryFriendlyURL (companyId, ctCollectionId);
+create index IX_FE45863 on DLFileEntryFriendlyURL (fileEntryId, ctCollectionId);
+create index IX_6EED186D on DLFileEntryFriendlyURL (fileEntryId, friendlyURL[$COLUMN_LENGTH:75$], ctCollectionId);
+create unique index IX_1D708B2A on DLFileEntryFriendlyURL (fileEntryId, languageId[$COLUMN_LENGTH:75$], ctCollectionId);
+create index IX_402B410C on DLFileEntryFriendlyURL (groupId, ctCollectionId);
+create index IX_3B966ACE on DLFileEntryFriendlyURL (uuid_[$COLUMN_LENGTH:75$], companyId, ctCollectionId);
+create index IX_C2455316 on DLFileEntryFriendlyURL (uuid_[$COLUMN_LENGTH:75$], ctCollectionId);
+create unique index IX_E7500950 on DLFileEntryFriendlyURL (uuid_[$COLUMN_LENGTH:75$], groupId, ctCollectionId);
+
 create unique index IX_B9210CAD on DLFileEntryMetadata (DDMStructureId, fileVersionId, ctCollectionId);
 create index IX_8D4F58BC on DLFileEntryMetadata (fileEntryId, ctCollectionId);
 create index IX_A158EA62 on DLFileEntryMetadata (fileVersionId, ctCollectionId);

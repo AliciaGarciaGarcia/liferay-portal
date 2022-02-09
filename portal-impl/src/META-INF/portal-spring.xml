@@ -57,6 +57,10 @@
 	<bean class="com.liferay.portlet.documentlibrary.service.persistence.impl.DLFileEntryModelArgumentsResolver" id="com.liferay.portlet.documentlibrary.service.persistence.impl.DLFileEntryModelArgumentsResolver" />
 	<bean class="com.liferay.portlet.documentlibrary.service.persistence.impl.DLFileEntryPersistenceImpl" id="com.liferay.document.library.kernel.service.persistence.DLFileEntryPersistence" />
 	<bean class="com.liferay.portlet.documentlibrary.service.persistence.impl.DLFileEntryFinderImpl" id="com.liferay.document.library.kernel.service.persistence.DLFileEntryFinder" />
+	<bean class="com.liferay.portlet.documentlibrary.service.impl.DLFileEntryFriendlyURLLocalServiceImpl" id="com.liferay.document.library.kernel.service.DLFileEntryFriendlyURLLocalService" />
+	<bean class="com.liferay.portlet.documentlibrary.service.impl.DLFileEntryFriendlyURLServiceImpl" id="com.liferay.document.library.kernel.service.DLFileEntryFriendlyURLService" />
+	<bean class="com.liferay.portlet.documentlibrary.service.persistence.impl.DLFileEntryFriendlyURLModelArgumentsResolver" id="com.liferay.portlet.documentlibrary.service.persistence.impl.DLFileEntryFriendlyURLModelArgumentsResolver" />
+	<bean class="com.liferay.portlet.documentlibrary.service.persistence.impl.DLFileEntryFriendlyURLPersistenceImpl" id="com.liferay.document.library.kernel.service.persistence.DLFileEntryFriendlyURLPersistence" />
 	<bean class="com.liferay.portlet.documentlibrary.service.impl.DLFileEntryMetadataLocalServiceImpl" id="com.liferay.document.library.kernel.service.DLFileEntryMetadataLocalService" />
 	<bean class="com.liferay.portlet.documentlibrary.service.persistence.impl.DLFileEntryMetadataModelArgumentsResolver" id="com.liferay.portlet.documentlibrary.service.persistence.impl.DLFileEntryMetadataModelArgumentsResolver" />
 	<bean class="com.liferay.portlet.documentlibrary.service.persistence.impl.DLFileEntryMetadataPersistenceImpl" id="com.liferay.document.library.kernel.service.persistence.DLFileEntryMetadataPersistence" />
