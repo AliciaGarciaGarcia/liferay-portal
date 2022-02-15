@@ -108,7 +108,8 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 			externalReferenceCode, getUserId(), groupId, repositoryId, folderId,
 			sourceFileName, mimeType, title, description, changeLog,
 			fileEntryTypeId, ddmFormValuesMap, file, inputStream, size,
-			expirationDate, reviewDate, serviceContext);
+			expirationDate, reviewDate, title,
+			serviceContext);
 	}
 
 	@Override
