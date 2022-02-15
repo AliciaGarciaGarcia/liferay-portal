@@ -92,7 +92,7 @@ public class DLFileEntryMetadataTableReferenceDefinitionTest
 			RandomTestUtil.randomString(), StringPool.BLANK, StringPool.BLANK,
 			DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT, null,
 			null, inputStream, bytes.length, null, null,
-			ServiceContextTestUtil.getServiceContext(group.getGroupId()));
+			RandomTestUtil.randomString(), ServiceContextTestUtil.getServiceContext(group.getGroupId()));
 
 		_ddmStructure = _ddmStructureLocalService.addStructure(
 			group.getCreatorUserId(), group.getGroupId(),

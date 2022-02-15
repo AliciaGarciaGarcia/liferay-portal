@@ -115,7 +115,7 @@ public class DLFileEntryMetadataLocalServiceTest {
 			null, null, _dlFileEntryType.getFileEntryTypeId(), ddmFormValuesMap,
 			null, new ByteArrayInputStream(TestDataConstants.TEST_BYTE_ARRAY),
 			TestDataConstants.TEST_BYTE_ARRAY.length, null, null,
-			serviceContext);
+			RandomTestUtil.randomString(), serviceContext);
 	}
 
 	@Test
@@ -150,7 +150,7 @@ public class DLFileEntryMetadataLocalServiceTest {
 				ddmStructure.getStructureKey(), user.getLocale()),
 			null, new ByteArrayInputStream(TestDataConstants.TEST_BYTE_ARRAY),
 			TestDataConstants.TEST_BYTE_ARRAY.length, null, null,
-			serviceContext);
+			RandomTestUtil.randomString(), serviceContext);
 
 		DLFileVersion dlFileVersion = dlFileEntry.getFileVersion();
 

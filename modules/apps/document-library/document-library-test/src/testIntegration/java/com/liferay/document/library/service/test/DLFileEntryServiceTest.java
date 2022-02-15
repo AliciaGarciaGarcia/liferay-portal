@@ -321,7 +321,7 @@ public class DLFileEntryServiceTest {
 			RandomTestUtil.randomString(), StringPool.BLANK,
 			DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT, null,
 			null, new ByteArrayInputStream(_CONTENT.getBytes()), 0, null, null,
-			serviceContext);
+			RandomTestUtil.randomString(), serviceContext);
 	}
 
 	protected DLFileEntry updateDLFileEntry(

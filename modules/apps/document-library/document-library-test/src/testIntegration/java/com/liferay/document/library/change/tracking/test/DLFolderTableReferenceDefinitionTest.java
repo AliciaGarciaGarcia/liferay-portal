@@ -80,7 +80,8 @@ public class DLFolderTableReferenceDefinitionTest
 			RandomTestUtil.randomString(), ContentTypes.TEXT_PLAIN,
 			RandomTestUtil.randomString(), StringPool.BLANK, StringPool.BLANK,
 			DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT, null,
-			null, inputStream, bytes.length, null, null, serviceContext);
+			null, inputStream, bytes.length, null, null,
+			RandomTestUtil.randomString(), serviceContext);
 
 		return parentFolder;
 	}

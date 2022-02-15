@@ -89,7 +89,7 @@ public class FriendlyURLDLFileEntryLocalServiceWrapperTest
 						DLFileEntryTypeConstants.
 							FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT,
 						null, null, inputStream, bytes.length, null, null,
-						serviceContext);
+						RandomTestUtil.randomString(), serviceContext);
 
 				FriendlyURLEntry friendlyURLEntry1 =
 					_friendlyURLEntryLocalService.getMainFriendlyURLEntry(
@@ -115,7 +115,7 @@ public class FriendlyURLDLFileEntryLocalServiceWrapperTest
 						DLFileEntryTypeConstants.
 							FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT,
 						null, null, inputStream, bytes.length, null, null,
-						serviceContext);
+						RandomTestUtil.randomString(), serviceContext);
 
 				FriendlyURLEntry friendlyURLEntry2 =
 					_friendlyURLEntryLocalService.getMainFriendlyURLEntry(
@@ -149,7 +149,7 @@ public class FriendlyURLDLFileEntryLocalServiceWrapperTest
 					StringPool.BLANK, StringPool.BLANK,
 					DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT,
 					null, null, inputStream, bytes.length, null, null,
-					serviceContext);
+					RandomTestUtil.randomString(), serviceContext);
 
 				FriendlyURLEntry friendlyURLEntry =
 					_friendlyURLEntryLocalService.getMainFriendlyURLEntry(
@@ -184,7 +184,7 @@ public class FriendlyURLDLFileEntryLocalServiceWrapperTest
 					StringPool.BLANK,
 					DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT,
 					null, null, inputStream, bytes.length, null, null,
-					serviceContext);
+					RandomTestUtil.randomString(), serviceContext);
 
 				FriendlyURLEntry friendlyURLEntry =
 					_friendlyURLEntryLocalService.getMainFriendlyURLEntry(
@@ -286,7 +286,7 @@ public class FriendlyURLDLFileEntryLocalServiceWrapperTest
 					StringPool.BLANK,
 					DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT,
 					null, null, inputStream, bytes.length, null, null,
-					serviceContext);
+					RandomTestUtil.randomString(), serviceContext);
 
 				dlFileEntry = _dlFileEntryLocalService.updateFileEntry(
 					group.getCreatorUserId(), dlFileEntry.getFileEntryId(),

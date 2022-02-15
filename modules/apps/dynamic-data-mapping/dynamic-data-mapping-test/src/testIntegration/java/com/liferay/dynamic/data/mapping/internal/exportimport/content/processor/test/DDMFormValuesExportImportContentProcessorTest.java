@@ -499,7 +499,7 @@ public class DDMFormValuesExportImportContentProcessorTest {
 			RandomTestUtil.randomString(), RandomTestUtil.randomString(),
 			StringPool.BLANK, dlFileEntryType.getFileEntryTypeId(),
 			ddmFormValuesMap, file, inputStream, size, null, null,
-			serviceContext);
+			RandomTestUtil.randomString(), serviceContext);
 
 		_fileEntry = _dlAppLocalService.getFileEntry(
 			dlFileEntry.getFileEntryId());
