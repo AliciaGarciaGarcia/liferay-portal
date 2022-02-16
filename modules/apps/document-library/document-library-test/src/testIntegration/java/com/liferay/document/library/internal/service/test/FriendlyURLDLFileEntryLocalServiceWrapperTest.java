@@ -296,7 +296,7 @@ public class FriendlyURLDLFileEntryLocalServiceWrapperTest
 					DLVersionNumberIncrease.MAJOR,
 					DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT,
 					Collections.emptyMap(), null, inputStream, 0, null, null,
-					serviceContext);
+					RandomTestUtil.randomString(), serviceContext);
 
 				FriendlyURLEntry friendlyURLEntry =
 					_friendlyURLEntryLocalService.getMainFriendlyURLEntry(

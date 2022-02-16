@@ -73,7 +73,8 @@ public class DLFileVersionTableReferenceDefinitionTest
 			RandomTestUtil.randomString(), StringPool.BLANK, StringPool.BLANK,
 			DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT, null,
 			null, inputStream, bytes.length, null, null,
-			RandomTestUtil.randomString(), ServiceContextTestUtil.getServiceContext(group.getGroupId()));
+			RandomTestUtil.randomString(),
+			ServiceContextTestUtil.getServiceContext(group.getGroupId()));
 	}
 
 	@Override
@@ -89,6 +90,7 @@ public class DLFileVersionTableReferenceDefinitionTest
 			DLVersionNumberIncrease.MAJOR,
 			DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT,
 			Collections.emptyMap(), null, inputStream, 0, null, null,
+			RandomTestUtil.randomString(),
 			ServiceContextTestUtil.getServiceContext(group.getGroupId()));
 
 		return _dlFileEntry.getFileVersion();

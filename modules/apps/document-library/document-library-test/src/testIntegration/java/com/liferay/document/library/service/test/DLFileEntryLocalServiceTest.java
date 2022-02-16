@@ -245,7 +245,7 @@ public class DLFileEntryLocalServiceTest {
 			DLVersionNumberIncrease.fromMajorVersion(false),
 			dlFileEntry.getFileEntryTypeId(), new HashMap<>(), null,
 			new ByteArrayInputStream(content.getBytes()), 0, null, null,
-			serviceContext);
+			StringUtil.randomString(), serviceContext);
 
 		dlFileVersion = dlFileEntry.getFileVersion();
 
@@ -938,7 +938,7 @@ public class DLFileEntryLocalServiceTest {
 			DLVersionNumberIncrease.fromMajorVersion(false),
 			dlFileEntry.getFileEntryTypeId(), new HashMap<>(), null,
 			new ByteArrayInputStream(content.getBytes()), 0, expirationDate,
-			reviewDate, serviceContext);
+			reviewDate, StringUtil.randomString(), serviceContext);
 
 		dlFileVersion = dlFileEntry.getFileVersion();
 
@@ -981,7 +981,7 @@ public class DLFileEntryLocalServiceTest {
 				DLVersionNumberIncrease.fromMajorVersion(false),
 				dlFileEntry.getFileEntryTypeId(), new HashMap<>(), null,
 				new ByteArrayInputStream(new byte[0]), 0, null, null,
-				serviceContext);
+				StringUtil.randomString(), serviceContext);
 		}
 	}
 
@@ -1192,7 +1192,7 @@ public class DLFileEntryLocalServiceTest {
 			DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT,
 			ddmFormValuesMap, null, inputStream, 0,
 			dlFileEntry.getExpirationDate(), dlFileEntry.getReviewDate(),
-			serviceContext);
+			StringUtil.randomString(), serviceContext);
 
 		DLFileVersion dlFileVersion = dlFileEntry.getLatestFileVersion(true);
 

@@ -64,7 +64,8 @@ public class DLFileEntryTableReferenceDefinitionTest
 			RandomTestUtil.randomString(), StringPool.BLANK, StringPool.BLANK,
 			DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT, null,
 			null, inputStream, bytes.length, null, null,
-			RandomTestUtil.randomString(), ServiceContextTestUtil.getServiceContext(group.getGroupId()));
+			RandomTestUtil.randomString(),
+			ServiceContextTestUtil.getServiceContext(group.getGroupId()));
 	}
 
 	@Inject

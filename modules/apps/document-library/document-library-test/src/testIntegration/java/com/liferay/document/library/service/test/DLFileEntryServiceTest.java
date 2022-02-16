@@ -335,7 +335,7 @@ public class DLFileEntryServiceTest {
 			StringPool.BLANK, DLVersionNumberIncrease.MINOR,
 			dlFileEntry.getFileEntryTypeId(), null, null,
 			dlFileEntry.getContentStream(), dlFileEntry.getSize(),
-			dlFileEntry.getExpirationDate(), dlFileEntry.getReviewDate(),
+			dlFileEntry.getExpirationDate(), dlFileEntry.getReviewDate(), null,
 			serviceContext);
 	}
 
