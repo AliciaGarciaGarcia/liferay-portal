@@ -607,7 +607,7 @@ public class LiferayLocalRepository
 			userId, fileEntryId, sourceFileName, mimeType, title, description,
 			changeLog, dlVersionNumberIncrease, fileEntryTypeId,
 			ddmFormValuesMap, file, null, size, expirationDate, reviewDate,
-			serviceContext);
+			title, serviceContext);
 
 		return new LiferayFileEntry(dlFileEntry);
 	}
@@ -631,7 +631,7 @@ public class LiferayLocalRepository
 			userId, fileEntryId, sourceFileName, mimeType, title, description,
 			changeLog, dlVersionNumberIncrease, fileEntryTypeId,
 			ddmFormValuesMap, null, inputStream, size, expirationDate,
-			reviewDate, serviceContext);
+			reviewDate, title, serviceContext);
 
 		return new LiferayFileEntry(dlFileEntry);
 	}

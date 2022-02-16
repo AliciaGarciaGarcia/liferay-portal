@@ -221,19 +221,18 @@ public class DLFileEntryLocalServiceImpl
 		return addFileEntry(
 			null, userId, groupId, repositoryId, folderId, sourceFileName,
 			mimeType, title, description, changeLog, fileEntryTypeId,
-			ddmFormValuesMap, file, inputStream, size, null, null,
-			title, serviceContext);
+			ddmFormValuesMap, file, inputStream, size, null, null, title,
+			serviceContext);
 	}
 
 	@Override
 	public DLFileEntry addFileEntry(
-		String externalReferenceCode, long userId, long groupId,
-		long repositoryId, long folderId, String sourceFileName,
-		String mimeType, String title, String description, String changeLog,
-		long fileEntryTypeId, Map<String, DDMFormValues> ddmFormValuesMap,
-		File file, InputStream inputStream, long size, Date expirationDate,
-		Date reviewDate, String urlTitle,
-		ServiceContext serviceContext)
+			String externalReferenceCode, long userId, long groupId,
+			long repositoryId, long folderId, String sourceFileName,
+			String mimeType, String title, String description, String changeLog,
+			long fileEntryTypeId, Map<String, DDMFormValues> ddmFormValuesMap,
+			File file, InputStream inputStream, long size, Date expirationDate,
+			Date reviewDate, String urlTitle, ServiceContext serviceContext)
 		throws PortalException {
 
 		if (Validator.isNull(title)) {
@@ -1771,7 +1770,7 @@ public class DLFileEntryLocalServiceImpl
 			DLVersionNumberIncrease dlVersionNumberIncrease,
 			long fileEntryTypeId, Map<String, DDMFormValues> ddmFormValuesMap,
 			File file, InputStream inputStream, long size, Date expirationDate,
-			Date reviewDate, ServiceContext serviceContext)
+			Date reviewDate, String urlTitle, ServiceContext serviceContext)
 		throws PortalException {
 
 		DLFileEntry dlFileEntry = dlFileEntryPersistence.findByPrimaryKey(
@@ -1826,7 +1825,11 @@ public class DLFileEntryLocalServiceImpl
 	}
 
 	/**
-	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link #updateFileEntry(long, long, String, String, String, String, String, DLVersionNumberIncrease, long, Map, File, InputStream, long, Date, Date, ServiceContext)}
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             com.liferay.document.library.kernel.service.DLFileEntryLocalService#updateFileEntry(
+	 *             long, long, String, String, String, String, String,
+	 *             DLVersionNumberIncrease, long, Map, File, InputStream, long,
+	 *             Date, Date, String, ServiceContext)}
 	 */
 	@Deprecated
 	@Override
@@ -1842,7 +1845,7 @@ public class DLFileEntryLocalServiceImpl
 		return updateFileEntry(
 			userId, fileEntryId, sourceFileName, mimeType, title, description,
 			changeLog, dlVersionNumberIncrease, fileEntryTypeId,
-			ddmFormValuesMap, file, inputStream, size, null, null,
+			ddmFormValuesMap, file, inputStream, size, null, null, title,
 			serviceContext);
 	}
 
