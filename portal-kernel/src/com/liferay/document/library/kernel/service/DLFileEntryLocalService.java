@@ -100,7 +100,7 @@ public interface DLFileEntryLocalService
 	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
 	 #addFileEntry(String, long, long, long, long, String, String,
 	 String, String, String, long, Map, File, InputStream, long,
-	 Date, Date, ServiceContext)}
+	 Date, Date, String, ServiceContext)}
 	 */
 	@Deprecated
 	public DLFileEntry addFileEntry(
@@ -117,7 +117,7 @@ public interface DLFileEntryLocalService
 			String mimeType, String title, String description, String changeLog,
 			long fileEntryTypeId, Map<String, DDMFormValues> ddmFormValuesMap,
 			File file, InputStream inputStream, long size, Date expirationDate,
-			Date reviewDate, ServiceContext serviceContext)
+			Date reviewDate, String urlTitle, ServiceContext serviceContext)
 		throws PortalException;
 
 	public DLFileVersion cancelCheckOut(long userId, long fileEntryId)
