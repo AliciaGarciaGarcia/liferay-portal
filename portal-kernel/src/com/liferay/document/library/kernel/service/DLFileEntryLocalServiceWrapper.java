@@ -1121,6 +1121,7 @@ public class DLFileEntryLocalServiceWrapper
 					ddmFormValuesMap,
 			java.io.File file, java.io.InputStream inputStream, long size,
 			java.util.Date expirationDate, java.util.Date reviewDate,
+			String urlTitle,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
@@ -1128,11 +1129,15 @@ public class DLFileEntryLocalServiceWrapper
 			userId, fileEntryId, sourceFileName, mimeType, title, description,
 			changeLog, dlVersionNumberIncrease, fileEntryTypeId,
 			ddmFormValuesMap, file, inputStream, size, expirationDate,
-			reviewDate, serviceContext);
+			reviewDate, urlTitle, serviceContext);
 	}
 
 	/**
-	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link #updateFileEntry(long, long, String, String, String, String, String, DLVersionNumberIncrease, long, Map, File, InputStream, long, Date, Date, ServiceContext)}
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 DLFileEntryLocalService#updateFileEntry(
+	 long, long, String, String, String, String, String,
+	 DLVersionNumberIncrease, long, Map, File, InputStream, long,
+	 Date, Date, String, ServiceContext)}
 	 */
 	@Deprecated
 	@Override
