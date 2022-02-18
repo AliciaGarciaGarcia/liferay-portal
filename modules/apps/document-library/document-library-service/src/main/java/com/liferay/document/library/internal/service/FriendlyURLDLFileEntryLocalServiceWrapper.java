@@ -99,17 +99,17 @@ public class FriendlyURLDLFileEntryLocalServiceWrapper
 			DLVersionNumberIncrease dlVersionNumberIncrease,
 			long fileEntryTypeId, Map<String, DDMFormValues> ddmFormValuesMap,
 			File file, InputStream inputStream, long size, Date expirationDate,
-			Date reviewDate, ServiceContext serviceContext)
+			Date reviewDate, String urlTitle, ServiceContext serviceContext)
 		throws PortalException {
 
 		DLFileEntry dlFileEntry = super.updateFileEntry(
 			userId, fileEntryId, sourceFileName, mimeType, title, description,
 			changeLog, dlVersionNumberIncrease, fileEntryTypeId,
 			ddmFormValuesMap, file, inputStream, size, expirationDate,
-			reviewDate, serviceContext);
+			reviewDate, urlTitle, serviceContext);
 
 		if (_ffFriendlyURLEntryFileEntryConfiguration.enabled()) {
-			_updateFriendlyURL(dlFileEntry, title);
+			_updateFriendlyURL(dlFileEntry, urlTitle);
 		}
 
 		return dlFileEntry;
