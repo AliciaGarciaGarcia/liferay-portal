@@ -60,17 +60,17 @@ public class FriendlyURLDLFileEntryLocalServiceWrapper
 			String mimeType, String title, String description, String changeLog,
 			long fileEntryTypeId, Map<String, DDMFormValues> ddmFormValuesMap,
 			File file, InputStream inputStream, long size, Date expirationDate,
-			Date reviewDate, ServiceContext serviceContext)
+			Date reviewDate, String urlTitle, ServiceContext serviceContext)
 		throws PortalException {
 
 		DLFileEntry dlFileEntry = super.addFileEntry(
 			externalReferenceCode, userId, groupId, repositoryId, folderId,
 			sourceFileName, mimeType, title, description, changeLog,
 			fileEntryTypeId, ddmFormValuesMap, file, inputStream, size,
-			expirationDate, reviewDate, serviceContext);
+			expirationDate, reviewDate, urlTitle, serviceContext);
 
 		if (_ffFriendlyURLEntryFileEntryConfiguration.enabled()) {
-			_addFriendlyURLEntry(dlFileEntry, title);
+			_addFriendlyURLEntry(dlFileEntry, urlTitle);
 		}
 
 		return dlFileEntry;
