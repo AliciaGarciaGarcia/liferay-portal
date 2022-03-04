@@ -106,8 +106,8 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 
 		return addFileEntry(
 			null, userId, repositoryId, folderId, sourceFileName, mimeType,
-			sourceFileName, StringPool.BLANK, StringPool.BLANK, bytes, null,
-			null, serviceContext);
+			sourceFileName, StringPool.BLANK, StringPool.BLANK,
+			StringPool.BLANK, bytes, null, null, serviceContext);
 	}
 
 	/**
@@ -155,7 +155,8 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 
 		return addFileEntry(
 			null, userId, repositoryId, folderId, sourceFileName, mimeType,
-			title, description, changeLog, bytes, null, null, serviceContext);
+			title, title, description, changeLog, bytes, null, null,
+			serviceContext);
 	}
 
 	/**
@@ -203,7 +204,8 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 
 		return addFileEntry(
 			null, userId, repositoryId, folderId, sourceFileName, mimeType,
-			title, description, changeLog, file, null, null, serviceContext);
+			title, title, description, changeLog, file, null, null,
+			serviceContext);
 	}
 
 	/**
@@ -254,7 +256,7 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 
 		return addFileEntry(
 			null, userId, repositoryId, folderId, sourceFileName, mimeType,
-			title, description, changeLog, inputStream, size, null, null,
+			title, title, description, changeLog, inputStream, size, null, null,
 			serviceContext);
 	}
 
@@ -268,8 +270,8 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 		return addFileEntry(
 			externalReferenceCode, userId, repositoryId, folderId,
 			sourceFileName, mimeType, sourceFileName, StringPool.BLANK,
-			StringPool.BLANK, bytes, expirationDate, reviewDate,
-			serviceContext);
+			StringPool.BLANK, StringPool.BLANK, bytes, expirationDate,
+			reviewDate, serviceContext);
 	}
 
 	/**
@@ -311,7 +313,7 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 	public FileEntry addFileEntry(
 			String externalReferenceCode, long userId, long repositoryId,
 			long folderId, String sourceFileName, String mimeType, String title,
-			String description, String changeLog, byte[] bytes,
+			String urlTitle, String description, String changeLog, byte[] bytes,
 			Date expirationDate, Date reviewDate, ServiceContext serviceContext)
 		throws PortalException {
 
@@ -324,8 +326,8 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 
 			return addFileEntry(
 				externalReferenceCode, userId, repositoryId, folderId,
-				sourceFileName, mimeType, title, description, changeLog, file,
-				expirationDate, reviewDate, serviceContext);
+				sourceFileName, mimeType, title, urlTitle, description,
+				changeLog, file, expirationDate, reviewDate, serviceContext);
 		}
 		catch (IOException ioException) {
 			throw new SystemException(
@@ -374,15 +376,15 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 	public FileEntry addFileEntry(
 			String externalReferenceCode, long userId, long repositoryId,
 			long folderId, String sourceFileName, String mimeType, String title,
-			String description, String changeLog, File file,
+			String urlTitle, String description, String changeLog, File file,
 			Date expirationDate, Date reviewDate, ServiceContext serviceContext)
 		throws PortalException {
 
 		if ((file == null) || !file.exists() || (file.length() == 0)) {
 			return addFileEntry(
 				externalReferenceCode, userId, repositoryId, folderId,
-				sourceFileName, mimeType, title, description, changeLog, null,
-				0, expirationDate, reviewDate, serviceContext);
+				sourceFileName, mimeType, title, urlTitle, description,
+				changeLog, null, 0, expirationDate, reviewDate, serviceContext);
 		}
 
 		mimeType = DLAppUtil.getMimeType(sourceFileName, mimeType, title, file);
@@ -391,7 +393,7 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 
 		return localRepository.addFileEntry(
 			externalReferenceCode, userId, folderId, sourceFileName, mimeType,
-			title, title, description, changeLog, file, expirationDate,
+			title, urlTitle, description, changeLog, file, expirationDate,
 			reviewDate, serviceContext);
 	}
 
@@ -436,9 +438,9 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 	public FileEntry addFileEntry(
 			String externalReferenceCode, long userId, long repositoryId,
 			long folderId, String sourceFileName, String mimeType, String title,
-			String description, String changeLog, InputStream inputStream,
-			long size, Date expirationDate, Date reviewDate,
-			ServiceContext serviceContext)
+			String urlTitle, String description, String changeLog,
+			InputStream inputStream, long size, Date expirationDate,
+			Date reviewDate, ServiceContext serviceContext)
 		throws PortalException {
 
 		if (inputStream == null) {
@@ -463,8 +465,9 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 
 					return addFileEntry(
 						externalReferenceCode, userId, repositoryId, folderId,
-						sourceFileName, mimeType, title, description, changeLog,
-						file, expirationDate, reviewDate, serviceContext);
+						sourceFileName, mimeType, title, urlTitle, description,
+						changeLog, file, expirationDate, reviewDate,
+						serviceContext);
 				}
 				catch (IOException ioException) {
 					throw new SystemException(
@@ -480,7 +483,7 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 
 		return localRepository.addFileEntry(
 			externalReferenceCode, userId, folderId, sourceFileName, mimeType,
-			title, title, description, changeLog, inputStream, size,
+			title, urlTitle, description, changeLog, inputStream, size,
 			expirationDate, reviewDate, serviceContext);
 	}
 
@@ -1116,74 +1119,6 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 	 * @param  dlVersionNumberIncrease the kind of version number increase to
 	 *         apply for these changes.
 	 * @param  bytes the file's data (optionally <code>null</code>)
-	 * @param  expirationDate the file's expiration date (optionally <code>null
-	 *                           </code>)
-	 * @param  reviewDate the file's review date (optionally <code>null</code>)
-	 * @param  serviceContext the service context to be applied. Can set the
-	 *         asset category IDs, asset tag names, and expando bridge
-	 *         attributes for the file entry. In a Liferay repository, it may
-	 *         include:  <ul> <li> fileEntryTypeId - ID for a custom file entry
-	 *         type </li> <li> fieldsMap - mapping for fields associated with a
-	 *         custom file entry type </li> </ul>
-	 * @return the file entry
-	 * @throws PortalException if a portal exception occurred
-	 */
-	@Override
-	public FileEntry updateFileEntry(
-			long userId, long fileEntryId, String sourceFileName,
-			String mimeType, String title, String description, String changeLog,
-			DLVersionNumberIncrease dlVersionNumberIncrease, byte[] bytes,
-			Date expirationDate, Date reviewDate, ServiceContext serviceContext)
-		throws PortalException {
-
-		File file = null;
-
-		try {
-			if (ArrayUtil.isNotEmpty(bytes)) {
-				file = FileUtil.createTempFile(bytes);
-			}
-
-			return updateFileEntry(
-				userId, fileEntryId, sourceFileName, mimeType, title,
-				description, changeLog, dlVersionNumberIncrease, file,
-				expirationDate, reviewDate, serviceContext);
-		}
-		catch (IOException ioException) {
-			throw new SystemException(
-				"Unable to write temporary file", ioException);
-		}
-		finally {
-			FileUtil.delete(file);
-		}
-	}
-
-	/**
-	 * Updates a file entry and associated metadata based on a byte array
-	 * object. If the file data is <code>null</code>, then only the associated
-	 * metadata (i.e., <code>title</code>, <code>description</code>, and
-	 * parameters in the <code>serviceContext</code>) will be updated.
-	 *
-	 * <p>
-	 * This method takes two file names, the <code>sourceFileName</code> and the
-	 * <code>title</code>. The <code>sourceFileName</code> corresponds to the
-	 * name of the actual file being uploaded. The <code>title</code>
-	 * corresponds to a name the client wishes to assign this file after it has
-	 * been uploaded to the portal.
-	 * </p>
-	 *
-	 * @param  userId the primary key of the user
-	 * @param  fileEntryId the primary key of the file entry
-	 * @param  sourceFileName the original file's name (optionally
-	 *         <code>null</code>)
-	 * @param  mimeType the file's MIME type (optionally <code>null</code>)
-	 * @param  title the new name to be assigned to the file (optionally <code>
-	 *         <code>null</code></code>)
-	 * @param  description the file's new description
-	 * @param  changeLog the file's version change log (optionally
-	 *         <code>null</code>)
-	 * @param  dlVersionNumberIncrease the kind of version number increase to
-	 *         apply for these changes.
-	 * @param  bytes the file's data (optionally <code>null</code>)
 	 * @param  serviceContext the service context to be applied. Can set the
 	 *         asset category IDs, asset tag names, and expando bridge
 	 *         attributes for the file entry. In a Liferay repository, it may
@@ -1207,80 +1142,9 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 		throws PortalException {
 
 		return updateFileEntry(
-			userId, fileEntryId, sourceFileName, mimeType, title, description,
-			changeLog, dlVersionNumberIncrease, bytes, null, null,
-			serviceContext);
-	}
-
-	/**
-	 * Updates a file entry and associated metadata based on a {@link File}
-	 * object. If the file data is <code>null</code>, then only the associated
-	 * metadata (i.e., <code>title</code>, <code>description</code>, and
-	 * parameters in the <code>serviceContext</code>) will be updated.
-	 *
-	 * <p>
-	 * This method takes two file names, the <code>sourceFileName</code> and the
-	 * <code>title</code>. The <code>sourceFileName</code> corresponds to the
-	 * name of the actual file being uploaded. The <code>title</code>
-	 * corresponds to a name the client wishes to assign this file after it has
-	 * been uploaded to the portal.
-	 * </p>
-	 *
-	 * @param  userId the primary key of the user
-	 * @param  fileEntryId the primary key of the file entry
-	 * @param  sourceFileName the original file's name (optionally
-	 *         <code>null</code>)
-	 * @param  mimeType the file's MIME type (optionally <code>null</code>)
-	 * @param  title the new name to be assigned to the file (optionally <code>
-	 *         <code>null</code></code>)
-	 * @param  description the file's new description
-	 * @param  changeLog the file's version change log (optionally
-	 *         <code>null</code>)
-	 * @param  dlVersionNumberIncrease the kind of version number increase to
-	 *         apply for these changes.
-	 * @param  file the file's data (optionally <code>null</code>)
-	 * @param  expirationDate the file's expiration date (optionally <code>null
-	 *                           </code>)
-	 * @param  reviewDate the file's review date (optionally <code>null</code>)
-	 * @param  serviceContext the service context to be applied. Can set the
-	 *         asset category IDs, asset tag names, and expando bridge
-	 *         attributes for the file entry. In a Liferay repository, it may
-	 *         include:  <ul> <li> fileEntryTypeId - ID for a custom file entry
-	 *         type </li> <li> fieldsMap - mapping for fields associated with a
-	 *         custom file entry type </li> </ul>
-	 * @return the file entry
-	 * @throws PortalException if a portal exception occurred
-	 */
-	@Override
-	public FileEntry updateFileEntry(
-			long userId, long fileEntryId, String sourceFileName,
-			String mimeType, String title, String description, String changeLog,
-			DLVersionNumberIncrease dlVersionNumberIncrease, File file,
-			Date expirationDate, Date reviewDate, ServiceContext serviceContext)
-		throws PortalException {
-
-		if ((file == null) || !file.exists() || (file.length() == 0)) {
-			return updateFileEntry(
-				userId, fileEntryId, sourceFileName, mimeType, title,
-				description, changeLog, dlVersionNumberIncrease, null, 0,
-				expirationDate, reviewDate, serviceContext);
-		}
-
-		mimeType = DLAppUtil.getMimeType(sourceFileName, mimeType, title, file);
-
-		LocalRepository localRepository =
-			repositoryProvider.getFileEntryLocalRepository(fileEntryId);
-
-		FileEntry fileEntry = localRepository.updateFileEntry(
 			userId, fileEntryId, sourceFileName, mimeType, title, title,
-			description, changeLog, dlVersionNumberIncrease, file,
-			expirationDate, reviewDate, serviceContext);
-
-		_dlAppHelperLocalService.updateFileEntry(
-			userId, fileEntry, null, fileEntry.getFileVersion(),
+			description, changeLog, dlVersionNumberIncrease, bytes, null, null,
 			serviceContext);
-
-		return fileEntry;
 	}
 
 	/**
@@ -1333,103 +1197,9 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 		throws PortalException {
 
 		return updateFileEntry(
-			userId, fileEntryId, sourceFileName, mimeType, title, description,
-			changeLog, dlVersionNumberIncrease, file, null, null,
-			serviceContext);
-	}
-
-	/**
-	 * Updates a file entry and associated metadata based on an {@link
-	 * InputStream} object. If the file data is <code>null</code>, then only the
-	 * associated metadata (i.e., <code>title</code>, <code>description</code>,
-	 * and parameters in the <code>serviceContext</code>) will be updated.
-	 *
-	 * <p>
-	 * This method takes two file names, the <code>sourceFileName</code> and the
-	 * <code>title</code>. The <code>sourceFileName</code> corresponds to the
-	 * name of the actual file being uploaded. The <code>title</code>
-	 * corresponds to a name the client wishes to assign this file after it has
-	 * been uploaded to the portal.
-	 * </p>
-	 *
-	 * @param  userId the primary key of the user
-	 * @param  fileEntryId the primary key of the file entry
-	 * @param  sourceFileName the original file's name (optionally
-	 *         <code>null</code>)
-	 * @param  mimeType the file's MIME type (optionally <code>null</code>)
-	 * @param  title the new name to be assigned to the file (optionally <code>
-	 *         <code>null</code></code>)
-	 * @param  description the file's new description
-	 * @param  changeLog the file's version change log (optionally
-	 *         <code>null</code>)
-	 * @param  dlVersionNumberIncrease the kind of version number increase to
-	 *         apply for these changes.
-	 * @param  inputStream the file's data (optionally <code>null</code>)
-	 * @param  size the file's size (optionally <code>0</code>)
-	 * @param  expirationDate the file's expiration date (optionally <code>null
-	 *                           </code>)
-	 * @param  reviewDate the file's review date (optionally <code>null</code>)
-	 * @param  serviceContext the service context to be applied. Can set the
-	 *         asset category IDs, asset tag names, and expando bridge
-	 *         attributes for the file entry. In a Liferay repository, it may
-	 *         include:  <ul> <li> fileEntryTypeId - ID for a custom file entry
-	 *         type </li> <li> fieldsMap - mapping for fields associated with a
-	 *         custom file entry type </li> </ul>
-	 * @return the file entry
-	 * @throws PortalException if a portal exception occurred
-	 */
-	@Override
-	public FileEntry updateFileEntry(
-			long userId, long fileEntryId, String sourceFileName,
-			String mimeType, String title, String description, String changeLog,
-			DLVersionNumberIncrease dlVersionNumberIncrease,
-			InputStream inputStream, long size, Date expirationDate,
-			Date reviewDate, ServiceContext serviceContext)
-		throws PortalException {
-
-		if (Validator.isNull(mimeType) ||
-			mimeType.equals(ContentTypes.APPLICATION_OCTET_STREAM)) {
-
-			if (size == 0) {
-				String extension = DLAppUtil.getExtension(
-					title, sourceFileName);
-
-				mimeType = MimeTypesUtil.getExtensionContentType(extension);
-			}
-			else {
-				File file = null;
-
-				try {
-					file = FileUtil.createTempFile(inputStream);
-
-					return updateFileEntry(
-						userId, fileEntryId, sourceFileName, mimeType, title,
-						description, changeLog, dlVersionNumberIncrease, file,
-						expirationDate, reviewDate, serviceContext);
-				}
-				catch (IOException ioException) {
-					throw new SystemException(
-						"Unable to write temporary file", ioException);
-				}
-				finally {
-					FileUtil.delete(file);
-				}
-			}
-		}
-
-		LocalRepository localRepository =
-			repositoryProvider.getFileEntryLocalRepository(fileEntryId);
-
-		FileEntry fileEntry = localRepository.updateFileEntry(
 			userId, fileEntryId, sourceFileName, mimeType, title, title,
-			description, changeLog, dlVersionNumberIncrease, inputStream, size,
-			expirationDate, reviewDate, serviceContext);
-
-		_dlAppHelperLocalService.updateFileEntry(
-			userId, fileEntry, null, fileEntry.getFileVersion(),
+			description, changeLog, dlVersionNumberIncrease, file, null, null,
 			serviceContext);
-
-		return fileEntry;
 	}
 
 	/**
@@ -1483,9 +1253,245 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 		throws PortalException {
 
 		return updateFileEntry(
-			userId, fileEntryId, sourceFileName, mimeType, title, description,
-			changeLog, dlVersionNumberIncrease, inputStream, size, null, null,
+			userId, fileEntryId, sourceFileName, mimeType, title, title,
+			description, changeLog, dlVersionNumberIncrease, inputStream, size,
+			null, null, serviceContext);
+	}
+
+	/**
+	 * Updates a file entry and associated metadata based on a byte array
+	 * object. If the file data is <code>null</code>, then only the associated
+	 * metadata (i.e., <code>title</code>, <code>description</code>, and
+	 * parameters in the <code>serviceContext</code>) will be updated.
+	 *
+	 * <p>
+	 * This method takes two file names, the <code>sourceFileName</code> and the
+	 * <code>title</code>. The <code>sourceFileName</code> corresponds to the
+	 * name of the actual file being uploaded. The <code>title</code>
+	 * corresponds to a name the client wishes to assign this file after it has
+	 * been uploaded to the portal.
+	 * </p>
+	 *
+	 * @param  userId the primary key of the user
+	 * @param  fileEntryId the primary key of the file entry
+	 * @param  sourceFileName the original file's name (optionally
+	 *         <code>null</code>)
+	 * @param  mimeType the file's MIME type (optionally <code>null</code>)
+	 * @param  title the new name to be assigned to the file (optionally <code>
+	 *         <code>null</code></code>)
+	 * @param  description the file's new description
+	 * @param  changeLog the file's version change log (optionally
+	 *         <code>null</code>)
+	 * @param  dlVersionNumberIncrease the kind of version number increase to
+	 *         apply for these changes.
+	 * @param  bytes the file's data (optionally <code>null</code>)
+	 * @param  expirationDate the file's expiration date (optionally <code>null
+	 *                           </code>)
+	 * @param  reviewDate the file's review date (optionally <code>null</code>)
+	 * @param  serviceContext the service context to be applied. Can set the
+	 *         asset category IDs, asset tag names, and expando bridge
+	 *         attributes for the file entry. In a Liferay repository, it may
+	 *         include:  <ul> <li> fileEntryTypeId - ID for a custom file entry
+	 *         type </li> <li> fieldsMap - mapping for fields associated with a
+	 *         custom file entry type </li> </ul>
+	 * @return the file entry
+	 * @throws PortalException if a portal exception occurred
+	 */
+	@Override
+	public FileEntry updateFileEntry(
+			long userId, long fileEntryId, String sourceFileName,
+			String mimeType, String title, String urlTitle, String description,
+			String changeLog, DLVersionNumberIncrease dlVersionNumberIncrease,
+			byte[] bytes, Date expirationDate, Date reviewDate,
+			ServiceContext serviceContext)
+		throws PortalException {
+
+		File file = null;
+
+		try {
+			if (ArrayUtil.isNotEmpty(bytes)) {
+				file = FileUtil.createTempFile(bytes);
+			}
+
+			return updateFileEntry(
+				userId, fileEntryId, sourceFileName, mimeType, title, urlTitle,
+				description, changeLog, dlVersionNumberIncrease, file,
+				expirationDate, reviewDate, serviceContext);
+		}
+		catch (IOException ioException) {
+			throw new SystemException(
+				"Unable to write temporary file", ioException);
+		}
+		finally {
+			FileUtil.delete(file);
+		}
+	}
+
+	/**
+	 * Updates a file entry and associated metadata based on a {@link File}
+	 * object. If the file data is <code>null</code>, then only the associated
+	 * metadata (i.e., <code>title</code>, <code>description</code>, and
+	 * parameters in the <code>serviceContext</code>) will be updated.
+	 *
+	 * <p>
+	 * This method takes two file names, the <code>sourceFileName</code> and the
+	 * <code>title</code>. The <code>sourceFileName</code> corresponds to the
+	 * name of the actual file being uploaded. The <code>title</code>
+	 * corresponds to a name the client wishes to assign this file after it has
+	 * been uploaded to the portal.
+	 * </p>
+	 *
+	 * @param  userId the primary key of the user
+	 * @param  fileEntryId the primary key of the file entry
+	 * @param  sourceFileName the original file's name (optionally
+	 *         <code>null</code>)
+	 * @param  mimeType the file's MIME type (optionally <code>null</code>)
+	 * @param  title the new name to be assigned to the file (optionally <code>
+	 *         <code>null</code></code>)
+	 * @param  description the file's new description
+	 * @param  changeLog the file's version change log (optionally
+	 *         <code>null</code>)
+	 * @param  dlVersionNumberIncrease the kind of version number increase to
+	 *         apply for these changes.
+	 * @param  file the file's data (optionally <code>null</code>)
+	 * @param  expirationDate the file's expiration date (optionally <code>null
+	 *                           </code>)
+	 * @param  reviewDate the file's review date (optionally <code>null</code>)
+	 * @param  serviceContext the service context to be applied. Can set the
+	 *         asset category IDs, asset tag names, and expando bridge
+	 *         attributes for the file entry. In a Liferay repository, it may
+	 *         include:  <ul> <li> fileEntryTypeId - ID for a custom file entry
+	 *         type </li> <li> fieldsMap - mapping for fields associated with a
+	 *         custom file entry type </li> </ul>
+	 * @return the file entry
+	 * @throws PortalException if a portal exception occurred
+	 */
+	@Override
+	public FileEntry updateFileEntry(
+			long userId, long fileEntryId, String sourceFileName,
+			String mimeType, String title, String urlTitle, String description,
+			String changeLog, DLVersionNumberIncrease dlVersionNumberIncrease,
+			File file, Date expirationDate, Date reviewDate,
+			ServiceContext serviceContext)
+		throws PortalException {
+
+		if ((file == null) || !file.exists() || (file.length() == 0)) {
+			return updateFileEntry(
+				userId, fileEntryId, sourceFileName, mimeType, title, urlTitle,
+				description, changeLog, dlVersionNumberIncrease, null, 0,
+				expirationDate, reviewDate, serviceContext);
+		}
+
+		mimeType = DLAppUtil.getMimeType(sourceFileName, mimeType, title, file);
+
+		LocalRepository localRepository =
+			repositoryProvider.getFileEntryLocalRepository(fileEntryId);
+
+		FileEntry fileEntry = localRepository.updateFileEntry(
+			userId, fileEntryId, sourceFileName, mimeType, title, urlTitle,
+			description, changeLog, dlVersionNumberIncrease, file,
+			expirationDate, reviewDate, serviceContext);
+
+		_dlAppHelperLocalService.updateFileEntry(
+			userId, fileEntry, null, fileEntry.getFileVersion(),
 			serviceContext);
+
+		return fileEntry;
+	}
+
+	/**
+	 * Updates a file entry and associated metadata based on an {@link
+	 * InputStream} object. If the file data is <code>null</code>, then only the
+	 * associated metadata (i.e., <code>title</code>, <code>description</code>,
+	 * and parameters in the <code>serviceContext</code>) will be updated.
+	 *
+	 * <p>
+	 * This method takes two file names, the <code>sourceFileName</code> and the
+	 * <code>title</code>. The <code>sourceFileName</code> corresponds to the
+	 * name of the actual file being uploaded. The <code>title</code>
+	 * corresponds to a name the client wishes to assign this file after it has
+	 * been uploaded to the portal.
+	 * </p>
+	 *
+	 * @param  userId the primary key of the user
+	 * @param  fileEntryId the primary key of the file entry
+	 * @param  sourceFileName the original file's name (optionally
+	 *         <code>null</code>)
+	 * @param  mimeType the file's MIME type (optionally <code>null</code>)
+	 * @param  title the new name to be assigned to the file (optionally <code>
+	 *         <code>null</code></code>)
+	 * @param  description the file's new description
+	 * @param  changeLog the file's version change log (optionally
+	 *         <code>null</code>)
+	 * @param  dlVersionNumberIncrease the kind of version number increase to
+	 *         apply for these changes.
+	 * @param  inputStream the file's data (optionally <code>null</code>)
+	 * @param  size the file's size (optionally <code>0</code>)
+	 * @param  expirationDate the file's expiration date (optionally <code>null
+	 *                           </code>)
+	 * @param  reviewDate the file's review date (optionally <code>null</code>)
+	 * @param  serviceContext the service context to be applied. Can set the
+	 *         asset category IDs, asset tag names, and expando bridge
+	 *         attributes for the file entry. In a Liferay repository, it may
+	 *         include:  <ul> <li> fileEntryTypeId - ID for a custom file entry
+	 *         type </li> <li> fieldsMap - mapping for fields associated with a
+	 *         custom file entry type </li> </ul>
+	 * @return the file entry
+	 * @throws PortalException if a portal exception occurred
+	 */
+	@Override
+	public FileEntry updateFileEntry(
+			long userId, long fileEntryId, String sourceFileName,
+			String mimeType, String title, String urlTitle, String description,
+			String changeLog, DLVersionNumberIncrease dlVersionNumberIncrease,
+			InputStream inputStream, long size, Date expirationDate,
+			Date reviewDate, ServiceContext serviceContext)
+		throws PortalException {
+
+		if (Validator.isNull(mimeType) ||
+			mimeType.equals(ContentTypes.APPLICATION_OCTET_STREAM)) {
+
+			if (size == 0) {
+				String extension = DLAppUtil.getExtension(
+					title, sourceFileName);
+
+				mimeType = MimeTypesUtil.getExtensionContentType(extension);
+			}
+			else {
+				File file = null;
+
+				try {
+					file = FileUtil.createTempFile(inputStream);
+
+					return updateFileEntry(
+						userId, fileEntryId, sourceFileName, mimeType, title,
+						urlTitle, description, changeLog,
+						dlVersionNumberIncrease, file, expirationDate,
+						reviewDate, serviceContext);
+				}
+				catch (IOException ioException) {
+					throw new SystemException(
+						"Unable to write temporary file", ioException);
+				}
+				finally {
+					FileUtil.delete(file);
+				}
+			}
+		}
+
+		LocalRepository localRepository =
+			repositoryProvider.getFileEntryLocalRepository(fileEntryId);
+
+		FileEntry fileEntry = localRepository.updateFileEntry(
+			userId, fileEntryId, sourceFileName, mimeType, title, urlTitle,
+			description, changeLog, dlVersionNumberIncrease, inputStream, size,
+			expirationDate, reviewDate, serviceContext);
+
+		_dlAppHelperLocalService.updateFileEntry(
+			userId, fileEntry, null, fileEntry.getFileVersion(),
+			serviceContext);
+
+		return fileEntry;
 	}
 
 	/**
