@@ -134,6 +134,13 @@ definition {
 			value1 = "${colunmName}");
 	}
 
+	macro viewColumnsOrder {
+		AssertElementPresent(
+			key_columnName = "${colunmName}",
+			key_position = "${position}",
+			locator1 = "ObjectCustomViews#VIEW_COLUMN_ENTRIES");
+	}
+
 	macro viewOrdersOfTheColumns {
 		AssertVisible(
 			key_colunmName1 = "${colunmName}",
