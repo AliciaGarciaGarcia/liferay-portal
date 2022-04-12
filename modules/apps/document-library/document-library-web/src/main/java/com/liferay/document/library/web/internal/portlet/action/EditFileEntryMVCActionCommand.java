@@ -895,14 +895,19 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 			String parameterName = entry.getKey();
 
 			if (StringUtil.startsWith(parameterName, namespace)) {
-				_setDefaultLanguageParameterNames(
-					dynamicServletRequest,
-					parameterName.substring(namespace.length()),
-					entry.getValue(), themeDisplay);
+				parameterName = parameterName.substring(namespace.length());
 
-				dynamicServletRequest.setParameterValues(
-					parameterName.substring(namespace.length()),
-					entry.getValue());
+				_setDefaultLanguageParameterNames(
+					dynamicServletRequest, parameterName, entry.getValue(),
+					themeDisplay);
+
+				if (ArrayUtil.isEmpty(
+						dynamicServletRequest.getParameterValues(
+							parameterName))) {
+
+					dynamicServletRequest.setParameterValues(
+						parameterName, entry.getValue());
+				}
 			}
 		}
 
