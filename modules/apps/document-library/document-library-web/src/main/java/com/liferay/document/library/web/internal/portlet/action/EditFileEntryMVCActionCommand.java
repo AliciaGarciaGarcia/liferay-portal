@@ -96,6 +96,7 @@ import com.liferay.portal.kernel.upload.LiferayFileItemException;
 import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.upload.UploadRequestSizeException;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -103,6 +104,7 @@ import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.HttpComponentsUtil;
 import com.liferay.portal.kernel.util.KeyValuePair;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
@@ -880,6 +882,10 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 		DynamicServletRequest dynamicServletRequest = new DynamicServletRequest(
 			httpServletRequest, new HashMap<>());
 
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay)httpServletRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
+
 		String namespace = String.valueOf(structureId) + StringPool.UNDERLINE;
 
 		Map<String, String[]> parameterMap =
@@ -889,6 +895,11 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 			String parameterName = entry.getKey();
 
 			if (StringUtil.startsWith(parameterName, namespace)) {
+				_setDefaultLanguageParameterNames(
+					dynamicServletRequest,
+					parameterName.substring(namespace.length()),
+					entry.getValue(), themeDisplay);
+
 				dynamicServletRequest.setParameterValues(
 					parameterName.substring(namespace.length()),
 					entry.getValue());
@@ -1123,6 +1134,26 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 			DLFileEntry.class.getName(), actionRequest);
 
 		_dlAppService.revertFileEntry(fileEntryId, version, serviceContext);
+	}
+
+	private void _setDefaultLanguageParameterNames(
+		DynamicServletRequest dynamicServletRequest, String parameterName,
+		String[] value, ThemeDisplay themeDisplay) {
+
+		if (!LocaleUtil.equals(
+				themeDisplay.getLocale(),
+				themeDisplay.getSiteDefaultLocale()) &&
+			parameterName.contains(
+				_language.getLanguageId(themeDisplay.getLocale()))) {
+
+			dynamicServletRequest.setParameterValues(
+				StringUtil.replace(
+					parameterName,
+					_language.getLanguageId(themeDisplay.getLocale()),
+					_language.getLanguageId(
+						themeDisplay.getSiteDefaultLocale())),
+				value);
+		}
 	}
 
 	private void _setUpDDMFormValues(ServiceContext serviceContext)
