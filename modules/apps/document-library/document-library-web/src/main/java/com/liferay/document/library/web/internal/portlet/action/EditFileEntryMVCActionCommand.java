@@ -130,6 +130,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -877,7 +878,7 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 	}
 
 	private HttpServletRequest _getDDMStructureHttpServletRequest(
-		HttpServletRequest httpServletRequest, long structureId) {
+		HttpServletRequest httpServletRequest, DDMStructure ddmStructure) {
 
 		DynamicServletRequest dynamicServletRequest = new DynamicServletRequest(
 			httpServletRequest, new HashMap<>());
@@ -886,7 +887,9 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 			(ThemeDisplay)httpServletRequest.getAttribute(
 				WebKeys.THEME_DISPLAY);
 
-		String namespace = String.valueOf(structureId) + StringPool.UNDERLINE;
+		String namespace =
+			String.valueOf(ddmStructure.getStructureId()) +
+				StringPool.UNDERLINE;
 
 		Map<String, String[]> parameterMap =
 			httpServletRequest.getParameterMap();
@@ -898,8 +901,8 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 				parameterName = parameterName.substring(namespace.length());
 
 				_setDefaultLanguageParameterNames(
-					dynamicServletRequest, parameterName, entry.getValue(),
-					themeDisplay);
+					dynamicServletRequest, ddmStructure, parameterName,
+					entry.getValue(), themeDisplay);
 
 				if (ArrayUtil.isEmpty(
 						dynamicServletRequest.getParameterValues(
@@ -1142,14 +1145,15 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 	}
 
 	private void _setDefaultLanguageParameterNames(
-		DynamicServletRequest dynamicServletRequest, String parameterName,
-		String[] value, ThemeDisplay themeDisplay) {
+		DynamicServletRequest dynamicServletRequest, DDMStructure ddmStructure,
+		String parameterName, String[] value, ThemeDisplay themeDisplay) {
 
 		if (!LocaleUtil.equals(
 				themeDisplay.getLocale(),
 				themeDisplay.getSiteDefaultLocale()) &&
-			parameterName.contains(
-				_language.getLanguageId(themeDisplay.getLocale()))) {
+			parameterName.contains(themeDisplay.getLanguageId()) &&
+			Objects.equals(
+				ddmStructure.getStructureKey(), "DL_VIDEO_EXTERNAL_SHORTCUT")) {
 
 			dynamicServletRequest.setParameterValues(
 				StringUtil.replace(
@@ -1181,7 +1185,7 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 
 			DDMFormValues ddmFormValues = _ddmFormValuesFactory.create(
 				_getDDMStructureHttpServletRequest(
-					serviceContext.getRequest(), ddmStructure.getStructureId()),
+					serviceContext.getRequest(), ddmStructure),
 				_ddmBeanTranslator.translate(ddmStructure.getDDMForm()));
 
 			serviceContext.setAttribute(
