@@ -139,7 +139,7 @@ public class LiferayPortletURLPrivilegedAction {
 			}
 			else {
 				portletURL = PortletURLFactoryUtil.create(
-					_portletRequest, _portletName, plid, _lifecycle, _copy);
+					_portletRequest, portletId, plid, _lifecycle, _copy);
 			}
 		}
 
