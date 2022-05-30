@@ -237,30 +237,23 @@ export default function propsTransformer({
 			otherProps.searchContainerId
 		);
 
-		if (searchContainer.select) {
-			const keys = searchContainer.select
-				.getAllSelectedElements()
-				.get('value');
+		const keys =
+			searchContainer.select.getAllSelectedElements().get('value') || [];
 
-			if (keys) {
-				const url = new URL(permissionsURL);
+		const url = new URL(permissionsURL);
 
-				const urlSearchParams = new URLSearchParams(url.search);
+		const urlSearchParams = new URLSearchParams(url.search);
 
-				const paramName = `_${urlSearchParams.get(
-					'p_p_id'
-				)}_resourcePrimKey`;
+		const paramName = `_${urlSearchParams.get('p_p_id')}_resourcePrimKey`;
 
-				for (const key of keys) {
-					url.searchParams.append(paramName, key);
-				}
-
-				openSelectionModal({
-					title: Liferay.Language.get('permissions'),
-					url: url.toString(),
-				});
-			}
+		for (const key of keys) {
+			url.searchParams.append(paramName, key);
 		}
+
+		openSelectionModal({
+			title: Liferay.Language.get('permissions'),
+			url: url.toString(),
+		});
 	};
 
 	return {
