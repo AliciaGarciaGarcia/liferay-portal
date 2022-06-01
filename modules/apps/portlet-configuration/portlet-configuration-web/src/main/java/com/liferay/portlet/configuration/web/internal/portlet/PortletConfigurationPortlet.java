@@ -532,10 +532,11 @@ public class PortletConfigurationPortlet extends MVCPortlet {
 			selResource = modelResource;
 		}
 
+		String[] resourcePrimKeys = ParamUtil.getStringValues(
+			actionRequest, "resourcePrimKey");
+
 		long resourceGroupId = ParamUtil.getLong(
 			actionRequest, "resourceGroupId", themeDisplay.getScopeGroupId());
-		String resourcePrimKey = ParamUtil.getString(
-			actionRequest, "resourcePrimKey");
 
 		Map<Long, String[]> roleIdsToActionIds = new HashMap<>();
 
@@ -544,16 +545,19 @@ public class PortletConfigurationPortlet extends MVCPortlet {
 				roleId, _getActionIds(actionRequest, roleId, false));
 		}
 
-		_resourcePermissionService.setIndividualResourcePermissions(
-			resourceGroupId, themeDisplay.getCompanyId(), selResource,
-			resourcePrimKey, roleIdsToActionIds);
+		PermissionPropagator permissionPropagator = null;
 
 		if (PropsValues.PERMISSIONS_PROPAGATION_ENABLED) {
 			Portlet portlet = _portletLocalService.getPortletById(
 				themeDisplay.getCompanyId(), portletResource);
 
-			PermissionPropagator permissionPropagator =
-				portlet.getPermissionPropagatorInstance();
+			permissionPropagator = portlet.getPermissionPropagatorInstance();
+		}
+
+		for (String resourcePrimKey : resourcePrimKeys) {
+			_resourcePermissionService.setIndividualResourcePermissions(
+				resourceGroupId, themeDisplay.getCompanyId(), selResource,
+				resourcePrimKey, roleIdsToActionIds);
 
 			if (permissionPropagator != null) {
 				permissionPropagator.propagateRolePermissions(
