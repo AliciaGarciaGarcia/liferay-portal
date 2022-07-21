@@ -21,10 +21,14 @@ import com.liferay.blogs.service.BlogsEntryLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.Date;
 
+import com.liferay.portal.util.PropsUtil;
+import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
@@ -34,6 +38,13 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class BlogsEntryOpenNLPDocumentAssetAutoTaggerTest
 	extends BaseOpenNLPDocumentAssetAutoTaggerTestCase {
+
+	@Test
+	public void testDraft() throws Exception {
+		if (GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-150762"))) {
+			Assert.fail();
+		}
+	}
 
 	@Override
 	protected AssetEntry getAssetEntry(String text) throws Exception {
