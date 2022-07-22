@@ -200,6 +200,46 @@ public class FileEntryInfoDisplayContributorTest {
 				originalLocalePrependFriendlyURLStyle;
 		}
 	}
+	@Test
+	public void testDisplayPageURLCustomLocaleAlgorithm22() throws Exception {
+		int originalLocalePrependFriendlyURLStyle =
+			PropsValues.LOCALE_PREPEND_FRIENDLY_URL_STYLE;
+
+		try {
+			PropsValues.LOCALE_PREPEND_FRIENDLY_URL_STYLE = 2;
+
+			_withAndWithoutAssetEntry(
+				fileEntry -> {
+					_addAssetDisplayPageEntry(fileEntry);
+
+					Locale locale = LocaleUtil.getDefault();
+
+					String expectedURL = StringBundler.concat(
+						"/", locale.getLanguage(), "/web/",
+						StringUtil.lowerCase(_group.getGroupKey()),
+						FriendlyURLResolverConstants.URL_SEPARATOR_FILE_ENTRY,
+						_friendlyURLNormalizer.normalizeWithPeriodsAndSlashes(
+							fileEntry.getTitle()));
+
+					ThemeDisplay themeDisplay = new ThemeDisplay();
+
+					themeDisplay.setLocale(locale);
+					themeDisplay.setScopeGroupId(_group.getGroupId());
+					themeDisplay.setServerName("localhost");
+					themeDisplay.setSiteGroupId(_group.getGroupId());
+
+					Assert.assertEquals(
+						expectedURL,
+						_assetDisplayPageFriendlyURLProvider.getFriendlyURL(
+							FileEntry.class.getName(),
+							fileEntry.getFileEntryId(), themeDisplay));
+				});
+		}
+		finally {
+			PropsValues.LOCALE_PREPEND_FRIENDLY_URL_STYLE =
+				originalLocalePrependFriendlyURLStyle;
+		}
+	}
 
 	@Test
 	public void testDisplayPageURLCustomLocaleAlgorithmDefault()
