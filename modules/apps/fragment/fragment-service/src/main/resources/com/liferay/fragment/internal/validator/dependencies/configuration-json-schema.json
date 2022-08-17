@@ -141,6 +141,7 @@
 						"colorPicker",
 						"collectionSelector",
 						"itemSelector",
+						"kbMenuItemSelector",
 						"navigationMenuSelector",
 						"select",
 						"text",
