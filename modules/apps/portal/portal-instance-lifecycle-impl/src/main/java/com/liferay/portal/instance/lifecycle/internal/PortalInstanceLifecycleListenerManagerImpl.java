@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.instance.lifecycle.PortalInstanceLifecycleManag
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.repository.RepositoryFactory;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.transaction.Propagation;
@@ -298,5 +299,10 @@ public class PortalInstanceLifecycleListenerManagerImpl
 
 	private final Set<PortalInstanceLifecycleListener>
 		_portalInstanceLifecycleListeners = new CopyOnWriteArraySet<>();
+
+	@Reference(
+		target = "(class.name=com.liferay.portal.repository.portletrepository.PortletRepository)"
+	)
+	private RepositoryFactory _repositoryFactory;
 
 }
