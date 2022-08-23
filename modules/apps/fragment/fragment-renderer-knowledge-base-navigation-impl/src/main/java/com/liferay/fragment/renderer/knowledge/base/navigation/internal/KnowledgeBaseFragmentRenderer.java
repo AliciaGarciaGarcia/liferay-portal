@@ -54,7 +54,7 @@ public class KnowledgeBaseFragmentRenderer implements FragmentRenderer {
 
 	@Override
 	public String getLabel(Locale locale) {
-		return _language.get(locale, "knowledge-base-navigation");
+		return _language.get(locale, "knowledge-base-navigation"+"FragmentRenderer");
 	}
 
 	@Override

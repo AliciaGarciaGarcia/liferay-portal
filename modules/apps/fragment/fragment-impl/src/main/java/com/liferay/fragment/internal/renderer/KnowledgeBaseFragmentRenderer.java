@@ -76,7 +76,7 @@ public class KnowledgeBaseFragmentRenderer extends BaseContentFragmentRenderer {
 
 	@Override
 	public String getLabel(Locale locale) {
-		return _language.get(locale, "knowledge-base-navigation");
+		return _language.get(locale, "knowledge-base-navigation"+"BaseContentFragmentRenderer");
 	}
 
 	@Override
