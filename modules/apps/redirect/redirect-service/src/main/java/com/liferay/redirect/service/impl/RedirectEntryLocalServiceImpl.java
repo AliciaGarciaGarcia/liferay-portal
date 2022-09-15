@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.service.ResourceLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.permission.ModelPermissions;
 import com.liferay.portal.kernel.util.DateUtil;
+import com.liferay.portal.kernel.util.FriendlyURLNormalizer;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -88,9 +89,14 @@ public class RedirectEntryLocalServiceImpl
 			boolean permanent, String sourceURL, ServiceContext serviceContext)
 		throws PortalException {
 
-		_validate(destinationURL, sourceURL);
+		String normalizedSourceURL =
+			_friendlyURLNormalizer.normalizeWithEncoding(sourceURL);
 
-		if (redirectEntryPersistence.fetchByG_S(groupId, sourceURL) != null) {
+		_validate(destinationURL, normalizedSourceURL);
+
+		if (redirectEntryPersistence.fetchByG_S(groupId, normalizedSourceURL) !=
+				null) {
+
 			throw new DuplicateRedirectEntrySourceURLException();
 		}
 
@@ -106,7 +112,7 @@ public class RedirectEntryLocalServiceImpl
 		redirectEntry.setDestinationURL(destinationURL);
 		redirectEntry.setExpirationDate(expirationDate);
 		redirectEntry.setPermanent(permanent);
-		redirectEntry.setSourceURL(sourceURL);
+		redirectEntry.setSourceURL(normalizedSourceURL);
 
 		redirectEntry = redirectEntryPersistence.update(redirectEntry);
 
@@ -124,7 +130,7 @@ public class RedirectEntryLocalServiceImpl
 
 		RedirectNotFoundEntry redirectNotFoundEntry =
 			_redirectNotFoundEntryLocalService.fetchRedirectNotFoundEntry(
-				groupId, sourceURL);
+				groupId, normalizedSourceURL);
 
 		if (redirectNotFoundEntry != null) {
 			_redirectNotFoundEntryLocalService.deleteRedirectNotFoundEntry(
@@ -250,13 +256,16 @@ public class RedirectEntryLocalServiceImpl
 			boolean permanent, String sourceURL)
 		throws PortalException {
 
-		_validate(destinationURL, sourceURL);
+		String normalizedSourceURL =
+			_friendlyURLNormalizer.normalizeWithEncoding(sourceURL);
+
+		_validate(destinationURL, normalizedSourceURL);
 
 		RedirectEntry redirectEntry = getRedirectEntry(redirectEntryId);
 
 		RedirectEntry existingRedirectEntry =
 			redirectEntryPersistence.fetchByG_S(
-				redirectEntry.getGroupId(), sourceURL);
+				redirectEntry.getGroupId(), normalizedSourceURL);
 
 		if ((existingRedirectEntry != null) &&
 			(existingRedirectEntry.getRedirectEntryId() != redirectEntryId)) {
@@ -267,7 +276,7 @@ public class RedirectEntryLocalServiceImpl
 		redirectEntry.setDestinationURL(destinationURL);
 		redirectEntry.setExpirationDate(expirationDate);
 		redirectEntry.setPermanent(permanent);
-		redirectEntry.setSourceURL(sourceURL);
+		redirectEntry.setSourceURL(normalizedSourceURL);
 
 		return redirectEntryPersistence.update(redirectEntry);
 	}
@@ -452,6 +461,9 @@ public class RedirectEntryLocalServiceImpl
 			throw new LayoutFriendlyURLException(exceptionType);
 		}
 	}
+
+	@Reference
+	private FriendlyURLNormalizer _friendlyURLNormalizer;
 
 	@Reference
 	private RedirectNotFoundEntryLocalService
