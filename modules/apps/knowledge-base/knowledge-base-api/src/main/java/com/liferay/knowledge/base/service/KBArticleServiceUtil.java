@@ -54,7 +54,7 @@ public class KBArticleServiceUtil {
 		return getService().addKBArticle(
 			externalReferenceCode, portletId, parentResourceClassNameId,
 			parentResourcePrimKey, title, urlTitle, content, description,
-			sourceURL, sections, selectedFileNames, expirationDate, reviewDate,
+			sourceURL, expirationDate, reviewDate, sections, selectedFileNames,
 			serviceContext);
 	}
 
@@ -372,8 +372,9 @@ public class KBArticleServiceUtil {
 		throws PortalException {
 
 		return getService().updateKBArticle(
-			resourcePrimKey, title, content, description, sourceURL, sections,
-			selectedFileNames, removeFileEntryIds, expirationDate, reviewDate,
+			resourcePrimKey, title, content, description, sourceURL,
+			expirationDate, reviewDate, sections,
+			selectedFileNames, removeFileEntryIds,
 			serviceContext);
 	}
 
