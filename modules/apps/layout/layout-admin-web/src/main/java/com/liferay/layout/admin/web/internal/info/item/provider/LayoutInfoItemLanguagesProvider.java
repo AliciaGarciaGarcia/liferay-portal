@@ -47,6 +47,11 @@ public class LayoutInfoItemLanguagesProvider
 	}
 
 	@Override
+	public String[] getConfigurationAvailableLanguageIds(Layout layout) {
+		return layout.getAvailableLanguageIds();
+	}
+
+	@Override
 	public String getDefaultLanguageId(Layout layout) {
 		return _layoutInfoItemLanguagesProviderHelper.getDefaultLanguageId(
 			layout);

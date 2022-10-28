@@ -47,6 +47,14 @@ public class LayoutSegmentsExperienceInfoItemLanguagesProvider
 	}
 
 	@Override
+	public String[] getConfigurationAvailableLanguageIds(
+			SegmentsExperience segmentsExperience)
+		throws PortalException {
+
+		return getAvailableLanguageIds(segmentsExperience);
+	}
+
+	@Override
 	public String getDefaultLanguageId(SegmentsExperience segmentsExperience) {
 		return _layoutInfoItemLanguagesProviderHelper.getDefaultLanguageId(
 			_getLayout(segmentsExperience));

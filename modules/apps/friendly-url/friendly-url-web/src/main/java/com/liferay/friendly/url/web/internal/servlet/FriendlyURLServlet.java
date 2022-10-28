@@ -385,6 +385,13 @@ public class FriendlyURLServlet extends HttpServlet {
 				}
 
 				@Override
+				public String[] getConfigurationAvailableLanguageIds(
+					Object object) {
+
+					return new String[] {getDefaultLanguageId(object)};
+				}
+
+				@Override
 				public String getDefaultLanguageId(Object object) {
 					return LanguageUtil.getLanguageId(
 						LocaleUtil.getSiteDefault());

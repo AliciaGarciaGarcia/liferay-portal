@@ -32,6 +32,13 @@ public class JournalArticleInfoItemLanguagesProvider
 	}
 
 	@Override
+	public String[] getConfigurationAvailableLanguageIds(
+		JournalArticle journalArticle) {
+
+		return getAvailableLanguageIds(journalArticle);
+	}
+
+	@Override
 	public String getDefaultLanguageId(JournalArticle journalArticle) {
 		return journalArticle.getDefaultLanguageId();
 	}

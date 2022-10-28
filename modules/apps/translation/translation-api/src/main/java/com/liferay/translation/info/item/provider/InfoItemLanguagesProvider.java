@@ -23,6 +23,9 @@ public interface InfoItemLanguagesProvider<T> {
 
 	public String[] getAvailableLanguageIds(T t) throws PortalException;
 
+	public String[] getConfigurationAvailableLanguageIds(T t)
+		throws PortalException;
+
 	public String getDefaultLanguageId(T t);
 
 }
