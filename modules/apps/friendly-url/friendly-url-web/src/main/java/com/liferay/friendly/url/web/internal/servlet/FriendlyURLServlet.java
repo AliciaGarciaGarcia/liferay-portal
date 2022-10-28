@@ -268,7 +268,8 @@ public class FriendlyURLServlet extends HttpServlet {
 			);
 
 		for (String languageId :
-				infoItemLanguagesProvider.getAvailableLanguageIds(object)) {
+				infoItemLanguagesProvider.getConfigurationAvailableLanguageIds(
+					object)) {
 
 			List<FriendlyURLEntryLocalization> friendlyURLEntryLocalizations =
 				infoItemFriendlyURLProvider.getFriendlyURLEntryLocalizations(
