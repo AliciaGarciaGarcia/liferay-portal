@@ -20,14 +20,21 @@ import com.liferay.fragment.model.FragmentEntryLink;
 import com.liferay.fragment.service.FragmentEntryLinkLocalService;
 import com.liferay.info.item.InfoItemServiceTracker;
 import com.liferay.layout.test.util.LayoutTestUtil;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.model.LayoutConstants;
 import com.liferay.portal.kernel.service.LayoutLocalService;
+import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
+import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
+import com.liferay.portal.kernel.test.util.TestPropsValues;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
@@ -86,6 +93,38 @@ public class LayoutInfoItemLanguagesProviderTest {
 		Assert.assertArrayEquals(
 			_getAvailableLocalesLayoutTranslatedLanguages(layout),
 			infoItemLanguagesProvider.getAvailableLanguageIds(layout));
+	}
+
+	@Test
+	public void testGetConfigurationAvailableLanguages() throws Exception {
+		Layout layout = LayoutLocalServiceUtil.addLayout(
+			TestPropsValues.getUserId(), _group.getGroupId(), false,
+			LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			RandomTestUtil.randomLocaleStringMap(),
+			HashMapBuilder.put(
+				LocaleUtil.SPAIN, "casa"
+			).put(
+				LocaleUtil.US, "home"
+			).build(),
+			RandomTestUtil.randomLocaleStringMap(),
+			RandomTestUtil.randomLocaleStringMap(),
+			RandomTestUtil.randomLocaleStringMap(),
+			LayoutConstants.TYPE_PORTLET, StringPool.BLANK, false,
+			HashMapBuilder.put(
+				LocaleUtil.SPAIN, "/casa"
+			).put(
+				LocaleUtil.US, "/home"
+			).build(),
+			ServiceContextTestUtil.getServiceContext(_group.getGroupId()));
+
+		InfoItemLanguagesProvider<Object> infoItemLanguagesProvider =
+			_infoItemServiceTracker.getFirstInfoItemService(
+				InfoItemLanguagesProvider.class, Layout.class.getName());
+
+		Assert.assertArrayEquals(
+			infoItemLanguagesProvider.getConfigurationAvailableLanguageIds(
+				layout),
+			layout.getAvailableLanguageIds());
 	}
 
 	private String[] _getAvailableLocalesLayoutTranslatedLanguages(
