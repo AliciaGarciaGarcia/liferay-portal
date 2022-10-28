@@ -37,7 +37,7 @@ public class LayoutSegmentsExperienceInfoItemLanguagesProvider
 	implements InfoItemLanguagesProvider<SegmentsExperience> {
 
 	@Override
-	public String[] getAvailableLanguageIds(
+	public String[] getContentAvailableLanguageIds(
 			SegmentsExperience segmentsExperience)
 		throws PortalException {
 
@@ -51,7 +51,7 @@ public class LayoutSegmentsExperienceInfoItemLanguagesProvider
 			SegmentsExperience segmentsExperience)
 		throws PortalException {
 
-		return getAvailableLanguageIds(segmentsExperience);
+		return getContentAvailableLanguageIds(segmentsExperience);
 	}
 
 	@Override

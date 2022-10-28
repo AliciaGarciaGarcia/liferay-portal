@@ -27,7 +27,7 @@ public class JournalArticleInfoItemLanguagesProvider
 	implements InfoItemLanguagesProvider<JournalArticle> {
 
 	@Override
-	public String[] getAvailableLanguageIds(JournalArticle journalArticle) {
+	public String[] getContentAvailableLanguageIds(JournalArticle journalArticle) {
 		return journalArticle.getAvailableLanguageIds();
 	}
 
@@ -35,7 +35,7 @@ public class JournalArticleInfoItemLanguagesProvider
 	public String[] getConfigurationAvailableLanguageIds(
 		JournalArticle journalArticle) {
 
-		return getAvailableLanguageIds(journalArticle);
+		return getContentAvailableLanguageIds(journalArticle);
 	}
 
 	@Override

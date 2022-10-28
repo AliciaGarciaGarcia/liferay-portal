@@ -648,7 +648,7 @@ public class OpenGraphTopHeadDynamicIncludeTest {
 
 		_assertAlternateLinkTagAssetDisplayPage(
 			document, fileEntry,
-			_getAvailableLocalesLayoutTranslatedLanguages());
+			_getContentAvailableLocalesLayoutTranslatedLanguages());
 		_assertCanonicalLinkTag(
 			document,
 			_assetDisplayPageFriendlyURLProvider.getFriendlyURL(
@@ -680,7 +680,7 @@ public class OpenGraphTopHeadDynamicIncludeTest {
 
 		_assertAlternateLinkTagAssetDisplayPage(
 			document, fileEntry,
-			_getAvailableLocalesLayoutTranslatedLanguages());
+			_getContentAvailableLocalesLayoutTranslatedLanguages());
 		_assertCanonicalLinkTag(
 			document,
 			_assetDisplayPageFriendlyURLProvider.getFriendlyURL(
@@ -745,7 +745,7 @@ public class OpenGraphTopHeadDynamicIncludeTest {
 				_getThemeDisplay()));
 		_assertAlternateLinkTagAssetDisplayPage(
 			document, fileEntry,
-			_getAvailableLocalesLayoutTranslatedLanguages());
+			_getContentAvailableLocalesLayoutTranslatedLanguages());
 	}
 
 	@Test
@@ -765,7 +765,7 @@ public class OpenGraphTopHeadDynamicIncludeTest {
 			mockHttpServletResponse.getContentAsString());
 
 		_assertAlternateLinkTag(
-			document, _getAvailableLocalesLayoutTranslatedLanguages());
+			document, _getContentAvailableLocalesLayoutTranslatedLanguages());
 		_assertCanonicalLinkTag(
 			document,
 			PortalUtil.getCanonicalURL("", _getThemeDisplay(), _layout));
@@ -797,7 +797,7 @@ public class OpenGraphTopHeadDynamicIncludeTest {
 			document,
 			PortalUtil.getCanonicalURL("", _getThemeDisplay(), _layout));
 		_assertAlternateLinkTag(
-			document, _getAvailableLocalesLayoutTranslatedLanguages());
+			document, _getContentAvailableLocalesLayoutTranslatedLanguages());
 	}
 
 	@Test
@@ -823,7 +823,7 @@ public class OpenGraphTopHeadDynamicIncludeTest {
 			mockHttpServletResponse.getContentAsString());
 
 		_assertAlternateLinkTag(
-			document, _getAvailableLocalesLayoutTranslatedLanguages());
+			document, _getContentAvailableLocalesLayoutTranslatedLanguages());
 		_assertCanonicalLinkTag(
 			document,
 			PortalUtil.getCanonicalURL("", _getThemeDisplay(), _layout));
@@ -848,7 +848,7 @@ public class OpenGraphTopHeadDynamicIncludeTest {
 			mockHttpServletResponse.getContentAsString());
 
 		_assertAlternateLinkTag(
-			document, _getAvailableLocalesLayoutTranslatedLanguages());
+			document, _getContentAvailableLocalesLayoutTranslatedLanguages());
 		_assertCanonicalLinkTag(
 			document,
 			PortalUtil.getCanonicalURL("", _getThemeDisplay(), _layout));
@@ -890,7 +890,7 @@ public class OpenGraphTopHeadDynamicIncludeTest {
 			mockHttpServletResponse.getContentAsString());
 
 		_assertAlternateLocalesTag(
-			document, _getAvailableLocalesLayoutTranslatedLanguages());
+			document, _getContentAvailableLocalesLayoutTranslatedLanguages());
 		_assertMetaTag(document, "og:locale", _group.getDefaultLanguageId());
 	}
 
@@ -915,7 +915,7 @@ public class OpenGraphTopHeadDynamicIncludeTest {
 			mockHttpServletResponse.getContentAsString());
 
 		_assertAlternateLocalesTag(
-			document, _getAvailableLocalesLayoutTranslatedLanguages());
+			document, _getContentAvailableLocalesLayoutTranslatedLanguages());
 
 		_assertMetaTag(document, "og:locale", _group.getDefaultLanguageId());
 	}
@@ -943,7 +943,7 @@ public class OpenGraphTopHeadDynamicIncludeTest {
 			mockHttpServletResponse.getContentAsString());
 
 		_assertAlternateLocalesTag(
-			document, _getAvailableLocalesLayoutTranslatedLanguages());
+			document, _getContentAvailableLocalesLayoutTranslatedLanguages());
 		_assertMetaTag(document, "og:locale", _group.getDefaultLanguageId());
 	}
 
@@ -968,7 +968,7 @@ public class OpenGraphTopHeadDynamicIncludeTest {
 			mockHttpServletResponse.getContentAsString());
 
 		_assertAlternateLocalesTag(
-			document, _getAvailableLocalesLayoutTranslatedLanguages());
+			document, _getContentAvailableLocalesLayoutTranslatedLanguages());
 		_assertMetaTag(document, "og:locale", _group.getDefaultLanguageId());
 
 		mockHttpServletResponse.reset();
@@ -1029,7 +1029,7 @@ public class OpenGraphTopHeadDynamicIncludeTest {
 			mockHttpServletResponse.getContentAsString());
 
 		_assertAlternateLocalesTag(
-			document, _getAvailableLocalesLayoutTranslatedLanguages());
+			document, _getContentAvailableLocalesLayoutTranslatedLanguages());
 		_assertMetaTag(document, "og:locale", _group.getDefaultLanguageId());
 
 		Stream<String> stream = Arrays.stream(
@@ -1063,7 +1063,7 @@ public class OpenGraphTopHeadDynamicIncludeTest {
 			mockHttpServletResponse.getContentAsString());
 
 		_assertAlternateLocalesTag(
-			document, _getAvailableLocalesLayoutTranslatedLanguages());
+			document, _getContentAvailableLocalesLayoutTranslatedLanguages());
 		_assertMetaTag(document, "og:locale", _group.getDefaultLanguageId());
 	}
 
@@ -1577,7 +1577,7 @@ public class OpenGraphTopHeadDynamicIncludeTest {
 		return httpServletRequest;
 	}
 
-	private Set<Locale> _getAvailableLocalesLayoutTranslatedLanguages()
+	private Set<Locale> _getContentAvailableLocalesLayoutTranslatedLanguages()
 		throws Exception {
 
 		InfoItemLanguagesProvider<Object> infoItemLanguagesProvider =
@@ -1589,7 +1589,7 @@ public class OpenGraphTopHeadDynamicIncludeTest {
 		}
 
 		Stream<String> stream = Arrays.stream(
-			infoItemLanguagesProvider.getAvailableLanguageIds(_layout));
+			infoItemLanguagesProvider.getContentAvailableLanguageIds(_layout));
 
 		Stream<Locale> localesStream = stream.map(LocaleUtil::fromLanguageId);
 

@@ -374,7 +374,7 @@ public class OpenGraphTopHeadDynamicInclude extends BaseDynamicInclude {
 		}
 
 		Stream<String> stream = Arrays.stream(
-			infoItemLanguagesProvider.getAvailableLanguageIds(layout));
+			infoItemLanguagesProvider.getContentAvailableLanguageIds(layout));
 
 		Stream<Locale> localesStream = stream.map(LocaleUtil::fromLanguageId);
 

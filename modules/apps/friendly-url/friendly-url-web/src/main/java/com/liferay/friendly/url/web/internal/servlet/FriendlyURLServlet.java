@@ -383,7 +383,7 @@ public class FriendlyURLServlet extends HttpServlet {
 			new InfoItemLanguagesProvider<Object>() {
 
 				@Override
-				public String[] getAvailableLanguageIds(Object object)
+				public String[] getContentAvailableLanguageIds(Object object)
 					throws PortalException {
 
 					return new String[] {getDefaultLanguageId(object)};

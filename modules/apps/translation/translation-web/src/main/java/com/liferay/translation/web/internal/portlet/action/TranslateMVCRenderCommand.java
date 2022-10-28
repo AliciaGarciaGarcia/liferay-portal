@@ -125,7 +125,7 @@ public class TranslateMVCRenderCommand implements MVCRenderCommand {
 			}
 
 			List<String> availableSourceLanguageIds = Arrays.asList(
-				infoItemLanguagesProvider.getAvailableLanguageIds(object));
+				infoItemLanguagesProvider.getContentAvailableLanguageIds(object));
 
 			String sourceLanguageId = ParamUtil.getString(
 				renderRequest, "sourceLanguageId",

@@ -21,7 +21,7 @@ import com.liferay.portal.kernel.exception.PortalException;
  */
 public interface InfoItemLanguagesProvider<T> {
 
-	public String[] getAvailableLanguageIds(T t) throws PortalException;
+	public String[] getContentAvailableLanguageIds(T t) throws PortalException;
 
 	public String[] getConfigurationAvailableLanguageIds(T t)
 		throws PortalException;

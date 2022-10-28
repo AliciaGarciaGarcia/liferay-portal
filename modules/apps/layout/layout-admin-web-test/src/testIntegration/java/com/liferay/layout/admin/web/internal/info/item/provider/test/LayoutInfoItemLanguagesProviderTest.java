@@ -70,7 +70,7 @@ public class LayoutInfoItemLanguagesProviderTest {
 	}
 
 	@Test
-	public void testGetAvailableLanguages() throws Exception {
+	public void testGetContentAvailableLanguages() throws Exception {
 		Layout layout = LayoutTestUtil.addTypePortletLayout(_group);
 
 		InfoItemLanguagesProvider<Object> infoItemLanguagesProvider =
@@ -78,12 +78,12 @@ public class LayoutInfoItemLanguagesProviderTest {
 				InfoItemLanguagesProvider.class, Layout.class.getName());
 
 		Assert.assertArrayEquals(
-			infoItemLanguagesProvider.getAvailableLanguageIds(layout),
+			infoItemLanguagesProvider.getContentAvailableLanguageIds(layout),
 			layout.getAvailableLanguageIds());
 	}
 
 	@Test
-	public void testGetAvailableLanguagesContentLayout() throws Exception {
+	public void testGetContentAvailableLanguagesContentLayout() throws Exception {
 		Layout layout = LayoutTestUtil.addTypeContentLayout(_group);
 
 		InfoItemLanguagesProvider<Object> infoItemLanguagesProvider =
@@ -91,8 +91,8 @@ public class LayoutInfoItemLanguagesProviderTest {
 				InfoItemLanguagesProvider.class, Layout.class.getName());
 
 		Assert.assertArrayEquals(
-			_getAvailableLocalesLayoutTranslatedLanguages(layout),
-			infoItemLanguagesProvider.getAvailableLanguageIds(layout));
+			_getContentAvailableLocalesLayoutTranslatedLanguages(layout),
+			infoItemLanguagesProvider.getContentAvailableLanguageIds(layout));
 	}
 
 	@Test
@@ -127,7 +127,7 @@ public class LayoutInfoItemLanguagesProviderTest {
 			layout.getAvailableLanguageIds());
 	}
 
-	private String[] _getAvailableLocalesLayoutTranslatedLanguages(
+	private String[] _getContentAvailableLocalesLayoutTranslatedLanguages(
 			Layout layout)
 		throws Exception {
 
