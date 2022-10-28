@@ -275,6 +275,10 @@ public class FriendlyURLServlet extends HttpServlet {
 				infoItemFriendlyURLProvider.getFriendlyURLEntryLocalizations(
 					object, languageId);
 
+			if (friendlyURLEntryLocalizations.isEmpty()) {
+				continue;
+			}
+
 			String mainUrlTitle = infoItemFriendlyURLProvider.getFriendlyURL(
 				object, languageId);
 
