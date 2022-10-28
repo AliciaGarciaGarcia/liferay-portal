@@ -35,6 +35,11 @@ public class LayoutInfoItemLanguagesProvider
 	implements InfoItemLanguagesProvider<Layout> {
 
 	@Override
+	public String[] getConfigurationAvailableLanguageIds(Layout layout) {
+		return layout.getAvailableLanguageIds();
+	}
+
+	@Override
 	public String[] getContentAvailableLanguageIds(Layout layout)
 		throws PortalException {
 
@@ -44,11 +49,6 @@ public class LayoutInfoItemLanguagesProvider
 
 		return _layoutInfoItemLanguagesProviderHelper.getAvailableLanguageIds(
 			layout, defaultSegmentsExperienceId);
-	}
-
-	@Override
-	public String[] getConfigurationAvailableLanguageIds(Layout layout) {
-		return layout.getAvailableLanguageIds();
 	}
 
 	@Override

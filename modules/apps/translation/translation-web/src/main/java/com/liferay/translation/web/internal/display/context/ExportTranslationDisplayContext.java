@@ -213,7 +213,8 @@ public class ExportTranslationDisplayContext {
 			_intersect(
 				languageIds,
 				Arrays.asList(
-					infoItemLanguagesProvider.getContentAvailableLanguageIds(model)));
+					infoItemLanguagesProvider.getContentAvailableLanguageIds(
+						model)));
 		}
 
 		Stream<String> stream = languageIds.stream();

@@ -70,32 +70,6 @@ public class LayoutInfoItemLanguagesProviderTest {
 	}
 
 	@Test
-	public void testGetContentAvailableLanguages() throws Exception {
-		Layout layout = LayoutTestUtil.addTypePortletLayout(_group);
-
-		InfoItemLanguagesProvider<Object> infoItemLanguagesProvider =
-			_infoItemServiceTracker.getFirstInfoItemService(
-				InfoItemLanguagesProvider.class, Layout.class.getName());
-
-		Assert.assertArrayEquals(
-			infoItemLanguagesProvider.getContentAvailableLanguageIds(layout),
-			layout.getAvailableLanguageIds());
-	}
-
-	@Test
-	public void testGetContentAvailableLanguagesContentLayout() throws Exception {
-		Layout layout = LayoutTestUtil.addTypeContentLayout(_group);
-
-		InfoItemLanguagesProvider<Object> infoItemLanguagesProvider =
-			_infoItemServiceTracker.getFirstInfoItemService(
-				InfoItemLanguagesProvider.class, Layout.class.getName());
-
-		Assert.assertArrayEquals(
-			_getContentAvailableLocalesLayoutTranslatedLanguages(layout),
-			infoItemLanguagesProvider.getContentAvailableLanguageIds(layout));
-	}
-
-	@Test
 	public void testGetConfigurationAvailableLanguages() throws Exception {
 		Layout layout = LayoutLocalServiceUtil.addLayout(
 			TestPropsValues.getUserId(), _group.getGroupId(), false,
@@ -125,6 +99,34 @@ public class LayoutInfoItemLanguagesProviderTest {
 			infoItemLanguagesProvider.getConfigurationAvailableLanguageIds(
 				layout),
 			layout.getAvailableLanguageIds());
+	}
+
+	@Test
+	public void testGetContentAvailableLanguages() throws Exception {
+		Layout layout = LayoutTestUtil.addTypePortletLayout(_group);
+
+		InfoItemLanguagesProvider<Object> infoItemLanguagesProvider =
+			_infoItemServiceTracker.getFirstInfoItemService(
+				InfoItemLanguagesProvider.class, Layout.class.getName());
+
+		Assert.assertArrayEquals(
+			infoItemLanguagesProvider.getContentAvailableLanguageIds(layout),
+			layout.getAvailableLanguageIds());
+	}
+
+	@Test
+	public void testGetContentAvailableLanguagesContentLayout()
+		throws Exception {
+
+		Layout layout = LayoutTestUtil.addTypeContentLayout(_group);
+
+		InfoItemLanguagesProvider<Object> infoItemLanguagesProvider =
+			_infoItemServiceTracker.getFirstInfoItemService(
+				InfoItemLanguagesProvider.class, Layout.class.getName());
+
+		Assert.assertArrayEquals(
+			_getContentAvailableLocalesLayoutTranslatedLanguages(layout),
+			infoItemLanguagesProvider.getContentAvailableLanguageIds(layout));
 	}
 
 	private String[] _getContentAvailableLocalesLayoutTranslatedLanguages(
