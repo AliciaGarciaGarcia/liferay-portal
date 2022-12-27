@@ -16,13 +16,17 @@ package com.liferay.headless.user.notification.internal.resource.v1_0;
 
 import com.liferay.headless.user.notification.dto.v1_0.UserNotification;
 import com.liferay.headless.user.notification.internal.dto.v1_0.UserNotificationDTOConverter;
+import com.liferay.headless.user.notification.internal.odata.entity.v1_0.UserNotificationEntityModel;
 import com.liferay.headless.user.notification.resource.v1_0.UserNotificationResource;
 import com.liferay.portal.kernel.exception.NoSuchUserNotificationEventException;
 import com.liferay.portal.kernel.model.UserNotificationEvent;
 import com.liferay.portal.kernel.service.UserNotificationEventLocalService;
+import com.liferay.portal.odata.entity.EntityModel;
 import com.liferay.portal.vulcan.dto.converter.DefaultDTOConverterContext;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
+
+import javax.ws.rs.core.MultivaluedMap;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -37,6 +41,13 @@ import org.osgi.service.component.annotations.ServiceScope;
 )
 public class UserNotificationResourceImpl
 	extends BaseUserNotificationResourceImpl {
+
+	@Override
+	public EntityModel getEntityModel(MultivaluedMap multivaluedMap)
+		throws Exception {
+
+		return _entityModel;
+	}
 
 	@Override
 	public UserNotification getMyUserNotification(Long userNotificationId)
@@ -151,6 +162,9 @@ public class UserNotificationResourceImpl
 				contextUser),
 			userNotificationEvent);
 	}
+
+	private static final EntityModel _entityModel =
+		new UserNotificationEntityModel();
 
 	@Reference
 	private UserNotificationDTOConverter _userNotificationDTOConverter;
