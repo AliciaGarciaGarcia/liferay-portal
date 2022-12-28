@@ -14,17 +14,23 @@
 
 package com.liferay.headless.user.notification.internal.service;
 
+import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
+import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.model.UserNotificationEvent;
+import com.liferay.portal.kernel.notifications.NotificationsHelper;
 import com.liferay.portal.kernel.service.ServiceWrapper;
 import com.liferay.portal.kernel.service.UserNotificationEventLocalServiceWrapper;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.List;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -92,12 +98,42 @@ public class HeadLessUserNotificationUserNotificationEventLocalServiceWrapper
 			return notificationMessage;
 		}
 
+		String className = userNotificationEventPayloadJSONObject.getString(
+			"className");
+
+		NotificationsHelper notificationsHelper = _getNotificationsHelper(
+			className);
+
+		if (notificationsHelper != null) {
+			return notificationsHelper.getPayload(payload);
+		}
+
 		return payload;
 	}
 
+	private NotificationsHelper _getNotificationsHelper(String className) {
+		if (_serviceTrackerMap == null) {
+			Bundle bundle = FrameworkUtil.getBundle(
+				HeadLessUserNotificationUserNotificationEventLocalServiceWrapper.class);
+
+			BundleContext bundleContext = bundle.getBundleContext();
+
+			_serviceTrackerMap = ServiceTrackerMapFactory.openSingleValueMap(
+				bundleContext, NotificationsHelper.class, null,
+				(serviceReference, emitter) -> {
+					NotificationsHelper notificationsHelper =
+						bundleContext.getService(serviceReference);
+
+					emitter.emit(notificationsHelper.getClassName());
+				});
+		}
+
+		return _serviceTrackerMap.getService(className);
+	}
 
 	@Reference
 	private JSONFactory _jsonFactory;
 
+	private ServiceTrackerMap<String, NotificationsHelper> _serviceTrackerMap;
 
 }
