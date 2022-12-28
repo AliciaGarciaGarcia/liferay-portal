@@ -1,0 +1,5 @@
+Bundle-Name: Liferay User Notification Service
+Bundle-SymbolicName: com.liferay.user.notification.service
+Bundle-Version: 1.0.0
+Liferay-Service: true
+-dsannotations-options: inherit
