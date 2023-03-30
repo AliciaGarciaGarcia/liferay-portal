@@ -78,6 +78,10 @@ public class CrawlerUserAgentsProviderImpl
 		}
 	}
 
+	protected void setCrawlerUserAgents(Set<String> crawlerUserAgents) {
+		_crawlerUserAgents = crawlerUserAgents;
+	}
+
 	private volatile Set<String> _crawlerUserAgents;
 	private volatile CrawlerUserAgentsConfiguration
 		_crawlerUserAgentsConfiguration;
