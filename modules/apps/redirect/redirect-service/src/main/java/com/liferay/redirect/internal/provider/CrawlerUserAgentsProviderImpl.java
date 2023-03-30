@@ -14,9 +14,13 @@
 
 package com.liferay.redirect.internal.provider;
 
+import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.redirect.configuration.CrawlerUserAgentsConfiguration;
 import com.liferay.redirect.provider.CrawlerUserAgentsProvider;
 
 import java.util.Dictionary;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.osgi.service.cm.ConfigurationException;
@@ -35,12 +39,26 @@ public class CrawlerUserAgentsProviderImpl
 
 	@Override
 	public Set<String> getCrawlerUserAgents() {
-		return null;
+		return _crawlerUserAgents;
 	}
 
 	@Override
 	public void updated(Dictionary<String, ?> dictionary)
 		throws ConfigurationException {
+
+		_crawlerUserAgents = new HashSet<>();
+
+		_crawlerUserAgentsConfiguration = ConfigurableUtil.createConfigurable(
+			CrawlerUserAgentsConfiguration.class, dictionary);
+
+		for (String crawlerUserAgent :
+			_crawlerUserAgentsConfiguration.crawlerUserAgents()) {
+
+			_crawlerUserAgents.add(StringUtil.toLowerCase(crawlerUserAgent));
+		}
 	}
 
+	private volatile Set<String> _crawlerUserAgents;
+	private volatile CrawlerUserAgentsConfiguration
+		_crawlerUserAgentsConfiguration;
 }
