@@ -22,7 +22,9 @@ import com.liferay.redirect.configuration.CrawlerUserAgentsConfiguration;
 import com.liferay.redirect.provider.CrawlerUserAgentsProvider;
 
 import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.osgi.service.cm.ConfigurationException;
@@ -47,19 +49,8 @@ public class CrawlerUserAgentsProviderImpl
 			return false;
 		}
 
-		userAgent = StringUtil.toLowerCase(userAgent);
-
-		if (_crawlerUserAgents.contains(userAgent)) {
-			return true;
-		}
-
-		for (String crawlerUserAgent : _crawlerUserAgents) {
-			if (userAgent.contains(crawlerUserAgent)) {
-				return true;
-			}
-		}
-
-		return false;
+		return _crawlerUserAgentsMap.computeIfAbsent(
+			userAgent, this::_isCrawlerUserAgent);
 	}
 
 	@Override
@@ -67,6 +58,8 @@ public class CrawlerUserAgentsProviderImpl
 		throws ConfigurationException {
 
 		_crawlerUserAgents = new HashSet<>();
+
+		_crawlerUserAgentsMap = new HashMap<>();
 
 		_crawlerUserAgentsConfiguration = ConfigurableUtil.createConfigurable(
 			CrawlerUserAgentsConfiguration.class, dictionary);
@@ -82,8 +75,25 @@ public class CrawlerUserAgentsProviderImpl
 		_crawlerUserAgents = crawlerUserAgents;
 	}
 
+	private boolean _isCrawlerUserAgent(String userAgent) {
+		userAgent = StringUtil.toLowerCase(userAgent);
+
+		if (_crawlerUserAgents.contains(userAgent)) {
+			return true;
+		}
+
+		for (String crawlerUserAgent : _crawlerUserAgents) {
+			if (userAgent.contains(crawlerUserAgent)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	private volatile Set<String> _crawlerUserAgents;
 	private volatile CrawlerUserAgentsConfiguration
 		_crawlerUserAgentsConfiguration;
+	private Map<String, Boolean> _crawlerUserAgentsMap = new HashMap<>();
 
 }
