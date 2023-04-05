@@ -72,20 +72,7 @@ public class CrawlerUserAgentsProviderImpl
 
 		_portalCache.removeAll();
 
-		_crawlerUserAgents = new HashSet<>();
-
-		_crawlerUserAgentsConfiguration = ConfigurableUtil.createConfigurable(
-			CrawlerUserAgentsConfiguration.class, dictionary);
-
-		Set<String> crawlerUserAgents = new HashSet<>();
-
-		for (String crawlerUserAgent :
-				_crawlerUserAgentsConfiguration.crawlerUserAgents()) {
-
-			crawlerUserAgents.add(StringUtil.toLowerCase(crawlerUserAgent));
-		}
-
-		_crawlerUserAgents = crawlerUserAgents;
+		_crawlerUserAgents = _getCrawlerUserAgents();
 	}
 
 	@Activate
@@ -93,6 +80,10 @@ public class CrawlerUserAgentsProviderImpl
 		_portalCache =
 			(PortalCache<String, Boolean>)_multiVMPool.getPortalCache(
 				CrawlerUserAgentsProvider.class.getName());
+		_crawlerUserAgentsConfiguration = ConfigurableUtil.createConfigurable(
+			CrawlerUserAgentsConfiguration.class, properties);
+
+		_crawlerUserAgents = _getCrawlerUserAgents();
 	}
 
 	@Deactivate
@@ -103,6 +94,18 @@ public class CrawlerUserAgentsProviderImpl
 
 	protected void setCrawlerUserAgents(Set<String> crawlerUserAgents) {
 		_crawlerUserAgents = crawlerUserAgents;
+	}
+
+	private Set<String> _getCrawlerUserAgents() {
+		Set<String> crawlerUserAgents = new HashSet<>();
+
+		for (String crawlerUserAgent :
+				_crawlerUserAgentsConfiguration.crawlerUserAgents()) {
+
+			crawlerUserAgents.add(StringUtil.toLowerCase(crawlerUserAgent));
+		}
+
+		return crawlerUserAgents;
 	}
 
 	private boolean _isCrawlerUserAgent(String userAgent) {
