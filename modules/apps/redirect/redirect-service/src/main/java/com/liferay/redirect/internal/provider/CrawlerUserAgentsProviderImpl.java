@@ -64,11 +64,15 @@ public class CrawlerUserAgentsProviderImpl
 		_crawlerUserAgentsConfiguration = ConfigurableUtil.createConfigurable(
 			CrawlerUserAgentsConfiguration.class, dictionary);
 
+		Set<String> crawlerUserAgents = new HashSet<>();
+
 		for (String crawlerUserAgent :
 				_crawlerUserAgentsConfiguration.crawlerUserAgents()) {
 
-			_crawlerUserAgents.add(StringUtil.toLowerCase(crawlerUserAgent));
+			crawlerUserAgents.add(StringUtil.toLowerCase(crawlerUserAgent));
 		}
+
+		_crawlerUserAgents = crawlerUserAgents;
 	}
 
 	protected void setCrawlerUserAgents(Set<String> crawlerUserAgents) {
