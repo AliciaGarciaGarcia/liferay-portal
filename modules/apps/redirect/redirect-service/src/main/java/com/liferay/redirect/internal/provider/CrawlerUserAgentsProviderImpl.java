@@ -15,6 +15,8 @@
 package com.liferay.redirect.internal.provider;
 
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
+import com.liferay.portal.kernel.cache.MultiVMPool;
+import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -22,14 +24,16 @@ import com.liferay.redirect.configuration.CrawlerUserAgentsConfiguration;
 import com.liferay.redirect.provider.CrawlerUserAgentsProvider;
 
 import java.util.Dictionary;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Alicia García
@@ -49,17 +53,26 @@ public class CrawlerUserAgentsProviderImpl
 			return false;
 		}
 
-		return _crawlerUserAgentsMap.computeIfAbsent(
-			userAgent, this::_isCrawlerUserAgent);
+		Boolean crawlerUserAgent = _portalCache.get(userAgent);
+
+		if (crawlerUserAgent != null) {
+			return crawlerUserAgent;
+		}
+
+		crawlerUserAgent = _isCrawlerUserAgent(userAgent);
+
+		_portalCache.put(userAgent, crawlerUserAgent);
+
+		return crawlerUserAgent;
 	}
 
 	@Override
 	public void updated(Dictionary<String, ?> dictionary)
 		throws ConfigurationException {
 
-		_crawlerUserAgents = new HashSet<>();
+		_portalCache.removeAll();
 
-		_crawlerUserAgentsMap = new HashMap<>();
+		_crawlerUserAgents = new HashSet<>();
 
 		_crawlerUserAgentsConfiguration = ConfigurableUtil.createConfigurable(
 			CrawlerUserAgentsConfiguration.class, dictionary);
@@ -73,6 +86,19 @@ public class CrawlerUserAgentsProviderImpl
 		}
 
 		_crawlerUserAgents = crawlerUserAgents;
+	}
+
+	@Activate
+	protected void activate(Map<String, Object> properties) {
+		_portalCache =
+			(PortalCache<String, Boolean>)_multiVMPool.getPortalCache(
+				CrawlerUserAgentsProvider.class.getName());
+	}
+
+	@Deactivate
+	protected void deactivate() {
+		_multiVMPool.removePortalCache(
+			CrawlerUserAgentsProvider.class.getName());
 	}
 
 	protected void setCrawlerUserAgents(Set<String> crawlerUserAgents) {
@@ -98,6 +124,10 @@ public class CrawlerUserAgentsProviderImpl
 	private volatile Set<String> _crawlerUserAgents;
 	private volatile CrawlerUserAgentsConfiguration
 		_crawlerUserAgentsConfiguration;
-	private Map<String, Boolean> _crawlerUserAgentsMap = new HashMap<>();
+
+	@Reference
+	private MultiVMPool _multiVMPool;
+
+	private PortalCache<String, Boolean> _portalCache;
 
 }
