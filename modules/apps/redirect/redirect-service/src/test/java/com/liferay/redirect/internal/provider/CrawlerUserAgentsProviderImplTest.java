@@ -14,15 +14,22 @@
 
 package com.liferay.redirect.internal.provider;
 
+import com.liferay.portal.kernel.cache.PortalCache;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
 import java.util.Set;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 /**
  * @author Alicia García
@@ -34,9 +41,23 @@ public class CrawlerUserAgentsProviderImplTest {
 	public static final LiferayUnitTestRule liferayUnitTestRule =
 		LiferayUnitTestRule.INSTANCE;
 
+	@Before
+	public void setUp() {
+		MockitoAnnotations.initMocks(this);
+
+		ReflectionTestUtil.setFieldValue(
+			_crawlerUserAgentsProviderImpl, "_portalCache", _portalCache);
+	}
+
 	@Test
 	public void testIsCrawlerUserAgent() {
 		_crawlerUserAgentsProviderImpl.setCrawlerUserAgents(_crawlerUserAgents);
+
+		Mockito.when(
+			_portalCache.get(Mockito.anyString())
+		).thenReturn(
+			null
+		);
 
 		Assert.assertFalse(
 			_crawlerUserAgentsProviderImpl.isCrawlerUserAgent("another"));
@@ -61,5 +82,8 @@ public class CrawlerUserAgentsProviderImplTest {
 
 	private final CrawlerUserAgentsProviderImpl _crawlerUserAgentsProviderImpl =
 		new CrawlerUserAgentsProviderImpl();
+
+	@Mock
+	private PortalCache<String, Boolean> _portalCache;
 
 }
