@@ -152,6 +152,19 @@ public class MentionsPortlet extends MVCPortlet {
 					"<a href=\"", profileURL, "\">@", user.getScreenName(),
 					"</a>");
 			}
+			else {
+				if (themeDisplay.getLayout() != null) {
+					_log.error(
+						"themeDisplay.getLayout().isPrivateLayout(): " +
+							themeDisplay.getLayout(
+							).isPrivateLayout());
+				}
+				else {
+					_log.error("themeDisplay.getLayout(): NULO");
+				}
+
+				_log.error("profileURL is null");
+			}
 
 			jsonArray.put(
 				JSONUtil.put(
