@@ -147,10 +147,18 @@ public class MentionsPortlet extends MVCPortlet {
 
 			String profileURL = user.getDisplayURL(themeDisplay);
 
+			if (Validator.isNull(profileURL)) {
+				profileURL = user.getDisplayURL(themeDisplay, true);
+			}
+
 			if (Validator.isNotNull(profileURL)) {
 				mention = StringBundler.concat(
 					"<a href=\"", profileURL, "\">@", user.getScreenName(),
 					"</a>");
+			}else{
+				_log.error("user: "+ user);
+				_log.error("themeDisplay: "+ themeDisplay);
+				_log.error("profileURL is null");
 			}
 
 			jsonArray.put(
