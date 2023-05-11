@@ -148,6 +148,7 @@ public class MentionsPortlet extends MVCPortlet {
 			String profileURL = user.getDisplayURL(themeDisplay);
 
 			if (Validator.isNull(profileURL)) {
+				_log.error("PRIVATELAYOUT : true");
 				profileURL = user.getDisplayURL(themeDisplay, true);
 			}
 
@@ -156,8 +157,15 @@ public class MentionsPortlet extends MVCPortlet {
 					"<a href=\"", profileURL, "\">@", user.getScreenName(),
 					"</a>");
 			}else{
-				_log.error("user: "+ user);
-				_log.error("themeDisplay: "+ themeDisplay);
+				if(Validator.isNull(user)){
+					_log.error("user: "+ user);
+				}
+				if(user.isGuestUser()){
+					_log.error("user.isGuestUser(): "+ user.isGuestUser());
+				}
+				if(Validator.isNull(themeDisplay)){
+					_log.error("themeDisplay: "+ themeDisplay);
+				}
 				_log.error("profileURL is null");
 			}
 
