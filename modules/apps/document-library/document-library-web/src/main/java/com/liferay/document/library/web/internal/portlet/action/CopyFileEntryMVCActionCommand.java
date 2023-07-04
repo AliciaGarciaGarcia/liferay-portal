@@ -15,7 +15,9 @@
 package com.liferay.document.library.web.internal.portlet.action;
 
 import com.liferay.asset.kernel.exception.NoSuchEntryException;
+import com.liferay.asset.kernel.model.AssetCategory;
 import com.liferay.asset.kernel.model.AssetEntry;
+import com.liferay.asset.kernel.service.AssetCategoryService;
 import com.liferay.asset.kernel.service.AssetEntryService;
 import com.liferay.document.library.constants.DLPortletKeys;
 import com.liferay.document.library.kernel.model.DLFileEntry;
@@ -33,10 +35,17 @@ import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -73,10 +82,8 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 		}
 	}
 
-	private void _checkDestinationRepository(long repositoryId)
+	private void _checkDestinationRepository(Group group)
 		throws PortalException {
-
-		Group group = _groupLocalService.fetchGroup(repositoryId);
 
 		if ((group != null) && group.isStaged() && !group.isStagingGroup()) {
 			throw new PortalException(
@@ -98,10 +105,13 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 			actionRequest, "destinationRepositoryId");
 
 		try {
-			_checkDestinationRepository(destinationRepositoryId);
+			Group group = _groupLocalService.fetchGroup(
+				destinationRepositoryId);
+
+			_checkDestinationRepository(group);
 
 			ServiceContext serviceContext = _createServiceContext(
-				actionRequest, fileEntryId);
+				actionRequest, fileEntryId, group);
 
 			_dlAppService.copyFileEntry(
 				fileEntryId, destinationFolderId, destinationRepositoryId,
@@ -123,17 +133,34 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 	}
 
 	private ServiceContext _createServiceContext(
-			ActionRequest actionRequest, long fileEntryId)
+			ActionRequest actionRequest, long fileEntryId, Group group)
 		throws PortalException {
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			DLFileEntry.class.getName(), actionRequest);
 
 		try {
+			List<Long> currentAndAncestorSiteGroupsIds = ListUtil.fromArray(
+				_portal.getCurrentAndAncestorSiteGroupIds(group.getGroupId()));
+			Set<Long> categoryIds = new HashSet<>();
+
 			AssetEntry assetEntry = _assetEntryService.getEntry(
 				DLFileEntry.class.getName(), fileEntryId);
 
-			serviceContext.setAssetCategoryIds(assetEntry.getCategoryIds());
+			for (long categoryId : assetEntry.getCategoryIds()) {
+				AssetCategory assetCategory =
+					_assetCategoryService.fetchCategory(categoryId);
+
+				if (currentAndAncestorSiteGroupsIds.contains(
+						assetCategory.getGroupId())) {
+
+					categoryIds.add(categoryId);
+				}
+			}
+
+			serviceContext.setAssetCategoryIds(
+				ArrayUtil.toLongArray(categoryIds));
+
 			serviceContext.setAssetTagNames(assetEntry.getTagNames());
 		}
 		catch (PortalException portalException) {
@@ -149,6 +176,9 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 		CopyFileEntryMVCActionCommand.class);
 
 	@Reference
+	private AssetCategoryService _assetCategoryService;
+
+	@Reference
 	private AssetEntryService _assetEntryService;
 
 	@Reference
@@ -159,5 +189,8 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private JSONFactory _jsonFactory;
+
+	@Reference
+	private Portal _portal;
 
 }
