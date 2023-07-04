@@ -14,8 +14,11 @@
 
 package com.liferay.document.library.web.internal.portlet.action;
 
+import com.liferay.asset.kernel.exception.NoSuchEntryException;
+import com.liferay.asset.kernel.model.AssetEntry;
+import com.liferay.asset.kernel.service.AssetEntryService;
 import com.liferay.document.library.constants.DLPortletKeys;
-import com.liferay.document.library.kernel.model.DLFileShortcut;
+import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.service.DLAppService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactory;
@@ -27,6 +30,7 @@ import com.liferay.portal.kernel.portlet.JSONPortletResponseUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -96,10 +100,12 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 		try {
 			_checkDestinationRepository(destinationRepositoryId);
 
+			ServiceContext serviceContext = _createServiceContext(
+				actionRequest, fileEntryId);
+
 			_dlAppService.copyFileEntry(
 				fileEntryId, destinationFolderId, destinationRepositoryId,
-				ServiceContextFactory.getInstance(
-					DLFileShortcut.class.getName(), actionRequest));
+				serviceContext);
 
 			JSONPortletResponseUtil.writeJSON(
 				actionRequest, actionResponse, _jsonFactory.createJSONObject());
@@ -116,8 +122,34 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 		}
 	}
 
+	private ServiceContext _createServiceContext(
+			ActionRequest actionRequest, long fileEntryId)
+		throws PortalException {
+
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(
+			DLFileEntry.class.getName(), actionRequest);
+
+		try {
+			AssetEntry assetEntry = _assetEntryService.getEntry(
+				DLFileEntry.class.getName(), fileEntryId);
+
+			serviceContext.setAssetCategoryIds(assetEntry.getCategoryIds());
+			serviceContext.setAssetTagNames(assetEntry.getTagNames());
+		}
+		catch (PortalException portalException) {
+			if (!(portalException instanceof NoSuchEntryException)) {
+				throw portalException;
+			}
+		}
+
+		return serviceContext;
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(
 		CopyFileEntryMVCActionCommand.class);
+
+	@Reference
+	private AssetEntryService _assetEntryService;
 
 	@Reference
 	private DLAppService _dlAppService;
