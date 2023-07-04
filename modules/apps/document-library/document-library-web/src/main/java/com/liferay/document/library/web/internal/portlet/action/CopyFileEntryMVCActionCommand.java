@@ -19,6 +19,10 @@ import com.liferay.asset.kernel.model.AssetCategory;
 import com.liferay.asset.kernel.model.AssetEntry;
 import com.liferay.asset.kernel.service.AssetCategoryService;
 import com.liferay.asset.kernel.service.AssetEntryService;
+import com.liferay.depot.model.DepotEntry;
+import com.liferay.depot.model.DepotEntryGroupRel;
+import com.liferay.depot.service.DepotEntryGroupRelLocalService;
+import com.liferay.depot.service.DepotEntryLocalService;
 import com.liferay.document.library.constants.DLPortletKeys;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.service.DLAppService;
@@ -138,6 +142,8 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			DLFileEntry.class.getName(), actionRequest);
+		DepotEntry groupDepotEntry =
+			_depotEntryLocalService.fetchGroupDepotEntry(group.getGroupId());
 
 		try {
 			List<Long> currentAndAncestorSiteGroupsIds = ListUtil.fromArray(
@@ -148,11 +154,9 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 				DLFileEntry.class.getName(), fileEntryId);
 
 			for (long categoryId : assetEntry.getCategoryIds()) {
-				AssetCategory assetCategory =
-					_assetCategoryService.fetchCategory(categoryId);
-
-				if (currentAndAncestorSiteGroupsIds.contains(
-						assetCategory.getGroupId())) {
+				if (_isCategoryIdAllowed(
+						categoryId, currentAndAncestorSiteGroupsIds, group,
+						groupDepotEntry)) {
 
 					categoryIds.add(categoryId);
 				}
@@ -172,6 +176,63 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 		return serviceContext;
 	}
 
+	private boolean _isCategoryIdAllowed(
+			long categoryId, List<Long> currentAndAncestorSiteGroupsIds,
+			Group group, DepotEntry groupDepotEntry)
+		throws PortalException {
+
+		AssetCategory assetCategory = _assetCategoryService.fetchCategory(
+			categoryId);
+
+		if (assetCategory == null) {
+			return false;
+		}
+
+		if (currentAndAncestorSiteGroupsIds.contains(
+				assetCategory.getGroupId())) {
+
+			return true;
+		}
+
+		if (group.isDepot()) {
+			if (groupDepotEntry == null) {
+				return false;
+			}
+
+			DepotEntryGroupRel depotEntryGroupRel =
+				_depotEntryGroupRelLocalService.
+					fetchDepotEntryGroupRelByDepotEntryIdToGroupId(
+						groupDepotEntry.getDepotEntryId(),
+						assetCategory.getGroupId());
+
+			if (depotEntryGroupRel != null) {
+				return true;
+			}
+
+			return false;
+		}
+
+		DepotEntry assetCategoryGroupDepotEntry =
+			_depotEntryLocalService.fetchGroupDepotEntry(
+				assetCategory.getGroupId());
+
+		if (assetCategoryGroupDepotEntry == null) {
+			return false;
+		}
+
+		DepotEntryGroupRel depotEntryGroupRel =
+			_depotEntryGroupRelLocalService.
+				fetchDepotEntryGroupRelByDepotEntryIdToGroupId(
+					assetCategoryGroupDepotEntry.getDepotEntryId(),
+					group.getGroupId());
+
+		if (depotEntryGroupRel != null) {
+			return true;
+		}
+
+		return false;
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(
 		CopyFileEntryMVCActionCommand.class);
 
@@ -180,6 +241,12 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private AssetEntryService _assetEntryService;
+
+	@Reference
+	private DepotEntryGroupRelLocalService _depotEntryGroupRelLocalService;
+
+	@Reference
+	private DepotEntryLocalService _depotEntryLocalService;
 
 	@Reference
 	private DLAppService _dlAppService;
