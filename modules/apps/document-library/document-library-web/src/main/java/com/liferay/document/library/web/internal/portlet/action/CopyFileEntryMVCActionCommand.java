@@ -144,12 +144,21 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			DLFileEntry.class.getName(), actionRequest);
-		DepotEntry groupDepotEntry =
-			_depotEntryLocalService.fetchGroupDepotEntry(group.getGroupId());
 
 		try {
 			List<Long> currentAndAncestorSiteGroupsIds = ListUtil.fromArray(
 				_portal.getCurrentAndAncestorSiteGroupIds(group.getGroupId()));
+
+			List<Long> groupIds = _relatedGroupIds(
+				currentAndAncestorSiteGroupsIds, group);
+
+			DepotEntry groupDepotEntry = null;
+
+			if (group.isDepot()) {
+				groupDepotEntry = _depotEntryLocalService.fetchGroupDepotEntry(
+					group.getGroupId());
+			}
+
 			Set<Long> categoryIds = new HashSet<>();
 
 			AssetEntry assetEntry = _assetEntryService.getEntry(
@@ -157,8 +166,7 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 
 			for (long categoryId : assetEntry.getCategoryIds()) {
 				if (_isCategoryIdAllowed(
-						categoryId, currentAndAncestorSiteGroupsIds, group,
-						groupDepotEntry)) {
+						categoryId, groupIds, group, groupDepotEntry)) {
 
 					categoryIds.add(categoryId);
 				}
@@ -179,8 +187,8 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 	}
 
 	private boolean _isCategoryIdAllowed(
-			long categoryId, List<Long> currentAndAncestorSiteGroupsIds,
-			Group group, DepotEntry groupDepotEntry)
+			long categoryId, List<Long> groupsIds, Group group,
+			DepotEntry groupDepotEntry)
 		throws PortalException {
 
 		AssetCategory assetCategory = _assetCategoryService.fetchCategory(
@@ -190,9 +198,7 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 			return false;
 		}
 
-		if (currentAndAncestorSiteGroupsIds.contains(
-				assetCategory.getGroupId())) {
-
+		if (groupsIds.contains(assetCategory.getGroupId())) {
 			return true;
 		}
 
@@ -214,13 +220,8 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 			return false;
 		}
 
-		DepotEntry assetCategoryGroupDepotEntry =
-			_depotEntryLocalService.fetchGroupDepotEntry(
-				assetCategory.getGroupId());
-
-		if (assetCategoryGroupDepotEntry == null) {
-			return false;
-		}
+		return false;
+	}
 
 		DepotEntryGroupRel depotEntryGroupRel =
 			_depotEntryGroupRelLocalService.
