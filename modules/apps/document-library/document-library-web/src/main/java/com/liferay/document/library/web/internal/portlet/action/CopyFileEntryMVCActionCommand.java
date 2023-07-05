@@ -17,8 +17,10 @@ package com.liferay.document.library.web.internal.portlet.action;
 import com.liferay.asset.kernel.exception.NoSuchEntryException;
 import com.liferay.asset.kernel.model.AssetCategory;
 import com.liferay.asset.kernel.model.AssetEntry;
+import com.liferay.asset.kernel.model.AssetTag;
 import com.liferay.asset.kernel.service.AssetCategoryService;
 import com.liferay.asset.kernel.service.AssetEntryService;
+import com.liferay.asset.kernel.service.AssetTagLocalService;
 import com.liferay.depot.model.DepotEntry;
 import com.liferay.depot.model.DepotEntryGroupRel;
 import com.liferay.depot.service.DepotEntryGroupRelLocalService;
@@ -175,7 +177,15 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 			serviceContext.setAssetCategoryIds(
 				ArrayUtil.toLongArray(categoryIds));
 
-			serviceContext.setAssetTagNames(assetEntry.getTagNames());
+			Set<String> tagNames = new HashSet<>();
+
+			for (String tagName : assetEntry.getTagNames()) {
+				if (_isTagNameAllowed(groupIds, tagName)) {
+					tagNames.add(tagName);
+				}
+			}
+
+			serviceContext.setAssetTagNames(ArrayUtil.toStringArray(tagNames));
 		}
 		catch (PortalException portalException) {
 			if (!(portalException instanceof NoSuchEntryException)) {
@@ -223,14 +233,16 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 		return false;
 	}
 
-		DepotEntryGroupRel depotEntryGroupRel =
-			_depotEntryGroupRelLocalService.
-				fetchDepotEntryGroupRelByDepotEntryIdToGroupId(
-					assetCategoryGroupDepotEntry.getDepotEntryId(),
-					group.getGroupId());
+	private boolean _isTagNameAllowed(
+		List<Long> groupIds, String tagName) {
 
-		if (depotEntryGroupRel != null) {
-			return true;
+		for (Long groupId : groupIds) {
+			AssetTag assetTag = _assetTagLocalService.fetchTag(
+				groupId, tagName);
+
+			if (assetTag != null) {
+				return true;
+			}
 		}
 
 		return false;
@@ -276,6 +288,9 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private AssetEntryService _assetEntryService;
+
+	@Reference
+	private AssetTagLocalService _assetTagLocalService;
 
 	@Reference
 	private DepotEntryGroupRelLocalService _depotEntryGroupRelLocalService;
