@@ -90,9 +90,7 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 		}
 	}
 
-	private void _checkDestinationRepository(Group group)
-		throws PortalException {
-
+	private void _checkDestinationGroup(Group group) throws PortalException {
 		if ((group != null) && group.isStaged() && !group.isStagingGroup()) {
 			throw new PortalException(
 				"cannot-copy-file-entries-to-the-live-version-of-a-group");
@@ -116,7 +114,7 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 			Group group = _groupLocalService.fetchGroup(
 				destinationRepositoryId);
 
-			_checkDestinationRepository(group);
+			_checkDestinationGroup(group);
 
 			ServiceContext serviceContext = _createServiceContext(
 				actionRequest, fileEntryId, group);
@@ -151,11 +149,11 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 			AssetEntry assetEntry = _assetEntryService.getEntry(
 				DLFileEntry.class.getName(), fileEntryId);
 
-			List<Long> currentAndAncestorSiteGroupsIds = ListUtil.fromArray(
-				_portal.getCurrentAndAncestorSiteGroupIds(group.getGroupId()));
-
-			List<Long> groupIds = _relatedGroupIds(
-				currentAndAncestorSiteGroupsIds, group);
+			List<Long> groupIds = _getGroupIds(
+				ListUtil.fromArray(
+					_portal.getCurrentAndAncestorSiteGroupIds(
+						group.getGroupId())),
+				group);
 
 			serviceContext.setAssetCategoryIds(
 				_getAssetCategoryIds(assetEntry, group, groupIds));
@@ -205,57 +203,7 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 		return ArrayUtil.toStringArray(tagNames);
 	}
 
-	private boolean _isCategoryIdAllowed(
-			long categoryId, List<Long> groupsIds, Group group,
-			DepotEntry groupDepotEntry)
-		throws PortalException {
-
-		AssetCategory assetCategory = _assetCategoryService.fetchCategory(
-			categoryId);
-
-		if (assetCategory == null) {
-			return false;
-		}
-
-		if (groupsIds.contains(assetCategory.getGroupId())) {
-			return true;
-		}
-
-		if (group.isDepot()) {
-			if (groupDepotEntry == null) {
-				return false;
-			}
-
-			DepotEntryGroupRel depotEntryGroupRel =
-				_depotEntryGroupRelLocalService.
-					fetchDepotEntryGroupRelByDepotEntryIdToGroupId(
-						groupDepotEntry.getDepotEntryId(),
-						assetCategory.getGroupId());
-
-			if (depotEntryGroupRel != null) {
-				return true;
-			}
-
-			return false;
-		}
-
-		return false;
-	}
-
-	private boolean _isTagNameAllowed(List<Long> groupIds, String tagName) {
-		for (Long groupId : groupIds) {
-			AssetTag assetTag = _assetTagLocalService.fetchTag(
-				groupId, tagName);
-
-			if (assetTag != null) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private List<Long> _relatedGroupIds(
+	private List<Long> _getGroupIds(
 			List<Long> currentAndAncestorSiteGroupsIds, Group group)
 		throws PortalException {
 
@@ -274,17 +222,62 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 			return currentAndAncestorSiteGroupsIds;
 		}
 
-		List<Long> relatedGroupIds = new ArrayList<>(
-			currentAndAncestorSiteGroupsIds);
+		List<Long> groupIds = new ArrayList<>(currentAndAncestorSiteGroupsIds);
 
 		for (DepotEntryGroupRel depotEntryGroupRel : depotEntryGroupRels) {
 			DepotEntry depotEntry = _depotEntryLocalService.getDepotEntry(
 				depotEntryGroupRel.getDepotEntryId());
 
-			relatedGroupIds.add(depotEntry.getGroupId());
+			groupIds.add(depotEntry.getGroupId());
 		}
 
-		return relatedGroupIds;
+		return groupIds;
+	}
+
+	private boolean _isCategoryIdAllowed(
+			long categoryId, List<Long> groupsIds, Group group,
+			DepotEntry groupDepotEntry)
+		throws PortalException {
+
+		AssetCategory assetCategory = _assetCategoryService.fetchCategory(
+			categoryId);
+
+		if (assetCategory == null) {
+			return false;
+		}
+
+		if (groupsIds.contains(assetCategory.getGroupId())) {
+			return true;
+		}
+
+		if (!group.isDepot() || (groupDepotEntry == null)) {
+			return false;
+		}
+
+		DepotEntryGroupRel depotEntryGroupRel =
+			_depotEntryGroupRelLocalService.
+				fetchDepotEntryGroupRelByDepotEntryIdToGroupId(
+					groupDepotEntry.getDepotEntryId(),
+					assetCategory.getGroupId());
+
+		if (depotEntryGroupRel != null) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean _isTagNameAllowed(List<Long> groupIds, String tagName) {
+		for (Long groupId : groupIds) {
+			AssetTag assetTag = _assetTagLocalService.fetchTag(
+				groupId, tagName);
+
+			if (assetTag != null) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
