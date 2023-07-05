@@ -26,6 +26,7 @@ import com.liferay.depot.service.DepotEntryLocalService;
 import com.liferay.document.library.constants.DLPortletKeys;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.service.DLAppService;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONUtil;
@@ -47,6 +48,7 @@ import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -231,6 +233,38 @@ public class CopyFileEntryMVCActionCommand extends BaseMVCActionCommand {
 		}
 
 		return false;
+	}
+
+	private List<Long> _relatedGroupIds(
+			List<Long> currentAndAncestorSiteGroupsIds, Group group)
+		throws PortalException {
+
+		DepotEntry groupDepotEntry =
+			_depotEntryLocalService.fetchGroupDepotEntry(group.getGroupId());
+
+		if (groupDepotEntry != null) {
+			return currentAndAncestorSiteGroupsIds;
+		}
+
+		List<DepotEntryGroupRel> depotEntryGroupRels =
+			_depotEntryGroupRelLocalService.getDepotEntryGroupRels(
+				group.getGroupId(), QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+		if (ListUtil.isEmpty(depotEntryGroupRels)) {
+			return currentAndAncestorSiteGroupsIds;
+		}
+
+		List<Long> relatedGroupIds = new ArrayList<>(
+			currentAndAncestorSiteGroupsIds);
+
+		for (DepotEntryGroupRel depotEntryGroupRel : depotEntryGroupRels) {
+			DepotEntry depotEntry = _depotEntryLocalService.getDepotEntry(
+				depotEntryGroupRel.getDepotEntryId());
+
+			relatedGroupIds.add(depotEntry.getGroupId());
+		}
+
+		return relatedGroupIds;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
