@@ -228,11 +228,17 @@ public class CopyDLObjectServlet extends HttpServlet {
 			httpServletRequest, "destinationParentFolderId");
 
 		try {
-			_checkDestinationRepository(destinationRepositoryId);
+			Group group = _groupLocalService.fetchGroup(
+				destinationRepositoryId);
+
+			_checkDestinationGroup(group);
 
 			_dlAppService.copyFolder(
 				sourceRepositoryId, sourceFolderId, destinationRepositoryId,
 				destinationParentFolderId,
+				_siteConnectedGroupGroupProvider.
+					getCurrentAndAncestorSiteAndDepotGroupIds(
+						group.getGroupId()),
 				ServiceContextFactory.getInstance(
 					DLFolder.class.getName(), httpServletRequest));
 
