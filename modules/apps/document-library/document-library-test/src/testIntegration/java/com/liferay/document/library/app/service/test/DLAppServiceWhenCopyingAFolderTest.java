@@ -105,7 +105,8 @@ public class DLAppServiceWhenCopyingAFolderTest extends BaseDLAppTestCase {
 		try {
 			DLAppServiceUtil.copyFolder(
 				group.getGroupId(), parentFolder.getFolderId(),
-				group.getGroupId(), parentFolder.getFolderId(), serviceContext);
+				group.getGroupId(), parentFolder.getFolderId(), null,
+				serviceContext);
 
 			Assert.fail();
 		}
@@ -138,7 +139,7 @@ public class DLAppServiceWhenCopyingAFolderTest extends BaseDLAppTestCase {
 		try {
 			DLAppServiceUtil.copyFolder(
 				group.getGroupId(), parentFolder.getFolderId(),
-				group.getGroupId(), folder.getFolderId(), serviceContext);
+				group.getGroupId(), folder.getFolderId(), null, serviceContext);
 
 			Assert.fail();
 		}
@@ -163,7 +164,7 @@ public class DLAppServiceWhenCopyingAFolderTest extends BaseDLAppTestCase {
 
 		DLAppServiceUtil.copyFolder(
 			group.getGroupId(), parentFolder.getFolderId(), group.getGroupId(),
-			parentFolder.getParentFolderId(),
+			parentFolder.getParentFolderId(), null,
 			ServiceContextTestUtil.getServiceContext(group.getGroupId()));
 	}
 
@@ -204,7 +205,7 @@ public class DLAppServiceWhenCopyingAFolderTest extends BaseDLAppTestCase {
 		Folder folder = DLAppServiceUtil.copyFolder(
 			group.getGroupId(), parentFolder.getFolderId(),
 			targetGroup.getGroupId(),
-			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, serviceContext);
+			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, null, serviceContext);
 
 		Assert.assertEquals(parentFolder.getName(), folder.getName());
 		AssertUtils.assertEquals(fileNamesMap, _getFileNamesMap(folder));
