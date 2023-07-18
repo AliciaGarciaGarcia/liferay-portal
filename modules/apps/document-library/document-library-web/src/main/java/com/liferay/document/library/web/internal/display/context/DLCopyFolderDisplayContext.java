@@ -51,8 +51,6 @@ public class DLCopyFolderDisplayContext {
 		_httpServletRequest = httpServletRequest;
 		_liferayPortletResponse = liferayPortletResponse;
 		_themeDisplay = themeDisplay;
-
-		_copyDLObjectURL = null;
 	}
 
 	public String getCopyDLObjectURL() {
