@@ -185,8 +185,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 			long parentResourceClassNameId, long parentResourcePrimKey,
 			String title, String urlTitle, String content, String description,
 			String[] sections, String sourceURL, Date displayDate,
-			Date expirationDate,
-			Date reviewDate, String[] selectedFileNames,
+			Date expirationDate, Date reviewDate, String[] selectedFileNames,
 			ServiceContext serviceContext)
 		throws PortalException {
 
@@ -1134,8 +1133,8 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 			userId, resourcePrimKey, kbArticle.getTitle(),
 			kbArticle.getContent(), kbArticle.getDescription(),
 			StringUtil.split(kbArticle.getSections()), kbArticle.getSourceURL(),
-			kbArticle.getExpirationDate(), kbArticle.getReviewDate(), null,
-			null, serviceContext);
+			kbArticle.getDisplayDate(), kbArticle.getExpirationDate(),
+			kbArticle.getReviewDate(), null, null, serviceContext);
 	}
 
 	@Override
@@ -1187,8 +1186,9 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 	public KBArticle updateKBArticle(
 			long userId, long resourcePrimKey, String title, String content,
 			String description, String[] sections, String sourceURL,
-			Date displayDate, Date expirationDate, Date reviewDate, String[] selectedFileNames,
-			long[] removeFileEntryIds, ServiceContext serviceContext)
+			Date displayDate, Date expirationDate, Date reviewDate,
+			String[] selectedFileNames, long[] removeFileEntryIds,
+			ServiceContext serviceContext)
 		throws PortalException {
 
 		// KB article
