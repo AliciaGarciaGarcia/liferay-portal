@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -119,8 +120,8 @@ public class KBArticleImporter {
 					null, userId, parentResourceClassNameId,
 					parentResourcePrimaryKey,
 					kbArticleMarkdownConverter.getTitle(), urlTitle, markdown,
-					null, null, kbArticleMarkdownConverter.getSourceURL(), null,
-					null, null, serviceContext);
+					null, null, kbArticleMarkdownConverter.getSourceURL(),
+					new Date(), null, null, null, serviceContext);
 
 				serviceContext.setWorkflowAction(workflowAction);
 			}

@@ -31,6 +31,7 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import java.io.File;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.Map;
 
 import org.junit.Assert;
@@ -314,7 +315,7 @@ public class KnowledgeBaseAttachmentResourceTest
 			PortalUtil.getClassNameId(KBFolder.class.getName()), 0,
 			RandomTestUtil.randomString(), RandomTestUtil.randomString(),
 			RandomTestUtil.randomString(), RandomTestUtil.randomString(), null,
-			null, null, null, null, serviceContext);
+			null, new Date(), null, null, null, serviceContext);
 	}
 
 	private KnowledgeBaseAttachment _addKnowledgeBaseAttachment()
