@@ -31,6 +31,7 @@ import com.liferay.knowledge.base.constants.KBFolderConstants;
 import com.liferay.knowledge.base.constants.KBPortletKeys;
 import com.liferay.knowledge.base.exception.DuplicateKBArticleExternalReferenceCodeException;
 import com.liferay.knowledge.base.exception.KBArticleContentException;
+import com.liferay.knowledge.base.exception.KBArticleDisplayDateException;
 import com.liferay.knowledge.base.exception.KBArticleExpirationDateException;
 import com.liferay.knowledge.base.exception.KBArticleParentException;
 import com.liferay.knowledge.base.exception.KBArticlePriorityException;
@@ -183,7 +184,8 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 			String externalReferenceCode, long userId,
 			long parentResourceClassNameId, long parentResourcePrimKey,
 			String title, String urlTitle, String content, String description,
-			String[] sections, String sourceURL, Date expirationDate,
+			String[] sections, String sourceURL, Date displayDate,
+			Date expirationDate,
 			Date reviewDate, String[] selectedFileNames,
 			ServiceContext serviceContext)
 		throws PortalException {
@@ -241,7 +243,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		kbArticle.setLatest(true);
 		kbArticle.setMain(false);
 		kbArticle.setSourceURL(sourceURL);
-		kbArticle.setDisplayDate(new Date());
+		kbArticle.setDisplayDate(displayDate);
 		kbArticle.setExpirationDate(expirationDate);
 		kbArticle.setReviewDate(reviewDate);
 		kbArticle.setStatus(WorkflowConstants.STATUS_DRAFT);
@@ -1184,7 +1186,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 	public KBArticle updateKBArticle(
 			long userId, long resourcePrimKey, String title, String content,
 			String description, String[] sections, String sourceURL,
-			Date expirationDate, Date reviewDate, String[] selectedFileNames,
+			Date displayDate, Date expirationDate, Date reviewDate, String[] selectedFileNames,
 			long[] removeFileEntryIds, ServiceContext serviceContext)
 		throws PortalException {
 
