@@ -107,6 +107,7 @@ public class UpdateKBArticleMVCActionCommand
 
 		User user = _userLocalService.getUser(themeDisplay.getUserId());
 
+		Date displayDate = new Date();
 		Date expirationDate = _getExpirationDate(
 			actionRequest, true, user.getTimeZone());
 		Date reviewDate = _getReviewDate(
@@ -129,7 +130,7 @@ public class UpdateKBArticleMVCActionCommand
 				null, _portal.getPortletId(actionRequest),
 				parentResourceClassNameId, parentResourcePrimKey, title,
 				urlTitle, content, description, sections, sourceURL,
-				expirationDate, reviewDate, selectedFileNames, serviceContext);
+				displayDate,	expirationDate, reviewDate, selectedFileNames, serviceContext);
 		}
 		else if (cmd.equals(Constants.UPDATE)) {
 			long[] removeFileEntryIds = ParamUtil.getLongValues(
@@ -137,7 +138,7 @@ public class UpdateKBArticleMVCActionCommand
 
 			kbArticle = _kbArticleService.updateKBArticle(
 				resourcePrimKey, title, content, description, sections,
-				sourceURL, expirationDate, reviewDate, selectedFileNames,
+				sourceURL, displayDate, expirationDate, reviewDate, selectedFileNames,
 				removeFileEntryIds, serviceContext);
 		}
 
