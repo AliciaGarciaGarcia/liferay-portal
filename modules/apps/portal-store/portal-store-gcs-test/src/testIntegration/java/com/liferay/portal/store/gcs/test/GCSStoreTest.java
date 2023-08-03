@@ -19,6 +19,8 @@ import com.liferay.portal.store.test.util.BaseStoreTestCase;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
+import java.util.Dictionary;
+
 import org.junit.AfterClass;
 import org.junit.Assume;
 import org.junit.BeforeClass;
@@ -58,6 +60,10 @@ public class GCSStoreTest extends BaseStoreTestCase {
 			"com.liferay.portal.store.gcs.configuration.GCSStoreConfiguration",
 			StringPool.QUESTION);
 
+		if (_configuration != null) {
+			_originalProperties = _configuration.getProperties();
+		}
+
 		ConfigurationTestUtil.saveConfiguration(
 			_configuration,
 			HashMapDictionaryBuilder.<String, Object>put(
@@ -87,7 +93,12 @@ public class GCSStoreTest extends BaseStoreTestCase {
 
 	@AfterClass
 	public static void tearDownClass() throws Exception {
-		ConfigurationTestUtil.deleteConfiguration(_configuration);
+		if (_originalProperties == null) {
+			ConfigurationTestUtil.deleteConfiguration(_configuration);
+		}
+		else {
+			_configuration.update(_originalProperties);
+		}
 	}
 
 	@Override
@@ -99,6 +110,8 @@ public class GCSStoreTest extends BaseStoreTestCase {
 
 	@Inject
 	private static ConfigurationAdmin _configurationAdmin;
+
+	private static Dictionary<String, Object> _originalProperties;
 
 	@Inject(
 		filter = "store.type=com.liferay.portal.store.gcs.GCSStore",

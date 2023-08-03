@@ -34,6 +34,7 @@ import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import java.time.Duration;
 
 import java.util.Arrays;
+import java.util.Dictionary;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -80,6 +81,10 @@ public class GCSStoreStoreAreaProcessorTest {
 			"com.liferay.portal.store.gcs.configuration.GCSStoreConfiguration",
 			StringPool.QUESTION);
 
+		if (_configuration != null) {
+			_originalProperties = _configuration.getProperties();
+		}
+
 		ConfigurationTestUtil.saveConfiguration(
 			_configuration,
 			HashMapDictionaryBuilder.<String, Object>put(
@@ -109,8 +114,13 @@ public class GCSStoreStoreAreaProcessorTest {
 
 	@AfterClass
 	public static void tearDownClass() throws Exception {
-		ConfigurationTestUtil.deleteConfiguration(_configuration);
+		if (_originalProperties == null) {
 			ConfigurationTestUtil.deleteConfiguration(_configuration);
+		}
+		else {
+			_configuration.update(_originalProperties);
+		}
+
 		_companyLocalService.deleteCompany(_company);
 	}
 
@@ -408,6 +418,8 @@ public class GCSStoreStoreAreaProcessorTest {
 
 	@Inject
 	private static ConfigurationAdmin _configurationAdmin;
+
+	private static Dictionary<String, Object> _originalProperties;
 
 	@DeleteAfterTestRun
 	private Group _group;
