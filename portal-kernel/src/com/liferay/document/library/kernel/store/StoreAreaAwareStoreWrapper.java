@@ -8,6 +8,7 @@ package com.liferay.document.library.kernel.store;
 import com.liferay.document.library.kernel.util.DLUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
+import com.liferay.portal.kernel.transaction.TransactionCommitCallbackUtil;
 
 import java.io.InputStream;
 
@@ -63,9 +64,9 @@ public class StoreAreaAwareStoreWrapper implements Store {
 				companyId, repositoryId, dirName, _SOURCE_STORE_AREAS,
 				StoreArea.DELETED);
 
-			StoreArea.runWithStoreAreas(
-				() -> store.deleteDirectory(companyId, repositoryId, dirName),
-				StoreArea.LIVE, StoreArea.NEW);
+			_registerDeleteDirectoryCallback(
+				companyId, repositoryId, dirName, store);
+			}
 		}
 		else {
 			store.deleteDirectory(companyId, repositoryId, dirName);
@@ -229,6 +230,20 @@ public class StoreAreaAwareStoreWrapper implements Store {
 		}
 
 		return false;
+	}
+
+	private void _registerDeleteDirectoryCallback(
+		long companyId, long repositoryId, String dirName, Store store) {
+
+		TransactionCommitCallbackUtil.registerCallback(
+			() -> {
+				StoreArea.runWithStoreAreas(
+					() -> store.deleteDirectory(
+						companyId, repositoryId, dirName),
+					StoreArea.LIVE, StoreArea.NEW);
+
+				return null;
+			});
 	}
 
 	private static final StoreArea[] _SOURCE_STORE_AREAS = {
