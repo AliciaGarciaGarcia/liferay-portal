@@ -60,12 +60,12 @@ public class StoreAreaAwareStoreWrapper implements Store {
 			StoreAreaProcessor storeAreaProcessor =
 				_storeAreaProcessorSupplier.get();
 
-			storeAreaProcessor.copyDirectory(
-				companyId, repositoryId, dirName, _SOURCE_STORE_AREAS,
-				StoreArea.DELETED);
+			if (storeAreaProcessor.copyDirectory(
+					companyId, repositoryId, dirName, _SOURCE_STORE_AREAS,
+					StoreArea.DELETED)) {
 
-			_registerDeleteDirectoryCallback(
-				companyId, repositoryId, dirName, store);
+				_registerDeleteDirectoryCallback(
+					companyId, repositoryId, dirName, store);
 			}
 		}
 		else {
