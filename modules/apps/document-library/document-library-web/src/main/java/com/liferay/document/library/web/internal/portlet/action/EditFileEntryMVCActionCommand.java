@@ -655,6 +655,8 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 		return URLBuilder.create(
 			redirect
 		).removeParameter(
+			portletName + "displayStyle"
+		).removeParameter(
 			portletName + "keywords"
 		).removeParameter(
 			portletName + "searchFolderId"
