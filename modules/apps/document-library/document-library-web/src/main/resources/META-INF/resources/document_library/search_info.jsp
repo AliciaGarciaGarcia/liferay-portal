@@ -37,7 +37,7 @@ List<Folder> mountFolders = dlAdminDisplayContext.getMountFolders();
 			searchRepositoryId = repositoryId;
 		}
 
-		PortletURL searchURL = dlAdminDisplayContext.getSearchRenderURL();
+		PortletURL searchURL = dlAdminDisplayContext.getSearchURL();
 
 		long searchFolderId = ParamUtil.getLong(request, "searchFolderId");
 		%>

@@ -170,7 +170,7 @@ public class DLAdminDisplayContext {
 
 	public PortletURL getCurrentRenderURL() {
 		if (isSearch()) {
-			return getSearchRenderURL();
+			return getSearchURL();
 		}
 
 		return getViewRenderURL();
@@ -366,7 +366,7 @@ public class DLAdminDisplayContext {
 		return _getDisplayStyle("descriptive");
 	}
 
-	public PortletURL getSearchRenderURL() {
+	public PortletURL getSearchURL() {
 		if (_searchURL != null) {
 			return _searchURL;
 		}
@@ -1080,7 +1080,7 @@ public class DLAdminDisplayContext {
 
 		SearchContainer<RepositoryEntry> searchContainer =
 			new SearchContainer<>(
-				_liferayPortletRequest, getSearchRenderURL(), null,
+				_liferayPortletRequest, getSearchURL(), null,
 				_getSearchEmptyResultsMessage());
 
 		if (_isExternalRepositorySearch() && hasFilterParameters()) {
