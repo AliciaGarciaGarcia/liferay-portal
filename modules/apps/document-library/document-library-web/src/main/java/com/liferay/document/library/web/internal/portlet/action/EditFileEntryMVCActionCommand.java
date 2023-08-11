@@ -87,6 +87,7 @@ import com.liferay.portal.kernel.upload.LiferayFileItemException;
 import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.upload.UploadRequestSizeException;
+import com.liferay.portal.kernel.url.URLBuilder;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizer;
@@ -121,6 +122,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -315,6 +318,8 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 						ParamUtil.getString(actionRequest, "redirect"));
 
 					if (Validator.isNotNull(redirect)) {
+						redirect = _clearSearchParameters(redirect);
+
 						if (cmd.equals(Constants.ADD) && (fileEntry != null)) {
 							String portletResource =
 								HttpComponentsUtil.getParameter(
@@ -640,6 +645,28 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 		}
 	}
 
+	private String _clearSearchParameters(String redirect) {
+		String portletName = _getPortletName(redirect);
+
+		if (Validator.isNull(portletName)) {
+			return redirect;
+		}
+
+		return URLBuilder.create(
+			redirect
+		).removeParameter(
+			portletName + "keywords"
+		).removeParameter(
+			portletName + "searchFolderId"
+		).removeParameter(
+			portletName + "searchRepositoryId"
+		).removeParameter(
+			portletName + "showSearchInfo"
+		).setParameter(
+			portletName + "mvcRenderCommandName", "/document_library/view"
+		).build();
+	}
+
 	private ServiceContext _createServiceContext(
 			HttpServletRequest httpServletRequest)
 		throws PortalException {
@@ -962,6 +989,20 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 		}
 
 		return expirationDate;
+	}
+
+	private String _getPortletName(String url) {
+		String pattern = "(?<=\\?|&)([^&]+)(?=keywords)";
+
+		Pattern regexPattern = Pattern.compile(pattern);
+
+		Matcher matcher = regexPattern.matcher(url);
+
+		if (!matcher.find()) {
+			return null;
+		}
+
+		return matcher.group(1);
 	}
 
 	private Date _getReviewDate(
