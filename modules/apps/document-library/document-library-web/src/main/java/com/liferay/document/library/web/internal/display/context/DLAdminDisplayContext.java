@@ -367,7 +367,11 @@ public class DLAdminDisplayContext {
 	}
 
 	public PortletURL getSearchRenderURL() {
-		PortletURL renderURL = PortletURLBuilder.createRenderURL(
+		if (_searchURL != null) {
+			return _searchURL;
+		}
+
+		_searchURL = PortletURLBuilder.createRenderURL(
 			_liferayPortletResponse
 		).setMVCRenderCommandName(
 			"/document_library/search"
@@ -375,11 +379,11 @@ public class DLAdminDisplayContext {
 			"folderId", ParamUtil.getLong(_httpServletRequest, "folderId")
 		).buildPortletURL();
 
-		_setFilterParameters(renderURL);
+		_setFilterParameters(_searchURL);
 
-		_setSearchParameters(renderURL);
+		_setSearchParameters(_searchURL);
 
-		return renderURL;
+		return _searchURL;
 	}
 
 	public long getSelectedRepositoryId() {
@@ -1273,6 +1277,7 @@ public class DLAdminDisplayContext {
 	private SearchContainer<RepositoryEntry> _searchContainer;
 	private Long _searchFolderId;
 	private Long _searchRepositoryId;
+	private PortletURL _searchURL;
 	private long _selectedRepositoryId;
 	private final ThemeDisplay _themeDisplay;
 	private final TrashHelper _trashHelper;
