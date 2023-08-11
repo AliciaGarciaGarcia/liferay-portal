@@ -358,9 +358,7 @@ public class DLAdminManagementToolbarDisplayContext
 
 	@Override
 	public String getSearchActionURL() {
-		PortletURL searchURL = _dlAdminDisplayContext.getSearchURL();
-
-		return searchURL.toString();
+		return String.valueOf(_dlAdminDisplayContext.getSearchURL());
 	}
 
 	@Override
