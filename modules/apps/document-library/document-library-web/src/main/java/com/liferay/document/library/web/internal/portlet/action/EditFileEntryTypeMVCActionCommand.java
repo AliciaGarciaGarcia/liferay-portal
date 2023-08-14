@@ -18,6 +18,7 @@ import com.liferay.document.library.kernel.model.DLFileEntryType;
 import com.liferay.document.library.kernel.service.DLAppService;
 import com.liferay.document.library.kernel.service.DLFileEntryTypeLocalService;
 import com.liferay.document.library.kernel.service.DLFileEntryTypeService;
+import com.liferay.document.library.web.internal.portlet.action.util.RedirectUtil;
 import com.liferay.dynamic.data.mapping.exception.NoSuchStructureException;
 import com.liferay.dynamic.data.mapping.exception.RequiredStructureException;
 import com.liferay.dynamic.data.mapping.exception.StructureDefinitionException;
@@ -147,6 +148,12 @@ public class EditFileEntryTypeMVCActionCommand
 				ParamUtil.getString(actionRequest, "redirect"));
 
 			if (Validator.isNotNull(redirect)) {
+				if (cmd.equals(Constants.ADD) || cmd.equals(Constants.UPDATE)) {
+					redirect = RedirectUtil.clearSearchParameters(redirect);
+
+					actionRequest.setAttribute(WebKeys.REDIRECT, redirect);
+				}
+
 				actionResponse.sendRedirect(redirect);
 			}
 		}
