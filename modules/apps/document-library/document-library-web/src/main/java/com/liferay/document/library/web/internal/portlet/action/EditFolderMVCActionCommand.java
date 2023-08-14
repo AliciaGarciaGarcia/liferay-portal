@@ -80,7 +80,8 @@ public class EditFolderMVCActionCommand extends BaseMVCActionCommand {
 				actionRequest.setAttribute(
 					WebKeys.REDIRECT,
 					RedirectUtil.clearSearchParameters(
-						_getRedirect(actionRequest)));
+						"/document_library/view", _getRedirect(actionRequest),
+						"mvcRenderCommandName"));
 			}
 			else if (cmd.equals(Constants.DELETE)) {
 				_deleteFolders(actionRequest, false);

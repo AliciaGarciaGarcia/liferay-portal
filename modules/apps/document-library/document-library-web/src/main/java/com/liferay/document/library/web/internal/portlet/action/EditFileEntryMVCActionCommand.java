@@ -316,7 +316,9 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 						ParamUtil.getString(actionRequest, "redirect"));
 
 					if (Validator.isNotNull(redirect)) {
-						redirect = RedirectUtil.clearSearchParameters(redirect);
+						redirect = RedirectUtil.clearSearchParameters(
+							"/document_library/view", redirect,
+							"mvcRenderCommandName");
 
 						if (cmd.equals(Constants.ADD) && (fileEntry != null)) {
 							String portletResource =

@@ -16,7 +16,9 @@ import java.util.regex.Pattern;
  */
 public class RedirectUtil {
 
-	public static String clearSearchParameters(String redirect) {
+	public static String clearSearchParameters(
+		String destination, String redirect, String target) {
+
 		String portletName = _getPortletName(redirect);
 
 		if (Validator.isNull(portletName)) {
@@ -36,7 +38,7 @@ public class RedirectUtil {
 		).removeParameter(
 			portletName + "showSearchInfo"
 		).setParameter(
-			portletName + "mvcRenderCommandName", "/document_library/view"
+			portletName + target, destination
 		).build();
 	}
 

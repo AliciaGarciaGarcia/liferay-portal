@@ -149,7 +149,8 @@ public class EditFileEntryTypeMVCActionCommand
 
 			if (Validator.isNotNull(redirect)) {
 				if (cmd.equals(Constants.ADD) || cmd.equals(Constants.UPDATE)) {
-					redirect = RedirectUtil.clearSearchParameters(redirect);
+					redirect = RedirectUtil.clearSearchParameters(
+						"file_entry_types", redirect, "navigation");
 
 					actionRequest.setAttribute(WebKeys.REDIRECT, redirect);
 				}
