@@ -12,6 +12,7 @@ import com.liferay.document.library.kernel.exception.NoSuchFileShortcutException
 import com.liferay.document.library.kernel.model.DLFileShortcutConstants;
 import com.liferay.document.library.kernel.service.DLAppService;
 import com.liferay.document.library.kernel.service.DLTrashService;
+import com.liferay.document.library.web.internal.portlet.action.util.RedirectUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.TrashedModel;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
@@ -22,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.MultiSessionMessages;
 import com.liferay.portal.kernel.servlet.SessionErrors;
-import com.liferay.portal.kernel.url.URLBuilder;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -30,9 +30,6 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -75,7 +72,8 @@ public class EditFileShortcutMVCActionCommand extends BaseMVCActionCommand {
 
 			actionRequest.setAttribute(
 				WebKeys.REDIRECT,
-				_clearSearchParameters(_getRedirect(actionRequest)));
+				RedirectUtil.clearSearchParameters(
+					_getRedirect(actionRequest)));
 
 			String portletResource = ParamUtil.getString(
 				actionRequest, "portletResource");
@@ -98,30 +96,6 @@ public class EditFileShortcutMVCActionCommand extends BaseMVCActionCommand {
 
 			SessionErrors.add(actionRequest, exception.getClass());
 		}
-	}
-
-	private String _clearSearchParameters(String redirect) {
-		String portletName = _getPortletName(redirect);
-
-		if (Validator.isNull(portletName)) {
-			return redirect;
-		}
-
-		return URLBuilder.create(
-			redirect
-		).removeParameter(
-			portletName + "displayStyle"
-		).removeParameter(
-			portletName + "keywords"
-		).removeParameter(
-			portletName + "searchFolderId"
-		).removeParameter(
-			portletName + "searchRepositoryId"
-		).removeParameter(
-			portletName + "showSearchInfo"
-		).setParameter(
-			portletName + "mvcRenderCommandName", "/document_library/view"
-		).build();
 	}
 
 	private void _deleteFileShortcut(
@@ -151,20 +125,6 @@ public class EditFileShortcutMVCActionCommand extends BaseMVCActionCommand {
 		else {
 			_dlAppService.deleteFileShortcut(fileShortcutId);
 		}
-	}
-
-	private String _getPortletName(String url) {
-		String pattern = "(?<=\\?|&)([^&]+)(?=keywords)";
-
-		Pattern regexPattern = Pattern.compile(pattern);
-
-		Matcher matcher = regexPattern.matcher(url);
-
-		if (!matcher.find()) {
-			return null;
-		}
-
-		return matcher.group(1);
 	}
 
 	private String _getRedirect(ActionRequest actionRequest) {
