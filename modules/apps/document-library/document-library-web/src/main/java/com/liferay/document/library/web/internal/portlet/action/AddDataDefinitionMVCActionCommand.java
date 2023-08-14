@@ -10,12 +10,15 @@ import com.liferay.data.engine.rest.dto.v2_0.DataLayout;
 import com.liferay.data.engine.rest.resource.exception.DataDefinitionValidationException;
 import com.liferay.data.engine.rest.resource.v2_0.DataDefinitionResource;
 import com.liferay.document.library.constants.DLPortletKeys;
+import com.liferay.document.library.web.internal.portlet.action.util.RedirectUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import javax.portlet.ActionRequest;
@@ -80,9 +83,30 @@ public class AddDataDefinitionMVCActionCommand extends BaseMVCActionCommand {
 				actionRequest, dataDefinitionValidationException.getClass(),
 				dataDefinitionValidationException);
 		}
+
+		actionRequest.setAttribute(
+			WebKeys.REDIRECT,
+			RedirectUtil.clearSearchParameters(_getRedirect(actionRequest)));
+	}
+
+	private String _getRedirect(ActionRequest actionRequest) {
+		String redirect = (String)actionRequest.getAttribute(WebKeys.REDIRECT);
+
+		if (Validator.isBlank(redirect)) {
+			redirect = ParamUtil.getString(actionRequest, "redirect");
+
+			if (!Validator.isBlank(redirect)) {
+				redirect = _portal.escapeRedirect(redirect);
+			}
+		}
+
+		return redirect;
 	}
 
 	@Reference
 	private DataDefinitionResource.Factory _dataDefinitionResourceFactory;
+
+	@Reference
+	private Portal _portal;
 
 }
