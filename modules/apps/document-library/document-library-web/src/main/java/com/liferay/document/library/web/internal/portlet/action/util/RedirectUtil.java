@@ -19,9 +19,7 @@ import java.util.regex.Pattern;
  */
 public class RedirectUtil {
 
-	public static String clearSearchParameters(
-		String destination, String redirect, String target) {
-
+	public static String clearSearchParameters(String redirect) {
 		String portletName = _getPortletName(redirect);
 
 		if (Validator.isNull(portletName)) {

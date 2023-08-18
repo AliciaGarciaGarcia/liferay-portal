@@ -86,9 +86,7 @@ public class AddDataDefinitionMVCActionCommand extends BaseMVCActionCommand {
 
 		actionRequest.setAttribute(
 			WebKeys.REDIRECT,
-			RedirectUtil.clearSearchParameters(
-				"file_entry_metadata_sets", _getRedirect(actionRequest),
-				"navigation"));
+			RedirectUtil.clearSearchParameters(_getRedirect(actionRequest)));
 	}
 
 	private String _getRedirect(ActionRequest actionRequest) {
