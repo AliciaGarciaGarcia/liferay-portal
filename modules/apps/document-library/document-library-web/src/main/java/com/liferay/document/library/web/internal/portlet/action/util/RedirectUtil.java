@@ -43,7 +43,9 @@ public class RedirectUtil {
 	}
 
 	private static String _getPortletName(String url) {
-		String pattern = "(?<=\\?|&)([^&]+)(?=keywords)";
+		String pattern =
+			"(?<=\\?|&)([^&]+)" +
+				"(?=(assetCategoryId|assetTagId|extension|keywords))";
 
 		Pattern regexPattern = Pattern.compile(pattern);
 
