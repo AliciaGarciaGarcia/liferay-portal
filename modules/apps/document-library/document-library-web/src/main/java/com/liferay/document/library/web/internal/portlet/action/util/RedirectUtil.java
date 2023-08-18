@@ -5,9 +5,12 @@
 
 package com.liferay.document.library.web.internal.portlet.action.util;
 
-import com.liferay.portal.kernel.url.URLBuilder;
+import com.liferay.portal.kernel.util.HttpComponentsUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,21 +28,37 @@ public class RedirectUtil {
 			return redirect;
 		}
 
-		return URLBuilder.create(
-			redirect
-		).removeParameter(
-			portletName + "displayStyle"
-		).removeParameter(
-			portletName + "keywords"
-		).removeParameter(
-			portletName + "searchFolderId"
-		).removeParameter(
-			portletName + "searchRepositoryId"
-		).removeParameter(
-			portletName + "showSearchInfo"
-		).setParameter(
-			portletName + target, destination
-		).build();
+		List<String> parameters = _getParameters(redirect, portletName);
+
+		for (String parameter : parameters) {
+			if (!Objects.equals(parameter, "folderId") &&
+				!Objects.equals(parameter, "groupId") &&
+				!Objects.equals(parameter, "mvcRenderCommandName") &&
+				!Objects.equals(parameter, "navigation") &&
+				!Objects.equals(parameter, "repositoryId")) {
+
+				redirect = HttpComponentsUtil.removeParameter(
+					redirect, portletName + parameter);
+			}
+		}
+
+		return redirect;
+	}
+
+	private static List<String> _getParameters(String url, String portletName) {
+		List<String> parameters = new ArrayList<>();
+
+		String pattern = portletName + "([^=&]*)";
+
+		Pattern regexPattern = Pattern.compile(pattern);
+
+		Matcher matcher = regexPattern.matcher(url);
+
+		while (matcher.find()) {
+			parameters.add(matcher.group());
+		}
+
+		return parameters;
 	}
 
 	private static String _getPortletName(String url) {
