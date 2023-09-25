@@ -54,11 +54,11 @@ public class SharepointConnectionTest {
 			_SERVER_PORT, _SITE_PATH, _LIBRARY_NAME, _LIBRARY_PATH, _USER_NAME,
 			_PASSWORD);
 
-//		SecureXMLFactoryProviderUtil secureXMLFactoryProviderUtil =
-//			new SecureXMLFactoryProviderUtil();
-//
-//		secureXMLFactoryProviderUtil.setSecureXMLFactoryProvider(
-//			new SecureXMLFactoryProviderImpl());
+		SecureXMLFactoryProviderUtil secureXMLFactoryProviderUtil =
+			new SecureXMLFactoryProviderUtil();
+
+		secureXMLFactoryProviderUtil.setSecureXMLFactoryProvider(
+			new SecureXMLFactoryProviderImpl());
 	}
 
 	@AfterClass
