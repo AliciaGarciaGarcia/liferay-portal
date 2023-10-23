@@ -5,8 +5,12 @@
 
 package com.liferay.fragment.internal.renderer;
 
+import com.liferay.asset.kernel.AssetRendererFactoryRegistryUtil;
+import com.liferay.asset.kernel.model.AssetRenderer;
+import com.liferay.asset.kernel.model.AssetRendererFactory;
 import com.liferay.fragment.renderer.FragmentRenderer;
 import com.liferay.fragment.renderer.FragmentRendererContext;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
@@ -76,16 +80,21 @@ public class SaveContentFragmentRenderer extends BaseContentFragmentRenderer {
 		Tuple displayObject = getDisplayObject(
 			fragmentRendererContext, httpServletRequest);
 
-		savedContentTag.setClassName(
-			GetterUtil.getString(displayObject.getObject(0)));
-		savedContentTag.setClassPK(
-			GetterUtil.getLong(displayObject.getObject(1)));
+		String className = GetterUtil.getString(displayObject.getObject(0));
+		long classPK = GetterUtil.getLong(displayObject.getObject(1));
+
+		savedContentTag.setClassName(className);
+
+		savedContentTag.setClassPK(classPK);
 
 		ThemeDisplay themeDisplay =
 			(ThemeDisplay)httpServletRequest.getAttribute(
 				WebKeys.THEME_DISPLAY);
 
 		savedContentTag.setGroupId(themeDisplay.getScopeGroupId());
+
+		savedContentTag.setContentTitle(
+			_getAssetTitle(className, classPK, themeDisplay.getLocale()));
 
 		savedContentTag.setInTrash(false);
 
@@ -94,6 +103,39 @@ public class SaveContentFragmentRenderer extends BaseContentFragmentRenderer {
 		}
 		catch (Exception exception) {
 			_log.error("Unable to render content ratings fragment", exception);
+		}
+	}
+
+	private String _getAssetTitle(
+		String className, long classPK, Locale locale) {
+
+		try {
+			AssetRendererFactory<?> assetRendererFactory =
+				AssetRendererFactoryRegistryUtil.
+					getAssetRendererFactoryByClassName(className);
+
+			if (assetRendererFactory == null) {
+				return null;
+			}
+
+			AssetRenderer<?> assetRenderer =
+				assetRendererFactory.getAssetRenderer(classPK);
+
+			if (assetRenderer == null) {
+				return null;
+			}
+
+			return assetRenderer.getTitle(locale);
+		}
+		catch (PortalException portalException) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(
+					"Unable to get asset renderer with class primary key " +
+						classPK,
+					portalException);
+			}
+
+			return null;
 		}
 	}
 
