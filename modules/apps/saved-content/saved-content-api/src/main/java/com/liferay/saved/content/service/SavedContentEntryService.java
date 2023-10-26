@@ -15,7 +15,10 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.saved.content.model.SavedContentEntry;
+
+import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -56,11 +59,28 @@ public interface SavedContentEntryService extends BaseService {
 			long groupId, long userId, String className, long classPK)
 		throws PortalException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<SavedContentEntry> getGroupUserSavedContentEntries(
+		long groupId, long userId, int start, int end);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<SavedContentEntry> getGroupUserSavedContentEntries(
+		long groupId, long userId, int start, int end,
+		OrderByComparator<SavedContentEntry> orderByComparator);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int getGroupUserSavedContentEntriesCount(long groupId, long userId);
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
 	 * @return the OSGi service identifier
 	 */
 	public String getOSGiServiceIdentifier();
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public SavedContentEntry getSavedContentEntry(
+			long companyId, long userId, String className, long classPK)
+		throws PortalException;
 
 }

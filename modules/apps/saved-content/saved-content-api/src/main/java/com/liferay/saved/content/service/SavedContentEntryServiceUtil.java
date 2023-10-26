@@ -6,7 +6,10 @@
 package com.liferay.saved.content.service;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.saved.content.model.SavedContentEntry;
+
+import java.util.List;
 
 /**
  * Provides the remote service utility for SavedContentEntry. This utility wraps
@@ -51,6 +54,28 @@ public class SavedContentEntryServiceUtil {
 			groupId, userId, className, classPK);
 	}
 
+	public static List<SavedContentEntry> getGroupUserSavedContentEntries(
+		long groupId, long userId, int start, int end) {
+
+		return getService().getGroupUserSavedContentEntries(
+			groupId, userId, start, end);
+	}
+
+	public static List<SavedContentEntry> getGroupUserSavedContentEntries(
+		long groupId, long userId, int start, int end,
+		OrderByComparator<SavedContentEntry> orderByComparator) {
+
+		return getService().getGroupUserSavedContentEntries(
+			groupId, userId, start, end, orderByComparator);
+	}
+
+	public static int getGroupUserSavedContentEntriesCount(
+		long groupId, long userId) {
+
+		return getService().getGroupUserSavedContentEntriesCount(
+			groupId, userId);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -58,6 +83,14 @@ public class SavedContentEntryServiceUtil {
 	 */
 	public static String getOSGiServiceIdentifier() {
 		return getService().getOSGiServiceIdentifier();
+	}
+
+	public static SavedContentEntry getSavedContentEntry(
+			long companyId, long userId, String className, long classPK)
+		throws PortalException {
+
+		return getService().getSavedContentEntry(
+			companyId, userId, className, classPK);
 	}
 
 	public static SavedContentEntryService getService() {
