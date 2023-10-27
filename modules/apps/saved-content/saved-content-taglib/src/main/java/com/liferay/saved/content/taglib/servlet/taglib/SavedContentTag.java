@@ -61,6 +61,10 @@ public class SavedContentTag extends IncludeTag {
 		return _savedContentEntry;
 	}
 
+	public void isViewMode(boolean viewMode) {
+		_viewMode = viewMode;
+	}
+
 	public void setClassName(String className) {
 		if (className.equals(DLFileEntry.class.getName()) ||
 			className.equals(FileEntry.class.getName()) ||
@@ -107,6 +111,7 @@ public class SavedContentTag extends IncludeTag {
 		_saved = false;
 		_savedContentEntry = null;
 		_url = null;
+		_viewMode = false;
 	}
 
 	@Override
@@ -181,7 +186,7 @@ public class SavedContentTag extends IncludeTag {
 	private boolean _isEnabled(ThemeDisplay themeDisplay)
 		throws PortalException {
 
-		if (!_isInTrash() && themeDisplay.isSignedIn()) {
+		if (_viewMode && !_isInTrash() && themeDisplay.isSignedIn()) {
 			Group group = themeDisplay.getSiteGroup();
 
 			if (!group.isStagingGroup() && !group.isStagedRemotely()) {
@@ -234,5 +239,6 @@ public class SavedContentTag extends IncludeTag {
 	private boolean _saved;
 	private SavedContentEntry _savedContentEntry;
 	private String _url;
+	private boolean _viewMode;
 
 }
