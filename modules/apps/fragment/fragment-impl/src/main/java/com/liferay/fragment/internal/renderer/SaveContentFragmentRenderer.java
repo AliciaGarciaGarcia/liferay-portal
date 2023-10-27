@@ -77,6 +77,8 @@ public class SaveContentFragmentRenderer extends BaseContentFragmentRenderer {
 
 		SavedContentTag savedContentTag = new SavedContentTag();
 
+		savedContentTag.isViewMode(fragmentRendererContext.isViewMode());
+
 		Tuple displayObject = getDisplayObject(
 			fragmentRendererContext, httpServletRequest);
 
