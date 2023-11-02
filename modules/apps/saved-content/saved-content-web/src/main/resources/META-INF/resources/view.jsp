@@ -37,6 +37,30 @@ MySavedContentDisplayContext mySavedContentDisplayContext = new MySavedContentDi
 				value="<%= mySavedContentDisplayContext.getAssetTitle(savedContentEntry.getClassName(), savedContentEntry.getClassPK()) %>"
 			/>
 
+			<div class="autofit-row">
+				<div class="autofit-col autofit-col-expand pl-1">
+					<div class="table-title">
+					</div>
+				</div>
+			</div>
+
+			<liferay-ui:search-container-column-text
+				name="description"
+				value="<%= ResourceActionsUtil.getModelResource(locale, savedContentEntry.getClassName()) %>"
+			/>
+
+			<liferay-ui:search-container-column-icon
+				href="<%= mySavedContentDisplayContext.getURL(savedContentEntry.getClassName(), savedContentEntry.getClassPK()) %>"
+				icon="shortcut"
+				name="icon"
+			/>
+
+			<liferay-ui:search-container-column-text
+				href="<%= mySavedContentDisplayContext.getURL(savedContentEntry.getClassName(), savedContentEntry.getClassPK()) %>"
+				name="url"
+				value="url"
+			/>
+
 			<liferay-ui:search-container-column-icon
 				icon="trash"
 			/>
