@@ -11,9 +11,13 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.saved.content.constants.SavedContentConstants;
 import com.liferay.saved.content.model.SavedContentEntry;
 import com.liferay.saved.content.service.base.SavedContentEntryServiceBaseImpl;
+import com.liferay.saved.content.util.comparator.SavedContentEntryClassNameIdComparator;
+
+import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -70,6 +74,44 @@ public class SavedContentEntryServiceImpl
 			_savedContentEntryModelResourcePermission.check(
 				getPermissionChecker(), savedContentEntry, ActionKeys.VIEW);
 		}
+
+		return savedContentEntry;
+	}
+
+	@Override
+	public List<SavedContentEntry> getGroupUserSavedContentEntries(
+		long groupId, long userId, int start, int end) {
+
+		return savedContentEntryPersistence.findByG_U(
+			groupId, userId, start, end,
+			new SavedContentEntryClassNameIdComparator());
+	}
+
+	@Override
+	public List<SavedContentEntry> getGroupUserSavedContentEntries(
+		long groupId, long userId, int start, int end,
+		OrderByComparator<SavedContentEntry> orderByComparator) {
+
+		return savedContentEntryPersistence.findByG_U(
+			groupId, userId, start, end, orderByComparator);
+	}
+
+	@Override
+	public int getGroupUserSavedContentEntriesCount(long groupId, long userId) {
+		return savedContentEntryPersistence.filterCountByG_U(groupId, userId);
+	}
+
+	@Override
+	public SavedContentEntry getSavedContentEntry(
+			long companyId, long userId, String className, long classPK)
+		throws PortalException {
+
+		SavedContentEntry savedContentEntry =
+			savedContentEntryLocalService.getSavedContentEntry(
+				companyId, userId, className, classPK);
+
+		_savedContentEntryModelResourcePermission.check(
+			getPermissionChecker(), savedContentEntry, ActionKeys.VIEW);
 
 		return savedContentEntry;
 	}

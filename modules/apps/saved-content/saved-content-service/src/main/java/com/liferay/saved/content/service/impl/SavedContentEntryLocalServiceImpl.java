@@ -15,6 +15,7 @@ import com.liferay.portal.kernel.service.ResourceLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.saved.content.exception.DuplicateSavedContentEntryException;
+import com.liferay.saved.content.exception.NoSuchSavedContentEntryException;
 import com.liferay.saved.content.model.SavedContentEntry;
 import com.liferay.saved.content.service.base.SavedContentEntryLocalServiceBaseImpl;
 
@@ -100,6 +101,16 @@ public class SavedContentEntryLocalServiceImpl
 
 		return savedContentEntryPersistence.fetchByG_U_C_C(
 			groupId, userId, _classNameLocalService.getClassNameId(className),
+			classPK);
+	}
+
+	@Override
+	public SavedContentEntry getSavedContentEntry(
+			long companyId, long userId, String className, long classPK)
+		throws NoSuchSavedContentEntryException {
+
+		return savedContentEntryPersistence.findByC_U_C_C(
+			companyId, userId, _classNameLocalService.getClassNameId(className),
 			classPK);
 	}
 
