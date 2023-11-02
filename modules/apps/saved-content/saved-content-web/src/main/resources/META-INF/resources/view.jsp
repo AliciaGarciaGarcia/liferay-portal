@@ -36,6 +36,16 @@ MySavedContentDisplayContext mySavedContentDisplayContext = new MySavedContentDi
 				name="title"
 				value="<%= mySavedContentDisplayContext.getAssetTitle(savedContentEntry.getClassName(), savedContentEntry.getClassPK()) %>"
 			/>
+
+			<liferay-ui:search-container-column-icon
+				icon="trash"
+			/>
+
+			<liferay-ui:search-container-column-text
+				href="<%= mySavedContentDisplayContext.getRemoveSavedContentURL(savedContentEntry.getClassName(), savedContentEntry.getClassPK()) %>"
+				name="trash"
+				value="trash"
+			/>
 		</liferay-ui:search-container-row>
 
 		<liferay-ui:search-iterator
