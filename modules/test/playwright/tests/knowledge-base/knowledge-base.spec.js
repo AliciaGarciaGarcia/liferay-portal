@@ -13,6 +13,18 @@ export const test = mergeTests(
 	knowledgeBaseTest
 );
 
+async function _createSimpleKBArticle(_knowledgeBaseHelper, page, title, content) {
+	await _knowledgeBaseHelper.openAdmin();
+
+	await page.getByLabel('New').click();
+	await page.getByRole('menuitem', {name: 'Basic Article'}).click();
+	await page.getByPlaceholder('Untitled Article').fill(title);
+	await page.frameLocator('iframe').getByRole('textbox').fill(
+		content);
+}
+
+const kbArticleTitle = 'KB Article title';
+
 test(
 	'Create and delete a Knowledge Base Article',
 	async ({
@@ -20,24 +32,20 @@ test(
 		   }) => {
 		await page.goto('/');
 
-		//this only affects that the portal-ext.properties has the FF active
+		//this only affects that the portal-ext.properties has the FF active, but on this stage we can not know it the FF were enabled or not.
 		await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', 'false');
 
-		await _knowledgeBaseHelper.openAdmin();
+		await _createSimpleKBArticle(_knowledgeBaseHelper, page, kbArticleTitle, 'KB Article content');
 
-		await page.getByLabel('New').click();
-		await page.getByRole('menuitem', {name: 'Basic Article'}).click();
-		await page.getByPlaceholder('Untitled Article').fill('Test Article');
-		await page.frameLocator('iframe').getByRole('textbox').fill(
-			'test content');
 		await page.getByRole('button', {name: 'Publish'}).click();
 
-		await expect(page.locator(
-			'[id="_com_liferay_knowledge_base_web_portlet_AdminPortlet_kbObjects_1"]').getByRole(
-			'link', {name: 'Test Article'})).toBeVisible();
-		await page.locator(
-			'[id="_com_liferay_knowledge_base_web_portlet_AdminPortlet_kbObjects_1"]').getByLabel(
-			'Show Actions').click();
+		const _firstKBArticle = page.locator(
+			'[id="_com_liferay_knowledge_base_web_portlet_AdminPortlet_kbObjects_1"]');
+
+		await expect(_firstKBArticle.getByRole('link', {name: kbArticleTitle})).toBeVisible();
+
+		await _firstKBArticle.getByLabel('Show Actions').click();
+
 		await page.once('dialog', dialog => {
 			console.log(`Dialog message: ${dialog.message()}`);
 			dialog.accept().catch(() => {
@@ -59,30 +67,23 @@ test(
 
 		await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', 'true');
 
-		await _knowledgeBaseHelper.openAdmin();
+		await _createSimpleKBArticle(_knowledgeBaseHelper, page, kbArticleTitle, 'KB Article content');
 
-		await page.getByLabel('New').click();
-		await page.getByRole('menuitem', {name: 'Basic Article'}).click();
-		await page.getByPlaceholder('Untitled Article').fill('Test Article');
-		await page.frameLocator('iframe').getByRole('textbox').fill(
-			'test content');
 		await page.getByRole('button', {name: 'Publish'}).click();
+		await expect(
+			page.getByRole('menuitem', {name: 'Publish'})).toBeVisible();
 		await expect(
 			page.getByRole('menuitem', {name: 'Publish'})).toBeVisible();
 		await page.getByRole('menuitem', {name: 'Publish'}).click();
 
 		await expect(page.locator(
 			'[id="_com_liferay_knowledge_base_web_portlet_AdminPortlet_kbObjects_1"]').getByRole(
-			'link', {name: 'Test Article'})).toBeVisible();
+			'link', {name: kbArticleTitle})).toBeVisible();
 
 		await page.locator(
 			'[id="_com_liferay_knowledge_base_web_portlet_AdminPortlet_kbObjects_1"]').getByLabel(
 			'Show Actions').click();
-		await page.once('dialog', dialog => {
-			console.log(`Dialog message: ${dialog.message()}`);
-			dialog.accept().catch(() => {
-			});
-		});
+
 		await page.getByRole('menuitem', {name: 'Delete'}).click();
 
 		await expect(page.getByRole(
