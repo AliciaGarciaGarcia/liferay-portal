@@ -4,9 +4,13 @@
  */
 import {expect, mergeTests} from "@playwright/test";
 import {test as apiHelpersTest} from '../../fixtures/apiHelpers.fixture';
+import {
+	test as knowledgeBaseTest
+} from '../../fixtures/knowledgeBase/knowldegbeBase.fixure';
 
 export const test = mergeTests(
-	apiHelpersTest
+	apiHelpersTest,
+	knowledgeBaseTest
 );
 
 test('Create and delete a Knowledge Base Article', async ({
@@ -45,7 +49,51 @@ test('Create and delete a Knowledge Base Article', async ({
 	});
 	await page.getByRole('menuitem', {name: 'Delete'}).click();
 
-	await expect(page.getByRole('heading',
+	await expect(page.getByRole(
+		'heading',
 		{name: 'Knowledge base is empty.'})).toBeVisible();
 	await page.close();
 });
+
+test(
+	'Publish and delete with schedule menu',
+	async ({
+			   _apiHelpers, _knowledgeBaseHelper, page
+		   }) => {
+
+		await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', 'true');
+
+		await _knowledgeBaseHelper.openAdmin();
+
+		await page.getByLabel('New').click();
+		await page.getByRole('menuitem', {name: 'Basic Article'}).click();
+		await page.getByPlaceholder('Untitled Article').fill('Test Article');
+		await page.frameLocator('iframe').getByRole('textbox').fill(
+			'test content');
+		await page.getByRole('button', {name: 'Publish'}).click();
+		await expect(
+			page.getByRole('menuitem', {name: 'Publish'})).toBeVisible();
+		await page.getByRole('menuitem', {name: 'Publish'}).click();
+
+		await expect(page.locator(
+			'[id="_com_liferay_knowledge_base_web_portlet_AdminPortlet_kbObjects_1"]').getByRole(
+			'link', {name: 'Test Article'})).toBeVisible();
+
+		await page.locator(
+			'[id="_com_liferay_knowledge_base_web_portlet_AdminPortlet_kbObjects_1"]').getByLabel(
+			'Show Actions').click();
+		await page.once('dialog', dialog => {
+			console.log(`Dialog message: ${dialog.message()}`);
+			dialog.accept().catch(() => {
+			});
+		});
+		await page.getByRole('menuitem', {name: 'Delete'}).click();
+
+		await expect(page.getByRole(
+			'heading',
+			{name: 'Knowledge base is empty.'})).toBeVisible();
+
+		await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', 'false');
+
+		await page.close();
+	});
