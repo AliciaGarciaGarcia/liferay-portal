@@ -19,10 +19,6 @@ export class KnowledgeBaseHelper {
 
 		await this.page.getByRole('menuitem', { name: 'Content & Data' }).click();
 		await this.page.getByRole('menuitem', { name: 'Knowledge Base' }).click();
-
-		return {
-			page: this.page
-		};
 	}
 
 }
