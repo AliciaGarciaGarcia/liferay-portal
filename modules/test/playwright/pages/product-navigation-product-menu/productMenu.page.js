@@ -5,22 +5,16 @@
 
 export class ProductMenuPage {
 	constructor(page) {
-		this.closeProductMenuButton = page.getByLabel(
-			'Close Product Menu'
-		);
+		this.closeProductMenuButton = page.getByLabel('Close Product Menu');
 		this.contentAndDateMenuItem = this.page.getByRole('menuitem', {
-				exact: true,
-				name: 'Content & Data'
-			}
-		);
+			exact: true,
+			name: 'Content & Data',
+		});
 		this.knowledgeBaseMenuItem = this.page.getByRole('menuitem', {
-				exact: true,
-				name: 'Knowledge Base'
-			}
-		);
-		this.openProductMenuButton = page.getByLabel(
-			'Open Product Menu'
-		);
+			exact: true,
+			name: 'Knowledge Base',
+		});
+		this.openProductMenuButton = page.getByLabel('Open Product Menu');
 		this.page = page;
 	}
 
@@ -30,7 +24,7 @@ export class ProductMenuPage {
 
 	async openToProductMenu() {
 		await this.goto();
-		let openProductMenuVisible = await this.openProductMenuButton.isVisible();
+		const openProductMenuVisible = await this.openProductMenuButton.isVisible();
 
 		if (openProductMenuVisible) {
 			await this.openProductMenuButton.click();
@@ -39,7 +33,7 @@ export class ProductMenuPage {
 
 	async closeToProductMenu() {
 		await this.goto();
-		let closeProductMenuVisible = await this.closeProductMenuButton.isVisible();
+		const closeProductMenuVisible = await this.closeProductMenuButton.isVisible();
 
 		if (closeProductMenuVisible) {
 			await this.closeProductMenuButton.click();
@@ -55,5 +49,4 @@ export class ProductMenuPage {
 		await this.openToProductMenu();
 		await this.contentAndDateMenuItem.click();
 	}
-
 }
