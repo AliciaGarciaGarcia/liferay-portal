@@ -14,7 +14,7 @@ async function _createSimpleKBArticle(
 	_knowledgeBaseHelper,
 	page,
 	content,
-	title,
+	title
 ) {
 	await _knowledgeBaseHelper.openAdmin();
 
@@ -42,7 +42,7 @@ test('Create and delete a Knowledge Base Article', async ({
 		_knowledgeBaseHelper,
 		page,
 		kbArticleContent,
-		kbArticleTitle,
+		kbArticleTitle
 	);
 
 	await page.getByRole('button', {name: 'Publish'}).click();
@@ -80,7 +80,7 @@ test('Publish and delete with schedule menu', async ({
 		_knowledgeBaseHelper,
 		page,
 		kbArticleContent,
-		kbArticleTitle,
+		kbArticleTitle
 	);
 
 	await page.getByRole('button', {name: 'Publish'}).click();

@@ -24,7 +24,7 @@ export class ProductMenuPage {
 
 	async openToProductMenu() {
 		await this.goto();
-		let openProductMenuVisible = await this.openProductMenuButton.isVisible();
+		const openProductMenuVisible = await this.openProductMenuButton.isVisible();
 
 		if (openProductMenuVisible) {
 			await this.openProductMenuButton.click();
@@ -33,7 +33,7 @@ export class ProductMenuPage {
 
 	async closeToProductMenu() {
 		await this.goto();
-		let closeProductMenuVisible = await this.closeProductMenuButton.isVisible();
+		const closeProductMenuVisible = await this.closeProductMenuButton.isVisible();
 
 		if (closeProductMenuVisible) {
 			await this.closeProductMenuButton.click();
@@ -47,6 +47,13 @@ export class ProductMenuPage {
 
 	async goToContentAndData() {
 		await this.openToProductMenu();
-		await this.contentAndDataMenuItem.click();
+		const isClosed =
+			(await this.contentAndDataMenuItem.getAttribute(
+				'aria-expanded'
+			)) === 'false';
+
+		if (isClosed) {
+			await this.contentAndDataMenuItem.click();
+		}
 	}
 }
