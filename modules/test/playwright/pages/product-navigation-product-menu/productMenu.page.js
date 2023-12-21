@@ -6,11 +6,11 @@
 export class ProductMenuPage {
 	constructor(page) {
 		this.closeProductMenuButton = page.getByLabel('Close Product Menu');
-		this.contentAndDateMenuItem = this.page.getByRole('menuitem', {
+		this.contentAndDateMenuItem = page.getByRole('menuitem', {
 			exact: true,
 			name: 'Content & Data',
 		});
-		this.knowledgeBaseMenuItem = this.page.getByRole('menuitem', {
+		this.knowledgeBaseMenuItem = page.getByRole('menuitem', {
 			exact: true,
 			name: 'Knowledge Base',
 		});
