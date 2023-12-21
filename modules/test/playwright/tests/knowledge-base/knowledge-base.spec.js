@@ -13,8 +13,8 @@ export const test = mergeTests(apiHelpersTest, knowledgeBaseTest);
 async function _createSimpleKBArticle(
 	_knowledgeBaseHelper,
 	page,
+	content,
 	title,
-	content
 ) {
 	await _knowledgeBaseHelper.openAdmin();
 
@@ -24,7 +24,8 @@ async function _createSimpleKBArticle(
 	await page.frameLocator('iframe').getByRole('textbox').fill(content);
 }
 
-const kbArticleTitle = 'KB Article title';
+const kbArticleContent = 'KB Article Content';
+const kbArticleTitle = 'KB Article Title';
 
 test('Create and delete a Knowledge Base Article', async ({
 	_apiHelpers,
@@ -40,8 +41,8 @@ test('Create and delete a Knowledge Base Article', async ({
 	await _createSimpleKBArticle(
 		_knowledgeBaseHelper,
 		page,
+		kbArticleContent,
 		kbArticleTitle,
-		'KB Article content'
 	);
 
 	await page.getByRole('button', {name: 'Publish'}).click();
@@ -78,8 +79,8 @@ test('Publish and delete with schedule menu', async ({
 	await _createSimpleKBArticle(
 		_knowledgeBaseHelper,
 		page,
+		kbArticleContent,
 		kbArticleTitle,
-		'KB Article content'
 	);
 
 	await page.getByRole('button', {name: 'Publish'}).click();
