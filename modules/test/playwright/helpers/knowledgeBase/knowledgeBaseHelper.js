@@ -13,7 +13,7 @@ export class KnowledgeBaseHelper {
 	}
 
 	async openAdmin() {
-		await this.productMenuPage.goToKnowledgeBase();
+		await this.productMenuPage.goToKnowledgeBaseMenuItem();
 	}
 
 }

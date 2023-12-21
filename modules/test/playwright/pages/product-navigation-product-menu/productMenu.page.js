@@ -1,11 +1,24 @@
 /**
- * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-FileCopyrightText: (c) 2023 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
 export class ProductMenuPage {
 	constructor(page) {
-		this.productMenuButton = page.getByLabel(
+		this.closeProductMenuButton = page.getByLabel(
+			'Close Product Menu'
+		);
+		this.contentAndDateMenuItem = this.page.getByRole('menuitem', {
+				exact: true,
+				name: 'Content & Data'
+			}
+		);
+		this.knowledgeBaseMenuItem = this.page.getByRole('menuitem', {
+				exact: true,
+				name: 'Knowledge Base'
+			}
+		);
+		this.openProductMenuButton = page.getByLabel(
 			'Open Product Menu'
 		);
 		this.page = page;
@@ -15,23 +28,32 @@ export class ProductMenuPage {
 		await this.page.goto('/');
 	}
 
-	async goToProductMenu() {
+	async openToProductMenu() {
 		await this.goto();
-		const openProductMenuVisible = await this.productMenuButton.isVisible();
+		let openProductMenuVisible = await this.openProductMenuButton.isVisible();
 
 		if (openProductMenuVisible) {
-			await this.productMenuButton.click();
+			await this.openProductMenuButton.click();
 		}
 	}
 
-	async goToKnowledgeBase() {
+	async closeToProductMenu() {
+		await this.goto();
+		let closeProductMenuVisible = await this.closeProductMenuButton.isVisible();
+
+		if (closeProductMenuVisible) {
+			await this.closeProductMenuButton.click();
+		}
+	}
+
+	async goToKnowledgeBaseMenuItem() {
 		await this.goToContentAndData();
-		await this.page.getByRole('menuitem', { name: 'Knowledge Base' }).click();
+		await this.knowledgeBaseMenuItem.click();
 	}
 
 	async goToContentAndData() {
-		await this.goToProductMenu();
-		await this.page.getByRole('menuitem', { name: 'Content & Data' }).click();
+		await this.openToProductMenu();
+		await this.contentAndDateMenuItem.click();
 	}
 
 }
