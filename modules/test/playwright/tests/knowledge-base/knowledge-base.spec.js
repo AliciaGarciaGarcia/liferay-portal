@@ -10,20 +10,6 @@ import {test as knowledgeBaseTest} from '../../fixtures/knowledgeBase/knowldegbe
 
 export const test = mergeTests(apiHelpersTest, knowledgeBaseTest);
 
-async function _createSimpleKBArticle(
-	_knowledgeBaseHelper,
-	page,
-	content,
-	title
-) {
-	await _knowledgeBaseHelper.openAdmin();
-
-	await page.getByLabel('New').click();
-	await page.getByRole('menuitem', {name: 'Basic Article'}).click();
-	await page.getByPlaceholder('Untitled Article').fill(title);
-	await page.frameLocator('iframe').getByRole('textbox').fill(content);
-}
-
 const kbArticleContent = 'KB Article Content';
 const kbArticleTitle = 'KB Article Title';
 
@@ -38,13 +24,10 @@ test('Create and delete a Knowledge Base Article', async ({
 
 	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', 'false');
 
-	await _createSimpleKBArticle(
-		_knowledgeBaseHelper,
-		page,
+	await _knowledgeBaseHelper.createNewKnowledgeBaseArticle(
 		kbArticleContent,
 		kbArticleTitle
 	);
-
 	await page.getByRole('button', {name: 'Publish'}).click();
 
 	const _firstKBArticle = page.locator(
@@ -76,9 +59,7 @@ test('Publish and delete with schedule menu', async ({
 }) => {
 	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', 'true');
 
-	await _createSimpleKBArticle(
-		_knowledgeBaseHelper,
-		page,
+	await _knowledgeBaseHelper.createNewKnowledgeBaseArticle(
 		kbArticleContent,
 		kbArticleTitle
 	);
