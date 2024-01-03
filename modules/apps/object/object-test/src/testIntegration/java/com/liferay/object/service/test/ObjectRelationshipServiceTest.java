@@ -121,7 +121,6 @@ public class ObjectRelationshipServiceTest {
 				TestPropsValues.getUserId(),
 				_objectDefinition2.getObjectDefinitionId());
 
-		_originalName = PrincipalThreadLocal.getName();
 		_originalPermissionChecker =
 			PermissionThreadLocal.getPermissionChecker();
 		_user = TestPropsValues.getUser();
@@ -130,8 +129,6 @@ public class ObjectRelationshipServiceTest {
 	@After
 	public void tearDown() {
 		PermissionThreadLocal.setPermissionChecker(_originalPermissionChecker);
-
-		PrincipalThreadLocal.setName(_originalName);
 	}
 
 	@Test
@@ -473,7 +470,6 @@ public class ObjectRelationshipServiceTest {
 	@Inject
 	private ObjectRelationshipService _objectRelationshipService;
 
-	private String _originalName;
 	private PermissionChecker _originalPermissionChecker;
 
 	@Inject

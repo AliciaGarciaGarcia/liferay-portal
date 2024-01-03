@@ -83,7 +83,6 @@ public class CommerceServiceTest {
 			CommerceChannelConstants.CHANNEL_TYPE_SITE, null,
 			_commerceCurrency.getCode(), _serviceContext);
 
-		_originalName = PrincipalThreadLocal.getName();
 		_originalPermissionChecker =
 			PermissionThreadLocal.getPermissionChecker();
 		_user = UserTestUtil.addUser(_company);
@@ -95,7 +94,6 @@ public class CommerceServiceTest {
 			_commerceChannel.getGroupId());
 
 		PermissionThreadLocal.setPermissionChecker(_originalPermissionChecker);
-		PrincipalThreadLocal.setName(_originalName);
 	}
 
 	@Test
@@ -275,7 +273,6 @@ public class CommerceServiceTest {
 	@DeleteAfterTestRun
 	private Group _group;
 
-	private String _originalName;
 	private PermissionChecker _originalPermissionChecker;
 
 	@Inject

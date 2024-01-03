@@ -85,8 +85,6 @@ public class CompanyLogServletTest {
 
 		_companyAdminUser = UserTestUtil.addCompanyAdminUser(_company);
 
-		_originalName = PrincipalThreadLocal.getName();
-
 		PrincipalThreadLocal.setName(_companyAdminUser.getUserId());
 
 		File companyLogDirectory = Log4JUtil.getCompanyLogDirectory(
@@ -115,8 +113,6 @@ public class CompanyLogServletTest {
 
 			parentDirectory.delete();
 		}
-
-		PrincipalThreadLocal.setName(_originalName);
 	}
 
 	@Ignore
@@ -538,7 +534,6 @@ public class CompanyLogServletTest {
 	private static CompanyLocalService _companyLocalService;
 
 	private static File _file;
-	private static String _originalName;
 
 	@Inject
 	private JSONFactory _jsonFactory;

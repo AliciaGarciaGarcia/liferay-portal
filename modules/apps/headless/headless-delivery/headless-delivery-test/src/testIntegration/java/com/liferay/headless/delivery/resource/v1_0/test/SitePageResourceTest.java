@@ -154,7 +154,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -185,10 +184,6 @@ public class SitePageResourceTest extends BaseSitePageResourceTestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 
-		_originalName = PrincipalThreadLocal.getName();
-
-		PrincipalThreadLocal.setName(TestPropsValues.getUserId());
-
 		SitePageResource.Builder builder = SitePageResource.builder();
 
 		sitePageResource = builder.authentication(
@@ -198,14 +193,6 @@ public class SitePageResourceTest extends BaseSitePageResourceTestCase {
 		).locale(
 			LocaleUtil.getDefault()
 		).build();
-	}
-
-	@After
-	@Override
-	public void tearDown() throws Exception {
-		super.tearDown();
-
-		PrincipalThreadLocal.setName(_originalName);
 	}
 
 	@Override
@@ -2353,7 +2340,6 @@ public class SitePageResourceTest extends BaseSitePageResourceTestCase {
 			configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
 		}
 	};
-	private String _originalName;
 
 	@Inject
 	private PermissionCheckerFactory _permissionCheckerFactory;

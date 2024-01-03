@@ -49,7 +49,6 @@ public class ListTypeDefinitionServiceTest {
 	@Before
 	public void setUp() throws Exception {
 		_adminUser = TestPropsValues.getUser();
-		_originalName = PrincipalThreadLocal.getName();
 		_originalPermissionChecker =
 			PermissionThreadLocal.getPermissionChecker();
 		_user = UserTestUtil.addUser();
@@ -58,8 +57,6 @@ public class ListTypeDefinitionServiceTest {
 	@After
 	public void tearDown() {
 		PermissionThreadLocal.setPermissionChecker(_originalPermissionChecker);
-
-		PrincipalThreadLocal.setName(_originalName);
 	}
 
 	@Test
@@ -257,7 +254,6 @@ public class ListTypeDefinitionServiceTest {
 	@Inject
 	private ListTypeDefinitionService _listTypeDefinitionService;
 
-	private String _originalName;
 	private PermissionChecker _originalPermissionChecker;
 	private User _user;
 
