@@ -22,7 +22,7 @@ test('Create and delete a Knowledge Base Article', async ({
 
 	// this only affects that the portal-ext.properties has the FF active, but on this stage we can not know it the FF were enabled or not.
 
-	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', 'false');
+	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
 
 	await _knowledgeBaseHelper.createNewKnowledgeBaseArticle(
 		kbArticleContent,
@@ -57,7 +57,7 @@ test('Publish and delete with schedule menu', async ({
 	_knowledgeBaseHelper,
 	page,
 }) => {
-	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', 'true');
+	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', true);
 
 	await _knowledgeBaseHelper.createNewKnowledgeBaseArticle(
 		kbArticleContent,
@@ -90,7 +90,7 @@ test('Publish and delete with schedule menu', async ({
 		page.getByRole('heading', {name: 'Knowledge base is empty.'})
 	).toBeVisible();
 
-	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', 'false');
+	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
 
 	await page.close();
 });
