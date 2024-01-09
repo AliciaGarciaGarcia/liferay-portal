@@ -23,7 +23,6 @@ export class KnowledgeBasePage {
 	}
 
 	async goto() {
-		await this.page.goto('/');
 		await this.productMenuPage.goToKnowledgeBaseMenuItem();
 	}
 

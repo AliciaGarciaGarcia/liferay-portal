@@ -20,8 +20,10 @@ export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
 		this.basicArticleMenuItem = page.getByRole('menuitem', {
 			name: 'Basic Article',
 		});
-		this.contentTextBox = this.contentFrameLocator.getByRole('textbox');
+
 		this.contentFrameLocator = page.frameLocator('iframe');
+		this.contentTextBox = this.contentFrameLocator.getByRole('textbox');
+
 		this.newButton = page.getByLabel('New');
 		this.titlePlaceholder = page.getByPlaceholder('Untitled Article');
 	}
