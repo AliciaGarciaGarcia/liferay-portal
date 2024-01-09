@@ -3,23 +3,23 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {Locator, Page} from '@playwright/test';
+
 import {ProductMenuPage} from '../product-navigation-product-menu/productMenu.page';
-import {Locator, Page} from "@playwright/test";
 
 export class KnowledgeBasePage {
 	readonly foldersAndArticlesButton: Locator;
-	readonly templatesButton: Locator;
-	readonly suggestionsButton: Locator;
 	readonly page: Page;
 	readonly productMenuPage: ProductMenuPage;
+	readonly suggestionsButton: Locator;
+	readonly templatesButton: Locator;
 
 	constructor(page: Page) {
 		this.foldersAndArticlesButton = page.getByLabel('Folders and Articles');
-		this.templatesButton = page.getByLabel('Templates');
-		this.suggestionsButton = page.getByLabel('Suggestions');
-
-		this.productMenuPage = new ProductMenuPage(page);
 		this.page = page;
+		this.productMenuPage = new ProductMenuPage(page);
+		this.suggestionsButton = page.getByLabel('Suggestions');
+		this.templatesButton = page.getByLabel('Templates');
 	}
 
 	async goto() {

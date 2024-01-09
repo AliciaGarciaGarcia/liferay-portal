@@ -3,27 +3,27 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {FrameLocator, Locator, Page} from '@playwright/test';
+
 import {KnowledgeBasePage} from './KnowledgeBase.page';
-import {FrameLocator, Locator, Page} from "@playwright/test";
 
 export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
-
-	readonly newButton: Locator;
 	readonly basicArticleMenuItem: Locator;
-	readonly titlePlaceholder: Locator;
-	readonly contentTextbox: Locator;
 	readonly contentFrameLocator: FrameLocator;
+	readonly contentTextBox: Locator;
+	readonly newButton: Locator;
 	readonly page: Page;
+	readonly titlePlaceholder: Locator;
 
 	constructor(page: Page) {
 		super(page);
-		this.newButton = page.getByLabel('New');
 		this.basicArticleMenuItem = page.getByRole('menuitem', {
 			name: 'Basic Article',
 		});
-		this.titlePlaceholder = page.getByPlaceholder('Untitled Article');
+		this.contentTextBox = this.contentFrameLocator.getByRole('textbox');
 		this.contentFrameLocator = page.frameLocator('iframe');
-		this.contentTextbox = this.contentFrameLocator.getByRole('textbox');
+		this.newButton = page.getByLabel('New');
+		this.titlePlaceholder = page.getByPlaceholder('Untitled Article');
 	}
 
 	async createNewKnowledgeBaseArticle(content: string, title: string) {
@@ -31,6 +31,6 @@ export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
 		await this.newButton.click();
 		await this.basicArticleMenuItem.click();
 		await this.titlePlaceholder.fill(title);
-		await this.contentTextbox.fill(content);
+		await this.contentTextBox.fill(content);
 	}
 }
