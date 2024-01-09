@@ -5,8 +5,8 @@
 
 import {expect, mergeTests} from '@playwright/test';
 
-import {test as apiHelpersTest} from '../../fixtures/apiHelpers.fixture';
-import {test as knowledgeBaseTest} from '../../fixtures/knowledgeBase/knowldegbeBase.fixure';
+import {apiHelpersTest} from '../../fixtures/apiHelpers.fixture';
+import {knowledgeBaseTest} from '../../fixtures/knowledgeBase/knowldegbeBase.fixure';
 
 export const test = mergeTests(apiHelpersTest, knowledgeBaseTest);
 
@@ -40,7 +40,7 @@ test('Create and delete a Knowledge Base Article', async ({
 
 	await _firstKBArticle.getByLabel('Show Actions').click();
 
-	await page.once('dialog', (dialog) => {
+	page.once('dialog', (dialog) => {
 		console.log(`Dialog message: ${dialog.message()}`);
 		dialog.accept().catch(() => {});
 	});

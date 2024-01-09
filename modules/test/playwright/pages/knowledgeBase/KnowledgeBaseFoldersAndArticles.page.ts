@@ -4,9 +4,18 @@
  */
 
 import {KnowledgeBasePage} from './KnowledgeBase.page';
+import {FrameLocator, Locator, Page} from "@playwright/test";
 
 export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
-	constructor(page) {
+
+	readonly newButton: Locator;
+	readonly basicArticleMenuItem: Locator;
+	readonly titlePlaceholder: Locator;
+	readonly contentTextbox: Locator;
+	readonly contentFrameLocator: FrameLocator;
+	readonly page: Page;
+
+	constructor(page: Page) {
 		super(page);
 		this.newButton = page.getByLabel('New');
 		this.basicArticleMenuItem = page.getByRole('menuitem', {
@@ -17,7 +26,7 @@ export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
 		this.contentTextbox = this.contentFrameLocator.getByRole('textbox');
 	}
 
-	async createNewKnowledgeBaseArticle(content, title) {
+	async createNewKnowledgeBaseArticle(content: string, title: string) {
 		await this.goToFoldersAndArticles();
 		await this.newButton.click();
 		await this.basicArticleMenuItem.click();

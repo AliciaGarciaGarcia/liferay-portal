@@ -2,9 +2,17 @@
  * SPDX-FileCopyrightText: (c) 2023 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
+import {Locator, Page} from "@playwright/test";
 
 export class ProductMenuPage {
-	constructor(page) {
+
+	readonly closeProductMenuButton: Locator;
+	readonly contentAndDataMenuItem: Locator;
+	readonly knowledgeBaseMenuItem: Locator;
+	readonly openProductMenuButton: Locator;
+	readonly page: Page;
+
+	constructor(page: Page) {
 		this.closeProductMenuButton = page.getByLabel('Close Product Menu');
 		this.contentAndDataMenuItem = page.getByRole('menuitem', {
 			exact: true,

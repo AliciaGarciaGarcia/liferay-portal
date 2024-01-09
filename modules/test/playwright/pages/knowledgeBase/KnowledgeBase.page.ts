@@ -4,9 +4,16 @@
  */
 
 import {ProductMenuPage} from '../product-navigation-product-menu/productMenu.page';
+import {Locator, Page} from "@playwright/test";
 
 export class KnowledgeBasePage {
-	constructor(page) {
+	readonly foldersAndArticlesButton: Locator;
+	readonly templatesButton: Locator;
+	readonly suggestionsButton: Locator;
+	readonly page: Page;
+	readonly productMenuPage: ProductMenuPage;
+
+	constructor(page: Page) {
 		this.foldersAndArticlesButton = page.getByLabel('Folders and Articles');
 		this.templatesButton = page.getByLabel('Templates');
 		this.suggestionsButton = page.getByLabel('Suggestions');

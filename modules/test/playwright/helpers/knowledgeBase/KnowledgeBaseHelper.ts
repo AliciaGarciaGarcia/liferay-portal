@@ -5,9 +5,14 @@
 
 import {KnowledgeBaseFoldersAndArticlesPage} from '../../pages/knowledgeBase/KnowledgeBaseFoldersAndArticles.page';
 import {ProductMenuPage} from '../../pages/product-navigation-product-menu/productMenu.page';
+import {Page} from "@playwright/test";
 
 export class KnowledgeBaseHelper {
-	constructor(page) {
+	readonly knowledgeBaseFoldersAndArticlesPage: KnowledgeBaseFoldersAndArticlesPage;
+	readonly page: Page;
+	readonly productMenuPage: ProductMenuPage;
+
+	constructor(page: Page) {
 		this.productMenuPage = new ProductMenuPage(page);
 		this.knowledgeBaseFoldersAndArticlesPage = new KnowledgeBaseFoldersAndArticlesPage(
 			page
@@ -20,7 +25,7 @@ export class KnowledgeBaseHelper {
 		await this.knowledgeBaseFoldersAndArticlesPage.goto();
 	}
 
-	async createNewKnowledgeBaseArticle(content, title) {
+	async createNewKnowledgeBaseArticle(content: any, title: any) {
 		await this.openAdmin();
 		await this.knowledgeBaseFoldersAndArticlesPage.createNewKnowledgeBaseArticle(
 			content,
