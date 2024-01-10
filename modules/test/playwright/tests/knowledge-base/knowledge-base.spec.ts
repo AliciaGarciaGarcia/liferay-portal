@@ -6,7 +6,7 @@
 import {expect, mergeTests} from '@playwright/test';
 
 import {apiHelpersTest} from '../../fixtures/apiHelpers.fixture';
-import {knowledgeBaseTest} from '../../fixtures/knowledgeBase/knowldegbeBase.fixure';
+import {knowledgeBaseTest} from '../../fixtures/knowledgeBase/knowldegbeBase.fixture';
 
 export const test = mergeTests(apiHelpersTest, knowledgeBaseTest);
 
