@@ -22,7 +22,6 @@ export class KnowledgeBaseHelper {
 	}
 
 	async openAdmin() {
-		await this.productMenuPage.goToKnowledgeBaseMenuItem();
 		await this.knowledgeBaseFoldersAndArticlesPage.goto();
 	}
 
