@@ -13,7 +13,7 @@ export const test = mergeTests(apiHelpersTest, knowledgeBaseTest);
 const kbArticleContent = 'KB Article Content';
 const kbArticleTitle = 'KB Article Title';
 
-test('Create and delete a Knowledge Base Article', async ({
+test('KBArticle - Create and delete', async ({
 	_apiHelpers,
 	_knowledgeBaseHelper,
 	page,
@@ -52,7 +52,7 @@ test('Create and delete a Knowledge Base Article', async ({
 	await page.close();
 });
 
-test('Publish and delete with schedule menu', async ({
+test('KBArticle - Publish and delete with schedule menu', async ({
 	_apiHelpers,
 	_knowledgeBaseHelper,
 	page,
