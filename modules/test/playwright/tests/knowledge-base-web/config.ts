@@ -7,8 +7,8 @@ import {devices} from '@playwright/test';
 
 export const config = {
 	dependencies: ['setup'],
-	name: 'knowledge-base',
-	testDir: 'tests/knowledge-base',
+	name: 'knowledge-base-web',
+	testDir: 'tests/knowledge-base-web',
 	timeout: 60 * 1000,
 	use: {
 		...devices['Desktop Chrome'],
