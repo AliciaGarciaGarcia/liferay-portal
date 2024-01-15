@@ -5,34 +5,37 @@
 
 import {FrameLocator, Locator, Page} from '@playwright/test';
 
-import {KnowledgeBasePage} from './KnowledgeBase.page';
-
-export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
-	readonly basicArticleMenuItem: Locator;
+export class KnowledgeBaseEditArticlePage {
 	readonly contentFrameLocator: FrameLocator;
 	readonly contentTextBox: Locator;
-	readonly newButton: Locator;
 	readonly page: Page;
+	readonly publishButton: Locator;
+	readonly publishMenuItem: Locator;
 	readonly titlePlaceholder: Locator;
 
 	constructor(page: Page) {
-		super(page);
-		this.basicArticleMenuItem = page.getByRole('menuitem', {
-			name: 'Basic Article',
-		});
-
 		this.contentFrameLocator = page.frameLocator('iframe');
 		this.contentTextBox = this.contentFrameLocator.getByRole('textbox');
-
-		this.newButton = page.getByLabel('New');
+		this.page = page;
 		this.titlePlaceholder = page.getByPlaceholder('Untitled Article');
+		this.publishButton = page.getByRole('button', {name: 'Publish'});
+		this.publishMenuItem = page.getByRole('menuitem', {name: 'Publish'});
 	}
 
-	async createNewKnowledgeBaseArticle(content: string, title: string) {
-		await this.goToFoldersAndArticles();
-		await this.newButton.click();
-		await this.basicArticleMenuItem.click();
+	async publishNewKnowledgeBaseArticle(content: string, title: string) {
 		await this.titlePlaceholder.fill(title);
 		await this.contentTextBox.fill(content);
+		await this.publishButton.click();
+	}
+
+	async publishNewKnowledgeBaseArticleWithSchedule(
+		content: string,
+		title: string
+	) {
+		await this.titlePlaceholder.fill(title);
+		await this.contentTextBox.fill(content);
+		await this.publishButton.click();
+		await this.publishMenuItem.isVisible();
+		await this.publishMenuItem.click();
 	}
 }

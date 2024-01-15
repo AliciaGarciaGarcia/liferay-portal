@@ -11,6 +11,7 @@ export class ProductMenuPage {
 	readonly knowledgeBaseMenuItem: Locator;
 	readonly openProductMenuButton: Locator;
 	readonly page: Page;
+	readonly documentsAndMediaMenuItem: Locator;
 
 	constructor(page: Page) {
 		this.closeProductMenuButton = page.getByLabel('Close Product Menu');
@@ -22,6 +23,10 @@ export class ProductMenuPage {
 			exact: true,
 			name: 'Knowledge Base',
 		});
+		this.documentsAndMediaMenuItem = page.getByRole('menuitem', {
+			name: 'Documents and Media',
+		});
+
 		this.openProductMenuButton = page.getByLabel('Open Product Menu');
 		this.page = page;
 	}
@@ -51,6 +56,11 @@ export class ProductMenuPage {
 	async goToKnowledgeBaseMenuItem() {
 		await this.goToContentAndData();
 		await this.knowledgeBaseMenuItem.click();
+	}
+
+	async goToDocumentsAndMediaMenuItemMenuItem() {
+		await this.goToContentAndData();
+		await this.documentsAndMediaMenuItem.click();
 	}
 
 	async goToContentAndData() {

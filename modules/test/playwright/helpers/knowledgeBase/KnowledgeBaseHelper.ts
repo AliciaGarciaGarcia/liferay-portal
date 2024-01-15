@@ -5,7 +5,7 @@
 
 import {Page} from '@playwright/test';
 
-import {KnowledgeBaseFoldersAndArticlesPage} from '../../pages/knowledgeBase/KnowledgeBaseFoldersAndArticles.page';
+import {KnowledgeBaseFoldersAndArticlesPage} from '../../pages/knowledge-base-web/KnowledgeBaseFoldersAndArticles.page';
 import {ProductMenuPage} from '../../pages/product-navigation-product-menu/productMenu.page';
 
 export class KnowledgeBaseHelper {
