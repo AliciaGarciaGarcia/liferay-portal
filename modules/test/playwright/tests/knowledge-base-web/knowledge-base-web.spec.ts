@@ -7,11 +7,9 @@ import {expect, mergeTests} from '@playwright/test';
 
 import {apiHelpersTest} from '../../fixtures/apiHelpers.fixture';
 import {knowledgeBaseTest} from '../../fixtures/knowledgeBase/knowldegbeBase.fixture';
+import {getRandomString} from '../../utils/util';
 
 export const test = mergeTests(apiHelpersTest, knowledgeBaseTest);
-
-const kbArticleContent = 'KB Article Content';
-const kbArticleTitle = 'KB Article Title';
 
 test('KBArticle - Create and delete', async ({
 	_apiHelpers,
@@ -24,18 +22,19 @@ test('KBArticle - Create and delete', async ({
 
 	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
 
-	await _knowledgeBaseHelper.createNewKnowledgeBaseArticle(
-		kbArticleContent,
-		kbArticleTitle
-	);
-	await page.getByRole('button', {name: 'Publish'}).click();
+	const content = getRandomString();
+	const title = getRandomString();
+
+	await _knowledgeBaseHelper.createNewKnowledgeBaseArticle(content, title);
+
+	await expect(page.getByRole('link', {name: title})).toBeVisible();
 
 	const _firstKBArticle = page.locator(
 		'[id="_com_liferay_knowledge_base_web_portlet_AdminPortlet_kbObjects_1"]'
 	);
 
 	await expect(
-		_firstKBArticle.getByRole('link', {name: kbArticleTitle})
+		_firstKBArticle.getByRole('link', {name: title})
 	).toBeVisible();
 
 	await _firstKBArticle.getByLabel('Show Actions').click();
@@ -49,6 +48,7 @@ test('KBArticle - Create and delete', async ({
 	await expect(
 		page.getByRole('heading', {name: 'Knowledge base is empty.'})
 	).toBeVisible();
+
 	await page.close();
 });
 
@@ -59,38 +59,133 @@ test('KBArticle - Publish and delete with schedule menu', async ({
 }) => {
 	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', true);
 
-	await _knowledgeBaseHelper.createNewKnowledgeBaseArticle(
-		kbArticleContent,
-		kbArticleTitle
+	const content = getRandomString();
+	const title = getRandomString();
+
+	await _knowledgeBaseHelper.createNewKnowledgeBaseArticleWithSchedule(
+		content,
+		title
 	);
 
-	await page.getByRole('button', {name: 'Publish'}).click();
-	await expect(page.getByRole('menuitem', {name: 'Publish'})).toBeVisible();
-	await expect(page.getByRole('menuitem', {name: 'Publish'})).toBeVisible();
-	await page.getByRole('menuitem', {name: 'Publish'}).click();
+	await expect(page.getByRole('link', {name: title})).toBeVisible();
+
+	await _knowledgeBaseHelper.deleteKnowledgeBaseArticle(title);
 
 	await expect(
-		page
-			.locator(
-				'[id="_com_liferay_knowledge_base_web_portlet_AdminPortlet_kbObjects_1"]'
-			)
-			.getByRole('link', {name: kbArticleTitle})
+		page.locator(
+			'[id="_com_liferay_knowledge_base_web_portlet_AdminPortlet_recycleBinAlert"]'
+		)
 	).toBeVisible();
 
-	await page
-		.locator(
-			'[id="_com_liferay_knowledge_base_web_portlet_AdminPortlet_kbObjects_1"]'
-		)
-		.getByLabel('Show Actions')
-		.click();
+	await expect(page.getByRole('link', {name: title})).toBeHidden();
 
-	await page.getByRole('menuitem', {name: 'Delete'}).click();
+	// await page.getByLabel(title+'\n\t\t\t\t\t\t\n\t\t\t\t\t\n\n\t\t\t\t\t\n\t\t\t\t\t\tTest Test, modified 0 Seconds ago.\n\t\t\t\t\t\n\n\t\t\t\t\t\n\n\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\n\t\t\t\t\t\t\t\t\n\n\t\t\t\t\t\t\t\t\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\t\n\n\t\n\n\t\n\t\t\n\n\t\t\n\t\t\tApproved').check();
+	// await page.getByRole('button', { name: 'Delete' }).click();
+
+	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
+
+	await page.close();
+});
+
+
+test('KBArticle - Delete all', async ({
+	_apiHelpers,
+	_knowledgeBaseHelper,
+	 page}) => {
+
+	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
+
+	const content = getRandomString();
+	const title = getRandomString();
+
+	await _knowledgeBaseHelper.createNewKnowledgeBaseArticleWithSchedule(
+		content,
+		title
+	);
+
+	const selectAll = page.getByLabel('Select All Items on the Page');
+
+	const disabled = await selectAll.isDisabled();
+
+	if (!disabled) {
+		await selectAll.click();
+
+		page.once('dialog', (dialog) => {
+			console.log(`Dialog message: ${dialog.message()}`);
+			dialog.accept().catch(() => {});
+		});
+		
+		await page.getByRole('button', {name: 'Delete'}).click();
+	}
+
+	await expect(
+		page.getByRole('heading', {name: 'Knowledge base is empty.'})
+	).toBeVisible();
+
+	await page.close();
+});
+
+test('KBArticle - Delete all - recycle Bin', async ({
+	_apiHelpers,
+	_knowledgeBaseHelper,
+	 page}) => {
+
+	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', true);
+
+	await _knowledgeBaseHelper.createNewKnowledgeBaseArticleWithSchedule(
+		getRandomString(),
+		getRandomString()
+	);
+
+	const selectAll = page.getByLabel('Select All Items on the Page');
+
+	const disabled = await selectAll.isDisabled();
+
+	if (!disabled) {
+		await selectAll.click();
+		
+		await page.getByRole('button', {name: 'Delete'}).click();
+	}
+
+	await expect(
+		page.locator(
+			'[id="_com_liferay_knowledge_base_web_portlet_AdminPortlet_recycleBinAlert"]'
+		)
+	).toBeVisible();
 
 	await expect(
 		page.getByRole('heading', {name: 'Knowledge base is empty.'})
 	).toBeVisible();
 
 	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
+
+	await page.close();
+});
+
+
+test.afterAll('Delete all', async ({
+	_apiHelpers,
+	_knowledgeBaseHelper,
+	 page}) => {
+
+	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
+
+	await _knowledgeBaseHelper.openAdmin();
+
+	const selectAll = page.getByLabel('Select All Items on the Page');
+
+	const disabled = await selectAll.isDisabled();
+
+	if (!disabled) {
+		await selectAll.click();
+
+		page.once('dialog', (dialog) => {
+			console.log(`Dialog message: ${dialog.message()}`);
+			dialog.accept().catch(() => {});
+		});
+		
+		await page.getByRole('button', {name: 'Delete'}).click();
+	}
 
 	await page.close();
 });

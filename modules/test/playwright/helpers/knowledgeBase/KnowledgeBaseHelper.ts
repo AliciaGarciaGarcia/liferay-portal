@@ -27,8 +27,24 @@ export class KnowledgeBaseHelper {
 
 	async createNewKnowledgeBaseArticle(content: any, title: any) {
 		await this.openAdmin();
-		await this.knowledgeBaseFoldersAndArticlesPage.createNewKnowledgeBaseArticle(
+		await this.knowledgeBaseFoldersAndArticlesPage.publishNewKnowledgeBaseArticle(
 			content,
+			title
+		);
+	}
+
+	async createNewKnowledgeBaseArticleWithSchedule(content: any, title: any) {
+		await this.openAdmin();
+		await this.knowledgeBaseFoldersAndArticlesPage.publishNewKnowledgeBaseArticleWithSchedule(
+			content,
+			title
+		);
+	}
+
+	async deleteKnowledgeBaseArticle(title: any) {
+		await this.openAdmin();
+		await this.knowledgeBaseFoldersAndArticlesPage.deleteKnowledgeBaseArticle(
+			this.page,
 			title
 		);
 	}

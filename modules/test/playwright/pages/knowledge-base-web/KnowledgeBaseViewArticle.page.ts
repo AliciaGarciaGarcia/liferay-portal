@@ -11,7 +11,7 @@ export class KnowledgeBaseViewArticlePage {
 	deleteMenuItem: Locator;
 
 	constructor(page: Page) {
-		//this.deleteMenuItem = page.getByRole('menuitem', {name: 'Delete'});
+		// this.deleteMenuItem = page.getByRole('menuitem', {name: 'Delete'});
 
 		this.page = page;
 
