@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {FrameLocator, Locator, Page} from '@playwright/test';
+import {Locator, Page} from '@playwright/test';
 
 import {KnowledgeBasePage} from './KnowledgeBase.page';
 import {KnowledgeBaseEditArticlePage} from './KnowledgeBaseEditArticle.page';
@@ -21,7 +21,6 @@ export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
 		this.basicArticleMenuItem = page.getByRole('menuitem', {
 			name: 'Basic Article',
 		});
-
 		this.newButton = page.getByLabel('New');
 		this.knowledgeBaseEditArticlePage = new KnowledgeBaseEditArticlePage(
 			page
@@ -32,7 +31,7 @@ export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
 	}
 
 	async publishNewKnowledgeBaseArticle(content: string, title: string) {
-		await this.goToNewArticle();
+		await this.goToCreateNewArticle();
 		await this.knowledgeBaseEditArticlePage.publishNewKnowledgeBaseArticle(
 			content,
 			title
@@ -43,14 +42,14 @@ export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
 		content: string,
 		title: string
 	) {
-		await this.goToNewArticle();
+		await this.goToCreateNewArticle();
 		await this.knowledgeBaseEditArticlePage.publishNewKnowledgeBaseArticleWithSchedule(
 			content,
 			title
 		);
 	}
 
-	private async goToNewArticle() {
+	private async goToCreateNewArticle() {
 		await this.goToFoldersAndArticles();
 		await this.newButton.click();
 		await this.basicArticleMenuItem.click();
@@ -76,7 +75,30 @@ export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
 		await page.getByRole('link', {name: title}).click();
 
 		await this.knowledgeBaseViewArticlePage.deleteKnowledgeBaseArticle(
-			page
 		);
 	}
+
+	async deleteAll(page: Page, recycleBin: boolean) {
+		const selectAll = page.getByLabel('Select All Items on the Page');
+
+		const disabled = await selectAll.isDisabled();
+
+		if (!disabled) {
+			await selectAll.click();
+
+			if (!recycleBin) {
+				page.once('dialog', (dialog) => {
+					console.log(`Dialog message: ${dialog.message()}`);
+					dialog.accept().catch(() => {});
+				});
+				await page.getByRole('button', {name: 'Delete'}).click();
+			} else {
+				await page.getByRole('button', {name: 'Delete'}).click();
+			}
+
+		}
+
+	}
+
+
 }

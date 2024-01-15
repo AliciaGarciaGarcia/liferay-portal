@@ -5,7 +5,7 @@
 
 import {Locator, Page} from '@playwright/test';
 
-import {ProductMenuPage} from '../product-navigation-product-menu/productMenu.page';
+import {ProductMenuPage} from '../product-navigation-product-menu/ProductMenu.page';
 
 export class KnowledgeBasePage {
 	readonly foldersAndArticlesButton: Locator;

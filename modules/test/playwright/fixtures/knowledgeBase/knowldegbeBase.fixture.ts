@@ -5,7 +5,7 @@
 
 import {test} from '@playwright/test';
 
-import {KnowledgeBaseHelper} from '../../helpers/knowledgeBase/knowledgeBaseHelper';
+import {KnowledgeBaseHelper} from '../../helpers/knowledgeBase/KnowledgeBaseHelper';
 
 const knowledgeBaseTest = test.extend<{
 	_knowledgeBaseHelper: KnowledgeBaseHelper;

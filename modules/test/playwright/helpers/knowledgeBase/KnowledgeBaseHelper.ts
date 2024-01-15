@@ -6,7 +6,7 @@
 import {Page} from '@playwright/test';
 
 import {KnowledgeBaseFoldersAndArticlesPage} from '../../pages/knowledge-base-web/KnowledgeBaseFoldersAndArticles.page';
-import {ProductMenuPage} from '../../pages/product-navigation-product-menu/productMenu.page';
+import {ProductMenuPage} from '../../pages/product-navigation-product-menu/ProductMenu.page';
 
 export class KnowledgeBaseHelper {
 	readonly knowledgeBaseFoldersAndArticlesPage: KnowledgeBaseFoldersAndArticlesPage;
@@ -25,6 +25,11 @@ export class KnowledgeBaseHelper {
 		await this.knowledgeBaseFoldersAndArticlesPage.goto();
 	}
 
+	async deleteAll(page: Page, recycleBin: boolean) {
+		await this.openAdmin();
+		await this.knowledgeBaseFoldersAndArticlesPage.deleteAll(page, recycleBin);
+	}
+
 	async createNewKnowledgeBaseArticle(content: any, title: any) {
 		await this.openAdmin();
 		await this.knowledgeBaseFoldersAndArticlesPage.publishNewKnowledgeBaseArticle(
@@ -41,11 +46,8 @@ export class KnowledgeBaseHelper {
 		);
 	}
 
-	async deleteKnowledgeBaseArticle(title: any) {
+	async deleteKnowledgeBaseArticle(page: Page, title: string) {
 		await this.openAdmin();
-		await this.knowledgeBaseFoldersAndArticlesPage.deleteKnowledgeBaseArticle(
-			this.page,
-			title
-		);
+		await this.knowledgeBaseFoldersAndArticlesPage.deleteKnowledgeBaseArticle(page, title);
 	}
 }

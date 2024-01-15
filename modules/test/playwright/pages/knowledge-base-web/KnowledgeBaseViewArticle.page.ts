@@ -24,7 +24,7 @@ export class KnowledgeBaseViewArticlePage {
 		// 	.nth(1);
 	}
 
-	async deleteKnowledgeBaseArticle(page: Page) {
+	async deleteKnowledgeBaseArticle() {
 		this.showActionsButton = this.page
 			.locator(
 				'#portlet_com_liferay_knowledge_base_web_portlet_AdminPortlet'
@@ -33,8 +33,8 @@ export class KnowledgeBaseViewArticlePage {
 			.locator('div')
 			.nth(1);
 
-		await page.getByLabel('Show Actions').last().click();	
+		await this.page.getByLabel('Show Actions').last().click();
 		await this.showActionsButton.click();
-		await page.getByRole('menuitem', {name: 'Delete'}).click();
+		await this.page.getByRole('menuitem', {name: 'Delete'}).click();
 	}
 }

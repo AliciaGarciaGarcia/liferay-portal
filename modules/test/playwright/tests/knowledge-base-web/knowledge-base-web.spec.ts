@@ -11,13 +11,11 @@ import {getRandomString} from '../../utils/util';
 
 export const test = mergeTests(apiHelpersTest, knowledgeBaseTest);
 
-test('KBArticle - Create and delete', async ({
+test('KBArticle - Publish and delete', async ({
 	_apiHelpers,
 	_knowledgeBaseHelper,
 	page,
 }) => {
-	await page.goto('/');
-
 	// this only affects that the portal-ext.properties has the FF active, but on this stage we can not know it the FF were enabled or not.
 
 	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
@@ -52,7 +50,7 @@ test('KBArticle - Create and delete', async ({
 	await page.close();
 });
 
-test('KBArticle - Publish and delete with schedule menu', async ({
+test('KBArticle - Publish and delete - Schedule menu', async ({
 	_apiHelpers,
 	_knowledgeBaseHelper,
 	page,
@@ -69,7 +67,7 @@ test('KBArticle - Publish and delete with schedule menu', async ({
 
 	await expect(page.getByRole('link', {name: title})).toBeVisible();
 
-	await _knowledgeBaseHelper.deleteKnowledgeBaseArticle(title);
+	await _knowledgeBaseHelper.deleteKnowledgeBaseArticle(page, title);
 
 	await expect(
 		page.locator(
@@ -87,7 +85,6 @@ test('KBArticle - Publish and delete with schedule menu', async ({
 	await page.close();
 });
 
-
 test('KBArticle - Delete all', async ({
 	_apiHelpers,
 	_knowledgeBaseHelper,
@@ -95,28 +92,12 @@ test('KBArticle - Delete all', async ({
 
 	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
 
-	const content = getRandomString();
-	const title = getRandomString();
-
 	await _knowledgeBaseHelper.createNewKnowledgeBaseArticleWithSchedule(
-		content,
-		title
+		getRandomString(),
+		getRandomString()
 	);
 
-	const selectAll = page.getByLabel('Select All Items on the Page');
-
-	const disabled = await selectAll.isDisabled();
-
-	if (!disabled) {
-		await selectAll.click();
-
-		page.once('dialog', (dialog) => {
-			console.log(`Dialog message: ${dialog.message()}`);
-			dialog.accept().catch(() => {});
-		});
-		
-		await page.getByRole('button', {name: 'Delete'}).click();
-	}
+	await _knowledgeBaseHelper.deleteAll(page, false);
 
 	await expect(
 		page.getByRole('heading', {name: 'Knowledge base is empty.'})
@@ -137,15 +118,7 @@ test('KBArticle - Delete all - recycle Bin', async ({
 		getRandomString()
 	);
 
-	const selectAll = page.getByLabel('Select All Items on the Page');
-
-	const disabled = await selectAll.isDisabled();
-
-	if (!disabled) {
-		await selectAll.click();
-		
-		await page.getByRole('button', {name: 'Delete'}).click();
-	}
+	await _knowledgeBaseHelper.deleteAll(page, false);
 
 	await expect(
 		page.locator(
@@ -163,13 +136,7 @@ test('KBArticle - Delete all - recycle Bin', async ({
 });
 
 
-test.afterAll('Delete all', async ({
-	_apiHelpers,
-	_knowledgeBaseHelper,
-	 page}) => {
-
-	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
-
+async function deleteAll(_knowledgeBaseHelper, page, recycleBin: boolean) {
 	await _knowledgeBaseHelper.openAdmin();
 
 	const selectAll = page.getByLabel('Select All Items on the Page');
@@ -178,14 +145,26 @@ test.afterAll('Delete all', async ({
 
 	if (!disabled) {
 		await selectAll.click();
+		if (!recycleBin) {
+			page.once('dialog', (dialog) => {
+				console.log(`Dialog message: ${dialog.message()}`);
+				dialog.accept().catch(() => {
+				});
+			});
+		}
 
-		page.once('dialog', (dialog) => {
-			console.log(`Dialog message: ${dialog.message()}`);
-			dialog.accept().catch(() => {});
-		});
-		
 		await page.getByRole('button', {name: 'Delete'}).click();
 	}
 
-	await page.close();
-});
+}
+
+// test.afterAll('Delete all', async ({
+// 	_apiHelpers,
+// 	_knowledgeBaseHelper,
+// 	 page}) => {
+//
+// 	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
+// 	await deleteAll(page, _knowledgeBaseHelper, false);
+//
+// 	await page.close();
+// });
