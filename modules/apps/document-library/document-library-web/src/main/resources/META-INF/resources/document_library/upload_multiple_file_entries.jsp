@@ -239,7 +239,9 @@ if (portletTitleBasedNavigation) {
 										loading.classList.add('hide');
 
 										if (!itemFailed) {
-											Liferay.Util.navigate('<%= HtmlUtil.escapeJS(redirect) %>');
+											Liferay.Util.navigate(
+												'<%= HtmlUtil.escapeJS(redirect.replaceAll("&#39", StringPool.BLANK)) %>'
+											);
 										}
 									})
 									.catch((error) => {
