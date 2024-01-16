@@ -47,7 +47,7 @@
 					onClick="<%= onClick %>"
 				</c:when>
 				<c:when test="<%= Validator.isNotNull(escapedHREF) %>">
-					onClick="Liferay.Util.navigate('<%= escapedHREF %>')"
+					onClick="Liferay.Util.navigate('<%= escapedHREF.replaceAll("&#39", StringPool.BLANK) %>')"
 				</c:when>
 			</c:choose>
 
