@@ -27,7 +27,8 @@ export class KnowledgeBasePage {
 	}
 
 	async goToFoldersAndArticles() {
-		const foldersAndArticlesButtonVisible = await this.foldersAndArticlesButton.isVisible();
+		const foldersAndArticlesButtonVisible =
+			await this.foldersAndArticlesButton.isVisible();
 
 		if (foldersAndArticlesButtonVisible) {
 			await this.foldersAndArticlesButton.click();
@@ -35,7 +36,8 @@ export class KnowledgeBasePage {
 	}
 
 	async goToSuggestions() {
-		const suggestionsButtonVisible = await this.suggestionsButton.isVisible();
+		const suggestionsButtonVisible =
+			await this.suggestionsButton.isVisible();
 
 		if (suggestionsButtonVisible) {
 			await this.suggestionsButton.click();

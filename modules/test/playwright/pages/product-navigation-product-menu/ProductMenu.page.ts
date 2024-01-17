@@ -37,7 +37,8 @@ export class ProductMenuPage {
 
 	async openToProductMenu() {
 		await this.goto();
-		const openProductMenuVisible = await this.openProductMenuButton.isVisible();
+		const openProductMenuVisible =
+			await this.openProductMenuButton.isVisible();
 
 		if (openProductMenuVisible) {
 			await this.openProductMenuButton.click();
@@ -46,7 +47,8 @@ export class ProductMenuPage {
 
 	async closeToProductMenu() {
 		await this.goto();
-		const closeProductMenuVisible = await this.closeProductMenuButton.isVisible();
+		const closeProductMenuVisible =
+			await this.closeProductMenuButton.isVisible();
 
 		if (closeProductMenuVisible) {
 			await this.closeProductMenuButton.click();

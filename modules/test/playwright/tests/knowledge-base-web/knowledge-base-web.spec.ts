@@ -16,6 +16,7 @@ test('KBArticle - Publish and delete', async ({
 	_knowledgeBaseHelper,
 	page,
 }) => {
+
 	// this only affects that the portal-ext.properties has the FF active, but on this stage we can not know it the FF were enabled or not.
 
 	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
@@ -88,8 +89,8 @@ test('KBArticle - Publish and delete - Schedule menu', async ({
 test('KBArticle - Delete all', async ({
 	_apiHelpers,
 	_knowledgeBaseHelper,
-	 page}) => {
-
+	page,
+}) => {
 	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
 
 	await _knowledgeBaseHelper.createNewKnowledgeBaseArticleWithSchedule(
@@ -109,8 +110,8 @@ test('KBArticle - Delete all', async ({
 test('KBArticle - Delete all - recycle Bin', async ({
 	_apiHelpers,
 	_knowledgeBaseHelper,
-	 page}) => {
-
+	page,
+}) => {
 	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', true);
 
 	await _knowledgeBaseHelper.createNewKnowledgeBaseArticleWithSchedule(
@@ -135,7 +136,6 @@ test('KBArticle - Delete all - recycle Bin', async ({
 	await page.close();
 });
 
-
 async function deleteAll(_knowledgeBaseHelper, page, recycleBin: boolean) {
 	await _knowledgeBaseHelper.openAdmin();
 
@@ -148,14 +148,12 @@ async function deleteAll(_knowledgeBaseHelper, page, recycleBin: boolean) {
 		if (!recycleBin) {
 			page.once('dialog', (dialog) => {
 				console.log(`Dialog message: ${dialog.message()}`);
-				dialog.accept().catch(() => {
-				});
+				dialog.accept().catch(() => {});
 			});
 		}
 
 		await page.getByRole('button', {name: 'Delete'}).click();
 	}
-
 }
 
 // test.afterAll('Delete all', async ({

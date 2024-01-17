@@ -74,8 +74,7 @@ export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
 
 		await page.getByRole('link', {name: title}).click();
 
-		await this.knowledgeBaseViewArticlePage.deleteKnowledgeBaseArticle(
-		);
+		await this.knowledgeBaseViewArticlePage.deleteKnowledgeBaseArticle();
 	}
 
 	async deleteAll(page: Page, recycleBin: boolean) {
@@ -92,13 +91,10 @@ export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
 					dialog.accept().catch(() => {});
 				});
 				await page.getByRole('button', {name: 'Delete'}).click();
-			} else {
+			}
+			else {
 				await page.getByRole('button', {name: 'Delete'}).click();
 			}
-
 		}
-
 	}
-
-
 }

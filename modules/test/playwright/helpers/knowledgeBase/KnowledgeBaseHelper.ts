@@ -15,9 +15,8 @@ export class KnowledgeBaseHelper {
 
 	constructor(page: Page) {
 		this.productMenuPage = new ProductMenuPage(page);
-		this.knowledgeBaseFoldersAndArticlesPage = new KnowledgeBaseFoldersAndArticlesPage(
-			page
-		);
+		this.knowledgeBaseFoldersAndArticlesPage =
+			new KnowledgeBaseFoldersAndArticlesPage(page);
 		this.page = page;
 	}
 
@@ -27,7 +26,10 @@ export class KnowledgeBaseHelper {
 
 	async deleteAll(page: Page, recycleBin: boolean) {
 		await this.openAdmin();
-		await this.knowledgeBaseFoldersAndArticlesPage.deleteAll(page, recycleBin);
+		await this.knowledgeBaseFoldersAndArticlesPage.deleteAll(
+			page,
+			recycleBin
+		);
 	}
 
 	async createNewKnowledgeBaseArticle(content: any, title: any) {
@@ -48,6 +50,9 @@ export class KnowledgeBaseHelper {
 
 	async deleteKnowledgeBaseArticle(page: Page, title: string) {
 		await this.openAdmin();
-		await this.knowledgeBaseFoldersAndArticlesPage.deleteKnowledgeBaseArticle(page, title);
+		await this.knowledgeBaseFoldersAndArticlesPage.deleteKnowledgeBaseArticle(
+			page,
+			title
+		);
 	}
 }
