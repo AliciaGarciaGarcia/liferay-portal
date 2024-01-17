@@ -11,19 +11,7 @@ export class KnowledgeBaseViewArticlePage {
 	deleteMenuItem: Locator;
 
 	constructor(page: Page) {
-
-		// this.deleteMenuItem = page.getByRole('menuitem', {name: 'Delete'});
-
 		this.page = page;
-
-		// this.showActionsButton = this.page
-		// 	.locator(
-		// 		'#portlet_com_liferay_knowledge_base_web_portlet_AdminPortlet'
-		// 	)
-		// 	.getByRole('list')
-		// 	.locator('div')
-		// 	.nth(1);
-
 	}
 
 	async deleteKnowledgeBaseArticle() {

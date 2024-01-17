@@ -56,22 +56,6 @@ export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
 	}
 
 	async deleteKnowledgeBaseArticle(page: Page, title: string) {
-
-		// const regex: RegExp = /(?=.*${title})/g;
-		// const regex: RegExp = new RegExp("/^\s*"+title+"\s*$/i", "g");
-		// const regex: RegExp = new RegExp('/^'+title+'\s+$/i');
-		//
-		// //const article = page.getByLabel(/^\s*${title}\s*$/i);
-		// const article = page.getByLabel(new RegExp(title+'\s+$/i'));
-		//  if(await article.isVisible()){
-		//  	await article.check();
-		// 	 page.once('dialog', (dialog) => {
-		// 		 console.log(`Dialog message: ${dialog.message()}`);
-		// 		 dialog.accept().catch(() => {});
-		// 	 });
-		// 	await page.getByRole('button', { name: 'Delete' }).click();
-		//  }
-
 		await page.getByRole('link', {name: title}).click();
 
 		await this.knowledgeBaseViewArticlePage.deleteKnowledgeBaseArticle();
@@ -87,7 +71,6 @@ export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
 
 			if (!recycleBin) {
 				page.once('dialog', (dialog) => {
-					console.log(`Dialog message: ${dialog.message()}`);
 					dialog.accept().catch(() => {});
 				});
 				await page.getByRole('button', {name: 'Delete'}).click();

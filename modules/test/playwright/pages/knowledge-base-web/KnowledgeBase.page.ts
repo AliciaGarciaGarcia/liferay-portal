@@ -43,6 +43,7 @@ export class KnowledgeBasePage {
 			await this.suggestionsButton.click();
 		}
 	}
+
 	async goToTemplates() {
 		const templatesButtonVisible = await this.templatesButton.isVisible();
 

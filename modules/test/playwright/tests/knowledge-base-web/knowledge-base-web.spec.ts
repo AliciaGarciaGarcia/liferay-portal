@@ -39,7 +39,6 @@ test('KBArticle - Publish and delete', async ({
 	await _firstKBArticle.getByLabel('Show Actions').click();
 
 	page.once('dialog', (dialog) => {
-		console.log(`Dialog message: ${dialog.message()}`);
 		dialog.accept().catch(() => {});
 	});
 	await page.getByRole('menuitem', {name: 'Delete'}).click();
@@ -77,9 +76,6 @@ test('KBArticle - Publish and delete - Schedule menu', async ({
 	).toBeVisible();
 
 	await expect(page.getByRole('link', {name: title})).toBeHidden();
-
-	// await page.getByLabel(title+'\n\t\t\t\t\t\t\n\t\t\t\t\t\n\n\t\t\t\t\t\n\t\t\t\t\t\tTest Test, modified 0 Seconds ago.\n\t\t\t\t\t\n\n\t\t\t\t\t\n\n\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\n\t\t\t\t\t\t\t\t\n\n\t\t\t\t\t\t\t\t\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\t\n\n\t\n\n\t\n\t\t\n\n\t\t\n\t\t\tApproved').check();
-	// await page.getByRole('button', { name: 'Delete' }).click();
 
 	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
 
@@ -135,34 +131,3 @@ test('KBArticle - Delete all - recycle Bin', async ({
 
 	await page.close();
 });
-
-async function deleteAll(_knowledgeBaseHelper, page, recycleBin: boolean) {
-	await _knowledgeBaseHelper.openAdmin();
-
-	const selectAll = page.getByLabel('Select All Items on the Page');
-
-	const disabled = await selectAll.isDisabled();
-
-	if (!disabled) {
-		await selectAll.click();
-		if (!recycleBin) {
-			page.once('dialog', (dialog) => {
-				console.log(`Dialog message: ${dialog.message()}`);
-				dialog.accept().catch(() => {});
-			});
-		}
-
-		await page.getByRole('button', {name: 'Delete'}).click();
-	}
-}
-
-// test.afterAll('Delete all', async ({
-// 	_apiHelpers,
-// 	_knowledgeBaseHelper,
-// 	 page}) => {
-//
-// 	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
-// 	await deleteAll(page, _knowledgeBaseHelper, false);
-//
-// 	await page.close();
-// });
