@@ -28,15 +28,13 @@ test('KBArticle - Publish and delete', async ({
 
 	await expect(page.getByRole('link', {name: title})).toBeVisible();
 
-	const _firstKBArticle = page.locator(
-		'[id="_com_liferay_knowledge_base_web_portlet_AdminPortlet_kbObjects_1"]'
-	);
+	const kbArticle = await page
+		.locator(
+			'#_com_liferay_knowledge_base_web_portlet_AdminPortlet_kbObjectsSearchContainer .list-group-item'
+		)
+		.filter({hasText: title});
 
-	await expect(
-		_firstKBArticle.getByRole('link', {name: title})
-	).toBeVisible();
-
-	await _firstKBArticle.getByLabel('Show Actions').click();
+	await kbArticle.getByLabel('Show Actions').click();
 
 	page.once('dialog', (dialog) => {
 		dialog.accept().catch(() => {});
