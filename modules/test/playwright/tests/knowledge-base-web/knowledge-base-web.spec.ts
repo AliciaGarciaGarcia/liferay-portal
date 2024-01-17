@@ -41,9 +41,7 @@ test('KBArticle - Publish and delete', async ({
 	});
 	await page.getByRole('menuitem', {name: 'Delete'}).click();
 
-	await expect(
-		page.getByRole('heading', {name: 'Knowledge base is empty.'})
-	).toBeVisible();
+	await expect(kbArticle).toBeHidden();
 
 	await page.close();
 });
