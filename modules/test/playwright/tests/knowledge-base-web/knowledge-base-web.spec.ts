@@ -51,6 +51,7 @@ test('KBArticle - Publish and delete - Schedule menu', async ({
 	_knowledgeBaseHelper,
 	page,
 }) => {
+	
 	await _apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', true);
 
 	const content = getRandomString();

@@ -11,19 +11,13 @@ export class KnowledgeBaseViewArticlePage {
 	deleteMenuItem: Locator;
 
 	constructor(page: Page) {
+		this.showActionsButton = page.getByLabel('Show Actions');
 		this.page = page;
 	}
 
 	async deleteKnowledgeBaseArticle() {
-		this.showActionsButton = this.page
-			.locator(
-				'#portlet_com_liferay_knowledge_base_web_portlet_AdminPortlet'
-			)
-			.getByRole('list')
-			.locator('div')
-			.nth(1);
+		// await this.showActionsButton.locator('[aria-haspopup]').waitFor();
 
-		await this.page.getByLabel('Show Actions').last().click();
 		await this.showActionsButton.click();
 		await this.page.getByRole('menuitem', {name: 'Delete'}).click();
 	}

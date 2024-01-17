@@ -57,6 +57,7 @@ export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
 
 	async deleteKnowledgeBaseArticle(page: Page, title: string) {
 		await page.getByRole('link', {name: title}).click();
+		await page.locator('.kb-article-title').getByText(title).waitFor();
 
 		await this.knowledgeBaseViewArticlePage.deleteKnowledgeBaseArticle();
 	}
