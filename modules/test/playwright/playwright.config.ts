@@ -7,7 +7,7 @@ import {defineConfig} from '@playwright/test';
 
 import {config as batchPlanner} from './tests/batch-planner/config';
 import {config as exportImportWeb} from './tests/export-import-web/config';
-import {config as knowledgeBase} from './tests/knowledge-base/config';
+import {config as knowledgeBase} from './tests/knowledge-base-web/config';
 import {config as layoutContentPageEditorWeb} from './tests/layout-content-page-editor-web/config';
 import {config as object} from './tests/object-web/config';
 import {config as portalWeb} from './tests/portal-web/config';
