@@ -11,13 +11,14 @@ export class KnowledgeBaseViewArticlePage {
 	deleteMenuItem: Locator;
 
 	constructor(page: Page) {
-		this.showActionsButton = page.getByLabel('Show Actions');
+		this.showActionsButton = page
+			.getByLabel('Show Actions')
+			.and(page.locator('[aria-haspopup]'));
 		this.page = page;
 	}
 
 	async deleteKnowledgeBaseArticle() {
-		// await this.showActionsButton.locator('[aria-haspopup]').waitFor();
-
+		await this.showActionsButton.waitFor();
 		await this.showActionsButton.click();
 		await this.page.getByRole('menuitem', {name: 'Delete'}).click();
 	}
