@@ -5,17 +5,15 @@
 
 import {expect, mergeTests} from '@playwright/test';
 
-import {apiHelpersTest} from '../../fixtures/apiHelpers.fixture';
-import {knowledgeBaseTest} from '../../fixtures/knowledgeBase/knowldegbeBase.fixture';
 import {apiHelpersTest} from '../../fixtures/apiHelpersTest';
+import {knowledgeBaseTest} from '../../fixtures/knowledgeBase/knowldegbeBaseTest';
 import {getRandomString} from '../../utils/util';
 
 export const test = mergeTests(apiHelpersTest, knowledgeBaseTest);
 
 test('KBArticle - Publish and delete', async ({
-	_apiHelpers,
-	_knowledgeBaseHelper,
 	apiHelpers,
+	knowledgeBaseHelper,
 	page,
 }) => {
 
@@ -26,7 +24,7 @@ test('KBArticle - Publish and delete', async ({
 	const content = getRandomString();
 	const title = getRandomString();
 
-	await _knowledgeBaseHelper.createNewKnowledgeBaseArticle(content, title);
+	await knowledgeBaseHelper.createNewKnowledgeBaseArticle(content, title);
 
 	await expect(page.getByRole('link', {name: title})).toBeVisible();
 
@@ -49,9 +47,8 @@ test('KBArticle - Publish and delete', async ({
 });
 
 test('KBArticle - Publish and delete - Schedule menu', async ({
-	_apiHelpers,
-	_knowledgeBaseHelper,
 	apiHelpers,
+	knowledgeBaseHelper,
 	page,
 }) => {
 	
@@ -60,14 +57,14 @@ test('KBArticle - Publish and delete - Schedule menu', async ({
 	const content = getRandomString();
 	const title = getRandomString();
 
-	await _knowledgeBaseHelper.createNewKnowledgeBaseArticleWithSchedule(
+	await knowledgeBaseHelper.createNewKnowledgeBaseArticleWithSchedule(
 		content,
 		title
 	);
 
 	await expect(page.getByRole('link', {name: title})).toBeVisible();
 
-	await _knowledgeBaseHelper.deleteKnowledgeBaseArticle(page, title);
+	await knowledgeBaseHelper.deleteKnowledgeBaseArticle(page, title);
 
 	await expect(
 		page.locator(
@@ -83,19 +80,18 @@ test('KBArticle - Publish and delete - Schedule menu', async ({
 });
 
 test('KBArticle - Delete all', async ({
-	_apiHelpers,
-	_knowledgeBaseHelper,
 	apiHelpers,
+	knowledgeBaseHelper,
 	page,
 }) => {
 	await apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
 
-	await _knowledgeBaseHelper.createNewKnowledgeBaseArticleWithSchedule(
+	await knowledgeBaseHelper.createNewKnowledgeBaseArticleWithSchedule(
 		getRandomString(),
 		getRandomString()
 	);
 
-	await _knowledgeBaseHelper.deleteAll(page, false);
+	await knowledgeBaseHelper.deleteAll(page, false);
 
 	await expect(
 		page.getByRole('heading', {name: 'Knowledge base is empty.'})
@@ -105,19 +101,18 @@ test('KBArticle - Delete all', async ({
 });
 
 test('KBArticle - Delete all - recycle Bin', async ({
-	_apiHelpers,
-	_knowledgeBaseHelper,
 	apiHelpers,
+	knowledgeBaseHelper,
 	page,
 }) => {
 	await apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', true);
 
-	await _knowledgeBaseHelper.createNewKnowledgeBaseArticleWithSchedule(
+	await knowledgeBaseHelper.createNewKnowledgeBaseArticleWithSchedule(
 		getRandomString(),
 		getRandomString()
 	);
 
-	await _knowledgeBaseHelper.deleteAll(page, false);
+	await knowledgeBaseHelper.deleteAll(page, false);
 
 	await expect(
 		page.locator(

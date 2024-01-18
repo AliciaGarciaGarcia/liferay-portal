@@ -8,9 +8,9 @@ import {test} from '@playwright/test';
 import {KnowledgeBaseHelper} from '../../helpers/knowledgeBase/KnowledgeBaseHelper';
 
 const knowledgeBaseTest = test.extend<{
-	_knowledgeBaseHelper: KnowledgeBaseHelper;
+	knowledgeBaseHelper: KnowledgeBaseHelper;
 }>({
-	_knowledgeBaseHelper: async ({page}, use) => {
+	knowledgeBaseHelper: async ({page}, use) => {
 		await use(new KnowledgeBaseHelper(page));
 	},
 });
