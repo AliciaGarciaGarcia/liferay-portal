@@ -13,6 +13,7 @@ export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
 	readonly basicArticleMenuItem: Locator;
 	readonly newButton: Locator;
 	readonly page: Page;
+	readonly selectAllCheckBox: Locator;
 	knowledgeBaseEditArticlePage: KnowledgeBaseEditArticlePage;
 	knowledgeBaseViewArticlePage: KnowledgeBaseViewArticlePage;
 
@@ -21,13 +22,14 @@ export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
 		this.basicArticleMenuItem = page.getByRole('menuitem', {
 			name: 'Basic Article',
 		});
-		this.newButton = page.getByLabel('New');
+		this.newButton = page.getByLabel('New', { exact: true });
 		this.knowledgeBaseEditArticlePage = new KnowledgeBaseEditArticlePage(
 			page
 		);
 		this.knowledgeBaseViewArticlePage = new KnowledgeBaseViewArticlePage(
 			page
 		);
+		this.selectAllCheckBox = page.getByLabel('Select All Items on the Page');
 	}
 
 	async publishNewKnowledgeBaseArticle(content: string, title: string) {
@@ -51,11 +53,14 @@ export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
 
 	private async goToCreateNewArticle() {
 		await this.goToFoldersAndArticles();
+		await this.newButton.waitFor();
 		await this.newButton.click();
+		await this.basicArticleMenuItem.waitFor();
 		await this.basicArticleMenuItem.click();
 	}
 
 	async deleteKnowledgeBaseArticle(page: Page, title: string) {
+		await page.getByRole('link', {name: title}).waitFor();
 		await page.getByRole('link', {name: title}).click();
 		await page.locator('.kb-article-title').getByText(title).waitFor();
 
@@ -63,13 +68,12 @@ export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
 	}
 
 	async deleteAll(page: Page, recycleBin: boolean) {
-		const selectAll = page.getByLabel('Select All Items on the Page');
-
-		const disabled = await selectAll.isDisabled();
+		const disabled = await this.selectAllCheckBox.isDisabled();
 
 		if (!disabled) {
-			await selectAll.click();
+			await this.selectAllCheckBox.click();
 
+			await page.getByRole('button', {name: 'Delete'}).waitFor();
 			if (!recycleBin) {
 				page.once('dialog', (dialog) => {
 					dialog.accept().catch(() => {});
