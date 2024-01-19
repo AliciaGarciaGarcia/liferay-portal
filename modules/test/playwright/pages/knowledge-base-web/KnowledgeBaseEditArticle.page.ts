@@ -35,7 +35,7 @@ export class KnowledgeBaseEditArticlePage {
 		await this.titlePlaceholder.fill(title);
 		await this.contentTextBox.fill(content);
 		await this.publishButton.click();
-		await this.publishMenuItem.isVisible();
+		await this.publishMenuItem.waitFor();
 		await this.publishMenuItem.click();
 	}
 }

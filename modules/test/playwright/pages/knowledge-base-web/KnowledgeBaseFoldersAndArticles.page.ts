@@ -22,14 +22,16 @@ export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
 		this.basicArticleMenuItem = page.getByRole('menuitem', {
 			name: 'Basic Article',
 		});
-		this.newButton = page.getByLabel('New', { exact: true });
+		this.newButton = page.getByLabel('New', {exact: true});
 		this.knowledgeBaseEditArticlePage = new KnowledgeBaseEditArticlePage(
 			page
 		);
 		this.knowledgeBaseViewArticlePage = new KnowledgeBaseViewArticlePage(
 			page
 		);
-		this.selectAllCheckBox = page.getByLabel('Select All Items on the Page');
+		this.selectAllCheckBox = page.getByLabel(
+			'Select All Items on the Page'
+		);
 	}
 
 	async publishNewKnowledgeBaseArticle(content: string, title: string) {
@@ -71,9 +73,11 @@ export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
 		const disabled = await this.selectAllCheckBox.isDisabled();
 
 		if (!disabled) {
+			await page.waitForTimeout(2_000);
 			await this.selectAllCheckBox.click();
 
 			await page.getByRole('button', {name: 'Delete'}).waitFor();
+
 			if (!recycleBin) {
 				page.once('dialog', (dialog) => {
 					dialog.accept().catch(() => {});
