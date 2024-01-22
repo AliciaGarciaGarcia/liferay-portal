@@ -5,9 +5,10 @@
 
 import {test} from '@playwright/test';
 
-import {KnowledgeBaseHelper} from '../../helpers/knowledgeBase/KnowledgeBaseHelper';
+import {KnowledgeBaseHelper} from '../helpers/knowledgeBase/KnowledgeBaseHelper';
 
-const knowledgeBaseTest = test.extend<{
+
+const knowledgeBasePages = test.extend<{
 	knowledgeBaseHelper: KnowledgeBaseHelper;
 }>({
 	knowledgeBaseHelper: async ({page}, use) => {
@@ -15,4 +16,4 @@ const knowledgeBaseTest = test.extend<{
 	},
 });
 
-export {knowledgeBaseTest};
+export {knowledgeBasePages};

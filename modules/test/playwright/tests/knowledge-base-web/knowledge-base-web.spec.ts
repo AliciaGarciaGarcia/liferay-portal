@@ -6,10 +6,10 @@
 import {expect, mergeTests} from '@playwright/test';
 
 import {apiHelpersTest} from '../../fixtures/apiHelpersTest';
-import {knowledgeBaseTest} from '../../fixtures/knowledgeBase/knowldegbeBaseTest';
+import {knowledgeBasePages} from '../../fixtures/knowldegbeBasePages';
 import {getRandomString} from '../../utils/util';
 
-export const test = mergeTests(apiHelpersTest, knowledgeBaseTest);
+export const test = mergeTests(apiHelpersTest, knowledgeBasePages);
 
 test('KBArticle - Publish and delete', async ({
 	apiHelpers,
