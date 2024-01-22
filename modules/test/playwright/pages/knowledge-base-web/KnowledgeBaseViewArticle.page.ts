@@ -17,6 +17,12 @@ export class KnowledgeBaseViewArticlePage {
 		this.page = page;
 	}
 
+	async goto(title: string) {
+		await this.page.getByRole('link', {name: title}).waitFor();
+		await this.page.getByRole('link', {name: title}).click();
+		await this.page.locator('.kb-article-title').getByText(title).waitFor();
+	}
+
 	async deleteKnowledgeBaseArticle() {
 		await this.showActionsButton.waitFor();
 		await this.showActionsButton.click();

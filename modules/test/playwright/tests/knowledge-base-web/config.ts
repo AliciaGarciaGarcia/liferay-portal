@@ -9,7 +9,7 @@ export const config = {
 	dependencies: ['setup'],
 	name: 'knowledge-base-web',
 	testDir: 'tests/knowledge-base-web',
-	timeout: 60 * 1000,
+	timeout: 60_000,
 	use: {
 		...devices['Desktop Chrome'],
 		storageState: 'tmp/.auth/user.json',

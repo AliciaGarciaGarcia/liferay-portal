@@ -63,7 +63,7 @@ test('KBArticle - Publish and delete - Schedule menu', async ({
 
 	await expect(page.getByRole('link', {name: title})).toBeVisible();
 
-	await knowledgeBaseHelper.deleteKnowledgeBaseArticle(page, title);
+	await knowledgeBaseHelper.deleteKnowledgeBaseArticle(title);
 
 	await expect(
 		page.locator(

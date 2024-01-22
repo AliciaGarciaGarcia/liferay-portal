@@ -48,10 +48,9 @@ export class KnowledgeBaseHelper {
 		);
 	}
 
-	async deleteKnowledgeBaseArticle(page: Page, title: string) {
+	async deleteKnowledgeBaseArticle(title: string) {
 		await this.openAdmin();
 		await this.knowledgeBaseFoldersAndArticlesPage.deleteKnowledgeBaseArticle(
-			page,
 			title
 		);
 	}
