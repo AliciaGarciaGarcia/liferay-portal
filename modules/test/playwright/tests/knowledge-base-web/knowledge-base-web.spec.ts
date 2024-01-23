@@ -83,14 +83,12 @@ test('KBArticle - Delete all - without recycle Bin', async ({
 	knowledgeBasePage,
 	page,
 }) => {
-	await apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', true);
+	await apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
 
-	await knowledgeBasePage.publishNewKnowledgeBaseArticleWithSchedule(
+	await knowledgeBasePage.publishNewKnowledgeBaseArticle(
 		getRandomString(),
 		getRandomString()
 	);
-
-	await apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
 
 	await knowledgeBasePage.deleteAll(page, false);
 
