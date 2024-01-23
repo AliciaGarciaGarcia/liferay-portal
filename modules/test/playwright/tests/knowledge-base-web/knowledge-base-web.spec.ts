@@ -13,18 +13,18 @@ export const test = mergeTests(apiHelpersTest, knowledgeBasePages);
 
 test('KBArticle - Publish and delete', async ({
 	apiHelpers,
-	knowledgeBaseHelper,
+	knowledgeBasePage,
 	page,
 }) => {
-
-	// this only affects that the portal-ext.properties has the FF active, but on this stage we can not know it the FF were enabled or not.
-
 	await apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
 
 	const content = getRandomString();
 	const title = getRandomString();
 
-	await knowledgeBaseHelper.createNewKnowledgeBaseArticle(content, title);
+	await knowledgeBasePage.publishNewKnowledgeBaseArticle(
+		content,
+		title
+	);
 
 	await expect(page.getByRole('link', {name: title})).toBeVisible();
 
@@ -48,7 +48,7 @@ test('KBArticle - Publish and delete', async ({
 
 test('KBArticle - Publish and delete - Schedule menu', async ({
 	apiHelpers,
-	knowledgeBaseHelper,
+	knowledgeBasePage,
 	page,
 }) => {
 	await apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', true);
@@ -56,14 +56,14 @@ test('KBArticle - Publish and delete - Schedule menu', async ({
 	const content = getRandomString();
 	const title = getRandomString();
 
-	await knowledgeBaseHelper.createNewKnowledgeBaseArticleWithSchedule(
+	await knowledgeBasePage.publishNewKnowledgeBaseArticleWithSchedule(
 		content,
 		title
 	);
 
 	await expect(page.getByRole('link', {name: title})).toBeVisible();
 
-	await knowledgeBaseHelper.deleteKnowledgeBaseArticle(title);
+	await knowledgeBasePage.deleteKnowledgeBaseArticle(title);
 
 	await expect(
 		page.locator(
@@ -80,19 +80,19 @@ test('KBArticle - Publish and delete - Schedule menu', async ({
 
 test('KBArticle - Delete all - without recycle Bin', async ({
 	apiHelpers,
-	knowledgeBaseHelper,
+	knowledgeBasePage,
 	page,
 }) => {
 	await apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', true);
 
-	await knowledgeBaseHelper.createNewKnowledgeBaseArticleWithSchedule(
+	await knowledgeBasePage.publishNewKnowledgeBaseArticleWithSchedule(
 		getRandomString(),
 		getRandomString()
 	);
 
 	await apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
 
-	await knowledgeBaseHelper.deleteAll(page, false);
+	await knowledgeBasePage.deleteAll(page, false);
 
 	await expect(
 		page.getByRole('heading', {name: 'Knowledge base is empty.'})
@@ -103,17 +103,17 @@ test('KBArticle - Delete all - without recycle Bin', async ({
 
 test('KBArticle - Delete all - recycle Bin', async ({
 	apiHelpers,
-	knowledgeBaseHelper,
+	knowledgeBasePage,
 	page,
 }) => {
 	await apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', true);
 
-	await knowledgeBaseHelper.createNewKnowledgeBaseArticleWithSchedule(
+	await knowledgeBasePage.publishNewKnowledgeBaseArticleWithSchedule(
 		getRandomString(),
 		getRandomString()
 	);
 
-	await knowledgeBaseHelper.deleteAll(page, false);
+	await knowledgeBasePage.deleteAll(page, false);
 
 	await expect(
 		page.locator(

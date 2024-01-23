@@ -5,33 +5,60 @@
 
 import {Locator, Page} from '@playwright/test';
 
-import {KnowledgeBasePage} from './KnowledgeBase.page';
+import {ProductMenuPage} from '../product-navigation-product-menu/ProductMenu.page';
 import {KnowledgeBaseEditArticlePage} from './KnowledgeBaseEditArticle.page';
 import {KnowledgeBaseViewArticlePage} from './KnowledgeBaseViewArticle.page';
 
-export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
+export class KnowledgeBasePage {
 	readonly basicArticleMenuItem: Locator;
+	readonly foldersAndArticlesButton: Locator;
 	readonly newButton: Locator;
 	readonly page: Page;
+	readonly productMenuPage: ProductMenuPage;
 	readonly selectAllCheckBox: Locator;
 	knowledgeBaseEditArticlePage: KnowledgeBaseEditArticlePage;
 	knowledgeBaseViewArticlePage: KnowledgeBaseViewArticlePage;
 
 	constructor(page: Page) {
-		super(page);
 		this.basicArticleMenuItem = page.getByRole('menuitem', {
 			name: 'Basic Article',
 		});
-		this.newButton = page.getByLabel('New', {exact: true});
+		this.foldersAndArticlesButton = page.getByLabel('Folders and Articles');
 		this.knowledgeBaseEditArticlePage = new KnowledgeBaseEditArticlePage(
 			page
 		);
 		this.knowledgeBaseViewArticlePage = new KnowledgeBaseViewArticlePage(
 			page
 		);
+		this.newButton = page.getByLabel('New', {exact: true});
+		this.page = page;
+		this.productMenuPage = new ProductMenuPage(page);
 		this.selectAllCheckBox = page.getByLabel(
 			'Select All Items on the Page'
 		);
+	}
+
+	async goto() {
+		await this.productMenuPage.goToKnowledgeBaseMenuItem();
+	}
+
+	private async goToCreateNewArticle() {
+		await this.goToFoldersAndArticles();
+		await this.newButton.waitFor();
+		await this.newButton.click();
+		await this.basicArticleMenuItem.waitFor();
+		await this.basicArticleMenuItem.click();
+	}
+
+	private async goToFoldersAndArticles() {
+		await this.goto();
+
+		const foldersAndArticlesButtonVisible =
+			await this.foldersAndArticlesButton.isVisible();
+
+		if (foldersAndArticlesButtonVisible) {
+			await this.foldersAndArticlesButton.click();
+		}
 	}
 
 	async publishNewKnowledgeBaseArticle(content: string, title: string) {
@@ -53,20 +80,13 @@ export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
 		);
 	}
 
-	private async goToCreateNewArticle() {
-		await this.goToFoldersAndArticles();
-		await this.newButton.waitFor();
-		await this.newButton.click();
-		await this.basicArticleMenuItem.waitFor();
-		await this.basicArticleMenuItem.click();
-	}
-
 	async deleteKnowledgeBaseArticle(title: string) {
 		await this.knowledgeBaseViewArticlePage.goto(title);
 		await this.knowledgeBaseViewArticlePage.deleteKnowledgeBaseArticle();
 	}
 
 	async deleteAll(page: Page, recycleBin: boolean) {
+		await this.goto();
 		const disabled = await this.selectAllCheckBox.isDisabled();
 
 		if (!disabled) {
@@ -80,8 +100,7 @@ export class KnowledgeBaseFoldersAndArticlesPage extends KnowledgeBasePage {
 					dialog.accept().catch(() => {});
 				});
 				await page.getByRole('button', {name: 'Delete'}).click();
-			}
-			else {
+			} else {
 				await page.getByRole('button', {name: 'Delete'}).click();
 			}
 		}

@@ -5,14 +5,13 @@
 
 import {test} from '@playwright/test';
 
-import {KnowledgeBaseHelper} from '../helpers/knowledgeBase/KnowledgeBaseHelper';
-
+import {KnowledgeBasePage} from '../pages/knowledge-base-web/KnowledgeBasePage.page';
 
 const knowledgeBasePages = test.extend<{
-	knowledgeBaseHelper: KnowledgeBaseHelper;
+	knowledgeBasePage: KnowledgeBasePage;
 }>({
-	knowledgeBaseHelper: async ({page}, use) => {
-		await use(new KnowledgeBaseHelper(page));
+	knowledgeBasePage: async ({page}, use) => {
+		await use(new KnowledgeBasePage(page));
 	},
 });
 
