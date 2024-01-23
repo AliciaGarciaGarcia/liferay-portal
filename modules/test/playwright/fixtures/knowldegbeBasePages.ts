@@ -5,8 +5,8 @@
 
 import {test} from '@playwright/test';
 
+import {KnowledgeBasePage} from '../pages/knowledge-base-web/KnowledgeBase.page';
 import {KnowledgeBaseEditArticlePage} from '../pages/knowledge-base-web/KnowledgeBaseEditArticle.page';
-import {KnowledgeBasePage} from '../pages/knowledge-base-web/KnowledgeBasePage.page';
 import {KnowledgeBaseViewArticlePage} from '../pages/knowledge-base-web/KnowledgeBaseViewArticle.page';
 
 const knowledgeBasePages = test.extend<{

@@ -5,7 +5,7 @@
 
 import {FrameLocator, Locator, Page} from '@playwright/test';
 
-import {KnowledgeBasePage} from './KnowledgeBasePage.page';
+import {KnowledgeBasePage} from './KnowledgeBase.page';
 
 export class KnowledgeBaseEditArticlePage {
 	readonly contentFrameLocator: FrameLocator;
