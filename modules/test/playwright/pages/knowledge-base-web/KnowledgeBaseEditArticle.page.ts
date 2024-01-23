@@ -27,8 +27,12 @@ export class KnowledgeBaseEditArticlePage {
 		this.page = page;
 	}
 
-	async publishNewKnowledgeBaseArticle(content: string, title: string) {
+	async goto() {
 		await this.knowledgeBasePage.goToCreateNewArticle();
+	}
+
+	async publishNewKnowledgeBaseArticle(content: string, title: string) {
+		await this.goto();
 		await this.titlePlaceholder.fill(title);
 		await this.contentTextBox.fill(content);
 		await this.publishButton.click();
@@ -38,7 +42,7 @@ export class KnowledgeBaseEditArticlePage {
 		content: string,
 		title: string
 	) {
-		await this.knowledgeBasePage.goToCreateNewArticle();
+		await this.goto();
 		await this.titlePlaceholder.fill(title);
 		await this.contentTextBox.fill(content);
 		await this.publishButton.click();
