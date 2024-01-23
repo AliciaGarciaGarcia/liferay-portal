@@ -11,7 +11,7 @@ import {getRandomString} from '../../utils/util';
 
 export const test = mergeTests(apiHelpersTest, knowledgeBasePages);
 
-test('KBArticle - Publish and delete', async ({
+test('can publish and delete an article', async ({
 	apiHelpers,
 	knowledgeBaseEditArticle,
 	page,
@@ -46,7 +46,7 @@ test('KBArticle - Publish and delete', async ({
 	await page.close();
 });
 
-test('KBArticle - Publish and delete - Schedule menu', async ({
+test('can schedule the publication of an article', async ({
 	apiHelpers,
 	knowledgeBaseEditArticle,
 	knowledgeBaseViewArticlePage,
@@ -79,7 +79,7 @@ test('KBArticle - Publish and delete - Schedule menu', async ({
 	await page.close();
 });
 
-test('KBArticle - Delete all - without recycle Bin', async ({
+test('can delete all articles without a recycle bin', async ({
 	apiHelpers,
 	knowledgeBaseEditArticle,
 	knowledgeBasePage,
@@ -101,7 +101,7 @@ test('KBArticle - Delete all - without recycle Bin', async ({
 	await page.close();
 });
 
-test('KBArticle - Delete all - recycle Bin', async ({
+test('can delete all articles with a recycle bin', async ({
 	apiHelpers,
 	knowledgeBaseEditArticle,
 	knowledgeBasePage,
