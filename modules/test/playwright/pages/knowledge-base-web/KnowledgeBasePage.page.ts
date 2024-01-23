@@ -6,8 +6,6 @@
 import {Locator, Page} from '@playwright/test';
 
 import {ProductMenuPage} from '../product-navigation-product-menu/ProductMenu.page';
-import {KnowledgeBaseEditArticlePage} from './KnowledgeBaseEditArticle.page';
-import {KnowledgeBaseViewArticlePage} from './KnowledgeBaseViewArticle.page';
 
 export class KnowledgeBasePage {
 	readonly basicArticleMenuItem: Locator;
@@ -16,20 +14,12 @@ export class KnowledgeBasePage {
 	readonly page: Page;
 	readonly productMenuPage: ProductMenuPage;
 	readonly selectAllCheckBox: Locator;
-	knowledgeBaseEditArticlePage: KnowledgeBaseEditArticlePage;
-	knowledgeBaseViewArticlePage: KnowledgeBaseViewArticlePage;
 
 	constructor(page: Page) {
 		this.basicArticleMenuItem = page.getByRole('menuitem', {
 			name: 'Basic Article',
 		});
 		this.foldersAndArticlesButton = page.getByLabel('Folders and Articles');
-		this.knowledgeBaseEditArticlePage = new KnowledgeBaseEditArticlePage(
-			page
-		);
-		this.knowledgeBaseViewArticlePage = new KnowledgeBaseViewArticlePage(
-			page
-		);
 		this.newButton = page.getByLabel('New', {exact: true});
 		this.page = page;
 		this.productMenuPage = new ProductMenuPage(page);
@@ -42,7 +32,7 @@ export class KnowledgeBasePage {
 		await this.productMenuPage.goToKnowledgeBaseMenuItem();
 	}
 
-	private async goToCreateNewArticle() {
+	async goToCreateNewArticle() {
 		await this.goToFoldersAndArticles();
 		await this.newButton.waitFor();
 		await this.newButton.click();
@@ -61,30 +51,6 @@ export class KnowledgeBasePage {
 		}
 	}
 
-	async publishNewKnowledgeBaseArticle(content: string, title: string) {
-		await this.goToCreateNewArticle();
-		await this.knowledgeBaseEditArticlePage.publishNewKnowledgeBaseArticle(
-			content,
-			title
-		);
-	}
-
-	async publishNewKnowledgeBaseArticleWithSchedule(
-		content: string,
-		title: string
-	) {
-		await this.goToCreateNewArticle();
-		await this.knowledgeBaseEditArticlePage.publishNewKnowledgeBaseArticleWithSchedule(
-			content,
-			title
-		);
-	}
-
-	async deleteKnowledgeBaseArticle(title: string) {
-		await this.knowledgeBaseViewArticlePage.goto(title);
-		await this.knowledgeBaseViewArticlePage.deleteKnowledgeBaseArticle();
-	}
-
 	async deleteAll(page: Page, recycleBin: boolean) {
 		await this.goto();
 		const disabled = await this.selectAllCheckBox.isDisabled();
@@ -100,7 +66,8 @@ export class KnowledgeBasePage {
 					dialog.accept().catch(() => {});
 				});
 				await page.getByRole('button', {name: 'Delete'}).click();
-			} else {
+			}
+			else {
 				await page.getByRole('button', {name: 'Delete'}).click();
 			}
 		}

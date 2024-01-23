@@ -13,7 +13,7 @@ export const test = mergeTests(apiHelpersTest, knowledgeBasePages);
 
 test('KBArticle - Publish and delete', async ({
 	apiHelpers,
-	knowledgeBasePage,
+	knowledgeBaseEditArticle,
 	page,
 }) => {
 	await apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
@@ -21,7 +21,7 @@ test('KBArticle - Publish and delete', async ({
 	const content = getRandomString();
 	const title = getRandomString();
 
-	await knowledgeBasePage.publishNewKnowledgeBaseArticle(
+	await knowledgeBaseEditArticle.publishNewKnowledgeBaseArticle(
 		content,
 		title
 	);
@@ -48,7 +48,8 @@ test('KBArticle - Publish and delete', async ({
 
 test('KBArticle - Publish and delete - Schedule menu', async ({
 	apiHelpers,
-	knowledgeBasePage,
+	knowledgeBaseEditArticle,
+	knowledgeBaseViewArticlePage,
 	page,
 }) => {
 	await apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', true);
@@ -56,14 +57,14 @@ test('KBArticle - Publish and delete - Schedule menu', async ({
 	const content = getRandomString();
 	const title = getRandomString();
 
-	await knowledgeBasePage.publishNewKnowledgeBaseArticleWithSchedule(
+	await knowledgeBaseEditArticle.publishNewKnowledgeBaseArticleWithSchedule(
 		content,
 		title
 	);
 
 	await expect(page.getByRole('link', {name: title})).toBeVisible();
 
-	await knowledgeBasePage.deleteKnowledgeBaseArticle(title);
+	await knowledgeBaseViewArticlePage.deleteKnowledgeBaseArticle(title);
 
 	await expect(
 		page.locator(
@@ -80,12 +81,13 @@ test('KBArticle - Publish and delete - Schedule menu', async ({
 
 test('KBArticle - Delete all - without recycle Bin', async ({
 	apiHelpers,
+	knowledgeBaseEditArticle,
 	knowledgeBasePage,
 	page,
 }) => {
 	await apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
 
-	await knowledgeBasePage.publishNewKnowledgeBaseArticle(
+	await knowledgeBaseEditArticle.publishNewKnowledgeBaseArticle(
 		getRandomString(),
 		getRandomString()
 	);
@@ -101,12 +103,13 @@ test('KBArticle - Delete all - without recycle Bin', async ({
 
 test('KBArticle - Delete all - recycle Bin', async ({
 	apiHelpers,
+	knowledgeBaseEditArticle,
 	knowledgeBasePage,
 	page,
 }) => {
 	await apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', true);
 
-	await knowledgeBasePage.publishNewKnowledgeBaseArticleWithSchedule(
+	await knowledgeBaseEditArticle.publishNewKnowledgeBaseArticleWithSchedule(
 		getRandomString(),
 		getRandomString()
 	);

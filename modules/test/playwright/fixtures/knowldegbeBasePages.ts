@@ -5,13 +5,23 @@
 
 import {test} from '@playwright/test';
 
+import {KnowledgeBaseEditArticlePage} from '../pages/knowledge-base-web/KnowledgeBaseEditArticle.page';
 import {KnowledgeBasePage} from '../pages/knowledge-base-web/KnowledgeBasePage.page';
+import {KnowledgeBaseViewArticlePage} from '../pages/knowledge-base-web/KnowledgeBaseViewArticle.page';
 
 const knowledgeBasePages = test.extend<{
+	knowledgeBaseEditArticle: KnowledgeBaseEditArticlePage;
 	knowledgeBasePage: KnowledgeBasePage;
+	knowledgeBaseViewArticlePage: KnowledgeBaseViewArticlePage;
 }>({
+	knowledgeBaseEditArticle: async ({page}, use) => {
+		await use(new KnowledgeBaseEditArticlePage(page));
+	},
 	knowledgeBasePage: async ({page}, use) => {
 		await use(new KnowledgeBasePage(page));
+	},
+	knowledgeBaseViewArticlePage: async ({page}, use) => {
+		await use(new KnowledgeBaseViewArticlePage(page));
 	},
 });
 

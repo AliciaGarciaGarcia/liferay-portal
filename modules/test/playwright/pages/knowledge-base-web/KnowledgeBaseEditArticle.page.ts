@@ -5,6 +5,8 @@
 
 import {FrameLocator, Locator, Page} from '@playwright/test';
 
+import {KnowledgeBasePage} from './KnowledgeBasePage.page';
+
 export class KnowledgeBaseEditArticlePage {
 	readonly contentFrameLocator: FrameLocator;
 	readonly contentTextBox: Locator;
@@ -13,16 +15,20 @@ export class KnowledgeBaseEditArticlePage {
 	readonly publishMenuItem: Locator;
 	readonly titlePlaceholder: Locator;
 
+	knowledgeBasePage: KnowledgeBasePage;
+
 	constructor(page: Page) {
 		this.contentFrameLocator = page.frameLocator('iframe');
 		this.contentTextBox = this.contentFrameLocator.getByRole('textbox');
-		this.page = page;
-		this.titlePlaceholder = page.getByPlaceholder('Untitled Article');
+		this.knowledgeBasePage = new KnowledgeBasePage(page);
 		this.publishButton = page.getByRole('button', {name: 'Publish'});
 		this.publishMenuItem = page.getByRole('menuitem', {name: 'Publish'});
+		this.titlePlaceholder = page.getByPlaceholder('Untitled Article');
+		this.page = page;
 	}
 
 	async publishNewKnowledgeBaseArticle(content: string, title: string) {
+		await this.knowledgeBasePage.goToCreateNewArticle();
 		await this.titlePlaceholder.fill(title);
 		await this.contentTextBox.fill(content);
 		await this.publishButton.click();
@@ -32,6 +38,7 @@ export class KnowledgeBaseEditArticlePage {
 		content: string,
 		title: string
 	) {
+		await this.knowledgeBasePage.goToCreateNewArticle();
 		await this.titlePlaceholder.fill(title);
 		await this.contentTextBox.fill(content);
 		await this.publishButton.click();
