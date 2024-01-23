@@ -7,9 +7,10 @@ import {expect, mergeTests} from '@playwright/test';
 
 import {apiHelpersTest} from '../../fixtures/apiHelpersTest';
 import {knowledgeBasePages} from '../../fixtures/knowldegbeBasePages';
+import {loginTest} from '../../fixtures/loginTest';
 import {getRandomString} from '../../utils/util';
 
-export const test = mergeTests(apiHelpersTest, knowledgeBasePages);
+export const test = mergeTests(apiHelpersTest, knowledgeBasePages, loginTest);
 
 test('can publish and delete an article', async ({
 	apiHelpers,
