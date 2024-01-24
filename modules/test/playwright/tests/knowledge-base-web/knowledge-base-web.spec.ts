@@ -47,7 +47,7 @@ test('can publish and delete an article', async ({
 	await page.close();
 });
 
-test('can schedule the publication of an article', async ({
+test('can schedule the publication of an article and delete it afterward', async ({
 	apiHelpers,
 	knowledgeBaseEditArticle,
 	knowledgeBaseViewArticlePage,
@@ -57,13 +57,14 @@ test('can schedule the publication of an article', async ({
 
 	const content = getRandomString();
 	const title = getRandomString();
+	const kbArticle = page.getByRole('link', {name: title});
 
 	await knowledgeBaseEditArticle.publishNewKnowledgeBaseArticleWithSchedule(
 		content,
 		title
 	);
 
-	await expect(page.getByRole('link', {name: title})).toBeVisible();
+	await expect(kbArticle).toBeVisible();
 
 	await knowledgeBaseViewArticlePage.deleteKnowledgeBaseArticle(title);
 
@@ -73,7 +74,7 @@ test('can schedule the publication of an article', async ({
 		)
 	).toBeVisible();
 
-	await expect(page.getByRole('link', {name: title})).toBeHidden();
+	await expect(kbArticle).toBeHidden();
 
 	await apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
 
