@@ -53,6 +53,26 @@ export class KnowledgeBasePage {
 		}
 	}
 
+	async deleteKnowledgeBaseArticle(title: string) {
+		await this.goto();
+
+		const kbArticle = await this.page
+			.locator(
+				'#_com_liferay_knowledge_base_web_portlet_AdminPortlet_kbObjectsSearchContainer .list-group-item'
+			)
+			.filter({hasText: title});
+
+		await kbArticle
+			.getByLabel('Show Actions')
+			.and(this.page.locator('[aria-haspopup]'))
+			.click();
+
+		this.page.once('dialog', (dialog) => {
+			dialog.accept().catch(() => {});
+		});
+		await this.page.getByRole('menuitem', {name: 'Delete'}).click();
+	}
+
 	async deleteAll(page: Page, recycleBin: boolean) {
 		await this.goto();
 		const disabled = await this.selectAllCheckBox.isDisabled();

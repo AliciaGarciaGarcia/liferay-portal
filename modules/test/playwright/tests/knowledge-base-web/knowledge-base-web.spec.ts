@@ -15,33 +15,22 @@ export const test = mergeTests(apiHelpersTest, knowledgeBasePages, loginTest);
 test('can publish and delete an article', async ({
 	apiHelpers,
 	knowledgeBaseEditArticle,
+	knowledgeBasePage,
 	page,
 }) => {
 	await apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
 
 	const content = getRandomString();
 	const title = getRandomString();
+	const kbArticle = page.getByRole('link', {name: title});
 
 	await knowledgeBaseEditArticle.publishNewKnowledgeBaseArticle(
 		content,
 		title
 	);
+	await expect(kbArticle).toBeVisible();
 
-	await expect(page.getByRole('link', {name: title})).toBeVisible();
-
-	const kbArticle = await page
-		.locator(
-			'#_com_liferay_knowledge_base_web_portlet_AdminPortlet_kbObjectsSearchContainer .list-group-item'
-		)
-		.filter({hasText: title});
-
-	await kbArticle.getByLabel('Show Actions').click();
-
-	page.once('dialog', (dialog) => {
-		dialog.accept().catch(() => {});
-	});
-	await page.getByRole('menuitem', {name: 'Delete'}).click();
-
+	await knowledgeBasePage.deleteKnowledgeBaseArticle(title);
 	await expect(kbArticle).toBeHidden();
 
 	await page.close();
