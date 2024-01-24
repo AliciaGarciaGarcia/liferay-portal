@@ -52,17 +52,14 @@ test('can schedule the publication of an article and delete it afterward', async
 		content,
 		title
 	);
-
 	await expect(kbArticle).toBeVisible();
 
 	await knowledgeBaseViewArticlePage.deleteKnowledgeBaseArticle(title);
-
 	await expect(
 		page.locator(
 			'[id="_com_liferay_knowledge_base_web_portlet_AdminPortlet_recycleBinAlert"]'
 		)
 	).toBeVisible();
-
 	await expect(kbArticle).toBeHidden();
 
 	await apiHelpers.featureFlag.updateFeatureFlag('LPS-188058', false);
@@ -84,7 +81,6 @@ test('can delete all articles without a recycle bin', async ({
 	);
 
 	await knowledgeBasePage.deleteAll(page, false);
-
 	await expect(
 		page.getByRole('heading', {name: 'Knowledge base is empty.'})
 	).toBeVisible();
@@ -106,13 +102,11 @@ test('can delete all articles with a recycle bin', async ({
 	);
 
 	await knowledgeBasePage.deleteAll(page, false);
-
 	await expect(
 		page.locator(
 			'[id="_com_liferay_knowledge_base_web_portlet_AdminPortlet_recycleBinAlert"]'
 		)
 	).toBeVisible();
-
 	await expect(
 		page.getByRole('heading', {name: 'Knowledge base is empty.'})
 	).toBeVisible();
