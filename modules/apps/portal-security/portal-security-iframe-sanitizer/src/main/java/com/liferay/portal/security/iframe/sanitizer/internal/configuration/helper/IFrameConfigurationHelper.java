@@ -31,7 +31,7 @@ import org.osgi.service.component.annotations.Modified;
  */
 @Component(
 	configurationPid = "com.liferay.portal.security.iframe.sanitizer.configuration.IFrameConfiguration",
-	service = {}
+	service = IFrameConfigurationHelper.class
 )
 public class IFrameConfigurationHelper {
 
@@ -60,7 +60,8 @@ public class IFrameConfigurationHelper {
 			new IFrameSanitizerManagedServiceFactory(),
 			MapUtil.singletonDictionary(
 				Constants.SERVICE_PID,
-				"com.liferay.portal.security.iframe.sanitizer.configuration.IFrameConfiguration.scoped"));
+				"com.liferay.portal.security.iframe.sanitizer.configuration." +
+					"IFrameConfiguration.scoped"));
 	}
 
 	@Deactivate
@@ -101,7 +102,8 @@ public class IFrameConfigurationHelper {
 
 		@Override
 		public String getName() {
-			return "com.liferay.portal.security.iframe.sanitizer.configuration.IFrameConfiguration.scoped";
+			return "com.liferay.portal.security.iframe.sanitizer." +
+				"configuration.IFrameConfiguration.scoped";
 		}
 
 		@Override
