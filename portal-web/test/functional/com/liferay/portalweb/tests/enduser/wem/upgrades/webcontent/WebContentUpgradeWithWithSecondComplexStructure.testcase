@@ -36,7 +36,7 @@ definition {
 
 			DataEngine.editFieldLabel(
 				fieldFieldLabel = "Label UF Comunicado",
-				fieldFieldLabelEdit = "Label UF Release Edit");
+				fieldFieldLabelEdit = "Label UF Release");
 
 			DataEngine.editFieldLabel(
 				fieldFieldLabel = "Url imagem do banner",
@@ -52,7 +52,7 @@ definition {
 
 			PortletEntry.changeLocale(locale = "en-US");
 
-			WebContent.assertFieldOnWebContent(fieldFieldLabel = "Label UF Release Edit");
+			WebContent.assertFieldOnWebContent(fieldFieldLabel = "Label UF Release");
 
 			WebContent.assertFieldOnWebContent(fieldFieldLabel = "Url banner image");
 		}
