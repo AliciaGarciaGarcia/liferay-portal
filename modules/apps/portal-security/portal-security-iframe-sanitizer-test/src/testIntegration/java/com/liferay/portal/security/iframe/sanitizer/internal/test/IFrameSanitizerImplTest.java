@@ -8,9 +8,10 @@ package com.liferay.portal.security.iframe.sanitizer.internal.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.petra.function.UnsafeRunnable;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.configuration.test.util.ConfigurationTemporarySwapper;
+import com.liferay.portal.configuration.test.util.CompanyConfigurationTemporarySwapper;
 import com.liferay.portal.kernel.sanitizer.Sanitizer;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.test.rule.Inject;
@@ -38,7 +39,7 @@ public class IFrameSanitizerImplTest {
 	@Test
 	public void testSanitizeHTMLWithIFrame() throws Exception {
 		_withConfiguration(
-			true, false, "",
+			TestPropsValues.getCompanyId(), true, false, "",
 			() -> Assert.assertEquals(
 				_BASIC_HTML_CONTENT + _EXPECTED_IFRAME_TAG,
 				_sanitize(
@@ -51,7 +52,7 @@ public class IFrameSanitizerImplTest {
 		throws Exception {
 
 		_withConfiguration(
-			false, false, "",
+			TestPropsValues.getCompanyId(), false, false, "",
 			() -> Assert.assertEquals(
 				_BASIC_HTML_CONTENT + _INITIAL_IFRAME_TAG,
 				_sanitize(
@@ -64,7 +65,7 @@ public class IFrameSanitizerImplTest {
 		throws Exception {
 
 		_withConfiguration(
-			true, true, "",
+			TestPropsValues.getCompanyId(), true, true, "",
 			() -> Assert.assertEquals(
 				_BASIC_HTML_CONTENT,
 				_sanitize(
@@ -77,7 +78,7 @@ public class IFrameSanitizerImplTest {
 		throws Exception {
 
 		_withConfiguration(
-			true, false, "test",
+			TestPropsValues.getCompanyId(), true, false, "test",
 			() -> Assert.assertEquals(
 				_BASIC_HTML_CONTENT + _EXPECTED_IFRAME_TAG_SANDBOX,
 				_sanitize(
@@ -88,7 +89,7 @@ public class IFrameSanitizerImplTest {
 	@Test
 	public void testSanitizeHTMLWithInvalidContentType() throws Exception {
 		_withConfiguration(
-			true, false, "",
+			TestPropsValues.getCompanyId(), true, false, "",
 			() -> {
 				Assert.assertEquals(
 					_BASIC_CONTENT,
@@ -107,7 +108,7 @@ public class IFrameSanitizerImplTest {
 	@Test
 	public void testSanitizeHTMLWithNullContent() throws Exception {
 		_withConfiguration(
-			true, false, "",
+			TestPropsValues.getCompanyId(), true, false, "",
 			() -> Assert.assertEquals(
 				StringPool.BLANK,
 				_sanitize(StringPool.BLANK, ContentTypes.TEXT_HTML)));
@@ -116,7 +117,7 @@ public class IFrameSanitizerImplTest {
 	@Test
 	public void testSanitizeHTMLWithNullContentType() throws Exception {
 		_withConfiguration(
-			true, false, "",
+			TestPropsValues.getCompanyId(), true, false, "",
 			() -> Assert.assertEquals(
 				_BASIC_HTML_CONTENT + _INITIAL_IFRAME_TAG,
 				_sanitize(
@@ -127,7 +128,7 @@ public class IFrameSanitizerImplTest {
 	@Test
 	public void testSanitizeHTMLWithoutIFrame() throws Exception {
 		_withConfiguration(
-			true, false, "",
+			TestPropsValues.getCompanyId(), true, false, "",
 			() -> Assert.assertEquals(
 				_BASIC_HTML_CONTENT,
 				_sanitize(_BASIC_HTML_CONTENT, ContentTypes.TEXT_HTML)));
@@ -142,22 +143,24 @@ public class IFrameSanitizerImplTest {
 	}
 
 	private void _withConfiguration(
-			boolean enabled, boolean removeIFrameTags,
+			long companyId, boolean enabled, boolean removeIFrameTags,
 			String sandboxAttributeValues,
 			UnsafeRunnable<Exception> unsafeRunnable)
 		throws Exception {
 
-		try (ConfigurationTemporarySwapper configurationTemporarySwapper =
-				new ConfigurationTemporarySwapper(
-					"com.liferay.portal.security.iframe.sanitizer." +
-						"configuration.IFrameConfiguration",
-					HashMapDictionaryBuilder.<String, Object>put(
-						"enabled", enabled
-					).put(
-						"removeIFrameTags", removeIFrameTags
-					).put(
-						"sandboxAttributeValues", sandboxAttributeValues
-					).build())) {
+		try (CompanyConfigurationTemporarySwapper
+				companyConfigurationTemporarySwapper =
+					new CompanyConfigurationTemporarySwapper(
+						companyId,
+						"com.liferay.portal.security.iframe.sanitizer." +
+							"configuration.IFrameConfiguration",
+						HashMapDictionaryBuilder.<String, Object>put(
+							"enabled", enabled
+						).put(
+							"removeIFrameTags", removeIFrameTags
+						).put(
+							"sandboxAttributeValues", sandboxAttributeValues
+						).build())) {
 
 			unsafeRunnable.run();
 		}
