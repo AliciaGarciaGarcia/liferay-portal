@@ -64,7 +64,8 @@ definition {
 	macro confirmSharepointApp() {
 		WaitForElementPresent.waitForLastScript();
 
-		var app_name = "SharePoint Online";
+		var app_name = "CM 2024/2025";
+		echo("0");
 
 		if (IsElementPresent(locator1 = "MicrosoftLogin#LOGIN_STAY_SIGNED_IN_CONFIRMATION")) {
 			AssertClick(
@@ -74,7 +75,10 @@ definition {
 			WaitForElementPresent.waitForLastScript();
 		}
 
+		echo("1");
+
 		if (IsElementPresent(locator1 = "MicrosoftLogin#SHAREPOINT_NOTIFICATION")) {
+			echo("Trust It");
 			AssertClick(
 				locator1 = "MicrosoftLogin#SHAREPOINT_TRUST_IT_BUTTON",
 				value1 = "Trust It");
@@ -82,14 +86,22 @@ definition {
 			WaitForElementPresent.waitForLastScript();
 		}
 
+		echo("2");
+
 		if (IsElementPresent(locator1 = "Portlet#HEADER")) {
+
+			echo("refresh");
 			Refresh();
 		}
 		else {
+
+			echo("Sitio de grupo de Liferay");
 			AssertTextEquals(
 				locator1 = "MicrosoftLogin#SHAREPOINT_SITE_TITLE",
 				value1 = "Sitio de grupo de Liferay");
 		}
+
+		echo("END");
 	}
 
 }
