@@ -184,6 +184,75 @@ public class SharepointOAuth2TokenEntryPersistenceTest {
 	}
 
 	@Test
+	public void testUpdateExisting2() throws Exception {
+		long pk = RandomTestUtil.nextLong();
+
+		SharepointOAuth2TokenEntry newSharepointOAuth2TokenEntry =
+			_persistence.create(pk);
+
+		newSharepointOAuth2TokenEntry.setCompanyId(RandomTestUtil.nextLong());
+
+		newSharepointOAuth2TokenEntry.setUserId(RandomTestUtil.nextLong());
+
+		newSharepointOAuth2TokenEntry.setUserName(
+			RandomTestUtil.randomString());
+
+		newSharepointOAuth2TokenEntry.setCreateDate(RandomTestUtil.nextDate());
+
+		newSharepointOAuth2TokenEntry.setAccessToken(
+			RandomTestUtil.randomString());
+
+		newSharepointOAuth2TokenEntry.setConfigurationPid(
+			RandomTestUtil.randomString());
+
+		newSharepointOAuth2TokenEntry.setExpirationDate(
+			RandomTestUtil.nextDate());
+
+		newSharepointOAuth2TokenEntry.setRefreshToken(
+			RandomTestUtil.randomString());
+
+		_sharepointOAuth2TokenEntries.add(
+			_persistence.update(newSharepointOAuth2TokenEntry));
+
+		SharepointOAuth2TokenEntry existingSharepointOAuth2TokenEntry =
+			_persistence.findByPrimaryKey(
+				newSharepointOAuth2TokenEntry.getPrimaryKey());
+
+		Assert.assertEquals(
+			existingSharepointOAuth2TokenEntry.
+				getSharepointOAuth2TokenEntryId(),
+			newSharepointOAuth2TokenEntry.getSharepointOAuth2TokenEntryId());
+		Assert.assertEquals(
+			existingSharepointOAuth2TokenEntry.getCompanyId(),
+			newSharepointOAuth2TokenEntry.getCompanyId());
+		Assert.assertEquals(
+			existingSharepointOAuth2TokenEntry.getUserId(),
+			newSharepointOAuth2TokenEntry.getUserId());
+		Assert.assertEquals(
+			existingSharepointOAuth2TokenEntry.getUserName(),
+			newSharepointOAuth2TokenEntry.getUserName());
+		Assert.assertEquals(
+			Time.getShortTimestamp(
+				existingSharepointOAuth2TokenEntry.getCreateDate()),
+			Time.getShortTimestamp(
+				newSharepointOAuth2TokenEntry.getCreateDate()));
+		Assert.assertEquals(
+			existingSharepointOAuth2TokenEntry.getAccessToken(),
+			newSharepointOAuth2TokenEntry.getAccessToken());
+		Assert.assertEquals(
+			existingSharepointOAuth2TokenEntry.getConfigurationPid(),
+			newSharepointOAuth2TokenEntry.getConfigurationPid());
+		Assert.assertEquals(
+			Time.getShortTimestamp(
+				existingSharepointOAuth2TokenEntry.getExpirationDate()),
+			Time.getShortTimestamp(
+				newSharepointOAuth2TokenEntry.getExpirationDate()));
+		Assert.assertEquals(
+			existingSharepointOAuth2TokenEntry.getRefreshToken(),
+			newSharepointOAuth2TokenEntry.getRefreshToken());
+	}
+
+	@Test
 	public void testCountByUserId() throws Exception {
 		_persistence.countByUserId(RandomTestUtil.nextLong());
 
