@@ -40,6 +40,7 @@ import com.liferay.dynamic.data.mapping.test.util.DDMFormTestUtil;
 import com.liferay.dynamic.data.mapping.test.util.DDMStructureTestUtil;
 import com.liferay.dynamic.data.mapping.test.util.DDMTemplateTestUtil;
 import com.liferay.exportimport.kernel.service.StagingLocalService;
+import com.liferay.friendly.url.exception.FriendlyURLLocalizationUrlTitleException;
 import com.liferay.journal.constants.JournalArticleConstants;
 import com.liferay.journal.constants.JournalFolderConstants;
 import com.liferay.journal.exception.ArticleFriendlyURLException;
@@ -178,6 +179,20 @@ public class JournalArticleLocalServiceTest {
 			article.getExternalReferenceCode(), _group.getGroupId(),
 			JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID,
 			article.getArticleId(), true);
+	}
+
+	@Test(
+		expected = FriendlyURLLocalizationUrlTitleException.MustNotHaveTrailingSlash.class
+	)
+	public void testAddArticleWithURLWithStartingSlashThrowsMustNotHaveTrailingSlashException()
+		throws Exception {
+
+		JournalTestUtil.addArticle(
+			_group.getGroupId(),
+			JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID,
+			HashMapBuilder.put(
+				_portal.getSiteDefaultLocale(_group), "test/"
+			).build());
 	}
 
 	@Test
