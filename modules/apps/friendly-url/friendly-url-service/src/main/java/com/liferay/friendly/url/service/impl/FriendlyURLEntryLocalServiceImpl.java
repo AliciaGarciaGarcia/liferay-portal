@@ -881,6 +881,10 @@ public class FriendlyURLEntryLocalServiceImpl
 			Map<String, String> urlTitleMap, ServiceContext serviceContext)
 		throws PortalException {
 
+		if (serviceContext == null) {
+			return;
+		}
+
 		long[] friendlyURLAssetCategoryIds = GetterUtil.getLongValues(
 			serviceContext.getAttribute("friendlyURLAssetCategoryIds"));
 
