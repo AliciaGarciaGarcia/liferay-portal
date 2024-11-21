@@ -808,7 +808,7 @@ definition {
 			groupName = "Test Site Name",
 			siteURLKey = "test-site-name");
 
-		Panel.expandPanel(panel = "Configuration");
+		Blogs.expandPanel(panel = "Friendly URL");
 
 		BlogsEntry.addCustomURL(customURL = "blogs-entry-new");
 
@@ -932,7 +932,7 @@ definition {
 			groupName = "Test Site Name",
 			siteURLKey = "test-site-name");
 
-		Panel.expandPanel(panel = "Configuration");
+		Blogs.expandPanel(panel = "Friendly URL");
 
 		BlogsEntry.addCustomURL(customURL = "blogs-entry-new");
 
