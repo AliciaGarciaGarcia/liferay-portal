@@ -7,12 +7,6 @@ apply plugin: "antlr"
 String parserDirName = "com/liferay/wiki/engine/creole/internal/parser/parser"
 List<String> startParameterTaskNames = gradle.startParameter.taskNames
 
-configurations {
-	compileInclude {
-		extendsFrom antlr
-	}
-}
-
 dependencies {
 	antlr group: "org.antlr", name: "antlr", version: "3.0.1"
 	compileInclude group: "antlr", name: "antlr", version: "2.7.7"
