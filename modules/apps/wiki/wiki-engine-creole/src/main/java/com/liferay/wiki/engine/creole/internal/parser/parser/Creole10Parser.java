@@ -129,7 +129,7 @@ public class Creole10Parser extends Parser {
 
         public Creole10Parser(TokenStream input) {
             super(input);
-            ruleMemo = new HashMap[128+1];
+            state.ruleMemo = new HashMap[128+1];
          }
         
 
@@ -204,8 +204,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_whitespaces_in_wikipage111);
                     whitespaces();
-                    _fsp--;
-                    if (failed) return ;
+                    state._fsp--;
+                    if (state.failed) return ;
 
                     }
                     break;
@@ -214,12 +214,12 @@ public class Creole10Parser extends Parser {
 
             pushFollow(FOLLOW_paragraphs_in_wikipage119);
             p=paragraphs();
-            _fsp--;
-            if (failed) return ;
-            if ( backtracking==0 ) {
+            state._fsp--;
+            if (state.failed) return ;
+            if ( state.backtracking==0 ) {
                _wikipage = new WikiPageNode(p); 
             }
-            match(input,EOF,FOLLOW_EOF_in_wikipage124); if (failed) return ;
+            match(input,EOF,FOLLOW_EOF_in_wikipage124); if (state.failed) return ;
 
             }
 
@@ -264,9 +264,9 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_paragraph_in_paragraphs142);
             	    p=paragraph();
-            	    _fsp--;
-            	    if (failed) return sections;
-            	    if ( backtracking==0 ) {
+            	    state._fsp--;
+            	    if (state.failed) return sections;
+            	    if ( state.backtracking==0 ) {
             	      
             	      			if (p != null){ // at this moment we ignore paragraps with blanks
             	      				sections.add(p);
@@ -332,7 +332,7 @@ public class Creole10Parser extends Parser {
                     alt6=3;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return node;}
+                    if (state.backtracking>0) {state.failed=true; return node;}
                     NoViableAltException nvae =
                         new NoViableAltException("178:1: paragraph returns [ASTNode node = null] : (n= nowiki_block | blanks paragraph_separator | ( blanks )? (tof= table_of_contents | h= heading | {...}?hn= horizontalrule | l= list | t= table | tp= text_paragraph ) ( paragraph_separator )? );", 6, 1, input);
 
@@ -436,7 +436,7 @@ public class Creole10Parser extends Parser {
                     }
                     break;
                 default:
-                    if (backtracking>0) {failed=true; return node;}
+                    if (state.backtracking>0) {state.failed=true; return node;}
                     NoViableAltException nvae =
                         new NoViableAltException("178:1: paragraph returns [ASTNode node = null] : (n= nowiki_block | blanks paragraph_separator | ( blanks )? (tof= table_of_contents | h= heading | {...}?hn= horizontalrule | l= list | t= table | tp= text_paragraph ) ( paragraph_separator )? );", 6, 2, input);
 
@@ -526,7 +526,7 @@ public class Creole10Parser extends Parser {
                 }
                 break;
             default:
-                if (backtracking>0) {failed=true; return node;}
+                if (state.backtracking>0) {state.failed=true; return node;}
                 NoViableAltException nvae =
                     new NoViableAltException("178:1: paragraph returns [ASTNode node = null] : (n= nowiki_block | blanks paragraph_separator | ( blanks )? (tof= table_of_contents | h= heading | {...}?hn= horizontalrule | l= list | t= table | tp= text_paragraph ) ( paragraph_separator )? );", 6, 0, input);
 
@@ -539,9 +539,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_nowiki_block_in_paragraph163);
                     n=nowiki_block();
-                    _fsp--;
-                    if (failed) return node;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return node;
+                    if ( state.backtracking==0 ) {
                        node = n; 
                     }
 
@@ -552,12 +552,12 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_blanks_in_paragraph170);
                     blanks();
-                    _fsp--;
-                    if (failed) return node;
+                    state._fsp--;
+                    if (state.failed) return node;
                     pushFollow(FOLLOW_paragraph_separator_in_paragraph173);
                     paragraph_separator();
-                    _fsp--;
-                    if (failed) return node;
+                    state._fsp--;
+                    if (state.failed) return node;
 
                     }
                     break;
@@ -577,8 +577,8 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_blanks_in_paragraph180);
                             blanks();
-                            _fsp--;
-                            if (failed) return node;
+                            state._fsp--;
+                            if (state.failed) return node;
 
                             }
                             break;
@@ -615,7 +615,7 @@ public class Creole10Parser extends Parser {
                             alt4=6;
                         }
                         else {
-                            if (backtracking>0) {failed=true; return node;}
+                            if (state.backtracking>0) {state.failed=true; return node;}
                             NoViableAltException nvae =
                                 new NoViableAltException("182:4: (tof= table_of_contents | h= heading | {...}?hn= horizontalrule | l= list | t= table | tp= text_paragraph )", 4, 4, input);
 
@@ -639,7 +639,7 @@ public class Creole10Parser extends Parser {
                             alt4=6;
                         }
                         else {
-                            if (backtracking>0) {failed=true; return node;}
+                            if (state.backtracking>0) {state.failed=true; return node;}
                             NoViableAltException nvae =
                                 new NoViableAltException("182:4: (tof= table_of_contents | h= heading | {...}?hn= horizontalrule | l= list | t= table | tp= text_paragraph )", 4, 6, input);
 
@@ -728,7 +728,7 @@ public class Creole10Parser extends Parser {
                         }
                         break;
                     default:
-                        if (backtracking>0) {failed=true; return node;}
+                        if (state.backtracking>0) {state.failed=true; return node;}
                         NoViableAltException nvae =
                             new NoViableAltException("182:4: (tof= table_of_contents | h= heading | {...}?hn= horizontalrule | l= list | t= table | tp= text_paragraph )", 4, 0, input);
 
@@ -741,9 +741,9 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_table_of_contents_in_paragraph194);
                             tof=table_of_contents();
-                            _fsp--;
-                            if (failed) return node;
-                            if ( backtracking==0 ) {
+                            state._fsp--;
+                            if (state.failed) return node;
+                            if ( state.backtracking==0 ) {
                               node = tof;
                             }
 
@@ -754,9 +754,9 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_heading_in_paragraph208);
                             h=heading();
-                            _fsp--;
-                            if (failed) return node;
-                            if ( backtracking==0 ) {
+                            state._fsp--;
+                            if (state.failed) return node;
+                            if ( state.backtracking==0 ) {
                                node = h;
                             }
 
@@ -767,14 +767,14 @@ public class Creole10Parser extends Parser {
                             {
                             if ( !( input.LA(1) == DASH && input.LA(2) == DASH &&
                             				input.LA(3) == DASH && input.LA(4) == DASH ) ) {
-                                if (backtracking>0) {failed=true; return node;}
+                                if (state.backtracking>0) {state.failed=true; return node;}
                                 throw new FailedPredicateException(input, "paragraph", " input.LA(1) == DASH && input.LA(2) == DASH &&\r\n\t\t\t\tinput.LA(3) == DASH && input.LA(4) == DASH ");
                             }
                             pushFollow(FOLLOW_horizontalrule_in_paragraph227);
                             hn=horizontalrule();
-                            _fsp--;
-                            if (failed) return node;
-                            if ( backtracking==0 ) {
+                            state._fsp--;
+                            if (state.failed) return node;
+                            if ( state.backtracking==0 ) {
                               node = hn;
                             }
 
@@ -785,9 +785,9 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_list_in_paragraph240);
                             l=list();
-                            _fsp--;
-                            if (failed) return node;
-                            if ( backtracking==0 ) {
+                            state._fsp--;
+                            if (state.failed) return node;
+                            if ( state.backtracking==0 ) {
                               node = l;
                             }
 
@@ -798,9 +798,9 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_table_in_paragraph253);
                             t=table();
-                            _fsp--;
-                            if (failed) return node;
-                            if ( backtracking==0 ) {
+                            state._fsp--;
+                            if (state.failed) return node;
+                            if ( state.backtracking==0 ) {
                                node = t; 
                             }
 
@@ -811,9 +811,9 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_text_paragraph_in_paragraph266);
                             tp=text_paragraph();
-                            _fsp--;
-                            if (failed) return node;
-                            if ( backtracking==0 ) {
+                            state._fsp--;
+                            if (state.failed) return node;
+                            if ( state.backtracking==0 ) {
                               node = tp; 
                             }
 
@@ -849,8 +849,8 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_paragraph_separator_in_paragraph279);
                             paragraph_separator();
-                            _fsp--;
-                            if (failed) return node;
+                            state._fsp--;
+                            if (state.failed) return node;
 
                             }
                             break;
@@ -1050,9 +1050,9 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_text_line_in_text_paragraph307);
             	    tl=text_line();
-            	    _fsp--;
-            	    if (failed) return paragraph;
-            	    if ( backtracking==0 ) {
+            	    state._fsp--;
+            	    if (state.failed) return paragraph;
+            	    if ( state.backtracking==0 ) {
             	        paragraph.addChildASTNode(tl);  
             	    }
 
@@ -1063,9 +1063,9 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_nowiki_inline_in_text_paragraph339);
             	    nw=nowiki_inline();
-            	    _fsp--;
-            	    if (failed) return paragraph;
-            	    if ( backtracking==0 ) {
+            	    state._fsp--;
+            	    if (state.failed) return paragraph;
+            	    if ( state.backtracking==0 ) {
             	      paragraph.addChildASTNode(nw);
             	    }
             	    // Creole10.g:200:66: (te= text_element )*
@@ -1085,9 +1085,9 @@ public class Creole10Parser extends Parser {
             	    	    {
             	    	    pushFollow(FOLLOW_text_element_in_text_paragraph350);
             	    	    te=text_element();
-            	    	    _fsp--;
-            	    	    if (failed) return paragraph;
-            	    	    if ( backtracking==0 ) {
+            	    	    state._fsp--;
+            	    	    if (state.failed) return paragraph;
+            	    	    if ( state.backtracking==0 ) {
             	    	      paragraph.addChildASTNode(te);
             	    	    }
 
@@ -1101,15 +1101,15 @@ public class Creole10Parser extends Parser {
 
             	    pushFollow(FOLLOW_text_lineseparator_in_text_paragraph359);
             	    text_lineseparator();
-            	    _fsp--;
-            	    if (failed) return paragraph;
+            	    state._fsp--;
+            	    if (state.failed) return paragraph;
 
             	    }
             	    break;
 
             	default :
             	    if ( cnt8 >= 1 ) break loop8;
-            	    if (backtracking>0) {failed=true; return paragraph;}
+            	    if (state.backtracking>0) {state.failed=true; return paragraph;}
                         EarlyExitException eee =
                             new EarlyExitException(8, input);
                         throw eee;
@@ -1148,9 +1148,9 @@ public class Creole10Parser extends Parser {
             {
             pushFollow(FOLLOW_text_firstelement_in_text_line382);
             first=text_firstelement();
-            _fsp--;
-            if (failed) return line;
-            if ( backtracking==0 ) {
+            state._fsp--;
+            if (state.failed) return line;
+            if ( state.backtracking==0 ) {
               
               										if (first != null) { // recovering from errors
               											line.addChildASTNode(first);
@@ -1174,9 +1174,9 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_text_element_in_text_line401);
             	    element=text_element();
-            	    _fsp--;
-            	    if (failed) return line;
-            	    if ( backtracking==0 ) {
+            	    state._fsp--;
+            	    if (state.failed) return line;
+            	    if ( state.backtracking==0 ) {
             	      
             	      								if (element != null) // recovering from errors
             	      									line.addChildASTNode(element);
@@ -1193,8 +1193,8 @@ public class Creole10Parser extends Parser {
 
             pushFollow(FOLLOW_text_lineseparator_in_text_line415);
             text_lineseparator();
-            _fsp--;
-            if (failed) return line;
+            state._fsp--;
+            if (state.failed) return line;
 
             }
 
@@ -1232,7 +1232,7 @@ public class Creole10Parser extends Parser {
                 alt10=2;
             }
             else {
-                if (backtracking>0) {failed=true; return item;}
+                if (state.backtracking>0) {state.failed=true; return item;}
                 NoViableAltException nvae =
                     new NoViableAltException("215:1: text_firstelement returns [ASTNode item = null] : ({...}?tf= text_formattedelement | tu= text_first_unformattedelement );", 10, 0, input);
 
@@ -1243,14 +1243,14 @@ public class Creole10Parser extends Parser {
                     // Creole10.g:216:4: {...}?tf= text_formattedelement
                     {
                     if ( !( input.LA(1) != STAR || (input.LA(1) == STAR && input.LA(2) == STAR) ) ) {
-                        if (backtracking>0) {failed=true; return item;}
+                        if (state.backtracking>0) {state.failed=true; return item;}
                         throw new FailedPredicateException(input, "text_firstelement", " input.LA(1) != STAR || (input.LA(1) == STAR && input.LA(2) == STAR) ");
                     }
                     pushFollow(FOLLOW_text_formattedelement_in_text_firstelement437);
                     tf=text_formattedelement();
-                    _fsp--;
-                    if (failed) return item;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return item;
+                    if ( state.backtracking==0 ) {
                        item = tf; 
                     }
 
@@ -1261,9 +1261,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_text_first_unformattedelement_in_text_firstelement448);
                     tu=text_first_unformattedelement();
-                    _fsp--;
-                    if (failed) return item;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return item;
+                    if ( state.backtracking==0 ) {
                        item = tu; 
                     }
 
@@ -1305,7 +1305,7 @@ public class Creole10Parser extends Parser {
                 alt15=2;
             }
             else {
-                if (backtracking>0) {failed=true; return item;}
+                if (state.backtracking>0) {state.failed=true; return item;}
                 NoViableAltException nvae =
                     new NoViableAltException("220:1: text_formattedelement returns [FormattedTextNode item = null] : ( ital_markup ic= text_italcontent ( ( NEWLINE )? ital_markup )? | bold_markup bc= text_boldcontent ( ( NEWLINE )? bold_markup )? );", 15, 0, input);
 
@@ -1317,13 +1317,13 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_ital_markup_in_text_formattedelement464);
                     ital_markup();
-                    _fsp--;
-                    if (failed) return item;
+                    state._fsp--;
+                    if (state.failed) return item;
                     pushFollow(FOLLOW_text_italcontent_in_text_formattedelement470);
                     ic=text_italcontent();
-                    _fsp--;
-                    if (failed) return item;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return item;
+                    if ( state.backtracking==0 ) {
                        item = new ItalicTextNode(ic); 
                     }
                     // Creole10.g:221:81: ( ( NEWLINE )? ital_markup )?
@@ -1355,7 +1355,7 @@ public class Creole10Parser extends Parser {
                                 case 1 :
                                     // Creole10.g:221:85: NEWLINE
                                     {
-                                    match(input,NEWLINE,FOLLOW_NEWLINE_in_text_formattedelement479); if (failed) return item;
+                                    match(input,NEWLINE,FOLLOW_NEWLINE_in_text_formattedelement479); if (state.failed) return item;
 
                                     }
                                     break;
@@ -1364,8 +1364,8 @@ public class Creole10Parser extends Parser {
 
                             pushFollow(FOLLOW_ital_markup_in_text_formattedelement485);
                             ital_markup();
-                            _fsp--;
-                            if (failed) return item;
+                            state._fsp--;
+                            if (state.failed) return item;
 
                             }
                             break;
@@ -1380,13 +1380,13 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_bold_markup_in_text_formattedelement493);
                     bold_markup();
-                    _fsp--;
-                    if (failed) return item;
+                    state._fsp--;
+                    if (state.failed) return item;
                     pushFollow(FOLLOW_text_boldcontent_in_text_formattedelement500);
                     bc=text_boldcontent();
-                    _fsp--;
-                    if (failed) return item;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return item;
+                    if ( state.backtracking==0 ) {
                       item = new BoldTextNode(bc); 
                     }
                     // Creole10.g:222:79: ( ( NEWLINE )? bold_markup )?
@@ -1426,7 +1426,7 @@ public class Creole10Parser extends Parser {
                                 case 1 :
                                     // Creole10.g:222:83: NEWLINE
                                     {
-                                    match(input,NEWLINE,FOLLOW_NEWLINE_in_text_formattedelement509); if (failed) return item;
+                                    match(input,NEWLINE,FOLLOW_NEWLINE_in_text_formattedelement509); if (state.failed) return item;
 
                                     }
                                     break;
@@ -1435,8 +1435,8 @@ public class Creole10Parser extends Parser {
 
                             pushFollow(FOLLOW_bold_markup_in_text_formattedelement515);
                             bold_markup();
-                            _fsp--;
-                            if (failed) return item;
+                            state._fsp--;
+                            if (state.failed) return item;
 
                             }
                             break;
@@ -1480,7 +1480,7 @@ public class Creole10Parser extends Parser {
                 alt18=1;
             }
             else {
-                if (backtracking>0) {failed=true; return text;}
+                if (state.backtracking>0) {state.failed=true; return text;}
                 NoViableAltException nvae =
                     new NoViableAltException("224:1: text_boldcontent returns [ CollectionNode text = new CollectionNode() ] : ( ( NEWLINE )? (p= text_boldcontentpart )* | EOF );", 18, 0, input);
 
@@ -1501,7 +1501,7 @@ public class Creole10Parser extends Parser {
                         case 1 :
                             // Creole10.g:225:6: NEWLINE
                             {
-                            match(input,NEWLINE,FOLLOW_NEWLINE_in_text_boldcontent534); if (failed) return text;
+                            match(input,NEWLINE,FOLLOW_NEWLINE_in_text_boldcontent534); if (state.failed) return text;
 
                             }
                             break;
@@ -1642,9 +1642,9 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_text_boldcontentpart_in_text_boldcontent546);
                     	    p=text_boldcontentpart();
-                    	    _fsp--;
-                    	    if (failed) return text;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return text;
+                    	    if ( state.backtracking==0 ) {
                     	       text.add(p); 
                     	    }
 
@@ -1662,7 +1662,7 @@ public class Creole10Parser extends Parser {
                 case 2 :
                     // Creole10.g:226:4: EOF
                     {
-                    match(input,EOF,FOLLOW_EOF_in_text_boldcontent557); if (failed) return text;
+                    match(input,EOF,FOLLOW_EOF_in_text_boldcontent557); if (state.failed) return text;
 
                     }
                     break;
@@ -1700,7 +1700,7 @@ public class Creole10Parser extends Parser {
                 alt21=1;
             }
             else {
-                if (backtracking>0) {failed=true; return text;}
+                if (state.backtracking>0) {state.failed=true; return text;}
                 NoViableAltException nvae =
                     new NoViableAltException("228:1: text_italcontent returns [ CollectionNode text = new CollectionNode() ] : ( ( NEWLINE )? (p= text_italcontentpart )* | EOF );", 21, 0, input);
 
@@ -1721,7 +1721,7 @@ public class Creole10Parser extends Parser {
                         case 1 :
                             // Creole10.g:229:6: NEWLINE
                             {
-                            match(input,NEWLINE,FOLLOW_NEWLINE_in_text_italcontent573); if (failed) return text;
+                            match(input,NEWLINE,FOLLOW_NEWLINE_in_text_italcontent573); if (state.failed) return text;
 
                             }
                             break;
@@ -1851,9 +1851,9 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_text_italcontentpart_in_text_italcontent585);
                     	    p=text_italcontentpart();
-                    	    _fsp--;
-                    	    if (failed) return text;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return text;
+                    	    if ( state.backtracking==0 ) {
                     	       text.add(p); 
                     	    }
 
@@ -1871,7 +1871,7 @@ public class Creole10Parser extends Parser {
                 case 2 :
                     // Creole10.g:230:4: EOF
                     {
-                    match(input,EOF,FOLLOW_EOF_in_text_italcontent596); if (failed) return text;
+                    match(input,EOF,FOLLOW_EOF_in_text_italcontent596); if (state.failed) return text;
 
                     }
                     break;
@@ -1916,7 +1916,7 @@ public class Creole10Parser extends Parser {
                     alt22=3;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return item;}
+                    if (state.backtracking>0) {state.failed=true; return item;}
                     NoViableAltException nvae =
                         new NoViableAltException("232:1: text_element returns [ASTNode item = null] : ( onestar tu1= text_unformattedelement | tu2= text_unformattedelement onestar | tf= text_formattedelement );", 22, 1, input);
 
@@ -2034,7 +2034,7 @@ public class Creole10Parser extends Parser {
                 }
                 break;
             default:
-                if (backtracking>0) {failed=true; return item;}
+                if (state.backtracking>0) {state.failed=true; return item;}
                 NoViableAltException nvae =
                     new NoViableAltException("232:1: text_element returns [ASTNode item = null] : ( onestar tu1= text_unformattedelement | tu2= text_unformattedelement onestar | tf= text_formattedelement );", 22, 0, input);
 
@@ -2047,13 +2047,13 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_onestar_in_text_element610);
                     onestar();
-                    _fsp--;
-                    if (failed) return item;
+                    state._fsp--;
+                    if (state.failed) return item;
                     pushFollow(FOLLOW_text_unformattedelement_in_text_element617);
                     tu1=text_unformattedelement();
-                    _fsp--;
-                    if (failed) return item;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return item;
+                    if ( state.backtracking==0 ) {
                        item = tu1; 
                     }
 
@@ -2064,13 +2064,13 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_text_unformattedelement_in_text_element628);
                     tu2=text_unformattedelement();
-                    _fsp--;
-                    if (failed) return item;
+                    state._fsp--;
+                    if (state.failed) return item;
                     pushFollow(FOLLOW_onestar_in_text_element631);
                     onestar();
-                    _fsp--;
-                    if (failed) return item;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return item;
+                    if ( state.backtracking==0 ) {
                        item = tu2; 
                     }
 
@@ -2081,9 +2081,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_text_formattedelement_in_text_element642);
                     tf=text_formattedelement();
-                    _fsp--;
-                    if (failed) return item;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return item;
+                    if ( state.backtracking==0 ) {
                        item = tf; 
                     }
 
@@ -2125,7 +2125,7 @@ public class Creole10Parser extends Parser {
                 alt24=2;
             }
             else {
-                if (backtracking>0) {failed=true; return node;}
+                if (state.backtracking>0) {state.failed=true; return node;}
                 NoViableAltException nvae =
                     new NoViableAltException("238:1: text_boldcontentpart returns [FormattedTextNode node = null] : ( ital_markup t= text_bolditalcontent ( ital_markup )? | tf= text_formattedcontent );", 24, 0, input);
 
@@ -2137,13 +2137,13 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_ital_markup_in_text_boldcontentpart659);
                     ital_markup();
-                    _fsp--;
-                    if (failed) return node;
+                    state._fsp--;
+                    if (state.failed) return node;
                     pushFollow(FOLLOW_text_bolditalcontent_in_text_boldcontentpart666);
                     t=text_bolditalcontent();
-                    _fsp--;
-                    if (failed) return node;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return node;
+                    if ( state.backtracking==0 ) {
                       node = new ItalicTextNode(t); 
                     }
                     // Creole10.g:239:84: ( ital_markup )?
@@ -2159,8 +2159,8 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_ital_markup_in_text_boldcontentpart673);
                             ital_markup();
-                            _fsp--;
-                            if (failed) return node;
+                            state._fsp--;
+                            if (state.failed) return node;
 
                             }
                             break;
@@ -2175,9 +2175,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_text_formattedcontent_in_text_boldcontentpart685);
                     tf=text_formattedcontent();
-                    _fsp--;
-                    if (failed) return node;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return node;
+                    if ( state.backtracking==0 ) {
                       node = new FormattedTextNode(tf); 
                     }
 
@@ -2222,7 +2222,7 @@ public class Creole10Parser extends Parser {
                     alt26=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return node;}
+                    if (state.backtracking>0) {state.failed=true; return node;}
                     NoViableAltException nvae =
                         new NoViableAltException("242:1: text_italcontentpart returns [FormattedTextNode node = null] : ( bold_markup t= text_bolditalcontent ( bold_markup )? | tf= text_formattedcontent );", 26, 1, input);
 
@@ -2233,7 +2233,7 @@ public class Creole10Parser extends Parser {
                 alt26=2;
             }
             else {
-                if (backtracking>0) {failed=true; return node;}
+                if (state.backtracking>0) {state.failed=true; return node;}
                 NoViableAltException nvae =
                     new NoViableAltException("242:1: text_italcontentpart returns [FormattedTextNode node = null] : ( bold_markup t= text_bolditalcontent ( bold_markup )? | tf= text_formattedcontent );", 26, 0, input);
 
@@ -2245,13 +2245,13 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_bold_markup_in_text_italcontentpart701);
                     bold_markup();
-                    _fsp--;
-                    if (failed) return node;
+                    state._fsp--;
+                    if (state.failed) return node;
                     pushFollow(FOLLOW_text_bolditalcontent_in_text_italcontentpart708);
                     t=text_bolditalcontent();
-                    _fsp--;
-                    if (failed) return node;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return node;
+                    if ( state.backtracking==0 ) {
                        node = new BoldTextNode(t); 
                     }
                     // Creole10.g:243:82: ( bold_markup )?
@@ -2271,8 +2271,8 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_bold_markup_in_text_italcontentpart714);
                             bold_markup();
-                            _fsp--;
-                            if (failed) return node;
+                            state._fsp--;
+                            if (state.failed) return node;
 
                             }
                             break;
@@ -2287,9 +2287,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_text_formattedcontent_in_text_italcontentpart725);
                     tf=text_formattedcontent();
-                    _fsp--;
-                    if (failed) return node;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return node;
+                    if ( state.backtracking==0 ) {
                       node = new FormattedTextNode(tf); 
                     }
 
@@ -2329,7 +2329,7 @@ public class Creole10Parser extends Parser {
                 alt29=1;
             }
             else {
-                if (backtracking>0) {failed=true; return items;}
+                if (state.backtracking>0) {state.failed=true; return items;}
                 NoViableAltException nvae =
                     new NoViableAltException("246:1: text_bolditalcontent returns [ASTNode items = null] : ( ( NEWLINE )? (tf= text_formattedcontent )? | EOF );", 29, 0, input);
 
@@ -2350,7 +2350,7 @@ public class Creole10Parser extends Parser {
                         case 1 :
                             // Creole10.g:247:6: NEWLINE
                             {
-                            match(input,NEWLINE,FOLLOW_NEWLINE_in_text_bolditalcontent743); if (failed) return items;
+                            match(input,NEWLINE,FOLLOW_NEWLINE_in_text_bolditalcontent743); if (state.failed) return items;
 
                             }
                             break;
@@ -2481,9 +2481,9 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_text_formattedcontent_in_text_bolditalcontent754);
                             tf=text_formattedcontent();
-                            _fsp--;
-                            if (failed) return items;
-                            if ( backtracking==0 ) {
+                            state._fsp--;
+                            if (state.failed) return items;
+                            if ( state.backtracking==0 ) {
                               items = tf; 
                             }
 
@@ -2498,7 +2498,7 @@ public class Creole10Parser extends Parser {
                 case 2 :
                     // Creole10.g:248:4: EOF
                     {
-                    match(input,EOF,FOLLOW_EOF_in_text_bolditalcontent764); if (failed) return items;
+                    match(input,EOF,FOLLOW_EOF_in_text_bolditalcontent764); if (state.failed) return items;
 
                     }
                     break;
@@ -2530,8 +2530,8 @@ public class Creole10Parser extends Parser {
             {
             pushFollow(FOLLOW_onestar_in_text_formattedcontent778);
             onestar();
-            _fsp--;
-            if (failed) return items;
+            state._fsp--;
+            if (state.failed) return items;
             // Creole10.g:251:13: (t= text_unformattedelement onestar ( text_linebreak )? )+
             int cnt31=0;
             loop31:
@@ -2651,15 +2651,15 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_text_unformattedelement_in_text_formattedcontent787);
             	    t=text_unformattedelement();
-            	    _fsp--;
-            	    if (failed) return items;
-            	    if ( backtracking==0 ) {
+            	    state._fsp--;
+            	    if (state.failed) return items;
+            	    if ( state.backtracking==0 ) {
             	      items.add(t); 
             	    }
             	    pushFollow(FOLLOW_onestar_in_text_formattedcontent792);
             	    onestar();
-            	    _fsp--;
-            	    if (failed) return items;
+            	    state._fsp--;
+            	    if (state.failed) return items;
             	    // Creole10.g:251:81: ( text_linebreak )?
             	    int alt30=2;
             	    int LA30_0 = input.LA(1);
@@ -2686,8 +2686,8 @@ public class Creole10Parser extends Parser {
             	            {
             	            pushFollow(FOLLOW_text_linebreak_in_text_formattedcontent797);
             	            text_linebreak();
-            	            _fsp--;
-            	            if (failed) return items;
+            	            state._fsp--;
+            	            if (state.failed) return items;
 
             	            }
             	            break;
@@ -2700,7 +2700,7 @@ public class Creole10Parser extends Parser {
 
             	default :
             	    if ( cnt31 >= 1 ) break loop31;
-            	    if (backtracking>0) {failed=true; return items;}
+            	    if (state.backtracking>0) {state.failed=true; return items;}
                         EarlyExitException eee =
                             new EarlyExitException(31, input);
                         throw eee;
@@ -2732,13 +2732,13 @@ public class Creole10Parser extends Parser {
             {
             if ( !( input.LA(2) != DASH && input.LA(2) != POUND &&
             		input.LA(2) != EQUAL && input.LA(2) != NEWLINE ) ) {
-                if (backtracking>0) {failed=true; return ;}
+                if (state.backtracking>0) {state.failed=true; return ;}
                 throw new FailedPredicateException(input, "text_linebreak", " input.LA(2) != DASH && input.LA(2) != POUND &&\r\n\t\tinput.LA(2) != EQUAL && input.LA(2) != NEWLINE ");
             }
             pushFollow(FOLLOW_text_lineseparator_in_text_linebreak817);
             text_lineseparator();
-            _fsp--;
-            if (failed) return ;
+            state._fsp--;
+            if (state.failed) return ;
 
             }
 
@@ -2776,7 +2776,7 @@ public class Creole10Parser extends Parser {
                 alt32=2;
             }
             else {
-                if (backtracking>0) {failed=true; return element;}
+                if (state.backtracking>0) {state.failed=true; return element;}
                 NoViableAltException nvae =
                     new NoViableAltException("258:1: text_inlineelement returns [ASTNode element = null ] : (tf= text_first_inlineelement | nwi= nowiki_inline );", 32, 0, input);
 
@@ -2788,9 +2788,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_text_first_inlineelement_in_text_inlineelement835);
                     tf=text_first_inlineelement();
-                    _fsp--;
-                    if (failed) return element;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return element;
+                    if ( state.backtracking==0 ) {
                       element = tf; 
                     }
 
@@ -2801,9 +2801,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_nowiki_inline_in_text_inlineelement846);
                     nwi=nowiki_inline();
-                    _fsp--;
-                    if (failed) return element;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return element;
+                    if ( state.backtracking==0 ) {
                       element = nwi; 
                     }
 
@@ -2855,7 +2855,7 @@ public class Creole10Parser extends Parser {
                 }
                 break;
             default:
-                if (backtracking>0) {failed=true; return element;}
+                if (state.backtracking>0) {state.failed=true; return element;}
                 NoViableAltException nvae =
                     new NoViableAltException("262:1: text_first_inlineelement returns [ASTNode element = null] : (l= link | i= image | e= extension );", 33, 0, input);
 
@@ -2868,9 +2868,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_link_in_text_first_inlineelement867);
                     l=link();
-                    _fsp--;
-                    if (failed) return element;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return element;
+                    if ( state.backtracking==0 ) {
                       element = l;
                     }
 
@@ -2881,9 +2881,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_image_in_text_first_inlineelement878);
                     i=image();
-                    _fsp--;
-                    if (failed) return element;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return element;
+                    if ( state.backtracking==0 ) {
                       element = i;
                     }
 
@@ -2894,9 +2894,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_extension_in_text_first_inlineelement888);
                     e=extension();
-                    _fsp--;
-                    if (failed) return element;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return element;
+                    if ( state.backtracking==0 ) {
                       element = e;
                     }
 
@@ -2938,7 +2938,7 @@ public class Creole10Parser extends Parser {
                 alt34=2;
             }
             else {
-                if (backtracking>0) {failed=true; return item;}
+                if (state.backtracking>0) {state.failed=true; return item;}
                 NoViableAltException nvae =
                     new NoViableAltException("268:1: text_first_unformattedelement returns [ASTNode item = null] : (tfu= text_first_unformatted | tfi= text_first_inlineelement );", 34, 0, input);
 
@@ -2950,9 +2950,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_text_first_unformatted_in_text_first_unformattedelement908);
                     tfu=text_first_unformatted();
-                    _fsp--;
-                    if (failed) return item;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return item;
+                    if ( state.backtracking==0 ) {
                       item = new UnformattedTextNode(tfu);
                     }
 
@@ -2963,9 +2963,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_text_first_inlineelement_in_text_first_unformattedelement919);
                     tfi=text_first_inlineelement();
-                    _fsp--;
-                    if (failed) return item;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return item;
+                    if ( state.backtracking==0 ) {
                        item = tfi; 
                     }
 
@@ -3007,7 +3007,7 @@ public class Creole10Parser extends Parser {
                 alt36=2;
             }
             else {
-                if (backtracking>0) {failed=true; return items;}
+                if (state.backtracking>0) {state.failed=true; return items;}
                 NoViableAltException nvae =
                     new NoViableAltException("272:1: text_first_unformatted returns [CollectionNode items = new CollectionNode()] : (t= text_first_unformmatted_text | ( forced_linebreak | e= escaped )+ );", 36, 0, input);
 
@@ -3019,9 +3019,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_text_first_unformmatted_text_in_text_first_unformatted941);
                     t=text_first_unformmatted_text();
-                    _fsp--;
-                    if (failed) return items;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return items;
+                    if ( state.backtracking==0 ) {
                       items.add(new UnformattedTextNode(t.toString()));
                     }
 
@@ -3057,9 +3057,9 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_forced_linebreak_in_text_first_unformatted950);
                     	    forced_linebreak();
-                    	    _fsp--;
-                    	    if (failed) return items;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return items;
+                    	    if ( state.backtracking==0 ) {
                     	       items.add(new ForcedEndOfLineNode()); 
                     	    }
 
@@ -3070,9 +3070,9 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_escaped_in_text_first_unformatted962);
                     	    e=escaped();
-                    	    _fsp--;
-                    	    if (failed) return items;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return items;
+                    	    if ( state.backtracking==0 ) {
                     	      items.add(e);
                     	    }
 
@@ -3081,7 +3081,7 @@ public class Creole10Parser extends Parser {
 
                     	default :
                     	    if ( cnt35 >= 1 ) break loop35;
-                    	    if (backtracking>0) {failed=true; return items;}
+                    	    if (state.backtracking>0) {state.failed=true; return items;}
                                 EarlyExitException eee =
                                     new EarlyExitException(35, input);
                                 throw eee;
@@ -3136,16 +3136,16 @@ public class Creole10Parser extends Parser {
             	    c=(Token)input.LT(1);
             	    if ( (input.LA(1)>=FORCED_END_OF_LINE && input.LA(1)<=WIKI)||(input.LA(1)>=NOWIKI_BLOCK_CLOSE && input.LA(1)<=82) ) {
             	        input.consume();
-            	        errorRecovery=false;failed=false;
+            	        state.errorRecovery=false;state.failed=false;
             	    }
             	    else {
-            	        if (backtracking>0) {failed=true; return text;}
+            	        if (state.backtracking>0) {state.failed=true; return text;}
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
             	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_text_first_unformmatted_text990);    throw mse;
             	    }
 
-            	    if ( backtracking==0 ) {
+            	    if ( state.backtracking==0 ) {
             	      text.append(c.getText()); 
             	    }
 
@@ -3154,7 +3154,7 @@ public class Creole10Parser extends Parser {
 
             	default :
             	    if ( cnt37 >= 1 ) break loop37;
-            	    if (backtracking>0) {failed=true; return text;}
+            	    if (state.backtracking>0) {state.failed=true; return text;}
                         EarlyExitException eee =
                             new EarlyExitException(37, input);
                         throw eee;
@@ -3199,7 +3199,7 @@ public class Creole10Parser extends Parser {
                 alt38=2;
             }
             else {
-                if (backtracking>0) {failed=true; return contents;}
+                if (state.backtracking>0) {state.failed=true; return contents;}
                 NoViableAltException nvae =
                     new NoViableAltException("294:1: text_unformattedelement returns [ASTNode contents = null] : (text= text_unformatted | ti= text_inlineelement );", 38, 0, input);
 
@@ -3211,9 +3211,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_text_unformatted_in_text_unformattedelement1104);
                     text=text_unformatted();
-                    _fsp--;
-                    if (failed) return contents;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return contents;
+                    if ( state.backtracking==0 ) {
                        contents = text; 
                     }
 
@@ -3224,9 +3224,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_text_inlineelement_in_text_unformattedelement1115);
                     ti=text_inlineelement();
-                    _fsp--;
-                    if (failed) return contents;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return contents;
+                    if ( state.backtracking==0 ) {
                        contents = ti; 
                     }
 
@@ -3268,7 +3268,7 @@ public class Creole10Parser extends Parser {
                 alt40=2;
             }
             else {
-                if (backtracking>0) {failed=true; return items;}
+                if (state.backtracking>0) {state.failed=true; return items;}
                 NoViableAltException nvae =
                     new NoViableAltException("299:1: text_unformatted returns [CollectionNode items = new CollectionNode()] : (contents= text_unformated_text | ( forced_linebreak | e= escaped )+ );", 40, 0, input);
 
@@ -3280,9 +3280,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_text_unformated_text_in_text_unformatted1137);
                     contents=text_unformated_text();
-                    _fsp--;
-                    if (failed) return items;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return items;
+                    if ( state.backtracking==0 ) {
                       items.add(new UnformattedTextNode(contents.toString())); 
                     }
 
@@ -3312,9 +3312,9 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_forced_linebreak_in_text_unformatted1146);
                     	    forced_linebreak();
-                    	    _fsp--;
-                    	    if (failed) return items;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return items;
+                    	    if ( state.backtracking==0 ) {
                     	       items.add(new ForcedEndOfLineNode()); 
                     	    }
 
@@ -3325,9 +3325,9 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_escaped_in_text_unformatted1158);
                     	    e=escaped();
-                    	    _fsp--;
-                    	    if (failed) return items;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return items;
+                    	    if ( state.backtracking==0 ) {
                     	      items.add(e);
                     	    }
 
@@ -3336,7 +3336,7 @@ public class Creole10Parser extends Parser {
 
                     	default :
                     	    if ( cnt39 >= 1 ) break loop39;
-                    	    if (backtracking>0) {failed=true; return items;}
+                    	    if (state.backtracking>0) {state.failed=true; return items;}
                                 EarlyExitException eee =
                                     new EarlyExitException(39, input);
                                 throw eee;
@@ -3391,16 +3391,16 @@ public class Creole10Parser extends Parser {
             	    c=(Token)input.LT(1);
             	    if ( (input.LA(1)>=FORCED_END_OF_LINE && input.LA(1)<=WIKI)||input.LA(1)==POUND||(input.LA(1)>=EQUAL && input.LA(1)<=PIPE)||(input.LA(1)>=NOWIKI_BLOCK_CLOSE && input.LA(1)<=82) ) {
             	        input.consume();
-            	        errorRecovery=false;failed=false;
+            	        state.errorRecovery=false;state.failed=false;
             	    }
             	    else {
-            	        if (backtracking>0) {failed=true; return text;}
+            	        if (state.backtracking>0) {state.failed=true; return text;}
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
             	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_text_unformated_text1183);    throw mse;
             	    }
 
-            	    if ( backtracking==0 ) {
+            	    if ( state.backtracking==0 ) {
             	       text.append(c.getText());
             	    }
 
@@ -3409,7 +3409,7 @@ public class Creole10Parser extends Parser {
 
             	default :
             	    if ( cnt41 >= 1 ) break loop41;
-            	    if (backtracking>0) {failed=true; return text;}
+            	    if (state.backtracking>0) {state.failed=true; return text;}
                         EarlyExitException eee =
                             new EarlyExitException(41, input);
                         throw eee;
@@ -3455,16 +3455,16 @@ public class Creole10Parser extends Parser {
             {
             pushFollow(FOLLOW_heading_markup_in_heading1285);
             heading_markup();
-            _fsp--;
-            if (failed) return header;
-            if ( backtracking==0 ) {
+            state._fsp--;
+            if (state.failed) return header;
+            if ( state.backtracking==0 ) {
               ((heading_scope)heading_stack.peek()).nestedLevel++;
             }
             pushFollow(FOLLOW_heading_content_in_heading1290);
             heading_content();
-            _fsp--;
-            if (failed) return header;
-            if ( backtracking==0 ) {
+            state._fsp--;
+            if (state.failed) return header;
+            if ( state.backtracking==0 ) {
                header = new HeadingNode(((heading_scope)heading_stack.peek()).items,((heading_scope)heading_stack.peek()).nestedLevel); 
             }
             // Creole10.g:331:134: ( heading_markup )?
@@ -3480,8 +3480,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_heading_markup_in_heading1297);
                     heading_markup();
-                    _fsp--;
-                    if (failed) return header;
+                    state._fsp--;
+                    if (state.failed) return header;
 
                     }
                     break;
@@ -3501,8 +3501,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_blanks_in_heading1305);
                     blanks();
-                    _fsp--;
-                    if (failed) return header;
+                    state._fsp--;
+                    if (state.failed) return header;
 
                     }
                     break;
@@ -3511,8 +3511,8 @@ public class Creole10Parser extends Parser {
 
             pushFollow(FOLLOW_paragraph_separator_in_heading1312);
             paragraph_separator();
-            _fsp--;
-            if (failed) return header;
+            state._fsp--;
+            if (state.failed) return header;
 
             }
 
@@ -3547,7 +3547,7 @@ public class Creole10Parser extends Parser {
                 alt45=2;
             }
             else {
-                if (backtracking>0) {failed=true; return ;}
+                if (state.backtracking>0) {state.failed=true; return ;}
                 NoViableAltException nvae =
                     new NoViableAltException("334:1: heading_content : ( heading_markup heading_content ( heading_markup )? | ht= heading_text );", 45, 0, input);
 
@@ -3559,15 +3559,15 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_heading_markup_in_heading_content1322);
                     heading_markup();
-                    _fsp--;
-                    if (failed) return ;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return ;
+                    if ( state.backtracking==0 ) {
                       ((heading_scope)heading_stack.peek()).nestedLevel++;
                     }
                     pushFollow(FOLLOW_heading_content_in_heading_content1327);
                     heading_content();
-                    _fsp--;
-                    if (failed) return ;
+                    state._fsp--;
+                    if (state.failed) return ;
                     // Creole10.g:335:64: ( heading_markup )?
                     int alt44=2;
                     int LA44_0 = input.LA(1);
@@ -3581,8 +3581,8 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_heading_markup_in_heading_content1332);
                             heading_markup();
-                            _fsp--;
-                            if (failed) return ;
+                            state._fsp--;
+                            if (state.failed) return ;
 
                             }
                             break;
@@ -3597,9 +3597,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_heading_text_in_heading_content1344);
                     ht=heading_text();
-                    _fsp--;
-                    if (failed) return ;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return ;
+                    if ( state.backtracking==0 ) {
                       ((heading_scope)heading_stack.peek()).items = ht;
                     }
 
@@ -3633,9 +3633,9 @@ public class Creole10Parser extends Parser {
             {
             pushFollow(FOLLOW_heading_cellcontent_in_heading_text1365);
             te=heading_cellcontent();
-            _fsp--;
-            if (failed) return items;
-            if ( backtracking==0 ) {
+            state._fsp--;
+            if (state.failed) return items;
+            if ( state.backtracking==0 ) {
               items = te;
             }
 
@@ -3667,8 +3667,8 @@ public class Creole10Parser extends Parser {
             {
             pushFollow(FOLLOW_onestar_in_heading_cellcontent1382);
             onestar();
-            _fsp--;
-            if (failed) return items;
+            state._fsp--;
+            if (state.failed) return items;
             // Creole10.g:344:13: (tcp= heading_cellcontentpart onestar )*
             loop46:
             do {
@@ -3686,9 +3686,9 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_heading_cellcontentpart_in_heading_cellcontent1391);
             	    tcp=heading_cellcontentpart();
-            	    _fsp--;
-            	    if (failed) return items;
-            	    if ( backtracking==0 ) {
+            	    state._fsp--;
+            	    if (state.failed) return items;
+            	    if ( state.backtracking==0 ) {
             	      
             	      
             	      							if (tcp != null) { // some AST Node could be NULL if bad CREOLE syntax is wrotten
@@ -3699,8 +3699,8 @@ public class Creole10Parser extends Parser {
             	    }
             	    pushFollow(FOLLOW_onestar_in_heading_cellcontent1402);
             	    onestar();
-            	    _fsp--;
-            	    if (failed) return items;
+            	    state._fsp--;
+            	    if (state.failed) return items;
 
             	    }
             	    break;
@@ -3755,7 +3755,7 @@ public class Creole10Parser extends Parser {
                     alt47=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return node;}
+                    if (state.backtracking>0) {state.failed=true; return node;}
                     NoViableAltException nvae =
                         new NoViableAltException("353:1: heading_cellcontentpart returns [ASTNode node = null] : (tf= heading_formattedelement | tu= heading_unformattedelement );", 47, 2, input);
 
@@ -3842,7 +3842,7 @@ public class Creole10Parser extends Parser {
                 }
                 break;
             default:
-                if (backtracking>0) {failed=true; return node;}
+                if (state.backtracking>0) {state.failed=true; return node;}
                 NoViableAltException nvae =
                     new NoViableAltException("353:1: heading_cellcontentpart returns [ASTNode node = null] : (tf= heading_formattedelement | tu= heading_unformattedelement );", 47, 0, input);
 
@@ -3855,9 +3855,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_heading_formattedelement_in_heading_cellcontentpart1423);
                     tf=heading_formattedelement();
-                    _fsp--;
-                    if (failed) return node;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return node;
+                    if ( state.backtracking==0 ) {
                       node =tf;
                     }
 
@@ -3868,9 +3868,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_heading_unformattedelement_in_heading_cellcontentpart1434);
                     tu=heading_unformattedelement();
-                    _fsp--;
-                    if (failed) return node;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return node;
+                    if ( state.backtracking==0 ) {
                       node =tu;
                     }
 
@@ -3912,7 +3912,7 @@ public class Creole10Parser extends Parser {
                 alt52=2;
             }
             else {
-                if (backtracking>0) {failed=true; return content;}
+                if (state.backtracking>0) {state.failed=true; return content;}
                 NoViableAltException nvae =
                     new NoViableAltException("357:1: heading_formattedelement returns [ASTNode content = null] : ( ital_markup (tic= heading_italcontent )? ( ital_markup )? | bold_markup (tbc= heading_boldcontent )? ( bold_markup )? );", 52, 0, input);
 
@@ -3924,8 +3924,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_ital_markup_in_heading_formattedelement1450);
                     ital_markup();
-                    _fsp--;
-                    if (failed) return content;
+                    state._fsp--;
+                    if (state.failed) return content;
                     // Creole10.g:358:18: (tic= heading_italcontent )?
                     int alt48=2;
                     switch ( input.LA(1) ) {
@@ -4046,9 +4046,9 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_heading_italcontent_in_heading_formattedelement1460);
                             tic=heading_italcontent();
-                            _fsp--;
-                            if (failed) return content;
-                            if ( backtracking==0 ) {
+                            state._fsp--;
+                            if (state.failed) return content;
+                            if ( state.backtracking==0 ) {
                                content = new ItalicTextNode(tic); 
                             }
 
@@ -4070,8 +4070,8 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_ital_markup_in_heading_formattedelement1469);
                             ital_markup();
-                            _fsp--;
-                            if (failed) return content;
+                            state._fsp--;
+                            if (state.failed) return content;
 
                             }
                             break;
@@ -4086,8 +4086,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_bold_markup_in_heading_formattedelement1477);
                     bold_markup();
-                    _fsp--;
-                    if (failed) return content;
+                    state._fsp--;
+                    if (state.failed) return content;
                     // Creole10.g:359:16: (tbc= heading_boldcontent )?
                     int alt50=2;
                     switch ( input.LA(1) ) {
@@ -4208,9 +4208,9 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_heading_boldcontent_in_heading_formattedelement1484);
                             tbc=heading_boldcontent();
-                            _fsp--;
-                            if (failed) return content;
-                            if ( backtracking==0 ) {
+                            state._fsp--;
+                            if (state.failed) return content;
+                            if ( state.backtracking==0 ) {
                               content = new BoldTextNode(tbc);
                             }
 
@@ -4236,8 +4236,8 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_bold_markup_in_heading_formattedelement1494);
                             bold_markup();
-                            _fsp--;
-                            if (failed) return content;
+                            state._fsp--;
+                            if (state.failed) return content;
 
                             }
                             break;
@@ -4281,7 +4281,7 @@ public class Creole10Parser extends Parser {
                 alt54=2;
             }
             else {
-                if (backtracking>0) {failed=true; return items;}
+                if (state.backtracking>0) {state.failed=true; return items;}
                 NoViableAltException nvae =
                     new NoViableAltException("361:1: heading_boldcontent returns [CollectionNode items = new CollectionNode()] : ( onestar (tb= heading_boldcontentpart onestar )+ | EOF );", 54, 0, input);
 
@@ -4293,8 +4293,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_onestar_in_heading_boldcontent1511);
                     onestar();
-                    _fsp--;
-                    if (failed) return items;
+                    state._fsp--;
+                    if (state.failed) return items;
                     // Creole10.g:362:13: (tb= heading_boldcontentpart onestar )+
                     int cnt53=0;
                     loop53:
@@ -4414,22 +4414,22 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_heading_boldcontentpart_in_heading_boldcontent1520);
                     	    tb=heading_boldcontentpart();
-                    	    _fsp--;
-                    	    if (failed) return items;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return items;
+                    	    if ( state.backtracking==0 ) {
                     	       items.add(tb); 
                     	    }
                     	    pushFollow(FOLLOW_onestar_in_heading_boldcontent1525);
                     	    onestar();
-                    	    _fsp--;
-                    	    if (failed) return items;
+                    	    state._fsp--;
+                    	    if (state.failed) return items;
 
                     	    }
                     	    break;
 
                     	default :
                     	    if ( cnt53 >= 1 ) break loop53;
-                    	    if (backtracking>0) {failed=true; return items;}
+                    	    if (state.backtracking>0) {state.failed=true; return items;}
                                 EarlyExitException eee =
                                     new EarlyExitException(53, input);
                                 throw eee;
@@ -4443,7 +4443,7 @@ public class Creole10Parser extends Parser {
                 case 2 :
                     // Creole10.g:363:4: EOF
                     {
-                    match(input,EOF,FOLLOW_EOF_in_heading_boldcontent1533); if (failed) return items;
+                    match(input,EOF,FOLLOW_EOF_in_heading_boldcontent1533); if (state.failed) return items;
 
                     }
                     break;
@@ -4481,7 +4481,7 @@ public class Creole10Parser extends Parser {
                 alt56=2;
             }
             else {
-                if (backtracking>0) {failed=true; return items;}
+                if (state.backtracking>0) {state.failed=true; return items;}
                 NoViableAltException nvae =
                     new NoViableAltException("365:1: heading_italcontent returns [CollectionNode items = new CollectionNode()] : ( onestar (ti= heading_italcontentpart onestar )+ | EOF );", 56, 0, input);
 
@@ -4493,8 +4493,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_onestar_in_heading_italcontent1547);
                     onestar();
-                    _fsp--;
-                    if (failed) return items;
+                    state._fsp--;
+                    if (state.failed) return items;
                     // Creole10.g:366:13: (ti= heading_italcontentpart onestar )+
                     int cnt55=0;
                     loop55:
@@ -4614,22 +4614,22 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_heading_italcontentpart_in_heading_italcontent1556);
                     	    ti=heading_italcontentpart();
-                    	    _fsp--;
-                    	    if (failed) return items;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return items;
+                    	    if ( state.backtracking==0 ) {
                     	       items.add(ti); 
                     	    }
                     	    pushFollow(FOLLOW_onestar_in_heading_italcontent1561);
                     	    onestar();
-                    	    _fsp--;
-                    	    if (failed) return items;
+                    	    state._fsp--;
+                    	    if (state.failed) return items;
 
                     	    }
                     	    break;
 
                     	default :
                     	    if ( cnt55 >= 1 ) break loop55;
-                    	    if (backtracking>0) {failed=true; return items;}
+                    	    if (state.backtracking>0) {state.failed=true; return items;}
                                 EarlyExitException eee =
                                     new EarlyExitException(55, input);
                                 throw eee;
@@ -4643,7 +4643,7 @@ public class Creole10Parser extends Parser {
                 case 2 :
                     // Creole10.g:367:4: EOF
                     {
-                    match(input,EOF,FOLLOW_EOF_in_heading_italcontent1569); if (failed) return items;
+                    match(input,EOF,FOLLOW_EOF_in_heading_italcontent1569); if (state.failed) return items;
 
                     }
                     break;
@@ -4680,7 +4680,7 @@ public class Creole10Parser extends Parser {
                 alt58=1;
             }
             else {
-                if (backtracking>0) {failed=true; return node;}
+                if (state.backtracking>0) {state.failed=true; return node;}
                 NoViableAltException nvae =
                     new NoViableAltException("369:1: heading_boldcontentpart returns [ASTNode node = null] : (tf= heading_formattedcontent | ital_markup tb= heading_bolditalcontent ( ital_markup )? );", 58, 0, input);
 
@@ -4692,9 +4692,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_heading_formattedcontent_in_heading_boldcontentpart1587);
                     tf=heading_formattedcontent();
-                    _fsp--;
-                    if (failed) return node;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return node;
+                    if ( state.backtracking==0 ) {
                       node = tf; 
                     }
 
@@ -4705,13 +4705,13 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_ital_markup_in_heading_boldcontentpart1594);
                     ital_markup();
-                    _fsp--;
-                    if (failed) return node;
+                    state._fsp--;
+                    if (state.failed) return node;
                     pushFollow(FOLLOW_heading_bolditalcontent_in_heading_boldcontentpart1601);
                     tb=heading_bolditalcontent();
-                    _fsp--;
-                    if (failed) return node;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return node;
+                    if ( state.backtracking==0 ) {
                        node = new ItalicTextNode(tb);  
                     }
                     // Creole10.g:371:94: ( ital_markup )?
@@ -4727,8 +4727,8 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_ital_markup_in_heading_boldcontentpart1608);
                             ital_markup();
-                            _fsp--;
-                            if (failed) return node;
+                            state._fsp--;
+                            if (state.failed) return node;
 
                             }
                             break;
@@ -4777,7 +4777,7 @@ public class Creole10Parser extends Parser {
                     alt60=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return node;}
+                    if (state.backtracking>0) {state.failed=true; return node;}
                     NoViableAltException nvae =
                         new NoViableAltException("373:1: heading_italcontentpart returns [ASTNode node = null] : ( bold_markup tb= heading_bolditalcontent ( bold_markup )? | tf= heading_formattedcontent );", 60, 1, input);
 
@@ -4788,7 +4788,7 @@ public class Creole10Parser extends Parser {
                 alt60=2;
             }
             else {
-                if (backtracking>0) {failed=true; return node;}
+                if (state.backtracking>0) {state.failed=true; return node;}
                 NoViableAltException nvae =
                     new NoViableAltException("373:1: heading_italcontentpart returns [ASTNode node = null] : ( bold_markup tb= heading_bolditalcontent ( bold_markup )? | tf= heading_formattedcontent );", 60, 0, input);
 
@@ -4800,13 +4800,13 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_bold_markup_in_heading_italcontentpart1625);
                     bold_markup();
-                    _fsp--;
-                    if (failed) return node;
+                    state._fsp--;
+                    if (state.failed) return node;
                     pushFollow(FOLLOW_heading_bolditalcontent_in_heading_italcontentpart1632);
                     tb=heading_bolditalcontent();
-                    _fsp--;
-                    if (failed) return node;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return node;
+                    if ( state.backtracking==0 ) {
                       node = new BoldTextNode(tb); 
                     }
                     // Creole10.g:374:90: ( bold_markup )?
@@ -4826,8 +4826,8 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_bold_markup_in_heading_italcontentpart1639);
                             bold_markup();
-                            _fsp--;
-                            if (failed) return node;
+                            state._fsp--;
+                            if (state.failed) return node;
 
                             }
                             break;
@@ -4842,9 +4842,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_heading_formattedcontent_in_heading_italcontentpart1651);
                     tf=heading_formattedcontent();
-                    _fsp--;
-                    if (failed) return node;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return node;
+                    if ( state.backtracking==0 ) {
                        node = tf; 
                     }
 
@@ -4884,7 +4884,7 @@ public class Creole10Parser extends Parser {
                 alt62=1;
             }
             else {
-                if (backtracking>0) {failed=true; return elements;}
+                if (state.backtracking>0) {state.failed=true; return elements;}
                 NoViableAltException nvae =
                     new NoViableAltException("377:1: heading_bolditalcontent returns [CollectionNode elements = null] : ( onestar (tfc= heading_formattedcontent onestar )? | EOF );", 62, 0, input);
 
@@ -4896,8 +4896,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_onestar_in_heading_bolditalcontent1667);
                     onestar();
-                    _fsp--;
-                    if (failed) return elements;
+                    state._fsp--;
+                    if (state.failed) return elements;
                     // Creole10.g:378:13: (tfc= heading_formattedcontent onestar )?
                     int alt61=2;
                     switch ( input.LA(1) ) {
@@ -5013,15 +5013,15 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_heading_formattedcontent_in_heading_bolditalcontent1676);
                             tfc=heading_formattedcontent();
-                            _fsp--;
-                            if (failed) return elements;
-                            if ( backtracking==0 ) {
+                            state._fsp--;
+                            if (state.failed) return elements;
+                            if ( state.backtracking==0 ) {
                                elements = tfc; 
                             }
                             pushFollow(FOLLOW_onestar_in_heading_bolditalcontent1681);
                             onestar();
-                            _fsp--;
-                            if (failed) return elements;
+                            state._fsp--;
+                            if (state.failed) return elements;
 
                             }
                             break;
@@ -5034,7 +5034,7 @@ public class Creole10Parser extends Parser {
                 case 2 :
                     // Creole10.g:379:4: EOF
                     {
-                    match(input,EOF,FOLLOW_EOF_in_heading_bolditalcontent1689); if (failed) return elements;
+                    match(input,EOF,FOLLOW_EOF_in_heading_bolditalcontent1689); if (state.failed) return elements;
 
                     }
                     break;
@@ -5183,9 +5183,9 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_heading_unformattedelement_in_heading_formattedcontent1709);
             	    tu=heading_unformattedelement();
-            	    _fsp--;
-            	    if (failed) return elements;
-            	    if ( backtracking==0 ) {
+            	    state._fsp--;
+            	    if (state.failed) return elements;
+            	    if ( state.backtracking==0 ) {
             	       elements.add(tu); 
             	    }
 
@@ -5194,7 +5194,7 @@ public class Creole10Parser extends Parser {
 
             	default :
             	    if ( cnt63 >= 1 ) break loop63;
-            	    if (backtracking>0) {failed=true; return elements;}
+            	    if (state.backtracking>0) {state.failed=true; return elements;}
                         EarlyExitException eee =
                             new EarlyExitException(63, input);
                         throw eee;
@@ -5239,7 +5239,7 @@ public class Creole10Parser extends Parser {
                 alt64=2;
             }
             else {
-                if (backtracking>0) {failed=true; return content;}
+                if (state.backtracking>0) {state.failed=true; return content;}
                 NoViableAltException nvae =
                     new NoViableAltException("384:1: heading_unformattedelement returns [ASTNode content = null] : (tu= heading_unformatted_text | ti= heading_inlineelement );", 64, 0, input);
 
@@ -5251,9 +5251,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_heading_unformatted_text_in_heading_unformattedelement1732);
                     tu=heading_unformatted_text();
-                    _fsp--;
-                    if (failed) return content;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return content;
+                    if ( state.backtracking==0 ) {
                       content = new UnformattedTextNode(tu.toString());
                     }
 
@@ -5264,9 +5264,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_heading_inlineelement_in_heading_unformattedelement1744);
                     ti=heading_inlineelement();
-                    _fsp--;
-                    if (failed) return content;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return content;
+                    if ( state.backtracking==0 ) {
                       content = ti;
                     }
 
@@ -5318,7 +5318,7 @@ public class Creole10Parser extends Parser {
                 }
                 break;
             default:
-                if (backtracking>0) {failed=true; return element;}
+                if (state.backtracking>0) {state.failed=true; return element;}
                 NoViableAltException nvae =
                     new NoViableAltException("388:1: heading_inlineelement returns [ASTNode element = null] : (l= link | i= image | nwi= nowiki_inline );", 65, 0, input);
 
@@ -5331,9 +5331,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_link_in_heading_inlineelement1764);
                     l=link();
-                    _fsp--;
-                    if (failed) return element;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return element;
+                    if ( state.backtracking==0 ) {
                       element = l; 
                     }
 
@@ -5344,9 +5344,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_image_in_heading_inlineelement1774);
                     i=image();
-                    _fsp--;
-                    if (failed) return element;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return element;
+                    if ( state.backtracking==0 ) {
                       element = i; 
                     }
 
@@ -5357,9 +5357,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_nowiki_inline_in_heading_inlineelement1785);
                     nwi=nowiki_inline();
-                    _fsp--;
-                    if (failed) return element;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return element;
+                    if ( state.backtracking==0 ) {
                       element = nwi; 
                     }
 
@@ -5495,16 +5495,16 @@ public class Creole10Parser extends Parser {
             	    c=(Token)input.LT(1);
             	    if ( (input.LA(1)>=FORCED_END_OF_LINE && input.LA(1)<=WIKI)||(input.LA(1)>=POUND && input.LA(1)<=STAR)||(input.LA(1)>=PIPE && input.LA(1)<=ITAL)||(input.LA(1)>=EXTENSION && input.LA(1)<=FORCED_LINEBREAK)||(input.LA(1)>=NOWIKI_BLOCK_CLOSE && input.LA(1)<=82) ) {
             	        input.consume();
-            	        errorRecovery=false;failed=false;
+            	        state.errorRecovery=false;state.failed=false;
             	    }
             	    else {
-            	        if (backtracking>0) {failed=true; return text;}
+            	        if (state.backtracking>0) {state.failed=true; return text;}
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
             	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_heading_unformatted_text1808);    throw mse;
             	    }
 
-            	    if ( backtracking==0 ) {
+            	    if ( state.backtracking==0 ) {
             	      text.append(c.getText());
             	    }
 
@@ -5513,7 +5513,7 @@ public class Creole10Parser extends Parser {
 
             	default :
             	    if ( cnt66 >= 1 ) break loop66;
-            	    if (backtracking>0) {failed=true; return text;}
+            	    if (state.backtracking>0) {state.failed=true; return text;}
                         EarlyExitException eee =
                             new EarlyExitException(66, input);
                         throw eee;
@@ -5589,15 +5589,15 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_list_elems_in_list1882);
             	    list_elems();
-            	    _fsp--;
-            	    if (failed) return listNode;
+            	    state._fsp--;
+            	    if (state.failed) return listNode;
 
             	    }
             	    break;
 
             	default :
             	    if ( cnt67 >= 1 ) break loop67;
-            	    if (backtracking>0) {failed=true; return listNode;}
+            	    if (state.backtracking>0) {state.failed=true; return listNode;}
                         EarlyExitException eee =
                             new EarlyExitException(67, input);
                         throw eee;
@@ -5621,8 +5621,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_end_of_list_in_list1890);
                     end_of_list();
-                    _fsp--;
-                    if (failed) return listNode;
+                    state._fsp--;
+                    if (state.failed) return listNode;
 
                     }
                     break;
@@ -5632,7 +5632,7 @@ public class Creole10Parser extends Parser {
 
             }
 
-            if ( backtracking==0 ) {
+            if ( state.backtracking==0 ) {
               
               		listNode = ((list_scope)list_stack.peek()).root;
               	
@@ -5677,7 +5677,7 @@ public class Creole10Parser extends Parser {
                 alt69=2;
             }
             else {
-                if (backtracking>0) {failed=true; return ;}
+                if (state.backtracking>0) {state.failed=true; return ;}
                 NoViableAltException nvae =
                     new NoViableAltException("428:1: list_elems : (om= list_ordelem_markup elem= list_elem | um= list_unordelem_markup elem= list_elem );", 69, 0, input);
 
@@ -5689,16 +5689,16 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_list_ordelem_markup_in_list_elems1920);
                     om=list_ordelem_markup();
-                    _fsp--;
-                    if (failed) return ;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return ;
+                    if ( state.backtracking==0 ) {
                       ++((CountLevel_scope)CountLevel_stack.peek()).level;((CountLevel_scope)CountLevel_stack.peek()).currentMarkup = input.toString(om.start,om.stop);((CountLevel_scope)CountLevel_stack.peek()).groups += input.toString(om.start,om.stop);
                     }
                     pushFollow(FOLLOW_list_elem_in_list_elems1930);
                     elem=list_elem();
-                    _fsp--;
-                    if (failed) return ;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return ;
+                    if ( state.backtracking==0 ) {
                       
                       
                       					Stack<ItemNode> parents = ((list_scope)list_stack.peek()).parents;
@@ -5795,16 +5795,16 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_list_unordelem_markup_in_list_elems1941);
                     um=list_unordelem_markup();
-                    _fsp--;
-                    if (failed) return ;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return ;
+                    if ( state.backtracking==0 ) {
                       ++((CountLevel_scope)CountLevel_stack.peek()).level; ((CountLevel_scope)CountLevel_stack.peek()).currentMarkup = input.toString(um.start,um.stop);((CountLevel_scope)CountLevel_stack.peek()).groups += input.toString(um.start,um.stop);
                     }
                     pushFollow(FOLLOW_list_elem_in_list_elems1951);
                     elem=list_elem();
-                    _fsp--;
-                    if (failed) return ;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return ;
+                    if ( state.backtracking==0 ) {
                       
                       
                       					Stack<ItemNode> parents = ((list_scope)list_stack.peek()).parents;
@@ -5947,9 +5947,9 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_list_elem_markup_in_list_elem1974);
             	    m=list_elem_markup();
-            	    _fsp--;
-            	    if (failed) return items;
-            	    if ( backtracking==0 ) {
+            	    state._fsp--;
+            	    if (state.failed) return items;
+            	    if ( state.backtracking==0 ) {
             	      
             	      			             ++((CountLevel_scope)CountLevel_stack.peek()).level;
             	      			             if (!input.toString(m.start,m.stop).equals(((CountLevel_scope)CountLevel_stack.peek()).currentMarkup)) {
@@ -5970,15 +5970,15 @@ public class Creole10Parser extends Parser {
 
             pushFollow(FOLLOW_list_elemcontent_in_list_elem1985);
             c=list_elemcontent();
-            _fsp--;
-            if (failed) return items;
-            if ( backtracking==0 ) {
+            state._fsp--;
+            if (state.failed) return items;
+            if ( state.backtracking==0 ) {
               items = c; 
             }
             pushFollow(FOLLOW_list_elemseparator_in_list_elem1990);
             list_elemseparator();
-            _fsp--;
-            if (failed) return items;
+            state._fsp--;
+            if (state.failed) return items;
 
             }
 
@@ -6014,7 +6014,7 @@ public class Creole10Parser extends Parser {
                 alt71=2;
             }
             else {
-                if (backtracking>0) {failed=true; return retval;}
+                if (state.backtracking>0) {state.failed=true; return retval;}
                 NoViableAltException nvae =
                     new NoViableAltException("621:1: list_elem_markup : ( list_ordelem_markup | list_unordelem_markup );", 71, 0, input);
 
@@ -6026,8 +6026,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_list_ordelem_markup_in_list_elem_markup2000);
                     list_ordelem_markup();
-                    _fsp--;
-                    if (failed) return retval;
+                    state._fsp--;
+                    if (state.failed) return retval;
 
                     }
                     break;
@@ -6036,8 +6036,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_list_unordelem_markup_in_list_elem_markup2005);
                     list_unordelem_markup();
-                    _fsp--;
-                    if (failed) return retval;
+                    state._fsp--;
+                    if (state.failed) return retval;
 
                     }
                     break;
@@ -6071,8 +6071,8 @@ public class Creole10Parser extends Parser {
             {
             pushFollow(FOLLOW_onestar_in_list_elemcontent2019);
             onestar();
-            _fsp--;
-            if (failed) return items;
+            state._fsp--;
+            if (state.failed) return items;
             // Creole10.g:626:13: (part= list_elemcontentpart onestar )*
             loop72:
             do {
@@ -6090,15 +6090,15 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_list_elemcontentpart_in_list_elemcontent2028);
             	    part=list_elemcontentpart();
-            	    _fsp--;
-            	    if (failed) return items;
-            	    if ( backtracking==0 ) {
+            	    state._fsp--;
+            	    if (state.failed) return items;
+            	    if ( state.backtracking==0 ) {
             	       items.add(part); 
             	    }
             	    pushFollow(FOLLOW_onestar_in_list_elemcontent2033);
             	    onestar();
-            	    _fsp--;
-            	    if (failed) return items;
+            	    state._fsp--;
+            	    if (state.failed) return items;
 
             	    }
             	    break;
@@ -6145,7 +6145,7 @@ public class Creole10Parser extends Parser {
                 alt73=2;
             }
             else {
-                if (backtracking>0) {failed=true; return node;}
+                if (state.backtracking>0) {state.failed=true; return node;}
                 NoViableAltException nvae =
                     new NoViableAltException("628:1: list_elemcontentpart returns [ASTNode node = null] : (tuf= text_unformattedelement | tf= list_formatted_elem );", 73, 0, input);
 
@@ -6157,9 +6157,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_text_unformattedelement_in_list_elemcontentpart2054);
                     tuf=text_unformattedelement();
-                    _fsp--;
-                    if (failed) return node;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return node;
+                    if ( state.backtracking==0 ) {
                       
                       				if (tuf instanceof CollectionNode)
                       					node = new UnformattedTextNode(tuf);
@@ -6175,9 +6175,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_list_formatted_elem_in_list_elemcontentpart2065);
                     tf=list_formatted_elem();
-                    _fsp--;
-                    if (failed) return node;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return node;
+                    if ( state.backtracking==0 ) {
                        node = new FormattedTextNode(tf);
                     }
 
@@ -6219,7 +6219,7 @@ public class Creole10Parser extends Parser {
                 alt78=2;
             }
             else {
-                if (backtracking>0) {failed=true; return contents;}
+                if (state.backtracking>0) {state.failed=true; return contents;}
                 NoViableAltException nvae =
                     new NoViableAltException("637:1: list_formatted_elem returns [CollectionNode contents = new CollectionNode()] : ( bold_markup onestar (boldContents= list_boldcontentpart onestar )* ( bold_markup )? | ital_markup onestar (italContents= list_italcontentpart onestar )* ( ital_markup )? );", 78, 0, input);
 
@@ -6231,12 +6231,12 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_bold_markup_in_list_formatted_elem2081);
                     bold_markup();
-                    _fsp--;
-                    if (failed) return contents;
+                    state._fsp--;
+                    if (state.failed) return contents;
                     pushFollow(FOLLOW_onestar_in_list_formatted_elem2084);
                     onestar();
-                    _fsp--;
-                    if (failed) return contents;
+                    state._fsp--;
+                    if (state.failed) return contents;
                     // Creole10.g:638:26: (boldContents= list_boldcontentpart onestar )*
                     loop74:
                     do {
@@ -6360,9 +6360,9 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_list_boldcontentpart_in_list_formatted_elem2093);
                     	    boldContents=list_boldcontentpart();
-                    	    _fsp--;
-                    	    if (failed) return contents;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return contents;
+                    	    if ( state.backtracking==0 ) {
                     	      
                     	      						BoldTextNode add = null;
                     	      						if (boldContents instanceof CollectionNode){
@@ -6378,8 +6378,8 @@ public class Creole10Parser extends Parser {
                     	    }
                     	    pushFollow(FOLLOW_onestar_in_list_formatted_elem2102);
                     	    onestar();
-                    	    _fsp--;
-                    	    if (failed) return contents;
+                    	    state._fsp--;
+                    	    if (state.failed) return contents;
 
                     	    }
                     	    break;
@@ -6406,8 +6406,8 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_bold_markup_in_list_formatted_elem2111);
                             bold_markup();
-                            _fsp--;
-                            if (failed) return contents;
+                            state._fsp--;
+                            if (state.failed) return contents;
 
                             }
                             break;
@@ -6422,12 +6422,12 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_ital_markup_in_list_formatted_elem2119);
                     ital_markup();
-                    _fsp--;
-                    if (failed) return contents;
+                    state._fsp--;
+                    if (state.failed) return contents;
                     pushFollow(FOLLOW_onestar_in_list_formatted_elem2124);
                     onestar();
-                    _fsp--;
-                    if (failed) return contents;
+                    state._fsp--;
+                    if (state.failed) return contents;
                     // Creole10.g:652:28: (italContents= list_italcontentpart onestar )*
                     loop76:
                     do {
@@ -6551,9 +6551,9 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_list_italcontentpart_in_list_formatted_elem2133);
                     	    italContents=list_italcontentpart();
-                    	    _fsp--;
-                    	    if (failed) return contents;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return contents;
+                    	    if ( state.backtracking==0 ) {
                     	      
                     	      						ItalicTextNode add = null;
                     	      						if (italContents instanceof CollectionNode){
@@ -6569,8 +6569,8 @@ public class Creole10Parser extends Parser {
                     	    }
                     	    pushFollow(FOLLOW_onestar_in_list_formatted_elem2142);
                     	    onestar();
-                    	    _fsp--;
-                    	    if (failed) return contents;
+                    	    state._fsp--;
+                    	    if (state.failed) return contents;
 
                     	    }
                     	    break;
@@ -6593,8 +6593,8 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_ital_markup_in_list_formatted_elem2151);
                             ital_markup();
-                            _fsp--;
-                            if (failed) return contents;
+                            state._fsp--;
+                            if (state.failed) return contents;
 
                             }
                             break;
@@ -6649,7 +6649,7 @@ public class Creole10Parser extends Parser {
                 alt81=2;
             }
             else {
-                if (backtracking>0) {failed=true; return contents;}
+                if (state.backtracking>0) {state.failed=true; return contents;}
                 NoViableAltException nvae =
                     new NoViableAltException("667:1: list_boldcontentpart returns [ASTNode contents = null] : ( ital_markup c= list_bolditalcontent ( ital_markup )? | (t= text_unformattedelement )+ );", 81, 0, input);
 
@@ -6661,13 +6661,13 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_ital_markup_in_list_boldcontentpart2177);
                     ital_markup();
-                    _fsp--;
-                    if (failed) return contents;
+                    state._fsp--;
+                    if (state.failed) return contents;
                     pushFollow(FOLLOW_list_bolditalcontent_in_list_boldcontentpart2184);
                     c=list_bolditalcontent();
-                    _fsp--;
-                    if (failed) return contents;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return contents;
+                    if ( state.backtracking==0 ) {
                       contents = new ItalicTextNode(c);
                     }
                     // Creole10.g:674:86: ( ital_markup )?
@@ -6683,8 +6683,8 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_ital_markup_in_list_boldcontentpart2191);
                             ital_markup();
-                            _fsp--;
-                            if (failed) return contents;
+                            state._fsp--;
+                            if (state.failed) return contents;
 
                             }
                             break;
@@ -6816,9 +6816,9 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_text_unformattedelement_in_list_boldcontentpart2205);
                     	    t=text_unformattedelement();
-                    	    _fsp--;
-                    	    if (failed) return contents;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return contents;
+                    	    if ( state.backtracking==0 ) {
                     	       ((list_boldcontentpart_scope)list_boldcontentpart_stack.peek()).elements.add(t); 
                     	    }
 
@@ -6827,7 +6827,7 @@ public class Creole10Parser extends Parser {
 
                     	default :
                     	    if ( cnt80 >= 1 ) break loop80;
-                    	    if (backtracking>0) {failed=true; return contents;}
+                    	    if (state.backtracking>0) {state.failed=true; return contents;}
                                 EarlyExitException eee =
                                     new EarlyExitException(80, input);
                                 throw eee;
@@ -6835,7 +6835,7 @@ public class Creole10Parser extends Parser {
                         cnt80++;
                     } while (true);
 
-                    if ( backtracking==0 ) {
+                    if ( state.backtracking==0 ) {
                       contents = new CollectionNode(((list_boldcontentpart_scope)list_boldcontentpart_stack.peek()).elements); 
                     }
 
@@ -6998,9 +6998,9 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_text_formattedcontent_in_list_bolditalcontent2236);
             	    tf=text_formattedcontent();
-            	    _fsp--;
-            	    if (failed) return text;
-            	    if ( backtracking==0 ) {
+            	    state._fsp--;
+            	    if (state.failed) return text;
+            	    if ( state.backtracking==0 ) {
             	       text = tf; 
             	    }
 
@@ -7009,7 +7009,7 @@ public class Creole10Parser extends Parser {
 
             	default :
             	    if ( cnt82 >= 1 ) break loop82;
-            	    if (backtracking>0) {failed=true; return text;}
+            	    if (state.backtracking>0) {state.failed=true; return text;}
                         EarlyExitException eee =
                             new EarlyExitException(82, input);
                         throw eee;
@@ -7063,7 +7063,7 @@ public class Creole10Parser extends Parser {
                 alt85=2;
             }
             else {
-                if (backtracking>0) {failed=true; return contents;}
+                if (state.backtracking>0) {state.failed=true; return contents;}
                 NoViableAltException nvae =
                     new NoViableAltException("683:1: list_italcontentpart returns [ASTNode contents = null] : ( bold_markup c= list_bolditalcontent ( bold_markup )? | (t= text_unformattedelement )+ );", 85, 0, input);
 
@@ -7075,13 +7075,13 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_bold_markup_in_list_italcontentpart2264);
                     bold_markup();
-                    _fsp--;
-                    if (failed) return contents;
+                    state._fsp--;
+                    if (state.failed) return contents;
                     pushFollow(FOLLOW_list_bolditalcontent_in_list_italcontentpart2271);
                     c=list_bolditalcontent();
-                    _fsp--;
-                    if (failed) return contents;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return contents;
+                    if ( state.backtracking==0 ) {
                        contents = new BoldTextNode(c); 
                     }
                     // Creole10.g:690:86: ( bold_markup )?
@@ -7101,8 +7101,8 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_bold_markup_in_list_italcontentpart2278);
                             bold_markup();
-                            _fsp--;
-                            if (failed) return contents;
+                            state._fsp--;
+                            if (state.failed) return contents;
 
                             }
                             break;
@@ -7234,9 +7234,9 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_text_unformattedelement_in_list_italcontentpart2292);
                     	    t=text_unformattedelement();
-                    	    _fsp--;
-                    	    if (failed) return contents;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return contents;
+                    	    if ( state.backtracking==0 ) {
                     	       ((list_italcontentpart_scope)list_italcontentpart_stack.peek()).elements.add(t); 
                     	    }
 
@@ -7245,7 +7245,7 @@ public class Creole10Parser extends Parser {
 
                     	default :
                     	    if ( cnt84 >= 1 ) break loop84;
-                    	    if (backtracking>0) {failed=true; return contents;}
+                    	    if (state.backtracking>0) {state.failed=true; return contents;}
                                 EarlyExitException eee =
                                     new EarlyExitException(84, input);
                                 throw eee;
@@ -7253,7 +7253,7 @@ public class Creole10Parser extends Parser {
                         cnt84++;
                     } while (true);
 
-                    if ( backtracking==0 ) {
+                    if ( state.backtracking==0 ) {
                        contents = new CollectionNode(((list_italcontentpart_scope)list_italcontentpart_stack.peek()).elements); 
                     }
 
@@ -7304,9 +7304,9 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_table_row_in_table2320);
             	    tr=table_row();
-            	    _fsp--;
-            	    if (failed) return table;
-            	    if ( backtracking==0 ) {
+            	    state._fsp--;
+            	    if (state.failed) return table;
+            	    if ( state.backtracking==0 ) {
             	      table.addChildASTNode(tr);
             	    }
 
@@ -7315,7 +7315,7 @@ public class Creole10Parser extends Parser {
 
             	default :
             	    if ( cnt86 >= 1 ) break loop86;
-            	    if (backtracking>0) {failed=true; return table;}
+            	    if (state.backtracking>0) {state.failed=true; return table;}
                         EarlyExitException eee =
                             new EarlyExitException(86, input);
                         throw eee;
@@ -7376,14 +7376,14 @@ public class Creole10Parser extends Parser {
             	    // Creole10.g:699:6: {...}? table_cell
             	    {
             	    if ( !( input.LA(1) == PIPE && input.LA(2) == PIPE ) ) {
-            	        if (backtracking>0) {failed=true; return row;}
+            	        if (state.backtracking>0) {state.failed=true; return row;}
             	        throw new FailedPredicateException(input, "table_row", " input.LA(1) == PIPE && input.LA(2) == PIPE ");
             	    }
             	    pushFollow(FOLLOW_table_cell_in_table_row2346);
             	    table_cell();
-            	    _fsp--;
-            	    if (failed) return row;
-            	    if ( backtracking==0 ) {
+            	    state._fsp--;
+            	    if (state.failed) return row;
+            	    if ( state.backtracking==0 ) {
             	      
             	      			CollectionNode cn = new CollectionNode();
             	      			cn.add(new UnformattedTextNode(" "));
@@ -7399,9 +7399,9 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_table_cell_in_table_row2359);
             	    tc=table_cell();
-            	    _fsp--;
-            	    if (failed) return row;
-            	    if ( backtracking==0 ) {
+            	    state._fsp--;
+            	    if (state.failed) return row;
+            	    if ( state.backtracking==0 ) {
             	       row.add(tc); 
             	    }
 
@@ -7410,7 +7410,7 @@ public class Creole10Parser extends Parser {
 
             	default :
             	    if ( cnt87 >= 1 ) break loop87;
-            	    if (backtracking>0) {failed=true; return row;}
+            	    if (state.backtracking>0) {state.failed=true; return row;}
                         EarlyExitException eee =
                             new EarlyExitException(87, input);
                         throw eee;
@@ -7420,8 +7420,8 @@ public class Creole10Parser extends Parser {
 
             pushFollow(FOLLOW_table_rowseparator_in_table_row2368);
             table_rowseparator();
-            _fsp--;
-            if (failed) return row;
+            state._fsp--;
+            if (state.failed) return row;
 
             }
 
@@ -7465,7 +7465,7 @@ public class Creole10Parser extends Parser {
                         alt88=2;
                     }
                     else {
-                        if (backtracking>0) {failed=true; return cell;}
+                        if (state.backtracking>0) {state.failed=true; return cell;}
                         NoViableAltException nvae =
                             new NoViableAltException("709:1: table_cell returns [TableCellNode cell = null] : ({...}?th= table_headercell | tc= table_normalcell );", 88, 2, input);
 
@@ -7476,7 +7476,7 @@ public class Creole10Parser extends Parser {
                     alt88=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return cell;}
+                    if (state.backtracking>0) {state.failed=true; return cell;}
                     NoViableAltException nvae =
                         new NoViableAltException("709:1: table_cell returns [TableCellNode cell = null] : ({...}?th= table_headercell | tc= table_normalcell );", 88, 1, input);
 
@@ -7484,7 +7484,7 @@ public class Creole10Parser extends Parser {
                 }
             }
             else {
-                if (backtracking>0) {failed=true; return cell;}
+                if (state.backtracking>0) {state.failed=true; return cell;}
                 NoViableAltException nvae =
                     new NoViableAltException("709:1: table_cell returns [TableCellNode cell = null] : ({...}?th= table_headercell | tc= table_normalcell );", 88, 0, input);
 
@@ -7495,14 +7495,14 @@ public class Creole10Parser extends Parser {
                     // Creole10.g:710:4: {...}?th= table_headercell
                     {
                     if ( !( input.LA(2) == EQUAL ) ) {
-                        if (backtracking>0) {failed=true; return cell;}
+                        if (state.backtracking>0) {state.failed=true; return cell;}
                         throw new FailedPredicateException(input, "table_cell", " input.LA(2) == EQUAL ");
                     }
                     pushFollow(FOLLOW_table_headercell_in_table_cell2389);
                     th=table_headercell();
-                    _fsp--;
-                    if (failed) return cell;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return cell;
+                    if ( state.backtracking==0 ) {
                       cell = th;
                     }
 
@@ -7513,9 +7513,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_table_normalcell_in_table_cell2400);
                     tc=table_normalcell();
-                    _fsp--;
-                    if (failed) return cell;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return cell;
+                    if ( state.backtracking==0 ) {
                       cell = tc; 
                     }
 
@@ -7549,13 +7549,13 @@ public class Creole10Parser extends Parser {
             {
             pushFollow(FOLLOW_table_headercell_markup_in_table_headercell2416);
             table_headercell_markup();
-            _fsp--;
-            if (failed) return header;
+            state._fsp--;
+            if (state.failed) return header;
             pushFollow(FOLLOW_table_cellcontent_in_table_headercell2423);
             tc=table_cellcontent();
-            _fsp--;
-            if (failed) return header;
-            if ( backtracking==0 ) {
+            state._fsp--;
+            if (state.failed) return header;
+            if ( state.backtracking==0 ) {
               header = new TableHeaderNode(tc);
             }
 
@@ -7587,13 +7587,13 @@ public class Creole10Parser extends Parser {
             {
             pushFollow(FOLLOW_table_cell_markup_in_table_normalcell2439);
             table_cell_markup();
-            _fsp--;
-            if (failed) return cell;
+            state._fsp--;
+            if (state.failed) return cell;
             pushFollow(FOLLOW_table_cellcontent_in_table_normalcell2446);
             tc=table_cellcontent();
-            _fsp--;
-            if (failed) return cell;
-            if ( backtracking==0 ) {
+            state._fsp--;
+            if (state.failed) return cell;
+            if ( state.backtracking==0 ) {
                cell = new TableDataNode(tc); 
             }
 
@@ -7625,8 +7625,8 @@ public class Creole10Parser extends Parser {
             {
             pushFollow(FOLLOW_onestar_in_table_cellcontent2462);
             onestar();
-            _fsp--;
-            if (failed) return items;
+            state._fsp--;
+            if (state.failed) return items;
             // Creole10.g:720:13: (tcp= table_cellcontentpart onestar )*
             loop89:
             do {
@@ -7644,9 +7644,9 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_table_cellcontentpart_in_table_cellcontent2471);
             	    tcp=table_cellcontentpart();
-            	    _fsp--;
-            	    if (failed) return items;
-            	    if ( backtracking==0 ) {
+            	    state._fsp--;
+            	    if (state.failed) return items;
+            	    if ( state.backtracking==0 ) {
             	      
             	      			if (tcp != null) {
             	      				items.add(tcp);
@@ -7655,8 +7655,8 @@ public class Creole10Parser extends Parser {
             	    }
             	    pushFollow(FOLLOW_onestar_in_table_cellcontent2478);
             	    onestar();
-            	    _fsp--;
-            	    if (failed) return items;
+            	    state._fsp--;
+            	    if (state.failed) return items;
 
             	    }
             	    break;
@@ -7703,7 +7703,7 @@ public class Creole10Parser extends Parser {
                 alt90=2;
             }
             else {
-                if (backtracking>0) {failed=true; return node;}
+                if (state.backtracking>0) {state.failed=true; return node;}
                 NoViableAltException nvae =
                     new NoViableAltException("727:1: table_cellcontentpart returns [ASTNode node = null] : (tf= table_formattedelement | tu= table_unformattedelement );", 90, 0, input);
 
@@ -7715,9 +7715,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_table_formattedelement_in_table_cellcontentpart2499);
                     tf=table_formattedelement();
-                    _fsp--;
-                    if (failed) return node;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return node;
+                    if ( state.backtracking==0 ) {
                       node =tf;
                     }
 
@@ -7728,9 +7728,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_table_unformattedelement_in_table_cellcontentpart2510);
                     tu=table_unformattedelement();
-                    _fsp--;
-                    if (failed) return node;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return node;
+                    if ( state.backtracking==0 ) {
                       node =tu;
                     }
 
@@ -7772,7 +7772,7 @@ public class Creole10Parser extends Parser {
                 alt95=2;
             }
             else {
-                if (backtracking>0) {failed=true; return content;}
+                if (state.backtracking>0) {state.failed=true; return content;}
                 NoViableAltException nvae =
                     new NoViableAltException("731:1: table_formattedelement returns [ASTNode content = null] : ( ital_markup (tic= table_italcontent )? ( ital_markup )? | bold_markup (tbc= table_boldcontent )? ( bold_markup )? );", 95, 0, input);
 
@@ -7784,8 +7784,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_ital_markup_in_table_formattedelement2526);
                     ital_markup();
-                    _fsp--;
-                    if (failed) return content;
+                    state._fsp--;
+                    if (state.failed) return content;
                     // Creole10.g:732:18: (tic= table_italcontent )?
                     int alt91=2;
                     switch ( input.LA(1) ) {
@@ -7910,9 +7910,9 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_table_italcontent_in_table_formattedelement2536);
                             tic=table_italcontent();
-                            _fsp--;
-                            if (failed) return content;
-                            if ( backtracking==0 ) {
+                            state._fsp--;
+                            if (state.failed) return content;
+                            if ( state.backtracking==0 ) {
                                content = new ItalicTextNode(tic); 
                             }
 
@@ -7934,8 +7934,8 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_ital_markup_in_table_formattedelement2545);
                             ital_markup();
-                            _fsp--;
-                            if (failed) return content;
+                            state._fsp--;
+                            if (state.failed) return content;
 
                             }
                             break;
@@ -7950,8 +7950,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_bold_markup_in_table_formattedelement2553);
                     bold_markup();
-                    _fsp--;
-                    if (failed) return content;
+                    state._fsp--;
+                    if (state.failed) return content;
                     // Creole10.g:733:16: (tbc= table_boldcontent )?
                     int alt93=2;
                     switch ( input.LA(1) ) {
@@ -8085,9 +8085,9 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_table_boldcontent_in_table_formattedelement2560);
                             tbc=table_boldcontent();
-                            _fsp--;
-                            if (failed) return content;
-                            if ( backtracking==0 ) {
+                            state._fsp--;
+                            if (state.failed) return content;
+                            if ( state.backtracking==0 ) {
                               content = new BoldTextNode(tbc);
                             }
 
@@ -8113,8 +8113,8 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_bold_markup_in_table_formattedelement2570);
                             bold_markup();
-                            _fsp--;
-                            if (failed) return content;
+                            state._fsp--;
+                            if (state.failed) return content;
 
                             }
                             break;
@@ -8158,7 +8158,7 @@ public class Creole10Parser extends Parser {
                 alt97=2;
             }
             else {
-                if (backtracking>0) {failed=true; return items;}
+                if (state.backtracking>0) {state.failed=true; return items;}
                 NoViableAltException nvae =
                     new NoViableAltException("735:1: table_boldcontent returns [CollectionNode items = new CollectionNode()] : ( onestar (tb= table_boldcontentpart onestar )+ | EOF );", 97, 0, input);
 
@@ -8170,8 +8170,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_onestar_in_table_boldcontent2587);
                     onestar();
-                    _fsp--;
-                    if (failed) return items;
+                    state._fsp--;
+                    if (state.failed) return items;
                     // Creole10.g:736:13: (tb= table_boldcontentpart onestar )+
                     int cnt96=0;
                     loop96:
@@ -8295,22 +8295,22 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_table_boldcontentpart_in_table_boldcontent2596);
                     	    tb=table_boldcontentpart();
-                    	    _fsp--;
-                    	    if (failed) return items;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return items;
+                    	    if ( state.backtracking==0 ) {
                     	       items.add(tb); 
                     	    }
                     	    pushFollow(FOLLOW_onestar_in_table_boldcontent2601);
                     	    onestar();
-                    	    _fsp--;
-                    	    if (failed) return items;
+                    	    state._fsp--;
+                    	    if (state.failed) return items;
 
                     	    }
                     	    break;
 
                     	default :
                     	    if ( cnt96 >= 1 ) break loop96;
-                    	    if (backtracking>0) {failed=true; return items;}
+                    	    if (state.backtracking>0) {state.failed=true; return items;}
                                 EarlyExitException eee =
                                     new EarlyExitException(96, input);
                                 throw eee;
@@ -8324,7 +8324,7 @@ public class Creole10Parser extends Parser {
                 case 2 :
                     // Creole10.g:737:4: EOF
                     {
-                    match(input,EOF,FOLLOW_EOF_in_table_boldcontent2609); if (failed) return items;
+                    match(input,EOF,FOLLOW_EOF_in_table_boldcontent2609); if (state.failed) return items;
 
                     }
                     break;
@@ -8362,7 +8362,7 @@ public class Creole10Parser extends Parser {
                 alt99=2;
             }
             else {
-                if (backtracking>0) {failed=true; return items;}
+                if (state.backtracking>0) {state.failed=true; return items;}
                 NoViableAltException nvae =
                     new NoViableAltException("739:1: table_italcontent returns [CollectionNode items = new CollectionNode()] : ( onestar (ti= table_italcontentpart onestar )+ | EOF );", 99, 0, input);
 
@@ -8374,8 +8374,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_onestar_in_table_italcontent2623);
                     onestar();
-                    _fsp--;
-                    if (failed) return items;
+                    state._fsp--;
+                    if (state.failed) return items;
                     // Creole10.g:740:13: (ti= table_italcontentpart onestar )+
                     int cnt98=0;
                     loop98:
@@ -8499,22 +8499,22 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_table_italcontentpart_in_table_italcontent2632);
                     	    ti=table_italcontentpart();
-                    	    _fsp--;
-                    	    if (failed) return items;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return items;
+                    	    if ( state.backtracking==0 ) {
                     	       items.add(ti); 
                     	    }
                     	    pushFollow(FOLLOW_onestar_in_table_italcontent2637);
                     	    onestar();
-                    	    _fsp--;
-                    	    if (failed) return items;
+                    	    state._fsp--;
+                    	    if (state.failed) return items;
 
                     	    }
                     	    break;
 
                     	default :
                     	    if ( cnt98 >= 1 ) break loop98;
-                    	    if (backtracking>0) {failed=true; return items;}
+                    	    if (state.backtracking>0) {state.failed=true; return items;}
                                 EarlyExitException eee =
                                     new EarlyExitException(98, input);
                                 throw eee;
@@ -8528,7 +8528,7 @@ public class Creole10Parser extends Parser {
                 case 2 :
                     // Creole10.g:741:4: EOF
                     {
-                    match(input,EOF,FOLLOW_EOF_in_table_italcontent2645); if (failed) return items;
+                    match(input,EOF,FOLLOW_EOF_in_table_italcontent2645); if (state.failed) return items;
 
                     }
                     break;
@@ -8568,7 +8568,7 @@ public class Creole10Parser extends Parser {
                 alt101=2;
             }
             else {
-                if (backtracking>0) {failed=true; return node;}
+                if (state.backtracking>0) {state.failed=true; return node;}
                 NoViableAltException nvae =
                     new NoViableAltException("743:1: table_boldcontentpart returns [ASTNode node = null] : (tf= table_formattedcontent | ital_markup tb= table_bolditalcontent ( ital_markup )? );", 101, 0, input);
 
@@ -8580,9 +8580,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_table_formattedcontent_in_table_boldcontentpart2663);
                     tf=table_formattedcontent();
-                    _fsp--;
-                    if (failed) return node;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return node;
+                    if ( state.backtracking==0 ) {
                       node = tf; 
                     }
 
@@ -8593,13 +8593,13 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_ital_markup_in_table_boldcontentpart2670);
                     ital_markup();
-                    _fsp--;
-                    if (failed) return node;
+                    state._fsp--;
+                    if (state.failed) return node;
                     pushFollow(FOLLOW_table_bolditalcontent_in_table_boldcontentpart2677);
                     tb=table_bolditalcontent();
-                    _fsp--;
-                    if (failed) return node;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return node;
+                    if ( state.backtracking==0 ) {
                        node = new ItalicTextNode(tb);  
                     }
                     // Creole10.g:745:92: ( ital_markup )?
@@ -8615,8 +8615,8 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_ital_markup_in_table_boldcontentpart2684);
                             ital_markup();
-                            _fsp--;
-                            if (failed) return node;
+                            state._fsp--;
+                            if (state.failed) return node;
 
                             }
                             break;
@@ -8662,7 +8662,7 @@ public class Creole10Parser extends Parser {
                 alt103=2;
             }
             else {
-                if (backtracking>0) {failed=true; return node;}
+                if (state.backtracking>0) {state.failed=true; return node;}
                 NoViableAltException nvae =
                     new NoViableAltException("747:1: table_italcontentpart returns [ASTNode node = null] : ( bold_markup tb= table_bolditalcontent ( bold_markup )? | tf= table_formattedcontent );", 103, 0, input);
 
@@ -8674,13 +8674,13 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_bold_markup_in_table_italcontentpart2701);
                     bold_markup();
-                    _fsp--;
-                    if (failed) return node;
+                    state._fsp--;
+                    if (state.failed) return node;
                     pushFollow(FOLLOW_table_bolditalcontent_in_table_italcontentpart2708);
                     tb=table_bolditalcontent();
-                    _fsp--;
-                    if (failed) return node;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return node;
+                    if ( state.backtracking==0 ) {
                       node = new BoldTextNode(tb); 
                     }
                     // Creole10.g:748:88: ( bold_markup )?
@@ -8700,8 +8700,8 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_bold_markup_in_table_italcontentpart2715);
                             bold_markup();
-                            _fsp--;
-                            if (failed) return node;
+                            state._fsp--;
+                            if (state.failed) return node;
 
                             }
                             break;
@@ -8716,9 +8716,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_table_formattedcontent_in_table_italcontentpart2727);
                     tf=table_formattedcontent();
-                    _fsp--;
-                    if (failed) return node;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return node;
+                    if ( state.backtracking==0 ) {
                        node = tf; 
                     }
 
@@ -8758,7 +8758,7 @@ public class Creole10Parser extends Parser {
                 alt105=1;
             }
             else {
-                if (backtracking>0) {failed=true; return elements;}
+                if (state.backtracking>0) {state.failed=true; return elements;}
                 NoViableAltException nvae =
                     new NoViableAltException("751:1: table_bolditalcontent returns [CollectionNode elements = null] : ( onestar (tfc= table_formattedcontent onestar )? | EOF );", 105, 0, input);
 
@@ -8770,8 +8770,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_onestar_in_table_bolditalcontent2743);
                     onestar();
-                    _fsp--;
-                    if (failed) return elements;
+                    state._fsp--;
+                    if (state.failed) return elements;
                     // Creole10.g:752:13: (tfc= table_formattedcontent onestar )?
                     int alt104=2;
                     switch ( input.LA(1) ) {
@@ -8886,15 +8886,15 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_table_formattedcontent_in_table_bolditalcontent2752);
                             tfc=table_formattedcontent();
-                            _fsp--;
-                            if (failed) return elements;
-                            if ( backtracking==0 ) {
+                            state._fsp--;
+                            if (state.failed) return elements;
+                            if ( state.backtracking==0 ) {
                                elements = tfc; 
                             }
                             pushFollow(FOLLOW_onestar_in_table_bolditalcontent2757);
                             onestar();
-                            _fsp--;
-                            if (failed) return elements;
+                            state._fsp--;
+                            if (state.failed) return elements;
 
                             }
                             break;
@@ -8907,7 +8907,7 @@ public class Creole10Parser extends Parser {
                 case 2 :
                     // Creole10.g:753:4: EOF
                     {
-                    match(input,EOF,FOLLOW_EOF_in_table_bolditalcontent2765); if (failed) return elements;
+                    match(input,EOF,FOLLOW_EOF_in_table_bolditalcontent2765); if (state.failed) return elements;
 
                     }
                     break;
@@ -9055,9 +9055,9 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_table_unformattedelement_in_table_formattedcontent2785);
             	    tu=table_unformattedelement();
-            	    _fsp--;
-            	    if (failed) return elements;
-            	    if ( backtracking==0 ) {
+            	    state._fsp--;
+            	    if (state.failed) return elements;
+            	    if ( state.backtracking==0 ) {
             	       elements.add(tu); 
             	    }
 
@@ -9066,7 +9066,7 @@ public class Creole10Parser extends Parser {
 
             	default :
             	    if ( cnt106 >= 1 ) break loop106;
-            	    if (backtracking>0) {failed=true; return elements;}
+            	    if (state.backtracking>0) {state.failed=true; return elements;}
                         EarlyExitException eee =
                             new EarlyExitException(106, input);
                         throw eee;
@@ -9111,7 +9111,7 @@ public class Creole10Parser extends Parser {
                 alt107=2;
             }
             else {
-                if (backtracking>0) {failed=true; return content;}
+                if (state.backtracking>0) {state.failed=true; return content;}
                 NoViableAltException nvae =
                     new NoViableAltException("758:1: table_unformattedelement returns [ASTNode content = null] : (tu= table_unformatted | ti= table_inlineelement );", 107, 0, input);
 
@@ -9123,9 +9123,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_table_unformatted_in_table_unformattedelement2808);
                     tu=table_unformatted();
-                    _fsp--;
-                    if (failed) return content;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return content;
+                    if ( state.backtracking==0 ) {
                       content = new UnformattedTextNode(tu);
                     }
 
@@ -9136,9 +9136,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_table_inlineelement_in_table_unformattedelement2820);
                     ti=table_inlineelement();
-                    _fsp--;
-                    if (failed) return content;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return content;
+                    if ( state.backtracking==0 ) {
                       content = ti;
                     }
 
@@ -9197,7 +9197,7 @@ public class Creole10Parser extends Parser {
                 }
                 break;
             default:
-                if (backtracking>0) {failed=true; return element;}
+                if (state.backtracking>0) {state.failed=true; return element;}
                 NoViableAltException nvae =
                     new NoViableAltException("762:1: table_inlineelement returns [ASTNode element = null] : (l= link | i= image | e= extension | nw= nowiki_inline );", 108, 0, input);
 
@@ -9210,9 +9210,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_link_in_table_inlineelement2840);
                     l=link();
-                    _fsp--;
-                    if (failed) return element;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return element;
+                    if ( state.backtracking==0 ) {
                       element = l; 
                     }
 
@@ -9223,9 +9223,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_image_in_table_inlineelement2850);
                     i=image();
-                    _fsp--;
-                    if (failed) return element;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return element;
+                    if ( state.backtracking==0 ) {
                       element = i; 
                     }
 
@@ -9236,9 +9236,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_extension_in_table_inlineelement2861);
                     e=extension();
-                    _fsp--;
-                    if (failed) return element;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return element;
+                    if ( state.backtracking==0 ) {
                       element = e; 
                     }
 
@@ -9249,9 +9249,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_nowiki_inline_in_table_inlineelement2871);
                     nw=nowiki_inline();
-                    _fsp--;
-                    if (failed) return element;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return element;
+                    if ( state.backtracking==0 ) {
                       element = nw; 
                     }
 
@@ -9293,7 +9293,7 @@ public class Creole10Parser extends Parser {
                 alt110=2;
             }
             else {
-                if (backtracking>0) {failed=true; return text;}
+                if (state.backtracking>0) {state.failed=true; return text;}
                 NoViableAltException nvae =
                     new NoViableAltException("768:1: table_unformatted returns [CollectionNode text = new CollectionNode()] : (t= table_unformatted_text | ( forced_linebreak | e= escaped )+ );", 110, 0, input);
 
@@ -9305,9 +9305,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_table_unformatted_text_in_table_unformatted2892);
                     t=table_unformatted_text();
-                    _fsp--;
-                    if (failed) return text;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return text;
+                    if ( state.backtracking==0 ) {
                        text.add(new UnformattedTextNode(t.toString()));
                     }
 
@@ -9337,9 +9337,9 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_forced_linebreak_in_table_unformatted2901);
                     	    forced_linebreak();
-                    	    _fsp--;
-                    	    if (failed) return text;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return text;
+                    	    if ( state.backtracking==0 ) {
                     	      text.add(new ForcedEndOfLineNode());
                     	    }
 
@@ -9350,9 +9350,9 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_escaped_in_table_unformatted2913);
                     	    e=escaped();
-                    	    _fsp--;
-                    	    if (failed) return text;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return text;
+                    	    if ( state.backtracking==0 ) {
                     	      text.add(e);
                     	    }
 
@@ -9361,7 +9361,7 @@ public class Creole10Parser extends Parser {
 
                     	default :
                     	    if ( cnt109 >= 1 ) break loop109;
-                    	    if (backtracking>0) {failed=true; return text;}
+                    	    if (state.backtracking>0) {state.failed=true; return text;}
                                 EarlyExitException eee =
                                     new EarlyExitException(109, input);
                                 throw eee;
@@ -9416,16 +9416,16 @@ public class Creole10Parser extends Parser {
             	    c=(Token)input.LT(1);
             	    if ( (input.LA(1)>=FORCED_END_OF_LINE && input.LA(1)<=WIKI)||input.LA(1)==POUND||input.LA(1)==EQUAL||(input.LA(1)>=NOWIKI_BLOCK_CLOSE && input.LA(1)<=82) ) {
             	        input.consume();
-            	        errorRecovery=false;failed=false;
+            	        state.errorRecovery=false;state.failed=false;
             	    }
             	    else {
-            	        if (backtracking>0) {failed=true; return text;}
+            	        if (state.backtracking>0) {state.failed=true; return text;}
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
             	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_table_unformatted_text2939);    throw mse;
             	    }
 
-            	    if ( backtracking==0 ) {
+            	    if ( state.backtracking==0 ) {
             	      text.append(c.getText());
             	    }
 
@@ -9434,7 +9434,7 @@ public class Creole10Parser extends Parser {
 
             	default :
             	    if ( cnt111 >= 1 ) break loop111;
-            	    if (backtracking>0) {failed=true; return text;}
+            	    if (state.backtracking>0) {state.failed=true; return text;}
                         EarlyExitException eee =
                             new EarlyExitException(111, input);
                         throw eee;
@@ -9471,23 +9471,23 @@ public class Creole10Parser extends Parser {
             {
             pushFollow(FOLLOW_nowikiblock_open_markup_in_nowiki_block3036);
             nowikiblock_open_markup();
-            _fsp--;
-            if (failed) return nowikiNode;
+            state._fsp--;
+            if (state.failed) return nowikiNode;
             pushFollow(FOLLOW_nowiki_block_contents_in_nowiki_block3043);
             contents=nowiki_block_contents();
-            _fsp--;
-            if (failed) return nowikiNode;
-            if ( backtracking==0 ) {
+            state._fsp--;
+            if (state.failed) return nowikiNode;
+            if ( state.backtracking==0 ) {
               nowikiNode = new NoWikiSectionNode(input.toString(contents.start,contents.stop).toString());
             }
             pushFollow(FOLLOW_nowikiblock_close_markup_in_nowiki_block3049);
             nowikiblock_close_markup();
-            _fsp--;
-            if (failed) return nowikiNode;
+            state._fsp--;
+            if (state.failed) return nowikiNode;
             pushFollow(FOLLOW_paragraph_separator_in_nowiki_block3052);
             paragraph_separator();
-            _fsp--;
-            if (failed) return nowikiNode;
+            state._fsp--;
+            if (state.failed) return nowikiNode;
 
             }
 
@@ -9512,12 +9512,12 @@ public class Creole10Parser extends Parser {
             {
             pushFollow(FOLLOW_nowiki_open_markup_in_nowikiblock_open_markup3063);
             nowiki_open_markup();
-            _fsp--;
-            if (failed) return ;
+            state._fsp--;
+            if (state.failed) return ;
             pushFollow(FOLLOW_newline_in_nowikiblock_open_markup3066);
             newline();
-            _fsp--;
-            if (failed) return ;
+            state._fsp--;
+            if (state.failed) return ;
 
             }
 
@@ -9540,7 +9540,7 @@ public class Creole10Parser extends Parser {
             // Creole10.g:799:4: ( NOWIKI_BLOCK_CLOSE )
             // Creole10.g:799:4: NOWIKI_BLOCK_CLOSE
             {
-            match(input,NOWIKI_BLOCK_CLOSE,FOLLOW_NOWIKI_BLOCK_CLOSE_in_nowikiblock_close_markup3077); if (failed) return ;
+            match(input,NOWIKI_BLOCK_CLOSE,FOLLOW_NOWIKI_BLOCK_CLOSE_in_nowikiblock_close_markup3077); if (state.failed) return ;
 
             }
 
@@ -9570,17 +9570,17 @@ public class Creole10Parser extends Parser {
             {
             pushFollow(FOLLOW_nowiki_open_markup_in_nowiki_inline3092);
             nowiki_open_markup();
-            _fsp--;
-            if (failed) return nowiki;
+            state._fsp--;
+            if (state.failed) return nowiki;
             pushFollow(FOLLOW_nowiki_inline_contents_in_nowiki_inline3099);
             t=nowiki_inline_contents();
-            _fsp--;
-            if (failed) return nowiki;
+            state._fsp--;
+            if (state.failed) return nowiki;
             pushFollow(FOLLOW_nowiki_close_markup_in_nowiki_inline3103);
             nowiki_close_markup();
-            _fsp--;
-            if (failed) return nowiki;
-            if ( backtracking==0 ) {
+            state._fsp--;
+            if (state.failed) return nowiki;
+            if ( state.backtracking==0 ) {
               nowiki = new NoWikiInlineNode(t.toString());
             }
 
@@ -9631,16 +9631,16 @@ public class Creole10Parser extends Parser {
             	    c=(Token)input.LT(1);
             	    if ( (input.LA(1)>=FORCED_END_OF_LINE && input.LA(1)<=ESCAPE)||(input.LA(1)>=NOWIKI_CLOSE && input.LA(1)<=82) ) {
             	        input.consume();
-            	        errorRecovery=false;failed=false;
+            	        state.errorRecovery=false;state.failed=false;
             	    }
             	    else {
-            	        if (backtracking>0) {failed=true; return retval;}
+            	        if (state.backtracking>0) {state.failed=true; return retval;}
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
             	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_nowiki_block_contents3121);    throw mse;
             	    }
 
-            	    if ( backtracking==0 ) {
+            	    if ( state.backtracking==0 ) {
             	      retval.contents.append(c.getText());
             	    }
 
@@ -9698,16 +9698,16 @@ public class Creole10Parser extends Parser {
             	    c=(Token)input.LT(1);
             	    if ( (input.LA(1)>=FORCED_END_OF_LINE && input.LA(1)<=WIKI)||(input.LA(1)>=POUND && input.LA(1)<=NOWIKI_BLOCK_CLOSE)||(input.LA(1)>=LINK_CLOSE && input.LA(1)<=82) ) {
             	        input.consume();
-            	        errorRecovery=false;failed=false;
+            	        state.errorRecovery=false;state.failed=false;
             	    }
             	    else {
-            	        if (backtracking>0) {failed=true; return text;}
+            	        if (state.backtracking>0) {state.failed=true; return text;}
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
             	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_nowiki_inline_contents3154);    throw mse;
             	    }
 
-            	    if ( backtracking==0 ) {
+            	    if ( state.backtracking==0 ) {
             	       text.append(c.getText()); 
             	    }
 
@@ -9745,8 +9745,8 @@ public class Creole10Parser extends Parser {
             {
             pushFollow(FOLLOW_horizontalrule_markup_in_horizontalrule3190);
             horizontalrule_markup();
-            _fsp--;
-            if (failed) return horizontal;
+            state._fsp--;
+            if (state.failed) return horizontal;
             // Creole10.g:819:27: ( blanks )?
             int alt114=2;
             int LA114_0 = input.LA(1);
@@ -9760,8 +9760,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_blanks_in_horizontalrule3195);
                     blanks();
-                    _fsp--;
-                    if (failed) return horizontal;
+                    state._fsp--;
+                    if (state.failed) return horizontal;
 
                     }
                     break;
@@ -9770,9 +9770,9 @@ public class Creole10Parser extends Parser {
 
             pushFollow(FOLLOW_paragraph_separator_in_horizontalrule3201);
             paragraph_separator();
-            _fsp--;
-            if (failed) return horizontal;
-            if ( backtracking==0 ) {
+            state._fsp--;
+            if (state.failed) return horizontal;
+            if ( state.backtracking==0 ) {
               horizontal = new HorizontalNode();
             }
 
@@ -9806,13 +9806,13 @@ public class Creole10Parser extends Parser {
             {
             pushFollow(FOLLOW_link_open_markup_in_link3222);
             link_open_markup();
-            _fsp--;
-            if (failed) return link;
+            state._fsp--;
+            if (state.failed) return link;
             pushFollow(FOLLOW_link_address_in_link3228);
             a=link_address();
-            _fsp--;
-            if (failed) return link;
-            if ( backtracking==0 ) {
+            state._fsp--;
+            if (state.failed) return link;
+            if ( state.backtracking==0 ) {
               link = a; 
             }
             // Creole10.g:827:59: ( link_description_markup d= link_description )?
@@ -9828,13 +9828,13 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_link_description_markup_in_link3234);
                     link_description_markup();
-                    _fsp--;
-                    if (failed) return link;
+                    state._fsp--;
+                    if (state.failed) return link;
                     pushFollow(FOLLOW_link_description_in_link3242);
                     d=link_description();
-                    _fsp--;
-                    if (failed) return link;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return link;
+                    if ( state.backtracking==0 ) {
                       
                       			if (link == null) { // recover from possible errors
                       			    link = new LinkNode();
@@ -9851,8 +9851,8 @@ public class Creole10Parser extends Parser {
 
             pushFollow(FOLLOW_link_close_markup_in_link3250);
             link_close_markup();
-            _fsp--;
-            if (failed) return link;
+            state._fsp--;
+            if (state.failed) return link;
 
             }
 
@@ -9901,7 +9901,7 @@ public class Creole10Parser extends Parser {
                             alt116=2;
                         }
                         else {
-                            if (backtracking>0) {failed=true; return link;}
+                            if (state.backtracking>0) {state.failed=true; return link;}
                             NoViableAltException nvae =
                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 34, input);
 
@@ -9912,7 +9912,7 @@ public class Creole10Parser extends Parser {
                         alt116=2;
                     }
                     else {
-                        if (backtracking>0) {failed=true; return link;}
+                        if (state.backtracking>0) {state.failed=true; return link;}
                         NoViableAltException nvae =
                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 16, input);
 
@@ -9923,7 +9923,7 @@ public class Creole10Parser extends Parser {
                     alt116=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return link;}
+                    if (state.backtracking>0) {state.failed=true; return link;}
                     NoViableAltException nvae =
                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 1, input);
 
@@ -9966,7 +9966,7 @@ public class Creole10Parser extends Parser {
                                                     alt116=2;
                                                 }
                                                 else {
-                                                    if (backtracking>0) {failed=true; return link;}
+                                                    if (state.backtracking>0) {state.failed=true; return link;}
                                                     NoViableAltException nvae =
                                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 34, input);
 
@@ -9977,7 +9977,7 @@ public class Creole10Parser extends Parser {
                                                 alt116=2;
                                             }
                                             else {
-                                                if (backtracking>0) {failed=true; return link;}
+                                                if (state.backtracking>0) {state.failed=true; return link;}
                                                 NoViableAltException nvae =
                                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 120, input);
 
@@ -9988,7 +9988,7 @@ public class Creole10Parser extends Parser {
                                             alt116=2;
                                         }
                                         else {
-                                            if (backtracking>0) {failed=true; return link;}
+                                            if (state.backtracking>0) {state.failed=true; return link;}
                                             NoViableAltException nvae =
                                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 109, input);
 
@@ -9999,7 +9999,7 @@ public class Creole10Parser extends Parser {
                                         alt116=2;
                                     }
                                     else {
-                                        if (backtracking>0) {failed=true; return link;}
+                                        if (state.backtracking>0) {state.failed=true; return link;}
                                         NoViableAltException nvae =
                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 93, input);
 
@@ -10010,7 +10010,7 @@ public class Creole10Parser extends Parser {
                                     alt116=2;
                                 }
                                 else {
-                                    if (backtracking>0) {failed=true; return link;}
+                                    if (state.backtracking>0) {state.failed=true; return link;}
                                     NoViableAltException nvae =
                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 74, input);
 
@@ -10021,7 +10021,7 @@ public class Creole10Parser extends Parser {
                                 alt116=2;
                             }
                             else {
-                                if (backtracking>0) {failed=true; return link;}
+                                if (state.backtracking>0) {state.failed=true; return link;}
                                 NoViableAltException nvae =
                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 55, input);
 
@@ -10032,7 +10032,7 @@ public class Creole10Parser extends Parser {
                             alt116=2;
                         }
                         else {
-                            if (backtracking>0) {failed=true; return link;}
+                            if (state.backtracking>0) {state.failed=true; return link;}
                             NoViableAltException nvae =
                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 35, input);
 
@@ -10043,7 +10043,7 @@ public class Creole10Parser extends Parser {
                         alt116=2;
                     }
                     else {
-                        if (backtracking>0) {failed=true; return link;}
+                        if (state.backtracking>0) {state.failed=true; return link;}
                         NoViableAltException nvae =
                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 17, input);
 
@@ -10054,7 +10054,7 @@ public class Creole10Parser extends Parser {
                     alt116=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return link;}
+                    if (state.backtracking>0) {state.failed=true; return link;}
                     NoViableAltException nvae =
                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 2, input);
 
@@ -10094,7 +10094,7 @@ public class Creole10Parser extends Parser {
                                             alt116=2;
                                         }
                                         else {
-                                            if (backtracking>0) {failed=true; return link;}
+                                            if (state.backtracking>0) {state.failed=true; return link;}
                                             NoViableAltException nvae =
                                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 34, input);
 
@@ -10102,7 +10102,7 @@ public class Creole10Parser extends Parser {
                                         }
                                     }
                                     else {
-                                        if (backtracking>0) {failed=true; return link;}
+                                        if (state.backtracking>0) {state.failed=true; return link;}
                                         NoViableAltException nvae =
                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 94, input);
 
@@ -10113,7 +10113,7 @@ public class Creole10Parser extends Parser {
                                     alt116=2;
                                 }
                                 else {
-                                    if (backtracking>0) {failed=true; return link;}
+                                    if (state.backtracking>0) {state.failed=true; return link;}
                                     NoViableAltException nvae =
                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 75, input);
 
@@ -10124,7 +10124,7 @@ public class Creole10Parser extends Parser {
                                 alt116=2;
                             }
                             else {
-                                if (backtracking>0) {failed=true; return link;}
+                                if (state.backtracking>0) {state.failed=true; return link;}
                                 NoViableAltException nvae =
                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 56, input);
 
@@ -10135,7 +10135,7 @@ public class Creole10Parser extends Parser {
                             alt116=2;
                         }
                         else {
-                            if (backtracking>0) {failed=true; return link;}
+                            if (state.backtracking>0) {state.failed=true; return link;}
                             NoViableAltException nvae =
                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 36, input);
 
@@ -10146,7 +10146,7 @@ public class Creole10Parser extends Parser {
                         alt116=2;
                     }
                     else {
-                        if (backtracking>0) {failed=true; return link;}
+                        if (state.backtracking>0) {state.failed=true; return link;}
                         NoViableAltException nvae =
                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 18, input);
 
@@ -10157,7 +10157,7 @@ public class Creole10Parser extends Parser {
                     alt116=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return link;}
+                    if (state.backtracking>0) {state.failed=true; return link;}
                     NoViableAltException nvae =
                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 3, input);
 
@@ -10197,7 +10197,7 @@ public class Creole10Parser extends Parser {
                                             alt116=2;
                                         }
                                         else {
-                                            if (backtracking>0) {failed=true; return link;}
+                                            if (state.backtracking>0) {state.failed=true; return link;}
                                             NoViableAltException nvae =
                                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 34, input);
 
@@ -10205,7 +10205,7 @@ public class Creole10Parser extends Parser {
                                         }
                                     }
                                     else {
-                                        if (backtracking>0) {failed=true; return link;}
+                                        if (state.backtracking>0) {state.failed=true; return link;}
                                         NoViableAltException nvae =
                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 95, input);
 
@@ -10216,7 +10216,7 @@ public class Creole10Parser extends Parser {
                                     alt116=2;
                                 }
                                 else {
-                                    if (backtracking>0) {failed=true; return link;}
+                                    if (state.backtracking>0) {state.failed=true; return link;}
                                     NoViableAltException nvae =
                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 76, input);
 
@@ -10227,7 +10227,7 @@ public class Creole10Parser extends Parser {
                                 alt116=2;
                             }
                             else {
-                                if (backtracking>0) {failed=true; return link;}
+                                if (state.backtracking>0) {state.failed=true; return link;}
                                 NoViableAltException nvae =
                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 57, input);
 
@@ -10238,7 +10238,7 @@ public class Creole10Parser extends Parser {
                             alt116=2;
                         }
                         else {
-                            if (backtracking>0) {failed=true; return link;}
+                            if (state.backtracking>0) {state.failed=true; return link;}
                             NoViableAltException nvae =
                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 37, input);
 
@@ -10249,7 +10249,7 @@ public class Creole10Parser extends Parser {
                         alt116=2;
                     }
                     else {
-                        if (backtracking>0) {failed=true; return link;}
+                        if (state.backtracking>0) {state.failed=true; return link;}
                         NoViableAltException nvae =
                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 19, input);
 
@@ -10260,7 +10260,7 @@ public class Creole10Parser extends Parser {
                     alt116=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return link;}
+                    if (state.backtracking>0) {state.failed=true; return link;}
                     NoViableAltException nvae =
                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 4, input);
 
@@ -10303,7 +10303,7 @@ public class Creole10Parser extends Parser {
                                                 alt116=2;
                                             }
                                             else {
-                                                if (backtracking>0) {failed=true; return link;}
+                                                if (state.backtracking>0) {state.failed=true; return link;}
                                                 NoViableAltException nvae =
                                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 34, input);
 
@@ -10311,7 +10311,7 @@ public class Creole10Parser extends Parser {
                                             }
                                         }
                                         else {
-                                            if (backtracking>0) {failed=true; return link;}
+                                            if (state.backtracking>0) {state.failed=true; return link;}
                                             NoViableAltException nvae =
                                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 110, input);
 
@@ -10322,7 +10322,7 @@ public class Creole10Parser extends Parser {
                                         alt116=2;
                                     }
                                     else {
-                                        if (backtracking>0) {failed=true; return link;}
+                                        if (state.backtracking>0) {state.failed=true; return link;}
                                         NoViableAltException nvae =
                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 96, input);
 
@@ -10333,7 +10333,7 @@ public class Creole10Parser extends Parser {
                                     alt116=2;
                                 }
                                 else {
-                                    if (backtracking>0) {failed=true; return link;}
+                                    if (state.backtracking>0) {state.failed=true; return link;}
                                     NoViableAltException nvae =
                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 77, input);
 
@@ -10344,7 +10344,7 @@ public class Creole10Parser extends Parser {
                                 alt116=2;
                             }
                             else {
-                                if (backtracking>0) {failed=true; return link;}
+                                if (state.backtracking>0) {state.failed=true; return link;}
                                 NoViableAltException nvae =
                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 58, input);
 
@@ -10355,7 +10355,7 @@ public class Creole10Parser extends Parser {
                             alt116=2;
                         }
                         else {
-                            if (backtracking>0) {failed=true; return link;}
+                            if (state.backtracking>0) {state.failed=true; return link;}
                             NoViableAltException nvae =
                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 38, input);
 
@@ -10366,7 +10366,7 @@ public class Creole10Parser extends Parser {
                         alt116=2;
                     }
                     else {
-                        if (backtracking>0) {failed=true; return link;}
+                        if (state.backtracking>0) {state.failed=true; return link;}
                         NoViableAltException nvae =
                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 20, input);
 
@@ -10377,7 +10377,7 @@ public class Creole10Parser extends Parser {
                     alt116=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return link;}
+                    if (state.backtracking>0) {state.failed=true; return link;}
                     NoViableAltException nvae =
                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 5, input);
 
@@ -10420,7 +10420,7 @@ public class Creole10Parser extends Parser {
                                                     alt116=2;
                                                 }
                                                 else {
-                                                    if (backtracking>0) {failed=true; return link;}
+                                                    if (state.backtracking>0) {state.failed=true; return link;}
                                                     NoViableAltException nvae =
                                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 34, input);
 
@@ -10431,7 +10431,7 @@ public class Creole10Parser extends Parser {
                                                 alt116=2;
                                             }
                                             else {
-                                                if (backtracking>0) {failed=true; return link;}
+                                                if (state.backtracking>0) {state.failed=true; return link;}
                                                 NoViableAltException nvae =
                                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 121, input);
 
@@ -10442,7 +10442,7 @@ public class Creole10Parser extends Parser {
                                             alt116=2;
                                         }
                                         else {
-                                            if (backtracking>0) {failed=true; return link;}
+                                            if (state.backtracking>0) {state.failed=true; return link;}
                                             NoViableAltException nvae =
                                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 111, input);
 
@@ -10453,7 +10453,7 @@ public class Creole10Parser extends Parser {
                                         alt116=2;
                                     }
                                     else {
-                                        if (backtracking>0) {failed=true; return link;}
+                                        if (state.backtracking>0) {state.failed=true; return link;}
                                         NoViableAltException nvae =
                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 97, input);
 
@@ -10464,7 +10464,7 @@ public class Creole10Parser extends Parser {
                                     alt116=2;
                                 }
                                 else {
-                                    if (backtracking>0) {failed=true; return link;}
+                                    if (state.backtracking>0) {state.failed=true; return link;}
                                     NoViableAltException nvae =
                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 78, input);
 
@@ -10475,7 +10475,7 @@ public class Creole10Parser extends Parser {
                                 alt116=2;
                             }
                             else {
-                                if (backtracking>0) {failed=true; return link;}
+                                if (state.backtracking>0) {state.failed=true; return link;}
                                 NoViableAltException nvae =
                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 59, input);
 
@@ -10486,7 +10486,7 @@ public class Creole10Parser extends Parser {
                             alt116=2;
                         }
                         else {
-                            if (backtracking>0) {failed=true; return link;}
+                            if (state.backtracking>0) {state.failed=true; return link;}
                             NoViableAltException nvae =
                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 39, input);
 
@@ -10497,7 +10497,7 @@ public class Creole10Parser extends Parser {
                         alt116=2;
                     }
                     else {
-                        if (backtracking>0) {failed=true; return link;}
+                        if (state.backtracking>0) {state.failed=true; return link;}
                         NoViableAltException nvae =
                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 21, input);
 
@@ -10540,7 +10540,7 @@ public class Creole10Parser extends Parser {
                                                         alt116=2;
                                                     }
                                                     else {
-                                                        if (backtracking>0) {failed=true; return link;}
+                                                        if (state.backtracking>0) {state.failed=true; return link;}
                                                         NoViableAltException nvae =
                                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 34, input);
 
@@ -10551,7 +10551,7 @@ public class Creole10Parser extends Parser {
                                                     alt116=2;
                                                 }
                                                 else {
-                                                    if (backtracking>0) {failed=true; return link;}
+                                                    if (state.backtracking>0) {state.failed=true; return link;}
                                                     NoViableAltException nvae =
                                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 129, input);
 
@@ -10562,7 +10562,7 @@ public class Creole10Parser extends Parser {
                                                 alt116=2;
                                             }
                                             else {
-                                                if (backtracking>0) {failed=true; return link;}
+                                                if (state.backtracking>0) {state.failed=true; return link;}
                                                 NoViableAltException nvae =
                                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 122, input);
 
@@ -10573,7 +10573,7 @@ public class Creole10Parser extends Parser {
                                             alt116=2;
                                         }
                                         else {
-                                            if (backtracking>0) {failed=true; return link;}
+                                            if (state.backtracking>0) {state.failed=true; return link;}
                                             NoViableAltException nvae =
                                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 112, input);
 
@@ -10584,7 +10584,7 @@ public class Creole10Parser extends Parser {
                                         alt116=2;
                                     }
                                     else {
-                                        if (backtracking>0) {failed=true; return link;}
+                                        if (state.backtracking>0) {state.failed=true; return link;}
                                         NoViableAltException nvae =
                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 98, input);
 
@@ -10595,7 +10595,7 @@ public class Creole10Parser extends Parser {
                                     alt116=2;
                                 }
                                 else {
-                                    if (backtracking>0) {failed=true; return link;}
+                                    if (state.backtracking>0) {state.failed=true; return link;}
                                     NoViableAltException nvae =
                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 79, input);
 
@@ -10606,7 +10606,7 @@ public class Creole10Parser extends Parser {
                                 alt116=2;
                             }
                             else {
-                                if (backtracking>0) {failed=true; return link;}
+                                if (state.backtracking>0) {state.failed=true; return link;}
                                 NoViableAltException nvae =
                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 60, input);
 
@@ -10617,7 +10617,7 @@ public class Creole10Parser extends Parser {
                             alt116=2;
                         }
                         else {
-                            if (backtracking>0) {failed=true; return link;}
+                            if (state.backtracking>0) {state.failed=true; return link;}
                             NoViableAltException nvae =
                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 40, input);
 
@@ -10654,7 +10654,7 @@ public class Creole10Parser extends Parser {
                                                     alt116=2;
                                                 }
                                                 else {
-                                                    if (backtracking>0) {failed=true; return link;}
+                                                    if (state.backtracking>0) {state.failed=true; return link;}
                                                     NoViableAltException nvae =
                                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 34, input);
 
@@ -10665,7 +10665,7 @@ public class Creole10Parser extends Parser {
                                                 alt116=2;
                                             }
                                             else {
-                                                if (backtracking>0) {failed=true; return link;}
+                                                if (state.backtracking>0) {state.failed=true; return link;}
                                                 NoViableAltException nvae =
                                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 123, input);
 
@@ -10676,7 +10676,7 @@ public class Creole10Parser extends Parser {
                                             alt116=2;
                                         }
                                         else {
-                                            if (backtracking>0) {failed=true; return link;}
+                                            if (state.backtracking>0) {state.failed=true; return link;}
                                             NoViableAltException nvae =
                                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 113, input);
 
@@ -10687,7 +10687,7 @@ public class Creole10Parser extends Parser {
                                         alt116=2;
                                     }
                                     else {
-                                        if (backtracking>0) {failed=true; return link;}
+                                        if (state.backtracking>0) {state.failed=true; return link;}
                                         NoViableAltException nvae =
                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 99, input);
 
@@ -10698,7 +10698,7 @@ public class Creole10Parser extends Parser {
                                     alt116=2;
                                 }
                                 else {
-                                    if (backtracking>0) {failed=true; return link;}
+                                    if (state.backtracking>0) {state.failed=true; return link;}
                                     NoViableAltException nvae =
                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 80, input);
 
@@ -10709,7 +10709,7 @@ public class Creole10Parser extends Parser {
                                 alt116=2;
                             }
                             else {
-                                if (backtracking>0) {failed=true; return link;}
+                                if (state.backtracking>0) {state.failed=true; return link;}
                                 NoViableAltException nvae =
                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 61, input);
 
@@ -10720,7 +10720,7 @@ public class Creole10Parser extends Parser {
                             alt116=2;
                         }
                         else {
-                            if (backtracking>0) {failed=true; return link;}
+                            if (state.backtracking>0) {state.failed=true; return link;}
                             NoViableAltException nvae =
                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 41, input);
 
@@ -10809,7 +10809,7 @@ public class Creole10Parser extends Parser {
                         }
                         break;
                     default:
-                        if (backtracking>0) {failed=true; return link;}
+                        if (state.backtracking>0) {state.failed=true; return link;}
                         NoViableAltException nvae =
                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 22, input);
 
@@ -10899,7 +10899,7 @@ public class Creole10Parser extends Parser {
                     }
                     break;
                 default:
-                    if (backtracking>0) {failed=true; return link;}
+                    if (state.backtracking>0) {state.failed=true; return link;}
                     NoViableAltException nvae =
                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 6, input);
 
@@ -10937,7 +10937,7 @@ public class Creole10Parser extends Parser {
                                         alt116=2;
                                     }
                                     else {
-                                        if (backtracking>0) {failed=true; return link;}
+                                        if (state.backtracking>0) {state.failed=true; return link;}
                                         NoViableAltException nvae =
                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 34, input);
 
@@ -10945,7 +10945,7 @@ public class Creole10Parser extends Parser {
                                     }
                                 }
                                 else {
-                                    if (backtracking>0) {failed=true; return link;}
+                                    if (state.backtracking>0) {state.failed=true; return link;}
                                     NoViableAltException nvae =
                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 81, input);
 
@@ -10956,7 +10956,7 @@ public class Creole10Parser extends Parser {
                                 alt116=2;
                             }
                             else {
-                                if (backtracking>0) {failed=true; return link;}
+                                if (state.backtracking>0) {state.failed=true; return link;}
                                 NoViableAltException nvae =
                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 62, input);
 
@@ -10967,7 +10967,7 @@ public class Creole10Parser extends Parser {
                             alt116=2;
                         }
                         else {
-                            if (backtracking>0) {failed=true; return link;}
+                            if (state.backtracking>0) {state.failed=true; return link;}
                             NoViableAltException nvae =
                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 42, input);
 
@@ -10978,7 +10978,7 @@ public class Creole10Parser extends Parser {
                         alt116=2;
                     }
                     else {
-                        if (backtracking>0) {failed=true; return link;}
+                        if (state.backtracking>0) {state.failed=true; return link;}
                         NoViableAltException nvae =
                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 23, input);
 
@@ -11018,7 +11018,7 @@ public class Creole10Parser extends Parser {
                                                 alt116=2;
                                             }
                                             else {
-                                                if (backtracking>0) {failed=true; return link;}
+                                                if (state.backtracking>0) {state.failed=true; return link;}
                                                 NoViableAltException nvae =
                                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 34, input);
 
@@ -11026,7 +11026,7 @@ public class Creole10Parser extends Parser {
                                             }
                                         }
                                         else {
-                                            if (backtracking>0) {failed=true; return link;}
+                                            if (state.backtracking>0) {state.failed=true; return link;}
                                             NoViableAltException nvae =
                                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 114, input);
 
@@ -11037,7 +11037,7 @@ public class Creole10Parser extends Parser {
                                         alt116=2;
                                     }
                                     else {
-                                        if (backtracking>0) {failed=true; return link;}
+                                        if (state.backtracking>0) {state.failed=true; return link;}
                                         NoViableAltException nvae =
                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 100, input);
 
@@ -11048,7 +11048,7 @@ public class Creole10Parser extends Parser {
                                     alt116=2;
                                 }
                                 else {
-                                    if (backtracking>0) {failed=true; return link;}
+                                    if (state.backtracking>0) {state.failed=true; return link;}
                                     NoViableAltException nvae =
                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 82, input);
 
@@ -11059,7 +11059,7 @@ public class Creole10Parser extends Parser {
                                 alt116=2;
                             }
                             else {
-                                if (backtracking>0) {failed=true; return link;}
+                                if (state.backtracking>0) {state.failed=true; return link;}
                                 NoViableAltException nvae =
                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 63, input);
 
@@ -11070,7 +11070,7 @@ public class Creole10Parser extends Parser {
                             alt116=2;
                         }
                         else {
-                            if (backtracking>0) {failed=true; return link;}
+                            if (state.backtracking>0) {state.failed=true; return link;}
                             NoViableAltException nvae =
                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 43, input);
 
@@ -11081,7 +11081,7 @@ public class Creole10Parser extends Parser {
                         alt116=2;
                     }
                     else {
-                        if (backtracking>0) {failed=true; return link;}
+                        if (state.backtracking>0) {state.failed=true; return link;}
                         NoViableAltException nvae =
                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 24, input);
 
@@ -11170,7 +11170,7 @@ public class Creole10Parser extends Parser {
                     }
                     break;
                 default:
-                    if (backtracking>0) {failed=true; return link;}
+                    if (state.backtracking>0) {state.failed=true; return link;}
                     NoViableAltException nvae =
                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 7, input);
 
@@ -11214,7 +11214,7 @@ public class Creole10Parser extends Parser {
                                                     alt116=2;
                                                 }
                                                 else {
-                                                    if (backtracking>0) {failed=true; return link;}
+                                                    if (state.backtracking>0) {state.failed=true; return link;}
                                                     NoViableAltException nvae =
                                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 34, input);
 
@@ -11225,7 +11225,7 @@ public class Creole10Parser extends Parser {
                                                 alt116=2;
                                             }
                                             else {
-                                                if (backtracking>0) {failed=true; return link;}
+                                                if (state.backtracking>0) {state.failed=true; return link;}
                                                 NoViableAltException nvae =
                                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 124, input);
 
@@ -11236,7 +11236,7 @@ public class Creole10Parser extends Parser {
                                             alt116=2;
                                         }
                                         else {
-                                            if (backtracking>0) {failed=true; return link;}
+                                            if (state.backtracking>0) {state.failed=true; return link;}
                                             NoViableAltException nvae =
                                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 115, input);
 
@@ -11247,7 +11247,7 @@ public class Creole10Parser extends Parser {
                                         alt116=2;
                                     }
                                     else {
-                                        if (backtracking>0) {failed=true; return link;}
+                                        if (state.backtracking>0) {state.failed=true; return link;}
                                         NoViableAltException nvae =
                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 101, input);
 
@@ -11258,7 +11258,7 @@ public class Creole10Parser extends Parser {
                                     alt116=2;
                                 }
                                 else {
-                                    if (backtracking>0) {failed=true; return link;}
+                                    if (state.backtracking>0) {state.failed=true; return link;}
                                     NoViableAltException nvae =
                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 83, input);
 
@@ -11269,7 +11269,7 @@ public class Creole10Parser extends Parser {
                                 alt116=2;
                             }
                             else {
-                                if (backtracking>0) {failed=true; return link;}
+                                if (state.backtracking>0) {state.failed=true; return link;}
                                 NoViableAltException nvae =
                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 64, input);
 
@@ -11280,7 +11280,7 @@ public class Creole10Parser extends Parser {
                             alt116=2;
                         }
                         else {
-                            if (backtracking>0) {failed=true; return link;}
+                            if (state.backtracking>0) {state.failed=true; return link;}
                             NoViableAltException nvae =
                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 44, input);
 
@@ -11323,7 +11323,7 @@ public class Creole10Parser extends Parser {
                                                             alt116=2;
                                                         }
                                                         else {
-                                                            if (backtracking>0) {failed=true; return link;}
+                                                            if (state.backtracking>0) {state.failed=true; return link;}
                                                             NoViableAltException nvae =
                                                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 34, input);
 
@@ -11334,7 +11334,7 @@ public class Creole10Parser extends Parser {
                                                         alt116=2;
                                                     }
                                                     else {
-                                                        if (backtracking>0) {failed=true; return link;}
+                                                        if (state.backtracking>0) {state.failed=true; return link;}
                                                         NoViableAltException nvae =
                                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 133, input);
 
@@ -11345,7 +11345,7 @@ public class Creole10Parser extends Parser {
                                                     alt116=2;
                                                 }
                                                 else {
-                                                    if (backtracking>0) {failed=true; return link;}
+                                                    if (state.backtracking>0) {state.failed=true; return link;}
                                                     NoViableAltException nvae =
                                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 130, input);
 
@@ -11356,7 +11356,7 @@ public class Creole10Parser extends Parser {
                                                 alt116=2;
                                             }
                                             else {
-                                                if (backtracking>0) {failed=true; return link;}
+                                                if (state.backtracking>0) {state.failed=true; return link;}
                                                 NoViableAltException nvae =
                                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 125, input);
 
@@ -11367,7 +11367,7 @@ public class Creole10Parser extends Parser {
                                             alt116=2;
                                         }
                                         else {
-                                            if (backtracking>0) {failed=true; return link;}
+                                            if (state.backtracking>0) {state.failed=true; return link;}
                                             NoViableAltException nvae =
                                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 116, input);
 
@@ -11378,7 +11378,7 @@ public class Creole10Parser extends Parser {
                                         alt116=2;
                                     }
                                     else {
-                                        if (backtracking>0) {failed=true; return link;}
+                                        if (state.backtracking>0) {state.failed=true; return link;}
                                         NoViableAltException nvae =
                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 102, input);
 
@@ -11389,7 +11389,7 @@ public class Creole10Parser extends Parser {
                                     alt116=2;
                                 }
                                 else {
-                                    if (backtracking>0) {failed=true; return link;}
+                                    if (state.backtracking>0) {state.failed=true; return link;}
                                     NoViableAltException nvae =
                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 84, input);
 
@@ -11400,7 +11400,7 @@ public class Creole10Parser extends Parser {
                                 alt116=2;
                             }
                             else {
-                                if (backtracking>0) {failed=true; return link;}
+                                if (state.backtracking>0) {state.failed=true; return link;}
                                 NoViableAltException nvae =
                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 65, input);
 
@@ -11411,7 +11411,7 @@ public class Creole10Parser extends Parser {
                             alt116=2;
                         }
                         else {
-                            if (backtracking>0) {failed=true; return link;}
+                            if (state.backtracking>0) {state.failed=true; return link;}
                             NoViableAltException nvae =
                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 45, input);
 
@@ -11500,7 +11500,7 @@ public class Creole10Parser extends Parser {
                         }
                         break;
                     default:
-                        if (backtracking>0) {failed=true; return link;}
+                        if (state.backtracking>0) {state.failed=true; return link;}
                         NoViableAltException nvae =
                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 25, input);
 
@@ -11538,7 +11538,7 @@ public class Creole10Parser extends Parser {
                                             alt116=2;
                                         }
                                         else {
-                                            if (backtracking>0) {failed=true; return link;}
+                                            if (state.backtracking>0) {state.failed=true; return link;}
                                             NoViableAltException nvae =
                                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 34, input);
 
@@ -11546,7 +11546,7 @@ public class Creole10Parser extends Parser {
                                         }
                                     }
                                     else {
-                                        if (backtracking>0) {failed=true; return link;}
+                                        if (state.backtracking>0) {state.failed=true; return link;}
                                         NoViableAltException nvae =
                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 103, input);
 
@@ -11557,7 +11557,7 @@ public class Creole10Parser extends Parser {
                                     alt116=2;
                                 }
                                 else {
-                                    if (backtracking>0) {failed=true; return link;}
+                                    if (state.backtracking>0) {state.failed=true; return link;}
                                     NoViableAltException nvae =
                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 85, input);
 
@@ -11568,7 +11568,7 @@ public class Creole10Parser extends Parser {
                                 alt116=2;
                             }
                             else {
-                                if (backtracking>0) {failed=true; return link;}
+                                if (state.backtracking>0) {state.failed=true; return link;}
                                 NoViableAltException nvae =
                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 66, input);
 
@@ -11579,7 +11579,7 @@ public class Creole10Parser extends Parser {
                             alt116=2;
                         }
                         else {
-                            if (backtracking>0) {failed=true; return link;}
+                            if (state.backtracking>0) {state.failed=true; return link;}
                             NoViableAltException nvae =
                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 46, input);
 
@@ -11590,7 +11590,7 @@ public class Creole10Parser extends Parser {
                         alt116=2;
                     }
                     else {
-                        if (backtracking>0) {failed=true; return link;}
+                        if (state.backtracking>0) {state.failed=true; return link;}
                         NoViableAltException nvae =
                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 26, input);
 
@@ -11679,7 +11679,7 @@ public class Creole10Parser extends Parser {
                     }
                     break;
                 default:
-                    if (backtracking>0) {failed=true; return link;}
+                    if (state.backtracking>0) {state.failed=true; return link;}
                     NoViableAltException nvae =
                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 8, input);
 
@@ -11717,7 +11717,7 @@ public class Creole10Parser extends Parser {
                                             alt116=2;
                                         }
                                         else {
-                                            if (backtracking>0) {failed=true; return link;}
+                                            if (state.backtracking>0) {state.failed=true; return link;}
                                             NoViableAltException nvae =
                                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 34, input);
 
@@ -11728,7 +11728,7 @@ public class Creole10Parser extends Parser {
                                         alt116=2;
                                     }
                                     else {
-                                        if (backtracking>0) {failed=true; return link;}
+                                        if (state.backtracking>0) {state.failed=true; return link;}
                                         NoViableAltException nvae =
                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 104, input);
 
@@ -11739,7 +11739,7 @@ public class Creole10Parser extends Parser {
                                     alt116=2;
                                 }
                                 else {
-                                    if (backtracking>0) {failed=true; return link;}
+                                    if (state.backtracking>0) {state.failed=true; return link;}
                                     NoViableAltException nvae =
                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 86, input);
 
@@ -11750,7 +11750,7 @@ public class Creole10Parser extends Parser {
                                 alt116=2;
                             }
                             else {
-                                if (backtracking>0) {failed=true; return link;}
+                                if (state.backtracking>0) {state.failed=true; return link;}
                                 NoViableAltException nvae =
                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 67, input);
 
@@ -11761,7 +11761,7 @@ public class Creole10Parser extends Parser {
                             alt116=2;
                         }
                         else {
-                            if (backtracking>0) {failed=true; return link;}
+                            if (state.backtracking>0) {state.failed=true; return link;}
                             NoViableAltException nvae =
                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 47, input);
 
@@ -11772,7 +11772,7 @@ public class Creole10Parser extends Parser {
                         alt116=2;
                     }
                     else {
-                        if (backtracking>0) {failed=true; return link;}
+                        if (state.backtracking>0) {state.failed=true; return link;}
                         NoViableAltException nvae =
                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 27, input);
 
@@ -11783,7 +11783,7 @@ public class Creole10Parser extends Parser {
                     alt116=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return link;}
+                    if (state.backtracking>0) {state.failed=true; return link;}
                     NoViableAltException nvae =
                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 9, input);
 
@@ -11829,7 +11829,7 @@ public class Creole10Parser extends Parser {
                                                     alt116=2;
                                                 }
                                                 else {
-                                                    if (backtracking>0) {failed=true; return link;}
+                                                    if (state.backtracking>0) {state.failed=true; return link;}
                                                     NoViableAltException nvae =
                                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 34, input);
 
@@ -11837,7 +11837,7 @@ public class Creole10Parser extends Parser {
                                                 }
                                             }
                                             else {
-                                                if (backtracking>0) {failed=true; return link;}
+                                                if (state.backtracking>0) {state.failed=true; return link;}
                                                 NoViableAltException nvae =
                                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 126, input);
 
@@ -11848,7 +11848,7 @@ public class Creole10Parser extends Parser {
                                             alt116=2;
                                         }
                                         else {
-                                            if (backtracking>0) {failed=true; return link;}
+                                            if (state.backtracking>0) {state.failed=true; return link;}
                                             NoViableAltException nvae =
                                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 117, input);
 
@@ -11859,7 +11859,7 @@ public class Creole10Parser extends Parser {
                                         alt116=2;
                                     }
                                     else {
-                                        if (backtracking>0) {failed=true; return link;}
+                                        if (state.backtracking>0) {state.failed=true; return link;}
                                         NoViableAltException nvae =
                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 105, input);
 
@@ -11870,7 +11870,7 @@ public class Creole10Parser extends Parser {
                                     alt116=2;
                                 }
                                 else {
-                                    if (backtracking>0) {failed=true; return link;}
+                                    if (state.backtracking>0) {state.failed=true; return link;}
                                     NoViableAltException nvae =
                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 87, input);
 
@@ -11881,7 +11881,7 @@ public class Creole10Parser extends Parser {
                                 alt116=2;
                             }
                             else {
-                                if (backtracking>0) {failed=true; return link;}
+                                if (state.backtracking>0) {state.failed=true; return link;}
                                 NoViableAltException nvae =
                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 68, input);
 
@@ -11892,7 +11892,7 @@ public class Creole10Parser extends Parser {
                             alt116=2;
                         }
                         else {
-                            if (backtracking>0) {failed=true; return link;}
+                            if (state.backtracking>0) {state.failed=true; return link;}
                             NoViableAltException nvae =
                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 48, input);
 
@@ -11903,7 +11903,7 @@ public class Creole10Parser extends Parser {
                         alt116=2;
                     }
                     else {
-                        if (backtracking>0) {failed=true; return link;}
+                        if (state.backtracking>0) {state.failed=true; return link;}
                         NoViableAltException nvae =
                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 28, input);
 
@@ -11914,7 +11914,7 @@ public class Creole10Parser extends Parser {
                     alt116=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return link;}
+                    if (state.backtracking>0) {state.failed=true; return link;}
                     NoViableAltException nvae =
                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 10, input);
 
@@ -11963,7 +11963,7 @@ public class Creole10Parser extends Parser {
                                                             alt116=2;
                                                         }
                                                         else {
-                                                            if (backtracking>0) {failed=true; return link;}
+                                                            if (state.backtracking>0) {state.failed=true; return link;}
                                                             NoViableAltException nvae =
                                                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 34, input);
 
@@ -11974,7 +11974,7 @@ public class Creole10Parser extends Parser {
                                                         alt116=2;
                                                     }
                                                     else {
-                                                        if (backtracking>0) {failed=true; return link;}
+                                                        if (state.backtracking>0) {state.failed=true; return link;}
                                                         NoViableAltException nvae =
                                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 134, input);
 
@@ -11985,7 +11985,7 @@ public class Creole10Parser extends Parser {
                                                     alt116=2;
                                                 }
                                                 else {
-                                                    if (backtracking>0) {failed=true; return link;}
+                                                    if (state.backtracking>0) {state.failed=true; return link;}
                                                     NoViableAltException nvae =
                                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 131, input);
 
@@ -11996,7 +11996,7 @@ public class Creole10Parser extends Parser {
                                                 alt116=2;
                                             }
                                             else {
-                                                if (backtracking>0) {failed=true; return link;}
+                                                if (state.backtracking>0) {state.failed=true; return link;}
                                                 NoViableAltException nvae =
                                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 127, input);
 
@@ -12007,7 +12007,7 @@ public class Creole10Parser extends Parser {
                                             alt116=2;
                                         }
                                         else {
-                                            if (backtracking>0) {failed=true; return link;}
+                                            if (state.backtracking>0) {state.failed=true; return link;}
                                             NoViableAltException nvae =
                                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 118, input);
 
@@ -12018,7 +12018,7 @@ public class Creole10Parser extends Parser {
                                         alt116=2;
                                     }
                                     else {
-                                        if (backtracking>0) {failed=true; return link;}
+                                        if (state.backtracking>0) {state.failed=true; return link;}
                                         NoViableAltException nvae =
                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 106, input);
 
@@ -12029,7 +12029,7 @@ public class Creole10Parser extends Parser {
                                     alt116=2;
                                 }
                                 else {
-                                    if (backtracking>0) {failed=true; return link;}
+                                    if (state.backtracking>0) {state.failed=true; return link;}
                                     NoViableAltException nvae =
                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 88, input);
 
@@ -12040,7 +12040,7 @@ public class Creole10Parser extends Parser {
                                 alt116=2;
                             }
                             else {
-                                if (backtracking>0) {failed=true; return link;}
+                                if (state.backtracking>0) {state.failed=true; return link;}
                                 NoViableAltException nvae =
                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 69, input);
 
@@ -12051,7 +12051,7 @@ public class Creole10Parser extends Parser {
                             alt116=2;
                         }
                         else {
-                            if (backtracking>0) {failed=true; return link;}
+                            if (state.backtracking>0) {state.failed=true; return link;}
                             NoViableAltException nvae =
                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 49, input);
 
@@ -12062,7 +12062,7 @@ public class Creole10Parser extends Parser {
                         alt116=2;
                     }
                     else {
-                        if (backtracking>0) {failed=true; return link;}
+                        if (state.backtracking>0) {state.failed=true; return link;}
                         NoViableAltException nvae =
                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 29, input);
 
@@ -12093,7 +12093,7 @@ public class Creole10Parser extends Parser {
                                         alt116=2;
                                     }
                                     else {
-                                        if (backtracking>0) {failed=true; return link;}
+                                        if (state.backtracking>0) {state.failed=true; return link;}
                                         NoViableAltException nvae =
                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 34, input);
 
@@ -12104,7 +12104,7 @@ public class Creole10Parser extends Parser {
                                     alt116=2;
                                 }
                                 else {
-                                    if (backtracking>0) {failed=true; return link;}
+                                    if (state.backtracking>0) {state.failed=true; return link;}
                                     NoViableAltException nvae =
                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 89, input);
 
@@ -12115,7 +12115,7 @@ public class Creole10Parser extends Parser {
                                 alt116=2;
                             }
                             else {
-                                if (backtracking>0) {failed=true; return link;}
+                                if (state.backtracking>0) {state.failed=true; return link;}
                                 NoViableAltException nvae =
                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 70, input);
 
@@ -12126,7 +12126,7 @@ public class Creole10Parser extends Parser {
                             alt116=2;
                         }
                         else {
-                            if (backtracking>0) {failed=true; return link;}
+                            if (state.backtracking>0) {state.failed=true; return link;}
                             NoViableAltException nvae =
                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 50, input);
 
@@ -12137,7 +12137,7 @@ public class Creole10Parser extends Parser {
                         alt116=2;
                     }
                     else {
-                        if (backtracking>0) {failed=true; return link;}
+                        if (state.backtracking>0) {state.failed=true; return link;}
                         NoViableAltException nvae =
                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 30, input);
 
@@ -12226,7 +12226,7 @@ public class Creole10Parser extends Parser {
                     }
                     break;
                 default:
-                    if (backtracking>0) {failed=true; return link;}
+                    if (state.backtracking>0) {state.failed=true; return link;}
                     NoViableAltException nvae =
                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 11, input);
 
@@ -12264,7 +12264,7 @@ public class Creole10Parser extends Parser {
                                             alt116=2;
                                         }
                                         else {
-                                            if (backtracking>0) {failed=true; return link;}
+                                            if (state.backtracking>0) {state.failed=true; return link;}
                                             NoViableAltException nvae =
                                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 34, input);
 
@@ -12275,7 +12275,7 @@ public class Creole10Parser extends Parser {
                                         alt116=2;
                                     }
                                     else {
-                                        if (backtracking>0) {failed=true; return link;}
+                                        if (state.backtracking>0) {state.failed=true; return link;}
                                         NoViableAltException nvae =
                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 107, input);
 
@@ -12286,7 +12286,7 @@ public class Creole10Parser extends Parser {
                                     alt116=2;
                                 }
                                 else {
-                                    if (backtracking>0) {failed=true; return link;}
+                                    if (state.backtracking>0) {state.failed=true; return link;}
                                     NoViableAltException nvae =
                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 90, input);
 
@@ -12297,7 +12297,7 @@ public class Creole10Parser extends Parser {
                                 alt116=2;
                             }
                             else {
-                                if (backtracking>0) {failed=true; return link;}
+                                if (state.backtracking>0) {state.failed=true; return link;}
                                 NoViableAltException nvae =
                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 71, input);
 
@@ -12308,7 +12308,7 @@ public class Creole10Parser extends Parser {
                             alt116=2;
                         }
                         else {
-                            if (backtracking>0) {failed=true; return link;}
+                            if (state.backtracking>0) {state.failed=true; return link;}
                             NoViableAltException nvae =
                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 51, input);
 
@@ -12319,7 +12319,7 @@ public class Creole10Parser extends Parser {
                         alt116=2;
                     }
                     else {
-                        if (backtracking>0) {failed=true; return link;}
+                        if (state.backtracking>0) {state.failed=true; return link;}
                         NoViableAltException nvae =
                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 31, input);
 
@@ -12330,7 +12330,7 @@ public class Creole10Parser extends Parser {
                     alt116=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return link;}
+                    if (state.backtracking>0) {state.failed=true; return link;}
                     NoViableAltException nvae =
                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 12, input);
 
@@ -12376,7 +12376,7 @@ public class Creole10Parser extends Parser {
                                                         alt116=2;
                                                     }
                                                     else {
-                                                        if (backtracking>0) {failed=true; return link;}
+                                                        if (state.backtracking>0) {state.failed=true; return link;}
                                                         NoViableAltException nvae =
                                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 34, input);
 
@@ -12387,7 +12387,7 @@ public class Creole10Parser extends Parser {
                                                     alt116=2;
                                                 }
                                                 else {
-                                                    if (backtracking>0) {failed=true; return link;}
+                                                    if (state.backtracking>0) {state.failed=true; return link;}
                                                     NoViableAltException nvae =
                                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 132, input);
 
@@ -12398,7 +12398,7 @@ public class Creole10Parser extends Parser {
                                                 alt116=2;
                                             }
                                             else {
-                                                if (backtracking>0) {failed=true; return link;}
+                                                if (state.backtracking>0) {state.failed=true; return link;}
                                                 NoViableAltException nvae =
                                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 128, input);
 
@@ -12409,7 +12409,7 @@ public class Creole10Parser extends Parser {
                                             alt116=2;
                                         }
                                         else {
-                                            if (backtracking>0) {failed=true; return link;}
+                                            if (state.backtracking>0) {state.failed=true; return link;}
                                             NoViableAltException nvae =
                                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 119, input);
 
@@ -12420,7 +12420,7 @@ public class Creole10Parser extends Parser {
                                         alt116=2;
                                     }
                                     else {
-                                        if (backtracking>0) {failed=true; return link;}
+                                        if (state.backtracking>0) {state.failed=true; return link;}
                                         NoViableAltException nvae =
                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 108, input);
 
@@ -12431,7 +12431,7 @@ public class Creole10Parser extends Parser {
                                     alt116=2;
                                 }
                                 else {
-                                    if (backtracking>0) {failed=true; return link;}
+                                    if (state.backtracking>0) {state.failed=true; return link;}
                                     NoViableAltException nvae =
                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 91, input);
 
@@ -12442,7 +12442,7 @@ public class Creole10Parser extends Parser {
                                 alt116=2;
                             }
                             else {
-                                if (backtracking>0) {failed=true; return link;}
+                                if (state.backtracking>0) {state.failed=true; return link;}
                                 NoViableAltException nvae =
                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 72, input);
 
@@ -12453,7 +12453,7 @@ public class Creole10Parser extends Parser {
                             alt116=2;
                         }
                         else {
-                            if (backtracking>0) {failed=true; return link;}
+                            if (state.backtracking>0) {state.failed=true; return link;}
                             NoViableAltException nvae =
                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 52, input);
 
@@ -12464,7 +12464,7 @@ public class Creole10Parser extends Parser {
                         alt116=2;
                     }
                     else {
-                        if (backtracking>0) {failed=true; return link;}
+                        if (state.backtracking>0) {state.failed=true; return link;}
                         NoViableAltException nvae =
                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 32, input);
 
@@ -12475,7 +12475,7 @@ public class Creole10Parser extends Parser {
                     alt116=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return link;}
+                    if (state.backtracking>0) {state.failed=true; return link;}
                     NoViableAltException nvae =
                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 13, input);
 
@@ -12512,7 +12512,7 @@ public class Creole10Parser extends Parser {
                                         alt116=2;
                                     }
                                     else {
-                                        if (backtracking>0) {failed=true; return link;}
+                                        if (state.backtracking>0) {state.failed=true; return link;}
                                         NoViableAltException nvae =
                                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 34, input);
 
@@ -12520,7 +12520,7 @@ public class Creole10Parser extends Parser {
                                     }
                                 }
                                 else {
-                                    if (backtracking>0) {failed=true; return link;}
+                                    if (state.backtracking>0) {state.failed=true; return link;}
                                     NoViableAltException nvae =
                                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 92, input);
 
@@ -12531,7 +12531,7 @@ public class Creole10Parser extends Parser {
                                 alt116=2;
                             }
                             else {
-                                if (backtracking>0) {failed=true; return link;}
+                                if (state.backtracking>0) {state.failed=true; return link;}
                                 NoViableAltException nvae =
                                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 73, input);
 
@@ -12542,7 +12542,7 @@ public class Creole10Parser extends Parser {
                             alt116=2;
                         }
                         else {
-                            if (backtracking>0) {failed=true; return link;}
+                            if (state.backtracking>0) {state.failed=true; return link;}
                             NoViableAltException nvae =
                                 new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 53, input);
 
@@ -12553,7 +12553,7 @@ public class Creole10Parser extends Parser {
                         alt116=2;
                     }
                     else {
-                        if (backtracking>0) {failed=true; return link;}
+                        if (state.backtracking>0) {state.failed=true; return link;}
                         NoViableAltException nvae =
                             new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 33, input);
 
@@ -12564,7 +12564,7 @@ public class Creole10Parser extends Parser {
                     alt116=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return link;}
+                    if (state.backtracking>0) {state.failed=true; return link;}
                     NoViableAltException nvae =
                         new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 14, input);
 
@@ -12639,7 +12639,7 @@ public class Creole10Parser extends Parser {
                 }
                 break;
             default:
-                if (backtracking>0) {failed=true; return link;}
+                if (state.backtracking>0) {state.failed=true; return link;}
                 NoViableAltException nvae =
                     new NoViableAltException("837:1: link_address returns [LinkNode link =null] : (li= link_interwiki_uri ':' p= link_interwiki_pagename | lu= link_uri );", 116, 0, input);
 
@@ -12652,14 +12652,14 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_link_interwiki_uri_in_link_address3269);
                     li=link_interwiki_uri();
-                    _fsp--;
-                    if (failed) return link;
-                    match(input,43,FOLLOW_43_in_link_address3272); if (failed) return link;
+                    state._fsp--;
+                    if (state.failed) return link;
+                    match(input,43,FOLLOW_43_in_link_address3272); if (state.failed) return link;
                     pushFollow(FOLLOW_link_interwiki_pagename_in_link_address3279);
                     p=link_interwiki_pagename();
-                    _fsp--;
-                    if (failed) return link;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return link;
+                    if ( state.backtracking==0 ) {
                       
                       						li.setTitle(p.toString());
                       						link = li;
@@ -12673,9 +12673,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_link_uri_in_link_address3290);
                     lu=link_uri();
-                    _fsp--;
-                    if (failed) return link;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return link;
+                    if ( state.backtracking==0 ) {
                       link = new LinkNode(lu.toString()); 
                     }
 
@@ -12743,7 +12743,7 @@ public class Creole10Parser extends Parser {
                         alt117=7;
                     }
                     else {
-                        if (backtracking>0) {failed=true; return interwiki;}
+                        if (state.backtracking>0) {state.failed=true; return interwiki;}
                         NoViableAltException nvae =
                             new NoViableAltException("844:1: link_interwiki_uri returns [InterwikiLinkNode interwiki = null] : ( 'C' '2' | 'D' 'o' 'k' 'u' 'W' 'i' 'k' 'i' | 'F' 'l' 'i' 'c' 'k' 'r' | 'G' 'o' 'o' 'g' 'l' 'e' | 'J' 'S' 'P' 'W' 'i' 'k' 'i' | 'M' 'e' 'a' 't' 'b' 'a' 'l' 'l' | 'M' 'e' 'd' 'i' 'a' 'W' 'i' 'k' 'i' | 'M' 'o' 'i' 'n' 'M' 'o' 'i' 'n' | 'O' 'd' 'd' 'm' 'u' 's' 'e' | 'O' 'h' 'a' 'n' 'a' | 'P' 'm' 'W' 'i' 'k' 'i' | 'P' 'u' 'k' 'i' 'W' 'i' 'k' 'i' | 'P' 'u' 'r' 'p' 'l' 'e' 'W' 'i' 'k' 'i' | 'R' 'a' 'd' 'e' 'o' 'x' | 'S' 'n' 'i' 'p' 'S' 'n' 'a' 'p' | 'T' 'i' 'd' 'd' 'l' 'y' 'W' 'i' 'k' 'i' | 'T' 'W' 'i' 'k' 'i' | 'U' 's' 'e' 'm' 'o' 'd' | 'W' 'i' 'k' 'i' 'p' 'e' 'd' 'i' 'a' | 'X' 'W' 'i' 'k' 'i' );", 117, 15, input);
 
@@ -12754,7 +12754,7 @@ public class Creole10Parser extends Parser {
                     alt117=8;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return interwiki;}
+                    if (state.backtracking>0) {state.failed=true; return interwiki;}
                     NoViableAltException nvae =
                         new NoViableAltException("844:1: link_interwiki_uri returns [InterwikiLinkNode interwiki = null] : ( 'C' '2' | 'D' 'o' 'k' 'u' 'W' 'i' 'k' 'i' | 'F' 'l' 'i' 'c' 'k' 'r' | 'G' 'o' 'o' 'g' 'l' 'e' | 'J' 'S' 'P' 'W' 'i' 'k' 'i' | 'M' 'e' 'a' 't' 'b' 'a' 'l' 'l' | 'M' 'e' 'd' 'i' 'a' 'W' 'i' 'k' 'i' | 'M' 'o' 'i' 'n' 'M' 'o' 'i' 'n' | 'O' 'd' 'd' 'm' 'u' 's' 'e' | 'O' 'h' 'a' 'n' 'a' | 'P' 'm' 'W' 'i' 'k' 'i' | 'P' 'u' 'k' 'i' 'W' 'i' 'k' 'i' | 'P' 'u' 'r' 'p' 'l' 'e' 'W' 'i' 'k' 'i' | 'R' 'a' 'd' 'e' 'o' 'x' | 'S' 'n' 'i' 'p' 'S' 'n' 'a' 'p' | 'T' 'i' 'd' 'd' 'l' 'y' 'W' 'i' 'k' 'i' | 'T' 'W' 'i' 'k' 'i' | 'U' 's' 'e' 'm' 'o' 'd' | 'W' 'i' 'k' 'i' 'p' 'e' 'd' 'i' 'a' | 'X' 'W' 'i' 'k' 'i' );", 117, 6, input);
 
@@ -12773,7 +12773,7 @@ public class Creole10Parser extends Parser {
                     alt117=9;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return interwiki;}
+                    if (state.backtracking>0) {state.failed=true; return interwiki;}
                     NoViableAltException nvae =
                         new NoViableAltException("844:1: link_interwiki_uri returns [InterwikiLinkNode interwiki = null] : ( 'C' '2' | 'D' 'o' 'k' 'u' 'W' 'i' 'k' 'i' | 'F' 'l' 'i' 'c' 'k' 'r' | 'G' 'o' 'o' 'g' 'l' 'e' | 'J' 'S' 'P' 'W' 'i' 'k' 'i' | 'M' 'e' 'a' 't' 'b' 'a' 'l' 'l' | 'M' 'e' 'd' 'i' 'a' 'W' 'i' 'k' 'i' | 'M' 'o' 'i' 'n' 'M' 'o' 'i' 'n' | 'O' 'd' 'd' 'm' 'u' 's' 'e' | 'O' 'h' 'a' 'n' 'a' | 'P' 'm' 'W' 'i' 'k' 'i' | 'P' 'u' 'k' 'i' 'W' 'i' 'k' 'i' | 'P' 'u' 'r' 'p' 'l' 'e' 'W' 'i' 'k' 'i' | 'R' 'a' 'd' 'e' 'o' 'x' | 'S' 'n' 'i' 'p' 'S' 'n' 'a' 'p' | 'T' 'i' 'd' 'd' 'l' 'y' 'W' 'i' 'k' 'i' | 'T' 'W' 'i' 'k' 'i' | 'U' 's' 'e' 'm' 'o' 'd' | 'W' 'i' 'k' 'i' 'p' 'e' 'd' 'i' 'a' | 'X' 'W' 'i' 'k' 'i' );", 117, 7, input);
 
@@ -12795,7 +12795,7 @@ public class Creole10Parser extends Parser {
                         alt117=13;
                     }
                     else {
-                        if (backtracking>0) {failed=true; return interwiki;}
+                        if (state.backtracking>0) {state.failed=true; return interwiki;}
                         NoViableAltException nvae =
                             new NoViableAltException("844:1: link_interwiki_uri returns [InterwikiLinkNode interwiki = null] : ( 'C' '2' | 'D' 'o' 'k' 'u' 'W' 'i' 'k' 'i' | 'F' 'l' 'i' 'c' 'k' 'r' | 'G' 'o' 'o' 'g' 'l' 'e' | 'J' 'S' 'P' 'W' 'i' 'k' 'i' | 'M' 'e' 'a' 't' 'b' 'a' 'l' 'l' | 'M' 'e' 'd' 'i' 'a' 'W' 'i' 'k' 'i' | 'M' 'o' 'i' 'n' 'M' 'o' 'i' 'n' | 'O' 'd' 'd' 'm' 'u' 's' 'e' | 'O' 'h' 'a' 'n' 'a' | 'P' 'm' 'W' 'i' 'k' 'i' | 'P' 'u' 'k' 'i' 'W' 'i' 'k' 'i' | 'P' 'u' 'r' 'p' 'l' 'e' 'W' 'i' 'k' 'i' | 'R' 'a' 'd' 'e' 'o' 'x' | 'S' 'n' 'i' 'p' 'S' 'n' 'a' 'p' | 'T' 'i' 'd' 'd' 'l' 'y' 'W' 'i' 'k' 'i' | 'T' 'W' 'i' 'k' 'i' | 'U' 's' 'e' 'm' 'o' 'd' | 'W' 'i' 'k' 'i' 'p' 'e' 'd' 'i' 'a' | 'X' 'W' 'i' 'k' 'i' );", 117, 19, input);
 
@@ -12806,7 +12806,7 @@ public class Creole10Parser extends Parser {
                     alt117=11;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return interwiki;}
+                    if (state.backtracking>0) {state.failed=true; return interwiki;}
                     NoViableAltException nvae =
                         new NoViableAltException("844:1: link_interwiki_uri returns [InterwikiLinkNode interwiki = null] : ( 'C' '2' | 'D' 'o' 'k' 'u' 'W' 'i' 'k' 'i' | 'F' 'l' 'i' 'c' 'k' 'r' | 'G' 'o' 'o' 'g' 'l' 'e' | 'J' 'S' 'P' 'W' 'i' 'k' 'i' | 'M' 'e' 'a' 't' 'b' 'a' 'l' 'l' | 'M' 'e' 'd' 'i' 'a' 'W' 'i' 'k' 'i' | 'M' 'o' 'i' 'n' 'M' 'o' 'i' 'n' | 'O' 'd' 'd' 'm' 'u' 's' 'e' | 'O' 'h' 'a' 'n' 'a' | 'P' 'm' 'W' 'i' 'k' 'i' | 'P' 'u' 'k' 'i' 'W' 'i' 'k' 'i' | 'P' 'u' 'r' 'p' 'l' 'e' 'W' 'i' 'k' 'i' | 'R' 'a' 'd' 'e' 'o' 'x' | 'S' 'n' 'i' 'p' 'S' 'n' 'a' 'p' | 'T' 'i' 'd' 'd' 'l' 'y' 'W' 'i' 'k' 'i' | 'T' 'W' 'i' 'k' 'i' | 'U' 's' 'e' 'm' 'o' 'd' | 'W' 'i' 'k' 'i' 'p' 'e' 'd' 'i' 'a' | 'X' 'W' 'i' 'k' 'i' );", 117, 8, input);
 
@@ -12835,7 +12835,7 @@ public class Creole10Parser extends Parser {
                     alt117=17;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return interwiki;}
+                    if (state.backtracking>0) {state.failed=true; return interwiki;}
                     NoViableAltException nvae =
                         new NoViableAltException("844:1: link_interwiki_uri returns [InterwikiLinkNode interwiki = null] : ( 'C' '2' | 'D' 'o' 'k' 'u' 'W' 'i' 'k' 'i' | 'F' 'l' 'i' 'c' 'k' 'r' | 'G' 'o' 'o' 'g' 'l' 'e' | 'J' 'S' 'P' 'W' 'i' 'k' 'i' | 'M' 'e' 'a' 't' 'b' 'a' 'l' 'l' | 'M' 'e' 'd' 'i' 'a' 'W' 'i' 'k' 'i' | 'M' 'o' 'i' 'n' 'M' 'o' 'i' 'n' | 'O' 'd' 'd' 'm' 'u' 's' 'e' | 'O' 'h' 'a' 'n' 'a' | 'P' 'm' 'W' 'i' 'k' 'i' | 'P' 'u' 'k' 'i' 'W' 'i' 'k' 'i' | 'P' 'u' 'r' 'p' 'l' 'e' 'W' 'i' 'k' 'i' | 'R' 'a' 'd' 'e' 'o' 'x' | 'S' 'n' 'i' 'p' 'S' 'n' 'a' 'p' | 'T' 'i' 'd' 'd' 'l' 'y' 'W' 'i' 'k' 'i' | 'T' 'W' 'i' 'k' 'i' | 'U' 's' 'e' 'm' 'o' 'd' | 'W' 'i' 'k' 'i' 'p' 'e' 'd' 'i' 'a' | 'X' 'W' 'i' 'k' 'i' );", 117, 11, input);
 
@@ -12859,7 +12859,7 @@ public class Creole10Parser extends Parser {
                 }
                 break;
             default:
-                if (backtracking>0) {failed=true; return interwiki;}
+                if (state.backtracking>0) {state.failed=true; return interwiki;}
                 NoViableAltException nvae =
                     new NoViableAltException("844:1: link_interwiki_uri returns [InterwikiLinkNode interwiki = null] : ( 'C' '2' | 'D' 'o' 'k' 'u' 'W' 'i' 'k' 'i' | 'F' 'l' 'i' 'c' 'k' 'r' | 'G' 'o' 'o' 'g' 'l' 'e' | 'J' 'S' 'P' 'W' 'i' 'k' 'i' | 'M' 'e' 'a' 't' 'b' 'a' 'l' 'l' | 'M' 'e' 'd' 'i' 'a' 'W' 'i' 'k' 'i' | 'M' 'o' 'i' 'n' 'M' 'o' 'i' 'n' | 'O' 'd' 'd' 'm' 'u' 's' 'e' | 'O' 'h' 'a' 'n' 'a' | 'P' 'm' 'W' 'i' 'k' 'i' | 'P' 'u' 'k' 'i' 'W' 'i' 'k' 'i' | 'P' 'u' 'r' 'p' 'l' 'e' 'W' 'i' 'k' 'i' | 'R' 'a' 'd' 'e' 'o' 'x' | 'S' 'n' 'i' 'p' 'S' 'n' 'a' 'p' | 'T' 'i' 'd' 'd' 'l' 'y' 'W' 'i' 'k' 'i' | 'T' 'W' 'i' 'k' 'i' | 'U' 's' 'e' 'm' 'o' 'd' | 'W' 'i' 'k' 'i' 'p' 'e' 'd' 'i' 'a' | 'X' 'W' 'i' 'k' 'i' );", 117, 0, input);
 
@@ -12870,9 +12870,9 @@ public class Creole10Parser extends Parser {
                 case 1 :
                     // Creole10.g:845:4: 'C' '2'
                     {
-                    match(input,44,FOLLOW_44_in_link_interwiki_uri3306); if (failed) return interwiki;
-                    match(input,45,FOLLOW_45_in_link_interwiki_uri3308); if (failed) return interwiki;
-                    if ( backtracking==0 ) {
+                    match(input,44,FOLLOW_44_in_link_interwiki_uri3306); if (state.failed) return interwiki;
+                    match(input,45,FOLLOW_45_in_link_interwiki_uri3308); if (state.failed) return interwiki;
+                    if ( state.backtracking==0 ) {
                        interwiki = new C2InterwikiLinkNode(); 
                     }
 
@@ -12881,15 +12881,15 @@ public class Creole10Parser extends Parser {
                 case 2 :
                     // Creole10.g:846:4: 'D' 'o' 'k' 'u' 'W' 'i' 'k' 'i'
                     {
-                    match(input,46,FOLLOW_46_in_link_interwiki_uri3315); if (failed) return interwiki;
-                    match(input,47,FOLLOW_47_in_link_interwiki_uri3317); if (failed) return interwiki;
-                    match(input,48,FOLLOW_48_in_link_interwiki_uri3319); if (failed) return interwiki;
-                    match(input,49,FOLLOW_49_in_link_interwiki_uri3321); if (failed) return interwiki;
-                    match(input,50,FOLLOW_50_in_link_interwiki_uri3323); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3325); if (failed) return interwiki;
-                    match(input,48,FOLLOW_48_in_link_interwiki_uri3327); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3329); if (failed) return interwiki;
-                    if ( backtracking==0 ) {
+                    match(input,46,FOLLOW_46_in_link_interwiki_uri3315); if (state.failed) return interwiki;
+                    match(input,47,FOLLOW_47_in_link_interwiki_uri3317); if (state.failed) return interwiki;
+                    match(input,48,FOLLOW_48_in_link_interwiki_uri3319); if (state.failed) return interwiki;
+                    match(input,49,FOLLOW_49_in_link_interwiki_uri3321); if (state.failed) return interwiki;
+                    match(input,50,FOLLOW_50_in_link_interwiki_uri3323); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3325); if (state.failed) return interwiki;
+                    match(input,48,FOLLOW_48_in_link_interwiki_uri3327); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3329); if (state.failed) return interwiki;
+                    if ( state.backtracking==0 ) {
                        interwiki = new DokuWikiInterwikiLinkNode(); 
                     }
 
@@ -12898,13 +12898,13 @@ public class Creole10Parser extends Parser {
                 case 3 :
                     // Creole10.g:847:4: 'F' 'l' 'i' 'c' 'k' 'r'
                     {
-                    match(input,52,FOLLOW_52_in_link_interwiki_uri3336); if (failed) return interwiki;
-                    match(input,53,FOLLOW_53_in_link_interwiki_uri3338); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3340); if (failed) return interwiki;
-                    match(input,54,FOLLOW_54_in_link_interwiki_uri3342); if (failed) return interwiki;
-                    match(input,48,FOLLOW_48_in_link_interwiki_uri3344); if (failed) return interwiki;
-                    match(input,55,FOLLOW_55_in_link_interwiki_uri3346); if (failed) return interwiki;
-                    if ( backtracking==0 ) {
+                    match(input,52,FOLLOW_52_in_link_interwiki_uri3336); if (state.failed) return interwiki;
+                    match(input,53,FOLLOW_53_in_link_interwiki_uri3338); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3340); if (state.failed) return interwiki;
+                    match(input,54,FOLLOW_54_in_link_interwiki_uri3342); if (state.failed) return interwiki;
+                    match(input,48,FOLLOW_48_in_link_interwiki_uri3344); if (state.failed) return interwiki;
+                    match(input,55,FOLLOW_55_in_link_interwiki_uri3346); if (state.failed) return interwiki;
+                    if ( state.backtracking==0 ) {
                        interwiki = new FlickrInterwikiLinkNode(); 
                     }
 
@@ -12913,13 +12913,13 @@ public class Creole10Parser extends Parser {
                 case 4 :
                     // Creole10.g:848:4: 'G' 'o' 'o' 'g' 'l' 'e'
                     {
-                    match(input,56,FOLLOW_56_in_link_interwiki_uri3354); if (failed) return interwiki;
-                    match(input,47,FOLLOW_47_in_link_interwiki_uri3356); if (failed) return interwiki;
-                    match(input,47,FOLLOW_47_in_link_interwiki_uri3358); if (failed) return interwiki;
-                    match(input,57,FOLLOW_57_in_link_interwiki_uri3360); if (failed) return interwiki;
-                    match(input,53,FOLLOW_53_in_link_interwiki_uri3362); if (failed) return interwiki;
-                    match(input,58,FOLLOW_58_in_link_interwiki_uri3364); if (failed) return interwiki;
-                    if ( backtracking==0 ) {
+                    match(input,56,FOLLOW_56_in_link_interwiki_uri3354); if (state.failed) return interwiki;
+                    match(input,47,FOLLOW_47_in_link_interwiki_uri3356); if (state.failed) return interwiki;
+                    match(input,47,FOLLOW_47_in_link_interwiki_uri3358); if (state.failed) return interwiki;
+                    match(input,57,FOLLOW_57_in_link_interwiki_uri3360); if (state.failed) return interwiki;
+                    match(input,53,FOLLOW_53_in_link_interwiki_uri3362); if (state.failed) return interwiki;
+                    match(input,58,FOLLOW_58_in_link_interwiki_uri3364); if (state.failed) return interwiki;
+                    if ( state.backtracking==0 ) {
                        interwiki = new GoogleInterwikiLinkNode(); 
                     }
 
@@ -12928,14 +12928,14 @@ public class Creole10Parser extends Parser {
                 case 5 :
                     // Creole10.g:849:4: 'J' 'S' 'P' 'W' 'i' 'k' 'i'
                     {
-                    match(input,59,FOLLOW_59_in_link_interwiki_uri3371); if (failed) return interwiki;
-                    match(input,60,FOLLOW_60_in_link_interwiki_uri3373); if (failed) return interwiki;
-                    match(input,61,FOLLOW_61_in_link_interwiki_uri3375); if (failed) return interwiki;
-                    match(input,50,FOLLOW_50_in_link_interwiki_uri3377); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3379); if (failed) return interwiki;
-                    match(input,48,FOLLOW_48_in_link_interwiki_uri3381); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3383); if (failed) return interwiki;
-                    if ( backtracking==0 ) {
+                    match(input,59,FOLLOW_59_in_link_interwiki_uri3371); if (state.failed) return interwiki;
+                    match(input,60,FOLLOW_60_in_link_interwiki_uri3373); if (state.failed) return interwiki;
+                    match(input,61,FOLLOW_61_in_link_interwiki_uri3375); if (state.failed) return interwiki;
+                    match(input,50,FOLLOW_50_in_link_interwiki_uri3377); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3379); if (state.failed) return interwiki;
+                    match(input,48,FOLLOW_48_in_link_interwiki_uri3381); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3383); if (state.failed) return interwiki;
+                    if ( state.backtracking==0 ) {
                        interwiki = new JSPWikiInterwikiLinkNode(); 
                     }
 
@@ -12944,15 +12944,15 @@ public class Creole10Parser extends Parser {
                 case 6 :
                     // Creole10.g:850:4: 'M' 'e' 'a' 't' 'b' 'a' 'l' 'l'
                     {
-                    match(input,62,FOLLOW_62_in_link_interwiki_uri3390); if (failed) return interwiki;
-                    match(input,58,FOLLOW_58_in_link_interwiki_uri3392); if (failed) return interwiki;
-                    match(input,63,FOLLOW_63_in_link_interwiki_uri3394); if (failed) return interwiki;
-                    match(input,64,FOLLOW_64_in_link_interwiki_uri3396); if (failed) return interwiki;
-                    match(input,65,FOLLOW_65_in_link_interwiki_uri3398); if (failed) return interwiki;
-                    match(input,63,FOLLOW_63_in_link_interwiki_uri3400); if (failed) return interwiki;
-                    match(input,53,FOLLOW_53_in_link_interwiki_uri3402); if (failed) return interwiki;
-                    match(input,53,FOLLOW_53_in_link_interwiki_uri3404); if (failed) return interwiki;
-                    if ( backtracking==0 ) {
+                    match(input,62,FOLLOW_62_in_link_interwiki_uri3390); if (state.failed) return interwiki;
+                    match(input,58,FOLLOW_58_in_link_interwiki_uri3392); if (state.failed) return interwiki;
+                    match(input,63,FOLLOW_63_in_link_interwiki_uri3394); if (state.failed) return interwiki;
+                    match(input,64,FOLLOW_64_in_link_interwiki_uri3396); if (state.failed) return interwiki;
+                    match(input,65,FOLLOW_65_in_link_interwiki_uri3398); if (state.failed) return interwiki;
+                    match(input,63,FOLLOW_63_in_link_interwiki_uri3400); if (state.failed) return interwiki;
+                    match(input,53,FOLLOW_53_in_link_interwiki_uri3402); if (state.failed) return interwiki;
+                    match(input,53,FOLLOW_53_in_link_interwiki_uri3404); if (state.failed) return interwiki;
+                    if ( state.backtracking==0 ) {
                        interwiki = new MeatballInterwikiLinkNode(); 
                     }
 
@@ -12961,16 +12961,16 @@ public class Creole10Parser extends Parser {
                 case 7 :
                     // Creole10.g:851:4: 'M' 'e' 'd' 'i' 'a' 'W' 'i' 'k' 'i'
                     {
-                    match(input,62,FOLLOW_62_in_link_interwiki_uri3411); if (failed) return interwiki;
-                    match(input,58,FOLLOW_58_in_link_interwiki_uri3413); if (failed) return interwiki;
-                    match(input,66,FOLLOW_66_in_link_interwiki_uri3415); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3417); if (failed) return interwiki;
-                    match(input,63,FOLLOW_63_in_link_interwiki_uri3419); if (failed) return interwiki;
-                    match(input,50,FOLLOW_50_in_link_interwiki_uri3421); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3423); if (failed) return interwiki;
-                    match(input,48,FOLLOW_48_in_link_interwiki_uri3425); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3427); if (failed) return interwiki;
-                    if ( backtracking==0 ) {
+                    match(input,62,FOLLOW_62_in_link_interwiki_uri3411); if (state.failed) return interwiki;
+                    match(input,58,FOLLOW_58_in_link_interwiki_uri3413); if (state.failed) return interwiki;
+                    match(input,66,FOLLOW_66_in_link_interwiki_uri3415); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3417); if (state.failed) return interwiki;
+                    match(input,63,FOLLOW_63_in_link_interwiki_uri3419); if (state.failed) return interwiki;
+                    match(input,50,FOLLOW_50_in_link_interwiki_uri3421); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3423); if (state.failed) return interwiki;
+                    match(input,48,FOLLOW_48_in_link_interwiki_uri3425); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3427); if (state.failed) return interwiki;
+                    if ( state.backtracking==0 ) {
                        interwiki = new MediaWikiInterwikiLinkNode(); 
                     }
 
@@ -12979,15 +12979,15 @@ public class Creole10Parser extends Parser {
                 case 8 :
                     // Creole10.g:852:4: 'M' 'o' 'i' 'n' 'M' 'o' 'i' 'n'
                     {
-                    match(input,62,FOLLOW_62_in_link_interwiki_uri3434); if (failed) return interwiki;
-                    match(input,47,FOLLOW_47_in_link_interwiki_uri3436); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3438); if (failed) return interwiki;
-                    match(input,67,FOLLOW_67_in_link_interwiki_uri3440); if (failed) return interwiki;
-                    match(input,62,FOLLOW_62_in_link_interwiki_uri3442); if (failed) return interwiki;
-                    match(input,47,FOLLOW_47_in_link_interwiki_uri3444); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3446); if (failed) return interwiki;
-                    match(input,67,FOLLOW_67_in_link_interwiki_uri3448); if (failed) return interwiki;
-                    if ( backtracking==0 ) {
+                    match(input,62,FOLLOW_62_in_link_interwiki_uri3434); if (state.failed) return interwiki;
+                    match(input,47,FOLLOW_47_in_link_interwiki_uri3436); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3438); if (state.failed) return interwiki;
+                    match(input,67,FOLLOW_67_in_link_interwiki_uri3440); if (state.failed) return interwiki;
+                    match(input,62,FOLLOW_62_in_link_interwiki_uri3442); if (state.failed) return interwiki;
+                    match(input,47,FOLLOW_47_in_link_interwiki_uri3444); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3446); if (state.failed) return interwiki;
+                    match(input,67,FOLLOW_67_in_link_interwiki_uri3448); if (state.failed) return interwiki;
+                    if ( state.backtracking==0 ) {
                        interwiki = new MoinMoinInterwikiLinkNode(); 
                     }
 
@@ -12996,14 +12996,14 @@ public class Creole10Parser extends Parser {
                 case 9 :
                     // Creole10.g:853:4: 'O' 'd' 'd' 'm' 'u' 's' 'e'
                     {
-                    match(input,68,FOLLOW_68_in_link_interwiki_uri3456); if (failed) return interwiki;
-                    match(input,66,FOLLOW_66_in_link_interwiki_uri3458); if (failed) return interwiki;
-                    match(input,66,FOLLOW_66_in_link_interwiki_uri3460); if (failed) return interwiki;
-                    match(input,69,FOLLOW_69_in_link_interwiki_uri3462); if (failed) return interwiki;
-                    match(input,49,FOLLOW_49_in_link_interwiki_uri3464); if (failed) return interwiki;
-                    match(input,70,FOLLOW_70_in_link_interwiki_uri3466); if (failed) return interwiki;
-                    match(input,58,FOLLOW_58_in_link_interwiki_uri3468); if (failed) return interwiki;
-                    if ( backtracking==0 ) {
+                    match(input,68,FOLLOW_68_in_link_interwiki_uri3456); if (state.failed) return interwiki;
+                    match(input,66,FOLLOW_66_in_link_interwiki_uri3458); if (state.failed) return interwiki;
+                    match(input,66,FOLLOW_66_in_link_interwiki_uri3460); if (state.failed) return interwiki;
+                    match(input,69,FOLLOW_69_in_link_interwiki_uri3462); if (state.failed) return interwiki;
+                    match(input,49,FOLLOW_49_in_link_interwiki_uri3464); if (state.failed) return interwiki;
+                    match(input,70,FOLLOW_70_in_link_interwiki_uri3466); if (state.failed) return interwiki;
+                    match(input,58,FOLLOW_58_in_link_interwiki_uri3468); if (state.failed) return interwiki;
+                    if ( state.backtracking==0 ) {
                        interwiki = new OddmuseInterwikiLinkNode(); 
                     }
 
@@ -13012,12 +13012,12 @@ public class Creole10Parser extends Parser {
                 case 10 :
                     // Creole10.g:854:4: 'O' 'h' 'a' 'n' 'a'
                     {
-                    match(input,68,FOLLOW_68_in_link_interwiki_uri3476); if (failed) return interwiki;
-                    match(input,71,FOLLOW_71_in_link_interwiki_uri3478); if (failed) return interwiki;
-                    match(input,63,FOLLOW_63_in_link_interwiki_uri3480); if (failed) return interwiki;
-                    match(input,67,FOLLOW_67_in_link_interwiki_uri3482); if (failed) return interwiki;
-                    match(input,63,FOLLOW_63_in_link_interwiki_uri3484); if (failed) return interwiki;
-                    if ( backtracking==0 ) {
+                    match(input,68,FOLLOW_68_in_link_interwiki_uri3476); if (state.failed) return interwiki;
+                    match(input,71,FOLLOW_71_in_link_interwiki_uri3478); if (state.failed) return interwiki;
+                    match(input,63,FOLLOW_63_in_link_interwiki_uri3480); if (state.failed) return interwiki;
+                    match(input,67,FOLLOW_67_in_link_interwiki_uri3482); if (state.failed) return interwiki;
+                    match(input,63,FOLLOW_63_in_link_interwiki_uri3484); if (state.failed) return interwiki;
+                    if ( state.backtracking==0 ) {
                        interwiki = new OhanaInterwikiLinkNode(); 
                     }
 
@@ -13026,13 +13026,13 @@ public class Creole10Parser extends Parser {
                 case 11 :
                     // Creole10.g:855:4: 'P' 'm' 'W' 'i' 'k' 'i'
                     {
-                    match(input,61,FOLLOW_61_in_link_interwiki_uri3491); if (failed) return interwiki;
-                    match(input,69,FOLLOW_69_in_link_interwiki_uri3493); if (failed) return interwiki;
-                    match(input,50,FOLLOW_50_in_link_interwiki_uri3495); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3497); if (failed) return interwiki;
-                    match(input,48,FOLLOW_48_in_link_interwiki_uri3499); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3501); if (failed) return interwiki;
-                    if ( backtracking==0 ) {
+                    match(input,61,FOLLOW_61_in_link_interwiki_uri3491); if (state.failed) return interwiki;
+                    match(input,69,FOLLOW_69_in_link_interwiki_uri3493); if (state.failed) return interwiki;
+                    match(input,50,FOLLOW_50_in_link_interwiki_uri3495); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3497); if (state.failed) return interwiki;
+                    match(input,48,FOLLOW_48_in_link_interwiki_uri3499); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3501); if (state.failed) return interwiki;
+                    if ( state.backtracking==0 ) {
                        interwiki = new PmWikiInterwikiLinkNode(); 
                     }
 
@@ -13041,15 +13041,15 @@ public class Creole10Parser extends Parser {
                 case 12 :
                     // Creole10.g:856:4: 'P' 'u' 'k' 'i' 'W' 'i' 'k' 'i'
                     {
-                    match(input,61,FOLLOW_61_in_link_interwiki_uri3509); if (failed) return interwiki;
-                    match(input,49,FOLLOW_49_in_link_interwiki_uri3511); if (failed) return interwiki;
-                    match(input,48,FOLLOW_48_in_link_interwiki_uri3513); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3515); if (failed) return interwiki;
-                    match(input,50,FOLLOW_50_in_link_interwiki_uri3517); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3519); if (failed) return interwiki;
-                    match(input,48,FOLLOW_48_in_link_interwiki_uri3521); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3523); if (failed) return interwiki;
-                    if ( backtracking==0 ) {
+                    match(input,61,FOLLOW_61_in_link_interwiki_uri3509); if (state.failed) return interwiki;
+                    match(input,49,FOLLOW_49_in_link_interwiki_uri3511); if (state.failed) return interwiki;
+                    match(input,48,FOLLOW_48_in_link_interwiki_uri3513); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3515); if (state.failed) return interwiki;
+                    match(input,50,FOLLOW_50_in_link_interwiki_uri3517); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3519); if (state.failed) return interwiki;
+                    match(input,48,FOLLOW_48_in_link_interwiki_uri3521); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3523); if (state.failed) return interwiki;
+                    if ( state.backtracking==0 ) {
                        interwiki = new PukiWikiInterwikiLinkNode(); 
                     }
 
@@ -13058,17 +13058,17 @@ public class Creole10Parser extends Parser {
                 case 13 :
                     // Creole10.g:857:4: 'P' 'u' 'r' 'p' 'l' 'e' 'W' 'i' 'k' 'i'
                     {
-                    match(input,61,FOLLOW_61_in_link_interwiki_uri3531); if (failed) return interwiki;
-                    match(input,49,FOLLOW_49_in_link_interwiki_uri3533); if (failed) return interwiki;
-                    match(input,55,FOLLOW_55_in_link_interwiki_uri3535); if (failed) return interwiki;
-                    match(input,72,FOLLOW_72_in_link_interwiki_uri3537); if (failed) return interwiki;
-                    match(input,53,FOLLOW_53_in_link_interwiki_uri3539); if (failed) return interwiki;
-                    match(input,58,FOLLOW_58_in_link_interwiki_uri3541); if (failed) return interwiki;
-                    match(input,50,FOLLOW_50_in_link_interwiki_uri3543); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3545); if (failed) return interwiki;
-                    match(input,48,FOLLOW_48_in_link_interwiki_uri3547); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3549); if (failed) return interwiki;
-                    if ( backtracking==0 ) {
+                    match(input,61,FOLLOW_61_in_link_interwiki_uri3531); if (state.failed) return interwiki;
+                    match(input,49,FOLLOW_49_in_link_interwiki_uri3533); if (state.failed) return interwiki;
+                    match(input,55,FOLLOW_55_in_link_interwiki_uri3535); if (state.failed) return interwiki;
+                    match(input,72,FOLLOW_72_in_link_interwiki_uri3537); if (state.failed) return interwiki;
+                    match(input,53,FOLLOW_53_in_link_interwiki_uri3539); if (state.failed) return interwiki;
+                    match(input,58,FOLLOW_58_in_link_interwiki_uri3541); if (state.failed) return interwiki;
+                    match(input,50,FOLLOW_50_in_link_interwiki_uri3543); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3545); if (state.failed) return interwiki;
+                    match(input,48,FOLLOW_48_in_link_interwiki_uri3547); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3549); if (state.failed) return interwiki;
+                    if ( state.backtracking==0 ) {
                        interwiki = new PurpleWikiInterwikiLinkNode(); 
                     }
 
@@ -13077,13 +13077,13 @@ public class Creole10Parser extends Parser {
                 case 14 :
                     // Creole10.g:858:4: 'R' 'a' 'd' 'e' 'o' 'x'
                     {
-                    match(input,73,FOLLOW_73_in_link_interwiki_uri3556); if (failed) return interwiki;
-                    match(input,63,FOLLOW_63_in_link_interwiki_uri3558); if (failed) return interwiki;
-                    match(input,66,FOLLOW_66_in_link_interwiki_uri3560); if (failed) return interwiki;
-                    match(input,58,FOLLOW_58_in_link_interwiki_uri3562); if (failed) return interwiki;
-                    match(input,47,FOLLOW_47_in_link_interwiki_uri3564); if (failed) return interwiki;
-                    match(input,74,FOLLOW_74_in_link_interwiki_uri3566); if (failed) return interwiki;
-                    if ( backtracking==0 ) {
+                    match(input,73,FOLLOW_73_in_link_interwiki_uri3556); if (state.failed) return interwiki;
+                    match(input,63,FOLLOW_63_in_link_interwiki_uri3558); if (state.failed) return interwiki;
+                    match(input,66,FOLLOW_66_in_link_interwiki_uri3560); if (state.failed) return interwiki;
+                    match(input,58,FOLLOW_58_in_link_interwiki_uri3562); if (state.failed) return interwiki;
+                    match(input,47,FOLLOW_47_in_link_interwiki_uri3564); if (state.failed) return interwiki;
+                    match(input,74,FOLLOW_74_in_link_interwiki_uri3566); if (state.failed) return interwiki;
+                    if ( state.backtracking==0 ) {
                        interwiki = new RadeoxInterwikiLinkNode(); 
                     }
 
@@ -13092,15 +13092,15 @@ public class Creole10Parser extends Parser {
                 case 15 :
                     // Creole10.g:859:4: 'S' 'n' 'i' 'p' 'S' 'n' 'a' 'p'
                     {
-                    match(input,60,FOLLOW_60_in_link_interwiki_uri3573); if (failed) return interwiki;
-                    match(input,67,FOLLOW_67_in_link_interwiki_uri3575); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3577); if (failed) return interwiki;
-                    match(input,72,FOLLOW_72_in_link_interwiki_uri3579); if (failed) return interwiki;
-                    match(input,60,FOLLOW_60_in_link_interwiki_uri3581); if (failed) return interwiki;
-                    match(input,67,FOLLOW_67_in_link_interwiki_uri3583); if (failed) return interwiki;
-                    match(input,63,FOLLOW_63_in_link_interwiki_uri3585); if (failed) return interwiki;
-                    match(input,72,FOLLOW_72_in_link_interwiki_uri3587); if (failed) return interwiki;
-                    if ( backtracking==0 ) {
+                    match(input,60,FOLLOW_60_in_link_interwiki_uri3573); if (state.failed) return interwiki;
+                    match(input,67,FOLLOW_67_in_link_interwiki_uri3575); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3577); if (state.failed) return interwiki;
+                    match(input,72,FOLLOW_72_in_link_interwiki_uri3579); if (state.failed) return interwiki;
+                    match(input,60,FOLLOW_60_in_link_interwiki_uri3581); if (state.failed) return interwiki;
+                    match(input,67,FOLLOW_67_in_link_interwiki_uri3583); if (state.failed) return interwiki;
+                    match(input,63,FOLLOW_63_in_link_interwiki_uri3585); if (state.failed) return interwiki;
+                    match(input,72,FOLLOW_72_in_link_interwiki_uri3587); if (state.failed) return interwiki;
+                    if ( state.backtracking==0 ) {
                        interwiki = new SnipSnapInterwikiLinkNode(); 
                     }
 
@@ -13109,17 +13109,17 @@ public class Creole10Parser extends Parser {
                 case 16 :
                     // Creole10.g:860:4: 'T' 'i' 'd' 'd' 'l' 'y' 'W' 'i' 'k' 'i'
                     {
-                    match(input,75,FOLLOW_75_in_link_interwiki_uri3594); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3596); if (failed) return interwiki;
-                    match(input,66,FOLLOW_66_in_link_interwiki_uri3598); if (failed) return interwiki;
-                    match(input,66,FOLLOW_66_in_link_interwiki_uri3600); if (failed) return interwiki;
-                    match(input,53,FOLLOW_53_in_link_interwiki_uri3602); if (failed) return interwiki;
-                    match(input,76,FOLLOW_76_in_link_interwiki_uri3604); if (failed) return interwiki;
-                    match(input,50,FOLLOW_50_in_link_interwiki_uri3606); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3608); if (failed) return interwiki;
-                    match(input,48,FOLLOW_48_in_link_interwiki_uri3610); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3612); if (failed) return interwiki;
-                    if ( backtracking==0 ) {
+                    match(input,75,FOLLOW_75_in_link_interwiki_uri3594); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3596); if (state.failed) return interwiki;
+                    match(input,66,FOLLOW_66_in_link_interwiki_uri3598); if (state.failed) return interwiki;
+                    match(input,66,FOLLOW_66_in_link_interwiki_uri3600); if (state.failed) return interwiki;
+                    match(input,53,FOLLOW_53_in_link_interwiki_uri3602); if (state.failed) return interwiki;
+                    match(input,76,FOLLOW_76_in_link_interwiki_uri3604); if (state.failed) return interwiki;
+                    match(input,50,FOLLOW_50_in_link_interwiki_uri3606); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3608); if (state.failed) return interwiki;
+                    match(input,48,FOLLOW_48_in_link_interwiki_uri3610); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3612); if (state.failed) return interwiki;
+                    if ( state.backtracking==0 ) {
                        interwiki = new TiddlyWikiInterwikiLinkNode(); 
                     }
 
@@ -13128,12 +13128,12 @@ public class Creole10Parser extends Parser {
                 case 17 :
                     // Creole10.g:861:4: 'T' 'W' 'i' 'k' 'i'
                     {
-                    match(input,75,FOLLOW_75_in_link_interwiki_uri3619); if (failed) return interwiki;
-                    match(input,50,FOLLOW_50_in_link_interwiki_uri3621); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3623); if (failed) return interwiki;
-                    match(input,48,FOLLOW_48_in_link_interwiki_uri3625); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3627); if (failed) return interwiki;
-                    if ( backtracking==0 ) {
+                    match(input,75,FOLLOW_75_in_link_interwiki_uri3619); if (state.failed) return interwiki;
+                    match(input,50,FOLLOW_50_in_link_interwiki_uri3621); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3623); if (state.failed) return interwiki;
+                    match(input,48,FOLLOW_48_in_link_interwiki_uri3625); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3627); if (state.failed) return interwiki;
+                    if ( state.backtracking==0 ) {
                        interwiki = new TWikiInterwikiLinkNode(); 
                     }
 
@@ -13142,13 +13142,13 @@ public class Creole10Parser extends Parser {
                 case 18 :
                     // Creole10.g:862:4: 'U' 's' 'e' 'm' 'o' 'd'
                     {
-                    match(input,77,FOLLOW_77_in_link_interwiki_uri3634); if (failed) return interwiki;
-                    match(input,70,FOLLOW_70_in_link_interwiki_uri3636); if (failed) return interwiki;
-                    match(input,58,FOLLOW_58_in_link_interwiki_uri3638); if (failed) return interwiki;
-                    match(input,69,FOLLOW_69_in_link_interwiki_uri3640); if (failed) return interwiki;
-                    match(input,47,FOLLOW_47_in_link_interwiki_uri3642); if (failed) return interwiki;
-                    match(input,66,FOLLOW_66_in_link_interwiki_uri3644); if (failed) return interwiki;
-                    if ( backtracking==0 ) {
+                    match(input,77,FOLLOW_77_in_link_interwiki_uri3634); if (state.failed) return interwiki;
+                    match(input,70,FOLLOW_70_in_link_interwiki_uri3636); if (state.failed) return interwiki;
+                    match(input,58,FOLLOW_58_in_link_interwiki_uri3638); if (state.failed) return interwiki;
+                    match(input,69,FOLLOW_69_in_link_interwiki_uri3640); if (state.failed) return interwiki;
+                    match(input,47,FOLLOW_47_in_link_interwiki_uri3642); if (state.failed) return interwiki;
+                    match(input,66,FOLLOW_66_in_link_interwiki_uri3644); if (state.failed) return interwiki;
+                    if ( state.backtracking==0 ) {
                        interwiki = new UsemodInterwikiLinkNode(); 
                     }
 
@@ -13157,16 +13157,16 @@ public class Creole10Parser extends Parser {
                 case 19 :
                     // Creole10.g:863:4: 'W' 'i' 'k' 'i' 'p' 'e' 'd' 'i' 'a'
                     {
-                    match(input,50,FOLLOW_50_in_link_interwiki_uri3651); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3653); if (failed) return interwiki;
-                    match(input,48,FOLLOW_48_in_link_interwiki_uri3655); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3657); if (failed) return interwiki;
-                    match(input,72,FOLLOW_72_in_link_interwiki_uri3659); if (failed) return interwiki;
-                    match(input,58,FOLLOW_58_in_link_interwiki_uri3661); if (failed) return interwiki;
-                    match(input,66,FOLLOW_66_in_link_interwiki_uri3663); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3665); if (failed) return interwiki;
-                    match(input,63,FOLLOW_63_in_link_interwiki_uri3667); if (failed) return interwiki;
-                    if ( backtracking==0 ) {
+                    match(input,50,FOLLOW_50_in_link_interwiki_uri3651); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3653); if (state.failed) return interwiki;
+                    match(input,48,FOLLOW_48_in_link_interwiki_uri3655); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3657); if (state.failed) return interwiki;
+                    match(input,72,FOLLOW_72_in_link_interwiki_uri3659); if (state.failed) return interwiki;
+                    match(input,58,FOLLOW_58_in_link_interwiki_uri3661); if (state.failed) return interwiki;
+                    match(input,66,FOLLOW_66_in_link_interwiki_uri3663); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3665); if (state.failed) return interwiki;
+                    match(input,63,FOLLOW_63_in_link_interwiki_uri3667); if (state.failed) return interwiki;
+                    if ( state.backtracking==0 ) {
                        interwiki = new WikipediaInterwikiLinkNode(); 
                     }
 
@@ -13175,12 +13175,12 @@ public class Creole10Parser extends Parser {
                 case 20 :
                     // Creole10.g:864:4: 'X' 'W' 'i' 'k' 'i'
                     {
-                    match(input,78,FOLLOW_78_in_link_interwiki_uri3674); if (failed) return interwiki;
-                    match(input,50,FOLLOW_50_in_link_interwiki_uri3676); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3678); if (failed) return interwiki;
-                    match(input,48,FOLLOW_48_in_link_interwiki_uri3680); if (failed) return interwiki;
-                    match(input,51,FOLLOW_51_in_link_interwiki_uri3682); if (failed) return interwiki;
-                    if ( backtracking==0 ) {
+                    match(input,78,FOLLOW_78_in_link_interwiki_uri3674); if (state.failed) return interwiki;
+                    match(input,50,FOLLOW_50_in_link_interwiki_uri3676); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3678); if (state.failed) return interwiki;
+                    match(input,48,FOLLOW_48_in_link_interwiki_uri3680); if (state.failed) return interwiki;
+                    match(input,51,FOLLOW_51_in_link_interwiki_uri3682); if (state.failed) return interwiki;
+                    if ( state.backtracking==0 ) {
                        interwiki = new XWikiInterwikiLinkNode(); 
                     }
 
@@ -13230,16 +13230,16 @@ public class Creole10Parser extends Parser {
             	    c=(Token)input.LT(1);
             	    if ( (input.LA(1)>=FORCED_END_OF_LINE && input.LA(1)<=WIKI)||(input.LA(1)>=POUND && input.LA(1)<=EQUAL)||(input.LA(1)>=ITAL && input.LA(1)<=NOWIKI_CLOSE)||(input.LA(1)>=IMAGE_CLOSE && input.LA(1)<=82) ) {
             	        input.consume();
-            	        errorRecovery=false;failed=false;
+            	        state.errorRecovery=false;state.failed=false;
             	    }
             	    else {
-            	        if (backtracking>0) {failed=true; return text;}
+            	        if (state.backtracking>0) {state.failed=true; return text;}
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
             	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_link_interwiki_pagename3704);    throw mse;
             	    }
 
-            	    if ( backtracking==0 ) {
+            	    if ( state.backtracking==0 ) {
             	       text.append(c.getText()); 
             	    }
 
@@ -13248,7 +13248,7 @@ public class Creole10Parser extends Parser {
 
             	default :
             	    if ( cnt118 >= 1 ) break loop118;
-            	    if (backtracking>0) {failed=true; return text;}
+            	    if (state.backtracking>0) {state.failed=true; return text;}
                         EarlyExitException eee =
                             new EarlyExitException(118, input);
                         throw eee;
@@ -13306,9 +13306,9 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_link_descriptionpart_in_link_description3747);
             	    l=link_descriptionpart();
-            	    _fsp--;
-            	    if (failed) return node;
-            	    if ( backtracking==0 ) {
+            	    state._fsp--;
+            	    if (state.failed) return node;
+            	    if ( state.backtracking==0 ) {
             	      
             	      					// Recover code: some bad syntax could include null elements in the collection
             	      					if (l != null) {
@@ -13324,9 +13324,9 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_image_in_link_description3759);
             	    i=image();
-            	    _fsp--;
-            	    if (failed) return node;
-            	    if ( backtracking==0 ) {
+            	    state._fsp--;
+            	    if (state.failed) return node;
+            	    if ( state.backtracking==0 ) {
             	      node.add(i);
             	    }
 
@@ -13335,7 +13335,7 @@ public class Creole10Parser extends Parser {
 
             	default :
             	    if ( cnt119 >= 1 ) break loop119;
-            	    if (backtracking>0) {failed=true; return node;}
+            	    if (state.backtracking>0) {state.failed=true; return node;}
                         EarlyExitException eee =
                             new EarlyExitException(119, input);
                         throw eee;
@@ -13394,7 +13394,7 @@ public class Creole10Parser extends Parser {
                     alt123=3;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return text;}
+                    if (state.backtracking>0) {state.failed=true; return text;}
                     NoViableAltException nvae =
                         new NoViableAltException("878:1: link_descriptionpart returns [ASTNode text = null] : ( bold_markup onestar (lb= link_bold_descriptionpart onestar )+ bold_markup | ital_markup onestar (li= link_ital_descriptionpart onestar )+ ital_markup | onestar (t= link_descriptiontext onestar )+ );", 123, 1, input);
 
@@ -13483,7 +13483,7 @@ public class Creole10Parser extends Parser {
                 }
                 break;
             default:
-                if (backtracking>0) {failed=true; return text;}
+                if (state.backtracking>0) {state.failed=true; return text;}
                 NoViableAltException nvae =
                     new NoViableAltException("878:1: link_descriptionpart returns [ASTNode text = null] : ( bold_markup onestar (lb= link_bold_descriptionpart onestar )+ bold_markup | ital_markup onestar (li= link_ital_descriptionpart onestar )+ ital_markup | onestar (t= link_descriptiontext onestar )+ );", 123, 0, input);
 
@@ -13496,12 +13496,12 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_bold_markup_in_link_descriptionpart3784);
                     bold_markup();
-                    _fsp--;
-                    if (failed) return text;
+                    state._fsp--;
+                    if (state.failed) return text;
                     pushFollow(FOLLOW_onestar_in_link_descriptionpart3787);
                     onestar();
-                    _fsp--;
-                    if (failed) return text;
+                    state._fsp--;
+                    if (state.failed) return text;
                     // Creole10.g:885:25: (lb= link_bold_descriptionpart onestar )+
                     int cnt120=0;
                     loop120:
@@ -13520,22 +13520,22 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_link_bold_descriptionpart_in_link_descriptionpart3795);
                     	    lb=link_bold_descriptionpart();
-                    	    _fsp--;
-                    	    if (failed) return text;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return text;
+                    	    if ( state.backtracking==0 ) {
                     	      ((link_descriptionpart_scope)link_descriptionpart_stack.peek()).element.add(lb);
                     	    }
                     	    pushFollow(FOLLOW_onestar_in_link_descriptionpart3800);
                     	    onestar();
-                    	    _fsp--;
-                    	    if (failed) return text;
+                    	    state._fsp--;
+                    	    if (state.failed) return text;
 
                     	    }
                     	    break;
 
                     	default :
                     	    if ( cnt120 >= 1 ) break loop120;
-                    	    if (backtracking>0) {failed=true; return text;}
+                    	    if (state.backtracking>0) {state.failed=true; return text;}
                                 EarlyExitException eee =
                                     new EarlyExitException(120, input);
                                 throw eee;
@@ -13543,13 +13543,13 @@ public class Creole10Parser extends Parser {
                         cnt120++;
                     } while (true);
 
-                    if ( backtracking==0 ) {
+                    if ( state.backtracking==0 ) {
                       text = new BoldTextNode(((link_descriptionpart_scope)link_descriptionpart_stack.peek()).element);
                     }
                     pushFollow(FOLLOW_bold_markup_in_link_descriptionpart3810);
                     bold_markup();
-                    _fsp--;
-                    if (failed) return text;
+                    state._fsp--;
+                    if (state.failed) return text;
 
                     }
                     break;
@@ -13558,12 +13558,12 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_ital_markup_in_link_descriptionpart3815);
                     ital_markup();
-                    _fsp--;
-                    if (failed) return text;
+                    state._fsp--;
+                    if (state.failed) return text;
                     pushFollow(FOLLOW_onestar_in_link_descriptionpart3818);
                     onestar();
-                    _fsp--;
-                    if (failed) return text;
+                    state._fsp--;
+                    if (state.failed) return text;
                     // Creole10.g:887:26: (li= link_ital_descriptionpart onestar )+
                     int cnt121=0;
                     loop121:
@@ -13582,22 +13582,22 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_link_ital_descriptionpart_in_link_descriptionpart3827);
                     	    li=link_ital_descriptionpart();
-                    	    _fsp--;
-                    	    if (failed) return text;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return text;
+                    	    if ( state.backtracking==0 ) {
                     	      ((link_descriptionpart_scope)link_descriptionpart_stack.peek()).element.add(li);
                     	    }
                     	    pushFollow(FOLLOW_onestar_in_link_descriptionpart3832);
                     	    onestar();
-                    	    _fsp--;
-                    	    if (failed) return text;
+                    	    state._fsp--;
+                    	    if (state.failed) return text;
 
                     	    }
                     	    break;
 
                     	default :
                     	    if ( cnt121 >= 1 ) break loop121;
-                    	    if (backtracking>0) {failed=true; return text;}
+                    	    if (state.backtracking>0) {state.failed=true; return text;}
                                 EarlyExitException eee =
                                     new EarlyExitException(121, input);
                                 throw eee;
@@ -13605,13 +13605,13 @@ public class Creole10Parser extends Parser {
                         cnt121++;
                     } while (true);
 
-                    if ( backtracking==0 ) {
+                    if ( state.backtracking==0 ) {
                       text = new ItalicTextNode(((link_descriptionpart_scope)link_descriptionpart_stack.peek()).element);
                     }
                     pushFollow(FOLLOW_ital_markup_in_link_descriptionpart3841);
                     ital_markup();
-                    _fsp--;
-                    if (failed) return text;
+                    state._fsp--;
+                    if (state.failed) return text;
 
                     }
                     break;
@@ -13620,8 +13620,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_onestar_in_link_descriptionpart3846);
                     onestar();
-                    _fsp--;
-                    if (failed) return text;
+                    state._fsp--;
+                    if (state.failed) return text;
                     // Creole10.g:889:13: (t= link_descriptiontext onestar )+
                     int cnt122=0;
                     loop122:
@@ -13720,13 +13720,13 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_link_descriptiontext_in_link_descriptionpart3855);
                     	    t=link_descriptiontext();
-                    	    _fsp--;
-                    	    if (failed) return text;
+                    	    state._fsp--;
+                    	    if (state.failed) return text;
                     	    pushFollow(FOLLOW_onestar_in_link_descriptionpart3858);
                     	    onestar();
-                    	    _fsp--;
-                    	    if (failed) return text;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return text;
+                    	    if ( state.backtracking==0 ) {
                     	      ((link_descriptionpart_scope)link_descriptionpart_stack.peek()).element.add(t);
                     	    }
 
@@ -13735,7 +13735,7 @@ public class Creole10Parser extends Parser {
 
                     	default :
                     	    if ( cnt122 >= 1 ) break loop122;
-                    	    if (backtracking>0) {failed=true; return text;}
+                    	    if (state.backtracking>0) {state.failed=true; return text;}
                                 EarlyExitException eee =
                                     new EarlyExitException(122, input);
                                 throw eee;
@@ -13743,7 +13743,7 @@ public class Creole10Parser extends Parser {
                         cnt122++;
                     } while (true);
 
-                    if ( backtracking==0 ) {
+                    if ( state.backtracking==0 ) {
                       text = new UnformattedTextNode(((link_descriptionpart_scope)link_descriptionpart_stack.peek()).element);
                     }
 
@@ -13786,7 +13786,7 @@ public class Creole10Parser extends Parser {
                 alt124=2;
             }
             else {
-                if (backtracking>0) {failed=true; return text;}
+                if (state.backtracking>0) {state.failed=true; return text;}
                 NoViableAltException nvae =
                     new NoViableAltException("891:1: link_bold_descriptionpart returns [ASTNode text = null] : ( ital_markup t= link_boldital_description ital_markup | ld= link_descriptiontext );", 124, 0, input);
 
@@ -13798,19 +13798,19 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_ital_markup_in_link_bold_descriptionpart3878);
                     ital_markup();
-                    _fsp--;
-                    if (failed) return text;
+                    state._fsp--;
+                    if (state.failed) return text;
                     pushFollow(FOLLOW_link_boldital_description_in_link_bold_descriptionpart3885);
                     t=link_boldital_description();
-                    _fsp--;
-                    if (failed) return text;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return text;
+                    if ( state.backtracking==0 ) {
                       text = new ItalicTextNode(t);
                     }
                     pushFollow(FOLLOW_ital_markup_in_link_bold_descriptionpart3890);
                     ital_markup();
-                    _fsp--;
-                    if (failed) return text;
+                    state._fsp--;
+                    if (state.failed) return text;
 
                     }
                     break;
@@ -13819,9 +13819,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_link_descriptiontext_in_link_bold_descriptionpart3899);
                     ld=link_descriptiontext();
-                    _fsp--;
-                    if (failed) return text;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return text;
+                    if ( state.backtracking==0 ) {
                       text =ld;
                     }
 
@@ -13863,7 +13863,7 @@ public class Creole10Parser extends Parser {
                 alt125=2;
             }
             else {
-                if (backtracking>0) {failed=true; return text;}
+                if (state.backtracking>0) {state.failed=true; return text;}
                 NoViableAltException nvae =
                     new NoViableAltException("895:1: link_ital_descriptionpart returns [ASTNode text = null] : ( bold_markup td= link_boldital_description bold_markup | t= link_descriptiontext );", 125, 0, input);
 
@@ -13875,17 +13875,17 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_bold_markup_in_link_ital_descriptionpart3915);
                     bold_markup();
-                    _fsp--;
-                    if (failed) return text;
+                    state._fsp--;
+                    if (state.failed) return text;
                     pushFollow(FOLLOW_link_boldital_description_in_link_ital_descriptionpart3922);
                     td=link_boldital_description();
-                    _fsp--;
-                    if (failed) return text;
+                    state._fsp--;
+                    if (state.failed) return text;
                     pushFollow(FOLLOW_bold_markup_in_link_ital_descriptionpart3925);
                     bold_markup();
-                    _fsp--;
-                    if (failed) return text;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return text;
+                    if ( state.backtracking==0 ) {
                       text = new BoldTextNode(td);
                     }
 
@@ -13896,9 +13896,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_link_descriptiontext_in_link_ital_descriptionpart3936);
                     t=link_descriptiontext();
-                    _fsp--;
-                    if (failed) return text;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return text;
+                    if ( state.backtracking==0 ) {
                       text = t; 
                     }
 
@@ -13932,8 +13932,8 @@ public class Creole10Parser extends Parser {
             {
             pushFollow(FOLLOW_onestar_in_link_boldital_description3952);
             onestar();
-            _fsp--;
-            if (failed) return text;
+            state._fsp--;
+            if (state.failed) return text;
             // Creole10.g:900:13: (t= link_descriptiontext onestar )+
             int cnt126=0;
             loop126:
@@ -13952,13 +13952,13 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_link_descriptiontext_in_link_boldital_description3961);
             	    t=link_descriptiontext();
-            	    _fsp--;
-            	    if (failed) return text;
+            	    state._fsp--;
+            	    if (state.failed) return text;
             	    pushFollow(FOLLOW_onestar_in_link_boldital_description3964);
             	    onestar();
-            	    _fsp--;
-            	    if (failed) return text;
-            	    if ( backtracking==0 ) {
+            	    state._fsp--;
+            	    if (state.failed) return text;
+            	    if ( state.backtracking==0 ) {
             	      
             	      					for (ASTNode item:t.getASTNodes()) {
             	      						text.add(item);
@@ -13971,7 +13971,7 @@ public class Creole10Parser extends Parser {
 
             	default :
             	    if ( cnt126 >= 1 ) break loop126;
-            	    if (backtracking>0) {failed=true; return text;}
+            	    if (state.backtracking>0) {state.failed=true; return text;}
                         EarlyExitException eee =
                             new EarlyExitException(126, input);
                         throw eee;
@@ -14016,7 +14016,7 @@ public class Creole10Parser extends Parser {
                 alt128=2;
             }
             else {
-                if (backtracking>0) {failed=true; return text;}
+                if (state.backtracking>0) {state.failed=true; return text;}
                 NoViableAltException nvae =
                     new NoViableAltException("906:1: link_descriptiontext returns [CollectionNode text = new CollectionNode()] : (t= link_descriptiontext_simple | ( forced_linebreak | e= escaped )+ );", 128, 0, input);
 
@@ -14028,9 +14028,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_link_descriptiontext_simple_in_link_descriptiontext3987);
                     t=link_descriptiontext_simple();
-                    _fsp--;
-                    if (failed) return text;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return text;
+                    if ( state.backtracking==0 ) {
                        text.add(new UnformattedTextNode(t.toString()));
                     }
 
@@ -14060,9 +14060,9 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_forced_linebreak_in_link_descriptiontext3997);
                     	    forced_linebreak();
-                    	    _fsp--;
-                    	    if (failed) return text;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return text;
+                    	    if ( state.backtracking==0 ) {
                     	      text.add(new ForcedEndOfLineNode());
                     	    }
 
@@ -14073,9 +14073,9 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_escaped_in_link_descriptiontext4009);
                     	    e=escaped();
-                    	    _fsp--;
-                    	    if (failed) return text;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return text;
+                    	    if ( state.backtracking==0 ) {
                     	      text.add(e);
                     	    }
 
@@ -14084,7 +14084,7 @@ public class Creole10Parser extends Parser {
 
                     	default :
                     	    if ( cnt127 >= 1 ) break loop127;
-                    	    if (backtracking>0) {failed=true; return text;}
+                    	    if (state.backtracking>0) {state.failed=true; return text;}
                                 EarlyExitException eee =
                                     new EarlyExitException(127, input);
                                 throw eee;
@@ -14139,16 +14139,16 @@ public class Creole10Parser extends Parser {
             	    c=(Token)input.LT(1);
             	    if ( (input.LA(1)>=FORCED_END_OF_LINE && input.LA(1)<=WIKI)||input.LA(1)==POUND||(input.LA(1)>=EQUAL && input.LA(1)<=PIPE)||(input.LA(1)>=NOWIKI_BLOCK_CLOSE && input.LA(1)<=NOWIKI_CLOSE)||(input.LA(1)>=IMAGE_CLOSE && input.LA(1)<=82) ) {
             	        input.consume();
-            	        errorRecovery=false;failed=false;
+            	        state.errorRecovery=false;state.failed=false;
             	    }
             	    else {
-            	        if (backtracking>0) {failed=true; return text;}
+            	        if (state.backtracking>0) {state.failed=true; return text;}
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
             	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_link_descriptiontext_simple4034);    throw mse;
             	    }
 
-            	    if ( backtracking==0 ) {
+            	    if ( state.backtracking==0 ) {
             	       text.append(c.getText()); 
             	    }
 
@@ -14157,7 +14157,7 @@ public class Creole10Parser extends Parser {
 
             	default :
             	    if ( cnt129 >= 1 ) break loop129;
-            	    if (backtracking>0) {failed=true; return text;}
+            	    if (state.backtracking>0) {state.failed=true; return text;}
                         EarlyExitException eee =
                             new EarlyExitException(129, input);
                         throw eee;
@@ -14210,16 +14210,16 @@ public class Creole10Parser extends Parser {
             	    c=(Token)input.LT(1);
             	    if ( (input.LA(1)>=FORCED_END_OF_LINE && input.LA(1)<=WIKI)||(input.LA(1)>=POUND && input.LA(1)<=EQUAL)||(input.LA(1)>=ITAL && input.LA(1)<=NOWIKI_CLOSE)||(input.LA(1)>=IMAGE_CLOSE && input.LA(1)<=82) ) {
             	        input.consume();
-            	        errorRecovery=false;failed=false;
+            	        state.errorRecovery=false;state.failed=false;
             	    }
             	    else {
-            	        if (backtracking>0) {failed=true; return text;}
+            	        if (state.backtracking>0) {state.failed=true; return text;}
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
             	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_link_uri4133);    throw mse;
             	    }
 
-            	    if ( backtracking==0 ) {
+            	    if ( state.backtracking==0 ) {
             	      text.append(c.getText()); 
             	    }
 
@@ -14228,7 +14228,7 @@ public class Creole10Parser extends Parser {
 
             	default :
             	    if ( cnt130 >= 1 ) break loop130;
-            	    if (backtracking>0) {failed=true; return text;}
+            	    if (state.backtracking>0) {state.failed=true; return text;}
                         EarlyExitException eee =
                             new EarlyExitException(130, input);
                         throw eee;
@@ -14267,13 +14267,13 @@ public class Creole10Parser extends Parser {
             {
             pushFollow(FOLLOW_image_open_markup_in_image4174);
             image_open_markup();
-            _fsp--;
-            if (failed) return image;
+            state._fsp--;
+            if (state.failed) return image;
             pushFollow(FOLLOW_image_uri_in_image4180);
             uri=image_uri();
-            _fsp--;
-            if (failed) return image;
-            if ( backtracking==0 ) {
+            state._fsp--;
+            if (state.failed) return image;
+            if ( state.backtracking==0 ) {
               image.setLink(uri.toString());
             }
             // Creole10.g:933:79: (alt= image_alternative )?
@@ -14289,9 +14289,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_image_alternative_in_image4190);
                     alt=image_alternative();
-                    _fsp--;
-                    if (failed) return image;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return image;
+                    if ( state.backtracking==0 ) {
                       image.setAltCollectionNode(alt);
                     }
 
@@ -14302,8 +14302,8 @@ public class Creole10Parser extends Parser {
 
             pushFollow(FOLLOW_image_close_markup_in_image4199);
             image_close_markup();
-            _fsp--;
-            if (failed) return image;
+            state._fsp--;
+            if (state.failed) return image;
 
             }
 
@@ -14349,16 +14349,16 @@ public class Creole10Parser extends Parser {
             	    c=(Token)input.LT(1);
             	    if ( (input.LA(1)>=FORCED_END_OF_LINE && input.LA(1)<=WIKI)||(input.LA(1)>=POUND && input.LA(1)<=EQUAL)||(input.LA(1)>=ITAL && input.LA(1)<=LINK_CLOSE)||(input.LA(1)>=BLANKS && input.LA(1)<=82) ) {
             	        input.consume();
-            	        errorRecovery=false;failed=false;
+            	        state.errorRecovery=false;state.failed=false;
             	    }
             	    else {
-            	        if (backtracking>0) {failed=true; return link;}
+            	        if (state.backtracking>0) {state.failed=true; return link;}
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
             	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_image_uri4218);    throw mse;
             	    }
 
-            	    if ( backtracking==0 ) {
+            	    if ( state.backtracking==0 ) {
             	      link.append(c.getText()); 
             	    }
 
@@ -14367,7 +14367,7 @@ public class Creole10Parser extends Parser {
 
             	default :
             	    if ( cnt132 >= 1 ) break loop132;
-            	    if (backtracking>0) {failed=true; return link;}
+            	    if (state.backtracking>0) {state.failed=true; return link;}
                         EarlyExitException eee =
                             new EarlyExitException(132, input);
                         throw eee;
@@ -14404,8 +14404,8 @@ public class Creole10Parser extends Parser {
             {
             pushFollow(FOLLOW_image_alternative_markup_in_image_alternative4253);
             image_alternative_markup();
-            _fsp--;
-            if (failed) return alternative;
+            state._fsp--;
+            if (state.failed) return alternative;
             // Creole10.g:940:30: (p= image_alternativepart )+
             int cnt133=0;
             loop133:
@@ -14424,9 +14424,9 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_image_alternativepart_in_image_alternative4262);
             	    p=image_alternativepart();
-            	    _fsp--;
-            	    if (failed) return alternative;
-            	    if ( backtracking==0 ) {
+            	    state._fsp--;
+            	    if (state.failed) return alternative;
+            	    if ( state.backtracking==0 ) {
             	      alternative.add(p); 
             	    }
 
@@ -14435,7 +14435,7 @@ public class Creole10Parser extends Parser {
 
             	default :
             	    if ( cnt133 >= 1 ) break loop133;
-            	    if (backtracking>0) {failed=true; return alternative;}
+            	    if (state.backtracking>0) {state.failed=true; return alternative;}
                         EarlyExitException eee =
                             new EarlyExitException(133, input);
                         throw eee;
@@ -14494,7 +14494,7 @@ public class Creole10Parser extends Parser {
                     alt137=3;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return item;}
+                    if (state.backtracking>0) {state.failed=true; return item;}
                     NoViableAltException nvae =
                         new NoViableAltException("942:1: image_alternativepart returns [ASTNode item = null] : ( bold_markup onestar (t1= image_bold_alternativepart onestar )+ bold_markup | ital_markup onestar (t2= image_ital_alternativepart onestar )+ ital_markup | onestar (t3= image_alternativetext onestar )+ );", 137, 1, input);
 
@@ -14583,7 +14583,7 @@ public class Creole10Parser extends Parser {
                 }
                 break;
             default:
-                if (backtracking>0) {failed=true; return item;}
+                if (state.backtracking>0) {state.failed=true; return item;}
                 NoViableAltException nvae =
                     new NoViableAltException("942:1: image_alternativepart returns [ASTNode item = null] : ( bold_markup onestar (t1= image_bold_alternativepart onestar )+ bold_markup | ital_markup onestar (t2= image_ital_alternativepart onestar )+ ital_markup | onestar (t3= image_alternativetext onestar )+ );", 137, 0, input);
 
@@ -14596,12 +14596,12 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_bold_markup_in_image_alternativepart4288);
                     bold_markup();
-                    _fsp--;
-                    if (failed) return item;
+                    state._fsp--;
+                    if (state.failed) return item;
                     pushFollow(FOLLOW_onestar_in_image_alternativepart4291);
                     onestar();
-                    _fsp--;
-                    if (failed) return item;
+                    state._fsp--;
+                    if (state.failed) return item;
                     // Creole10.g:949:26: (t1= image_bold_alternativepart onestar )+
                     int cnt134=0;
                     loop134:
@@ -14629,22 +14629,22 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_image_bold_alternativepart_in_image_alternativepart4300);
                     	    t1=image_bold_alternativepart();
-                    	    _fsp--;
-                    	    if (failed) return item;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return item;
+                    	    if ( state.backtracking==0 ) {
                     	      ((image_alternativepart_scope)image_alternativepart_stack.peek()).elements.add(t1);
                     	    }
                     	    pushFollow(FOLLOW_onestar_in_image_alternativepart4305);
                     	    onestar();
-                    	    _fsp--;
-                    	    if (failed) return item;
+                    	    state._fsp--;
+                    	    if (state.failed) return item;
 
                     	    }
                     	    break;
 
                     	default :
                     	    if ( cnt134 >= 1 ) break loop134;
-                    	    if (backtracking>0) {failed=true; return item;}
+                    	    if (state.backtracking>0) {state.failed=true; return item;}
                                 EarlyExitException eee =
                                     new EarlyExitException(134, input);
                                 throw eee;
@@ -14654,9 +14654,9 @@ public class Creole10Parser extends Parser {
 
                     pushFollow(FOLLOW_bold_markup_in_image_alternativepart4312);
                     bold_markup();
-                    _fsp--;
-                    if (failed) return item;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return item;
+                    if ( state.backtracking==0 ) {
                       item = new BoldTextNode(((image_alternativepart_scope)image_alternativepart_stack.peek()).elements);
                     }
 
@@ -14667,12 +14667,12 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_ital_markup_in_image_alternativepart4319);
                     ital_markup();
-                    _fsp--;
-                    if (failed) return item;
+                    state._fsp--;
+                    if (state.failed) return item;
                     pushFollow(FOLLOW_onestar_in_image_alternativepart4322);
                     onestar();
-                    _fsp--;
-                    if (failed) return item;
+                    state._fsp--;
+                    if (state.failed) return item;
                     // Creole10.g:951:26: (t2= image_ital_alternativepart onestar )+
                     int cnt135=0;
                     loop135:
@@ -14691,22 +14691,22 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_image_ital_alternativepart_in_image_alternativepart4332);
                     	    t2=image_ital_alternativepart();
-                    	    _fsp--;
-                    	    if (failed) return item;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return item;
+                    	    if ( state.backtracking==0 ) {
                     	      ((image_alternativepart_scope)image_alternativepart_stack.peek()).elements.add(t2);
                     	    }
                     	    pushFollow(FOLLOW_onestar_in_image_alternativepart4337);
                     	    onestar();
-                    	    _fsp--;
-                    	    if (failed) return item;
+                    	    state._fsp--;
+                    	    if (state.failed) return item;
 
                     	    }
                     	    break;
 
                     	default :
                     	    if ( cnt135 >= 1 ) break loop135;
-                    	    if (backtracking>0) {failed=true; return item;}
+                    	    if (state.backtracking>0) {state.failed=true; return item;}
                                 EarlyExitException eee =
                                     new EarlyExitException(135, input);
                                 throw eee;
@@ -14716,9 +14716,9 @@ public class Creole10Parser extends Parser {
 
                     pushFollow(FOLLOW_ital_markup_in_image_alternativepart4344);
                     ital_markup();
-                    _fsp--;
-                    if (failed) return item;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return item;
+                    if ( state.backtracking==0 ) {
                       item = new ItalicTextNode(((image_alternativepart_scope)image_alternativepart_stack.peek()).elements);
                     }
 
@@ -14729,8 +14729,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_onestar_in_image_alternativepart4351);
                     onestar();
-                    _fsp--;
-                    if (failed) return item;
+                    state._fsp--;
+                    if (state.failed) return item;
                     // Creole10.g:953:13: (t3= image_alternativetext onestar )+
                     int cnt136=0;
                     loop136:
@@ -14752,9 +14752,9 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_image_alternativetext_in_image_alternativepart4358);
                     	    t3=image_alternativetext();
-                    	    _fsp--;
-                    	    if (failed) return item;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return item;
+                    	    if ( state.backtracking==0 ) {
                     	      
                     	      					for (ASTNode n: t3.getASTNodes()) {
                     	      					   ((image_alternativepart_scope)image_alternativepart_stack.peek()).elements.add(n);
@@ -14763,15 +14763,15 @@ public class Creole10Parser extends Parser {
                     	    }
                     	    pushFollow(FOLLOW_onestar_in_image_alternativepart4363);
                     	    onestar();
-                    	    _fsp--;
-                    	    if (failed) return item;
+                    	    state._fsp--;
+                    	    if (state.failed) return item;
 
                     	    }
                     	    break;
 
                     	default :
                     	    if ( cnt136 >= 1 ) break loop136;
-                    	    if (backtracking>0) {failed=true; return item;}
+                    	    if (state.backtracking>0) {state.failed=true; return item;}
                                 EarlyExitException eee =
                                     new EarlyExitException(136, input);
                                 throw eee;
@@ -14779,7 +14779,7 @@ public class Creole10Parser extends Parser {
                         cnt136++;
                     } while (true);
 
-                    if ( backtracking==0 ) {
+                    if ( state.backtracking==0 ) {
                       item =new UnformattedTextNode(((image_alternativepart_scope)image_alternativepart_stack.peek()).elements);
                     }
 
@@ -14831,7 +14831,7 @@ public class Creole10Parser extends Parser {
                 alt139=2;
             }
             else {
-                if (backtracking>0) {failed=true; return text;}
+                if (state.backtracking>0) {state.failed=true; return text;}
                 NoViableAltException nvae =
                     new NoViableAltException("959:1: image_bold_alternativepart returns [ASTNode text = null] : ( ital_markup t= link_boldital_description ital_markup | onestar (i= image_alternativetext onestar )+ );", 139, 0, input);
 
@@ -14843,19 +14843,19 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_ital_markup_in_image_bold_alternativepart4389);
                     ital_markup();
-                    _fsp--;
-                    if (failed) return text;
+                    state._fsp--;
+                    if (state.failed) return text;
                     pushFollow(FOLLOW_link_boldital_description_in_image_bold_alternativepart4396);
                     t=link_boldital_description();
-                    _fsp--;
-                    if (failed) return text;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return text;
+                    if ( state.backtracking==0 ) {
                       text = new ItalicTextNode(t); 
                     }
                     pushFollow(FOLLOW_ital_markup_in_image_bold_alternativepart4401);
                     ital_markup();
-                    _fsp--;
-                    if (failed) return text;
+                    state._fsp--;
+                    if (state.failed) return text;
 
                     }
                     break;
@@ -14864,8 +14864,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_onestar_in_image_bold_alternativepart4406);
                     onestar();
-                    _fsp--;
-                    if (failed) return text;
+                    state._fsp--;
+                    if (state.failed) return text;
                     // Creole10.g:967:13: (i= image_alternativetext onestar )+
                     int cnt138=0;
                     loop138:
@@ -14887,13 +14887,13 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_image_alternativetext_in_image_bold_alternativepart4415);
                     	    i=image_alternativetext();
-                    	    _fsp--;
-                    	    if (failed) return text;
+                    	    state._fsp--;
+                    	    if (state.failed) return text;
                     	    pushFollow(FOLLOW_onestar_in_image_bold_alternativepart4418);
                     	    onestar();
-                    	    _fsp--;
-                    	    if (failed) return text;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return text;
+                    	    if ( state.backtracking==0 ) {
                     	      
                     	      					for (ASTNode item:i.getASTNodes()) {
                     	      					    ((image_ital_alternativepart_scope)image_ital_alternativepart_stack.peek()).elements.add(item);
@@ -14906,7 +14906,7 @@ public class Creole10Parser extends Parser {
 
                     	default :
                     	    if ( cnt138 >= 1 ) break loop138;
-                    	    if (backtracking>0) {failed=true; return text;}
+                    	    if (state.backtracking>0) {state.failed=true; return text;}
                                 EarlyExitException eee =
                                     new EarlyExitException(138, input);
                                 throw eee;
@@ -14914,7 +14914,7 @@ public class Creole10Parser extends Parser {
                         cnt138++;
                     } while (true);
 
-                    if ( backtracking==0 ) {
+                    if ( state.backtracking==0 ) {
                       text = new UnformattedTextNode(((image_bold_alternativepart_scope)image_bold_alternativepart_stack.peek()).elements);
                     }
 
@@ -14969,7 +14969,7 @@ public class Creole10Parser extends Parser {
                     alt141=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return text;}
+                    if (state.backtracking>0) {state.failed=true; return text;}
                     NoViableAltException nvae =
                         new NoViableAltException("974:1: image_ital_alternativepart returns [ASTNode text = null] : ( bold_markup t= link_boldital_description bold_markup | onestar (i= image_alternativetext onestar )+ );", 141, 1, input);
 
@@ -14980,7 +14980,7 @@ public class Creole10Parser extends Parser {
                 alt141=2;
             }
             else {
-                if (backtracking>0) {failed=true; return text;}
+                if (state.backtracking>0) {state.failed=true; return text;}
                 NoViableAltException nvae =
                     new NoViableAltException("974:1: image_ital_alternativepart returns [ASTNode text = null] : ( bold_markup t= link_boldital_description bold_markup | onestar (i= image_alternativetext onestar )+ );", 141, 0, input);
 
@@ -14992,19 +14992,19 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_bold_markup_in_image_ital_alternativepart4446);
                     bold_markup();
-                    _fsp--;
-                    if (failed) return text;
+                    state._fsp--;
+                    if (state.failed) return text;
                     pushFollow(FOLLOW_link_boldital_description_in_image_ital_alternativepart4453);
                     t=link_boldital_description();
-                    _fsp--;
-                    if (failed) return text;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return text;
+                    if ( state.backtracking==0 ) {
                       text = new BoldTextNode(t); 
                     }
                     pushFollow(FOLLOW_bold_markup_in_image_ital_alternativepart4458);
                     bold_markup();
-                    _fsp--;
-                    if (failed) return text;
+                    state._fsp--;
+                    if (state.failed) return text;
 
                     }
                     break;
@@ -15013,8 +15013,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_onestar_in_image_ital_alternativepart4463);
                     onestar();
-                    _fsp--;
-                    if (failed) return text;
+                    state._fsp--;
+                    if (state.failed) return text;
                     // Creole10.g:982:13: (i= image_alternativetext onestar )+
                     int cnt140=0;
                     loop140:
@@ -15036,13 +15036,13 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_image_alternativetext_in_image_ital_alternativepart4472);
                     	    i=image_alternativetext();
-                    	    _fsp--;
-                    	    if (failed) return text;
+                    	    state._fsp--;
+                    	    if (state.failed) return text;
                     	    pushFollow(FOLLOW_onestar_in_image_ital_alternativepart4475);
                     	    onestar();
-                    	    _fsp--;
-                    	    if (failed) return text;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return text;
+                    	    if ( state.backtracking==0 ) {
                     	      
                     	      					for (ASTNode item:i.getASTNodes()) {
                     	      					    ((image_ital_alternativepart_scope)image_ital_alternativepart_stack.peek()).elements.add(item);
@@ -15055,7 +15055,7 @@ public class Creole10Parser extends Parser {
 
                     	default :
                     	    if ( cnt140 >= 1 ) break loop140;
-                    	    if (backtracking>0) {failed=true; return text;}
+                    	    if (state.backtracking>0) {state.failed=true; return text;}
                                 EarlyExitException eee =
                                     new EarlyExitException(140, input);
                                 throw eee;
@@ -15063,7 +15063,7 @@ public class Creole10Parser extends Parser {
                         cnt140++;
                     } while (true);
 
-                    if ( backtracking==0 ) {
+                    if ( state.backtracking==0 ) {
                       text = new UnformattedTextNode(((image_ital_alternativepart_scope)image_ital_alternativepart_stack.peek()).elements);
                     }
 
@@ -15098,8 +15098,8 @@ public class Creole10Parser extends Parser {
             {
             pushFollow(FOLLOW_onestar_in_image_boldital_alternative4496);
             onestar();
-            _fsp--;
-            if (failed) return text;
+            state._fsp--;
+            if (state.failed) return text;
             // Creole10.g:989:13: (i= image_alternativetext onestar )+
             int cnt142=0;
             loop142:
@@ -15118,13 +15118,13 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_image_alternativetext_in_image_boldital_alternative4505);
             	    i=image_alternativetext();
-            	    _fsp--;
-            	    if (failed) return text;
+            	    state._fsp--;
+            	    if (state.failed) return text;
             	    pushFollow(FOLLOW_onestar_in_image_boldital_alternative4508);
             	    onestar();
-            	    _fsp--;
-            	    if (failed) return text;
-            	    if ( backtracking==0 ) {
+            	    state._fsp--;
+            	    if (state.failed) return text;
+            	    if ( state.backtracking==0 ) {
             	      
             	      					for (ASTNode item:i.getASTNodes()) {
             	      					    text.add(item);
@@ -15137,7 +15137,7 @@ public class Creole10Parser extends Parser {
 
             	default :
             	    if ( cnt142 >= 1 ) break loop142;
-            	    if (backtracking>0) {failed=true; return text;}
+            	    if (state.backtracking>0) {state.failed=true; return text;}
                         EarlyExitException eee =
                             new EarlyExitException(142, input);
                         throw eee;
@@ -15180,7 +15180,7 @@ public class Creole10Parser extends Parser {
                 alt144=2;
             }
             else {
-                if (backtracking>0) {failed=true; return items;}
+                if (state.backtracking>0) {state.failed=true; return items;}
                 NoViableAltException nvae =
                     new NoViableAltException("995:1: image_alternativetext returns [CollectionNode items = new CollectionNode()] : (contents= image_alternative_simple_text | ( forced_linebreak )+ );", 144, 0, input);
 
@@ -15192,9 +15192,9 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_image_alternative_simple_text_in_image_alternativetext4530);
                     contents=image_alternative_simple_text();
-                    _fsp--;
-                    if (failed) return items;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return items;
+                    if ( state.backtracking==0 ) {
                       items.add(new UnformattedTextNode(contents.toString())); 
                     }
 
@@ -15221,9 +15221,9 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_forced_linebreak_in_image_alternativetext4538);
                     	    forced_linebreak();
-                    	    _fsp--;
-                    	    if (failed) return items;
-                    	    if ( backtracking==0 ) {
+                    	    state._fsp--;
+                    	    if (state.failed) return items;
+                    	    if ( state.backtracking==0 ) {
                     	      items.add(new ForcedEndOfLineNode());
                     	    }
 
@@ -15232,7 +15232,7 @@ public class Creole10Parser extends Parser {
 
                     	default :
                     	    if ( cnt143 >= 1 ) break loop143;
-                    	    if (backtracking>0) {failed=true; return items;}
+                    	    if (state.backtracking>0) {state.failed=true; return items;}
                                 EarlyExitException eee =
                                     new EarlyExitException(143, input);
                                 throw eee;
@@ -15287,16 +15287,16 @@ public class Creole10Parser extends Parser {
             	    c=(Token)input.LT(1);
             	    if ( (input.LA(1)>=FORCED_END_OF_LINE && input.LA(1)<=WIKI)||input.LA(1)==POUND||(input.LA(1)>=EQUAL && input.LA(1)<=PIPE)||(input.LA(1)>=ESCAPE && input.LA(1)<=LINK_CLOSE)||(input.LA(1)>=BLANKS && input.LA(1)<=82) ) {
             	        input.consume();
-            	        errorRecovery=false;failed=false;
+            	        state.errorRecovery=false;state.failed=false;
             	    }
             	    else {
-            	        if (backtracking>0) {failed=true; return text;}
+            	        if (state.backtracking>0) {state.failed=true; return text;}
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
             	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_image_alternative_simple_text4564);    throw mse;
             	    }
 
-            	    if ( backtracking==0 ) {
+            	    if ( state.backtracking==0 ) {
             	      text.append(c.getText()); 
             	    }
 
@@ -15305,7 +15305,7 @@ public class Creole10Parser extends Parser {
 
             	default :
             	    if ( cnt145 >= 1 ) break loop145;
-            	    if (backtracking>0) {failed=true; return text;}
+            	    if (state.backtracking>0) {state.failed=true; return text;}
                         EarlyExitException eee =
                             new EarlyExitException(145, input);
                         throw eee;
@@ -15339,24 +15339,24 @@ public class Creole10Parser extends Parser {
             {
             pushFollow(FOLLOW_extension_markup_in_extension4656);
             extension_markup();
-            _fsp--;
-            if (failed) return node;
+            state._fsp--;
+            if (state.failed) return node;
             pushFollow(FOLLOW_extension_handler_in_extension4659);
             extension_handler();
-            _fsp--;
-            if (failed) return node;
+            state._fsp--;
+            if (state.failed) return node;
             pushFollow(FOLLOW_blanks_in_extension4662);
             blanks();
-            _fsp--;
-            if (failed) return node;
+            state._fsp--;
+            if (state.failed) return node;
             pushFollow(FOLLOW_extension_statement_in_extension4665);
             extension_statement();
-            _fsp--;
-            if (failed) return node;
+            state._fsp--;
+            if (state.failed) return node;
             pushFollow(FOLLOW_extension_markup_in_extension4669);
             extension_markup();
-            _fsp--;
-            if (failed) return node;
+            state._fsp--;
+            if (state.failed) return node;
 
             }
 
@@ -15400,10 +15400,10 @@ public class Creole10Parser extends Parser {
             	    {
             	    if ( (input.LA(1)>=FORCED_END_OF_LINE && input.LA(1)<=WIKI)||(input.LA(1)>=POUND && input.LA(1)<=NOWIKI_OPEN)||input.LA(1)==FORCED_LINEBREAK||(input.LA(1)>=NOWIKI_BLOCK_CLOSE && input.LA(1)<=IMAGE_CLOSE)||(input.LA(1)>=DASH && input.LA(1)<=82) ) {
             	        input.consume();
-            	        errorRecovery=false;failed=false;
+            	        state.errorRecovery=false;state.failed=false;
             	    }
             	    else {
-            	        if (backtracking>0) {failed=true; return ;}
+            	        if (state.backtracking>0) {state.failed=true; return ;}
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
             	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_extension_handler4681);    throw mse;
@@ -15417,15 +15417,15 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_escaped_in_extension_handler4714);
             	    escaped();
-            	    _fsp--;
-            	    if (failed) return ;
+            	    state._fsp--;
+            	    if (state.failed) return ;
 
             	    }
             	    break;
 
             	default :
             	    if ( cnt146 >= 1 ) break loop146;
-            	    if (backtracking>0) {failed=true; return ;}
+            	    if (state.backtracking>0) {state.failed=true; return ;}
                         EarlyExitException eee =
                             new EarlyExitException(146, input);
                         throw eee;
@@ -15475,10 +15475,10 @@ public class Creole10Parser extends Parser {
             	    {
             	    if ( (input.LA(1)>=FORCED_END_OF_LINE && input.LA(1)<=NOWIKI_OPEN)||input.LA(1)==FORCED_LINEBREAK||(input.LA(1)>=NOWIKI_BLOCK_CLOSE && input.LA(1)<=82) ) {
             	        input.consume();
-            	        errorRecovery=false;failed=false;
+            	        state.errorRecovery=false;state.failed=false;
             	    }
             	    else {
-            	        if (backtracking>0) {failed=true; return ;}
+            	        if (state.backtracking>0) {state.failed=true; return ;}
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
             	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_extension_statement4729);    throw mse;
@@ -15492,8 +15492,8 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_escaped_in_extension_statement4750);
             	    escaped();
-            	    _fsp--;
-            	    if (failed) return ;
+            	    state._fsp--;
+            	    if (state.failed) return ;
 
             	    }
             	    break;
@@ -15541,7 +15541,7 @@ public class Creole10Parser extends Parser {
                 alt148=2;
             }
             else {
-                if (backtracking>0) {failed=true; return tableOfContents;}
+                if (state.backtracking>0) {state.failed=true; return tableOfContents;}
                 NoViableAltException nvae =
                     new NoViableAltException("1034:3: ( '<<TableOfContents>>' | '<<TableOfContents title=' '\\\"' t= table_of_contents_title_text '\\\"' '>>' )", 148, 0, input);
 
@@ -15551,24 +15551,24 @@ public class Creole10Parser extends Parser {
                 case 1 :
                     // Creole10.g:1035:4: '<<TableOfContents>>'
                     {
-                    match(input,79,FOLLOW_79_in_table_of_contents4778); if (failed) return tableOfContents;
+                    match(input,79,FOLLOW_79_in_table_of_contents4778); if (state.failed) return tableOfContents;
 
                     }
                     break;
                 case 2 :
                     // Creole10.g:1037:4: '<<TableOfContents title=' '\\\"' t= table_of_contents_title_text '\\\"' '>>'
                     {
-                    match(input,80,FOLLOW_80_in_table_of_contents4788); if (failed) return tableOfContents;
-                    match(input,81,FOLLOW_81_in_table_of_contents4793); if (failed) return tableOfContents;
+                    match(input,80,FOLLOW_80_in_table_of_contents4788); if (state.failed) return tableOfContents;
+                    match(input,81,FOLLOW_81_in_table_of_contents4793); if (state.failed) return tableOfContents;
                     pushFollow(FOLLOW_table_of_contents_title_text_in_table_of_contents4802);
                     t=table_of_contents_title_text();
-                    _fsp--;
-                    if (failed) return tableOfContents;
-                    if ( backtracking==0 ) {
+                    state._fsp--;
+                    if (state.failed) return tableOfContents;
+                    if ( state.backtracking==0 ) {
                        tableOfContents.setTitle(t.toString()); 
                     }
-                    match(input,81,FOLLOW_81_in_table_of_contents4809); if (failed) return tableOfContents;
-                    match(input,82,FOLLOW_82_in_table_of_contents4814); if (failed) return tableOfContents;
+                    match(input,81,FOLLOW_81_in_table_of_contents4809); if (state.failed) return tableOfContents;
+                    match(input,82,FOLLOW_82_in_table_of_contents4814); if (state.failed) return tableOfContents;
 
                     }
                     break;
@@ -15629,16 +15629,16 @@ public class Creole10Parser extends Parser {
             	    c=(Token)input.LT(1);
             	    if ( (input.LA(1)>=FORCED_END_OF_LINE && input.LA(1)<=WIKI)||(input.LA(1)>=POUND && input.LA(1)<=STAR)||(input.LA(1)>=PIPE && input.LA(1)<=ITAL)||(input.LA(1)>=EXTENSION && input.LA(1)<=FORCED_LINEBREAK)||(input.LA(1)>=NOWIKI_BLOCK_CLOSE && input.LA(1)<=81) ) {
             	        input.consume();
-            	        errorRecovery=false;failed=false;
+            	        state.errorRecovery=false;state.failed=false;
             	    }
             	    else {
-            	        if (backtracking>0) {failed=true; return text;}
+            	        if (state.backtracking>0) {state.failed=true; return text;}
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
             	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_table_of_contents_title_text4840);    throw mse;
             	    }
 
-            	    if ( backtracking==0 ) {
+            	    if ( state.backtracking==0 ) {
             	      text.append(c.getText());
             	    }
 
@@ -15647,7 +15647,7 @@ public class Creole10Parser extends Parser {
 
             	default :
             	    if ( cnt149 >= 1 ) break loop149;
-            	    if (backtracking>0) {failed=true; return text;}
+            	    if (state.backtracking>0) {state.failed=true; return text;}
                         EarlyExitException eee =
                             new EarlyExitException(149, input);
                         throw eee;
@@ -15688,7 +15688,7 @@ public class Creole10Parser extends Parser {
                     alt151=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return ;}
+                    if (state.backtracking>0) {state.failed=true; return ;}
                     NoViableAltException nvae =
                         new NoViableAltException("1050:1: onestar : ( ({...}? ( STAR )? ) | );", 151, 1, input);
 
@@ -15707,7 +15707,7 @@ public class Creole10Parser extends Parser {
                     alt151=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return ;}
+                    if (state.backtracking>0) {state.failed=true; return ;}
                     NoViableAltException nvae =
                         new NoViableAltException("1050:1: onestar : ( ({...}? ( STAR )? ) | );", 151, 2, input);
 
@@ -15726,7 +15726,7 @@ public class Creole10Parser extends Parser {
                     alt151=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return ;}
+                    if (state.backtracking>0) {state.failed=true; return ;}
                     NoViableAltException nvae =
                         new NoViableAltException("1050:1: onestar : ( ({...}? ( STAR )? ) | );", 151, 3, input);
 
@@ -15745,7 +15745,7 @@ public class Creole10Parser extends Parser {
                     alt151=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return ;}
+                    if (state.backtracking>0) {state.failed=true; return ;}
                     NoViableAltException nvae =
                         new NoViableAltException("1050:1: onestar : ( ({...}? ( STAR )? ) | );", 151, 4, input);
 
@@ -15764,7 +15764,7 @@ public class Creole10Parser extends Parser {
                     alt151=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return ;}
+                    if (state.backtracking>0) {state.failed=true; return ;}
                     NoViableAltException nvae =
                         new NoViableAltException("1050:1: onestar : ( ({...}? ( STAR )? ) | );", 151, 5, input);
 
@@ -15783,7 +15783,7 @@ public class Creole10Parser extends Parser {
                     alt151=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return ;}
+                    if (state.backtracking>0) {state.failed=true; return ;}
                     NoViableAltException nvae =
                         new NoViableAltException("1050:1: onestar : ( ({...}? ( STAR )? ) | );", 151, 6, input);
 
@@ -15802,7 +15802,7 @@ public class Creole10Parser extends Parser {
                     alt151=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return ;}
+                    if (state.backtracking>0) {state.failed=true; return ;}
                     NoViableAltException nvae =
                         new NoViableAltException("1050:1: onestar : ( ({...}? ( STAR )? ) | );", 151, 7, input);
 
@@ -15821,7 +15821,7 @@ public class Creole10Parser extends Parser {
                     alt151=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return ;}
+                    if (state.backtracking>0) {state.failed=true; return ;}
                     NoViableAltException nvae =
                         new NoViableAltException("1050:1: onestar : ( ({...}? ( STAR )? ) | );", 151, 8, input);
 
@@ -15841,7 +15841,7 @@ public class Creole10Parser extends Parser {
                     alt151=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return ;}
+                    if (state.backtracking>0) {state.failed=true; return ;}
                     NoViableAltException nvae =
                         new NoViableAltException("1050:1: onestar : ( ({...}? ( STAR )? ) | );", 151, 9, input);
 
@@ -15861,7 +15861,7 @@ public class Creole10Parser extends Parser {
                     alt151=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return ;}
+                    if (state.backtracking>0) {state.failed=true; return ;}
                     NoViableAltException nvae =
                         new NoViableAltException("1050:1: onestar : ( ({...}? ( STAR )? ) | );", 151, 10, input);
 
@@ -15880,7 +15880,7 @@ public class Creole10Parser extends Parser {
                     alt151=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return ;}
+                    if (state.backtracking>0) {state.failed=true; return ;}
                     NoViableAltException nvae =
                         new NoViableAltException("1050:1: onestar : ( ({...}? ( STAR )? ) | );", 151, 11, input);
 
@@ -15899,7 +15899,7 @@ public class Creole10Parser extends Parser {
                     alt151=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return ;}
+                    if (state.backtracking>0) {state.failed=true; return ;}
                     NoViableAltException nvae =
                         new NoViableAltException("1050:1: onestar : ( ({...}? ( STAR )? ) | );", 151, 12, input);
 
@@ -15982,7 +15982,7 @@ public class Creole10Parser extends Parser {
                     alt151=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return ;}
+                    if (state.backtracking>0) {state.failed=true; return ;}
                     NoViableAltException nvae =
                         new NoViableAltException("1050:1: onestar : ( ({...}? ( STAR )? ) | );", 151, 13, input);
 
@@ -16001,7 +16001,7 @@ public class Creole10Parser extends Parser {
                     alt151=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return ;}
+                    if (state.backtracking>0) {state.failed=true; return ;}
                     NoViableAltException nvae =
                         new NoViableAltException("1050:1: onestar : ( ({...}? ( STAR )? ) | );", 151, 14, input);
 
@@ -16020,7 +16020,7 @@ public class Creole10Parser extends Parser {
                     alt151=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return ;}
+                    if (state.backtracking>0) {state.failed=true; return ;}
                     NoViableAltException nvae =
                         new NoViableAltException("1050:1: onestar : ( ({...}? ( STAR )? ) | );", 151, 15, input);
 
@@ -16039,7 +16039,7 @@ public class Creole10Parser extends Parser {
                     alt151=2;
                 }
                 else {
-                    if (backtracking>0) {failed=true; return ;}
+                    if (state.backtracking>0) {state.failed=true; return ;}
                     NoViableAltException nvae =
                         new NoViableAltException("1050:1: onestar : ( ({...}? ( STAR )? ) | );", 151, 16, input);
 
@@ -16048,7 +16048,7 @@ public class Creole10Parser extends Parser {
                 }
                 break;
             default:
-                if (backtracking>0) {failed=true; return ;}
+                if (state.backtracking>0) {state.failed=true; return ;}
                 NoViableAltException nvae =
                     new NoViableAltException("1050:1: onestar : ( ({...}? ( STAR )? ) | );", 151, 0, input);
 
@@ -16063,7 +16063,7 @@ public class Creole10Parser extends Parser {
                     // Creole10.g:1051:6: {...}? ( STAR )?
                     {
                     if ( !( input.LA(2) != STAR ) ) {
-                        if (backtracking>0) {failed=true; return ;}
+                        if (state.backtracking>0) {state.failed=true; return ;}
                         throw new FailedPredicateException(input, "onestar", " input.LA(2) != STAR ");
                     }
                     // Creole10.g:1051:32: ( STAR )?
@@ -16077,7 +16077,7 @@ public class Creole10Parser extends Parser {
                         case 1 :
                             // Creole10.g:1051:34: STAR
                             {
-                            match(input,STAR,FOLLOW_STAR_in_onestar4895); if (failed) return ;
+                            match(input,STAR,FOLLOW_STAR_in_onestar4895); if (state.failed) return ;
 
                             }
                             break;
@@ -16120,10 +16120,10 @@ public class Creole10Parser extends Parser {
             // Creole10.g:1055:4: ( ESCAPE c= . )
             // Creole10.g:1055:4: ESCAPE c= .
             {
-            match(input,ESCAPE,FOLLOW_ESCAPE_in_escaped4916); if (failed) return scaped;
+            match(input,ESCAPE,FOLLOW_ESCAPE_in_escaped4916); if (state.failed) return scaped;
             c=(Token)input.LT(1);
-            matchAny(input); if (failed) return scaped;
-            if ( backtracking==0 ) {
+            matchAny(input); if (state.failed) return scaped;
+            if ( state.backtracking==0 ) {
                scaped.setContent(c.getText()) ; 
             }
 
@@ -16156,7 +16156,7 @@ public class Creole10Parser extends Parser {
                 alt153=2;
             }
             else {
-                if (backtracking>0) {failed=true; return ;}
+                if (state.backtracking>0) {state.failed=true; return ;}
                 NoViableAltException nvae =
                     new NoViableAltException("1058:1: paragraph_separator : ( ( newline )+ | EOF );", 153, 0, input);
 
@@ -16184,15 +16184,15 @@ public class Creole10Parser extends Parser {
                     	    {
                     	    pushFollow(FOLLOW_newline_in_paragraph_separator4940);
                     	    newline();
-                    	    _fsp--;
-                    	    if (failed) return ;
+                    	    state._fsp--;
+                    	    if (state.failed) return ;
 
                     	    }
                     	    break;
 
                     	default :
                     	    if ( cnt152 >= 1 ) break loop152;
-                    	    if (backtracking>0) {failed=true; return ;}
+                    	    if (state.backtracking>0) {state.failed=true; return ;}
                                 EarlyExitException eee =
                                     new EarlyExitException(152, input);
                                 throw eee;
@@ -16206,7 +16206,7 @@ public class Creole10Parser extends Parser {
                 case 2 :
                     // Creole10.g:1060:4: EOF
                     {
-                    match(input,EOF,FOLLOW_EOF_in_paragraph_separator4948); if (failed) return ;
+                    match(input,EOF,FOLLOW_EOF_in_paragraph_separator4948); if (state.failed) return ;
 
                     }
                     break;
@@ -16252,8 +16252,8 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_blanks_in_whitespaces4960);
             	    blanks();
-            	    _fsp--;
-            	    if (failed) return ;
+            	    state._fsp--;
+            	    if (state.failed) return ;
 
             	    }
             	    break;
@@ -16262,15 +16262,15 @@ public class Creole10Parser extends Parser {
             	    {
             	    pushFollow(FOLLOW_newline_in_whitespaces4964);
             	    newline();
-            	    _fsp--;
-            	    if (failed) return ;
+            	    state._fsp--;
+            	    if (state.failed) return ;
 
             	    }
             	    break;
 
             	default :
             	    if ( cnt154 >= 1 ) break loop154;
-            	    if (backtracking>0) {failed=true; return ;}
+            	    if (state.backtracking>0) {state.failed=true; return ;}
                         EarlyExitException eee =
                             new EarlyExitException(154, input);
                         throw eee;
@@ -16300,7 +16300,7 @@ public class Creole10Parser extends Parser {
             // Creole10.g:1066:4: ( BLANKS )
             // Creole10.g:1066:4: BLANKS
             {
-            match(input,BLANKS,FOLLOW_BLANKS_in_blanks4977); if (failed) return ;
+            match(input,BLANKS,FOLLOW_BLANKS_in_blanks4977); if (state.failed) return ;
 
             }
 
@@ -16331,7 +16331,7 @@ public class Creole10Parser extends Parser {
                 alt156=2;
             }
             else {
-                if (backtracking>0) {failed=true; return ;}
+                if (state.backtracking>0) {state.failed=true; return ;}
                 NoViableAltException nvae =
                     new NoViableAltException("1068:1: text_lineseparator : ( newline ( blanks )? | EOF );", 156, 0, input);
 
@@ -16343,8 +16343,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_newline_in_text_lineseparator4987);
                     newline();
-                    _fsp--;
-                    if (failed) return ;
+                    state._fsp--;
+                    if (state.failed) return ;
                     // Creole10.g:1069:13: ( blanks )?
                     int alt155=2;
                     int LA155_0 = input.LA(1);
@@ -16358,8 +16358,8 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_blanks_in_text_lineseparator4992);
                             blanks();
-                            _fsp--;
-                            if (failed) return ;
+                            state._fsp--;
+                            if (state.failed) return ;
 
                             }
                             break;
@@ -16372,7 +16372,7 @@ public class Creole10Parser extends Parser {
                 case 2 :
                     // Creole10.g:1070:4: EOF
                     {
-                    match(input,EOF,FOLLOW_EOF_in_text_lineseparator5000); if (failed) return ;
+                    match(input,EOF,FOLLOW_EOF_in_text_lineseparator5000); if (state.failed) return ;
 
                     }
                     break;
@@ -16397,7 +16397,7 @@ public class Creole10Parser extends Parser {
             // Creole10.g:1073:4: ( NEWLINE )
             // Creole10.g:1073:4: NEWLINE
             {
-            match(input,NEWLINE,FOLLOW_NEWLINE_in_newline5010); if (failed) return ;
+            match(input,NEWLINE,FOLLOW_NEWLINE_in_newline5010); if (state.failed) return ;
 
             }
 
@@ -16420,8 +16420,8 @@ public class Creole10Parser extends Parser {
             // Creole10.g:1076:4: ( STAR STAR )
             // Creole10.g:1076:4: STAR STAR
             {
-            match(input,STAR,FOLLOW_STAR_in_bold_markup5020); if (failed) return ;
-            match(input,STAR,FOLLOW_STAR_in_bold_markup5023); if (failed) return ;
+            match(input,STAR,FOLLOW_STAR_in_bold_markup5020); if (state.failed) return ;
+            match(input,STAR,FOLLOW_STAR_in_bold_markup5023); if (state.failed) return ;
 
             }
 
@@ -16444,7 +16444,7 @@ public class Creole10Parser extends Parser {
             // Creole10.g:1079:4: ( ITAL )
             // Creole10.g:1079:4: ITAL
             {
-            match(input,ITAL,FOLLOW_ITAL_in_ital_markup5033); if (failed) return ;
+            match(input,ITAL,FOLLOW_ITAL_in_ital_markup5033); if (state.failed) return ;
 
             }
 
@@ -16467,7 +16467,7 @@ public class Creole10Parser extends Parser {
             // Creole10.g:1082:4: ( EQUAL )
             // Creole10.g:1082:4: EQUAL
             {
-            match(input,EQUAL,FOLLOW_EQUAL_in_heading_markup5043); if (failed) return ;
+            match(input,EQUAL,FOLLOW_EQUAL_in_heading_markup5043); if (state.failed) return ;
 
             }
 
@@ -16495,7 +16495,7 @@ public class Creole10Parser extends Parser {
             // Creole10.g:1085:4: ( POUND )
             // Creole10.g:1085:4: POUND
             {
-            match(input,POUND,FOLLOW_POUND_in_list_ordelem_markup5053); if (failed) return retval;
+            match(input,POUND,FOLLOW_POUND_in_list_ordelem_markup5053); if (state.failed) return retval;
 
             }
 
@@ -16525,7 +16525,7 @@ public class Creole10Parser extends Parser {
             // Creole10.g:1088:4: ( STAR )
             // Creole10.g:1088:4: STAR
             {
-            match(input,STAR,FOLLOW_STAR_in_list_unordelem_markup5063); if (failed) return retval;
+            match(input,STAR,FOLLOW_STAR_in_list_unordelem_markup5063); if (state.failed) return retval;
 
             }
 
@@ -16558,7 +16558,7 @@ public class Creole10Parser extends Parser {
                 alt158=2;
             }
             else {
-                if (backtracking>0) {failed=true; return ;}
+                if (state.backtracking>0) {state.failed=true; return ;}
                 NoViableAltException nvae =
                     new NoViableAltException("1090:1: list_elemseparator : ( newline ( blanks )? | EOF );", 158, 0, input);
 
@@ -16570,8 +16570,8 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_newline_in_list_elemseparator5073);
                     newline();
-                    _fsp--;
-                    if (failed) return ;
+                    state._fsp--;
+                    if (state.failed) return ;
                     // Creole10.g:1091:13: ( blanks )?
                     int alt157=2;
                     int LA157_0 = input.LA(1);
@@ -16585,8 +16585,8 @@ public class Creole10Parser extends Parser {
                             {
                             pushFollow(FOLLOW_blanks_in_list_elemseparator5078);
                             blanks();
-                            _fsp--;
-                            if (failed) return ;
+                            state._fsp--;
+                            if (state.failed) return ;
 
                             }
                             break;
@@ -16599,7 +16599,7 @@ public class Creole10Parser extends Parser {
                 case 2 :
                     // Creole10.g:1092:4: EOF
                     {
-                    match(input,EOF,FOLLOW_EOF_in_list_elemseparator5086); if (failed) return ;
+                    match(input,EOF,FOLLOW_EOF_in_list_elemseparator5086); if (state.failed) return ;
 
                     }
                     break;
@@ -16632,7 +16632,7 @@ public class Creole10Parser extends Parser {
                 alt159=2;
             }
             else {
-                if (backtracking>0) {failed=true; return ;}
+                if (state.backtracking>0) {state.failed=true; return ;}
                 NoViableAltException nvae =
                     new NoViableAltException("1094:1: end_of_list : ( newline | EOF );", 159, 0, input);
 
@@ -16644,15 +16644,15 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_newline_in_end_of_list5096);
                     newline();
-                    _fsp--;
-                    if (failed) return ;
+                    state._fsp--;
+                    if (state.failed) return ;
 
                     }
                     break;
                 case 2 :
                     // Creole10.g:1096:4: EOF
                     {
-                    match(input,EOF,FOLLOW_EOF_in_end_of_list5101); if (failed) return ;
+                    match(input,EOF,FOLLOW_EOF_in_end_of_list5101); if (state.failed) return ;
 
                     }
                     break;
@@ -16677,7 +16677,7 @@ public class Creole10Parser extends Parser {
             // Creole10.g:1099:4: ( PIPE )
             // Creole10.g:1099:4: PIPE
             {
-            match(input,PIPE,FOLLOW_PIPE_in_table_cell_markup5111); if (failed) return ;
+            match(input,PIPE,FOLLOW_PIPE_in_table_cell_markup5111); if (state.failed) return ;
 
             }
 
@@ -16700,8 +16700,8 @@ public class Creole10Parser extends Parser {
             // Creole10.g:1102:4: ( PIPE EQUAL )
             // Creole10.g:1102:4: PIPE EQUAL
             {
-            match(input,PIPE,FOLLOW_PIPE_in_table_headercell_markup5121); if (failed) return ;
-            match(input,EQUAL,FOLLOW_EQUAL_in_table_headercell_markup5124); if (failed) return ;
+            match(input,PIPE,FOLLOW_PIPE_in_table_headercell_markup5121); if (state.failed) return ;
+            match(input,EQUAL,FOLLOW_EQUAL_in_table_headercell_markup5124); if (state.failed) return ;
 
             }
 
@@ -16732,7 +16732,7 @@ public class Creole10Parser extends Parser {
                 alt160=2;
             }
             else {
-                if (backtracking>0) {failed=true; return ;}
+                if (state.backtracking>0) {state.failed=true; return ;}
                 NoViableAltException nvae =
                     new NoViableAltException("1104:1: table_rowseparator : ( newline | EOF );", 160, 0, input);
 
@@ -16744,15 +16744,15 @@ public class Creole10Parser extends Parser {
                     {
                     pushFollow(FOLLOW_newline_in_table_rowseparator5134);
                     newline();
-                    _fsp--;
-                    if (failed) return ;
+                    state._fsp--;
+                    if (state.failed) return ;
 
                     }
                     break;
                 case 2 :
                     // Creole10.g:1106:4: EOF
                     {
-                    match(input,EOF,FOLLOW_EOF_in_table_rowseparator5139); if (failed) return ;
+                    match(input,EOF,FOLLOW_EOF_in_table_rowseparator5139); if (state.failed) return ;
 
                     }
                     break;
@@ -16777,7 +16777,7 @@ public class Creole10Parser extends Parser {
             // Creole10.g:1109:4: ( NOWIKI_OPEN )
             // Creole10.g:1109:4: NOWIKI_OPEN
             {
-            match(input,NOWIKI_OPEN,FOLLOW_NOWIKI_OPEN_in_nowiki_open_markup5149); if (failed) return ;
+            match(input,NOWIKI_OPEN,FOLLOW_NOWIKI_OPEN_in_nowiki_open_markup5149); if (state.failed) return ;
 
             }
 
@@ -16800,7 +16800,7 @@ public class Creole10Parser extends Parser {
             // Creole10.g:1112:4: ( NOWIKI_CLOSE )
             // Creole10.g:1112:4: NOWIKI_CLOSE
             {
-            match(input,NOWIKI_CLOSE,FOLLOW_NOWIKI_CLOSE_in_nowiki_close_markup5159); if (failed) return ;
+            match(input,NOWIKI_CLOSE,FOLLOW_NOWIKI_CLOSE_in_nowiki_close_markup5159); if (state.failed) return ;
 
             }
 
@@ -16823,10 +16823,10 @@ public class Creole10Parser extends Parser {
             // Creole10.g:1115:4: ( DASH DASH DASH DASH )
             // Creole10.g:1115:4: DASH DASH DASH DASH
             {
-            match(input,DASH,FOLLOW_DASH_in_horizontalrule_markup5169); if (failed) return ;
-            match(input,DASH,FOLLOW_DASH_in_horizontalrule_markup5172); if (failed) return ;
-            match(input,DASH,FOLLOW_DASH_in_horizontalrule_markup5175); if (failed) return ;
-            match(input,DASH,FOLLOW_DASH_in_horizontalrule_markup5178); if (failed) return ;
+            match(input,DASH,FOLLOW_DASH_in_horizontalrule_markup5169); if (state.failed) return ;
+            match(input,DASH,FOLLOW_DASH_in_horizontalrule_markup5172); if (state.failed) return ;
+            match(input,DASH,FOLLOW_DASH_in_horizontalrule_markup5175); if (state.failed) return ;
+            match(input,DASH,FOLLOW_DASH_in_horizontalrule_markup5178); if (state.failed) return ;
 
             }
 
@@ -16849,7 +16849,7 @@ public class Creole10Parser extends Parser {
             // Creole10.g:1118:4: ( LINK_OPEN )
             // Creole10.g:1118:4: LINK_OPEN
             {
-            match(input,LINK_OPEN,FOLLOW_LINK_OPEN_in_link_open_markup5188); if (failed) return ;
+            match(input,LINK_OPEN,FOLLOW_LINK_OPEN_in_link_open_markup5188); if (state.failed) return ;
 
             }
 
@@ -16872,7 +16872,7 @@ public class Creole10Parser extends Parser {
             // Creole10.g:1121:4: ( LINK_CLOSE )
             // Creole10.g:1121:4: LINK_CLOSE
             {
-            match(input,LINK_CLOSE,FOLLOW_LINK_CLOSE_in_link_close_markup5198); if (failed) return ;
+            match(input,LINK_CLOSE,FOLLOW_LINK_CLOSE_in_link_close_markup5198); if (state.failed) return ;
 
             }
 
@@ -16895,7 +16895,7 @@ public class Creole10Parser extends Parser {
             // Creole10.g:1124:4: ( PIPE )
             // Creole10.g:1124:4: PIPE
             {
-            match(input,PIPE,FOLLOW_PIPE_in_link_description_markup5208); if (failed) return ;
+            match(input,PIPE,FOLLOW_PIPE_in_link_description_markup5208); if (state.failed) return ;
 
             }
 
@@ -16918,7 +16918,7 @@ public class Creole10Parser extends Parser {
             // Creole10.g:1127:4: ( IMAGE_OPEN )
             // Creole10.g:1127:4: IMAGE_OPEN
             {
-            match(input,IMAGE_OPEN,FOLLOW_IMAGE_OPEN_in_image_open_markup5218); if (failed) return ;
+            match(input,IMAGE_OPEN,FOLLOW_IMAGE_OPEN_in_image_open_markup5218); if (state.failed) return ;
 
             }
 
@@ -16941,7 +16941,7 @@ public class Creole10Parser extends Parser {
             // Creole10.g:1130:4: ( IMAGE_CLOSE )
             // Creole10.g:1130:4: IMAGE_CLOSE
             {
-            match(input,IMAGE_CLOSE,FOLLOW_IMAGE_CLOSE_in_image_close_markup5228); if (failed) return ;
+            match(input,IMAGE_CLOSE,FOLLOW_IMAGE_CLOSE_in_image_close_markup5228); if (state.failed) return ;
 
             }
 
@@ -16964,7 +16964,7 @@ public class Creole10Parser extends Parser {
             // Creole10.g:1133:4: ( PIPE )
             // Creole10.g:1133:4: PIPE
             {
-            match(input,PIPE,FOLLOW_PIPE_in_image_alternative_markup5238); if (failed) return ;
+            match(input,PIPE,FOLLOW_PIPE_in_image_alternative_markup5238); if (state.failed) return ;
 
             }
 
@@ -16987,7 +16987,7 @@ public class Creole10Parser extends Parser {
             // Creole10.g:1136:4: ( EXTENSION )
             // Creole10.g:1136:4: EXTENSION
             {
-            match(input,EXTENSION,FOLLOW_EXTENSION_in_extension_markup5248); if (failed) return ;
+            match(input,EXTENSION,FOLLOW_EXTENSION_in_extension_markup5248); if (state.failed) return ;
 
             }
 
@@ -17010,7 +17010,7 @@ public class Creole10Parser extends Parser {
             // Creole10.g:1139:4: ( FORCED_LINEBREAK )
             // Creole10.g:1139:4: FORCED_LINEBREAK
             {
-            match(input,FORCED_LINEBREAK,FOLLOW_FORCED_LINEBREAK_in_forced_linebreak5258); if (failed) return ;
+            match(input,FORCED_LINEBREAK,FOLLOW_FORCED_LINEBREAK_in_forced_linebreak5258); if (state.failed) return ;
 
             }
 
@@ -17030,13 +17030,13 @@ public class Creole10Parser extends Parser {
         // Creole10.g:199:5: ( NOWIKI_OPEN ~ ( NEWLINE ) )
         // Creole10.g:199:7: NOWIKI_OPEN ~ ( NEWLINE )
         {
-        match(input,NOWIKI_OPEN,FOLLOW_NOWIKI_OPEN_in_synpred1317); if (failed) return ;
+        match(input,NOWIKI_OPEN,FOLLOW_NOWIKI_OPEN_in_synpred1317); if (state.failed) return ;
         if ( (input.LA(1)>=FORCED_END_OF_LINE && input.LA(1)<=WIKI)||(input.LA(1)>=POUND && input.LA(1)<=82) ) {
             input.consume();
-            errorRecovery=false;failed=false;
+            state.errorRecovery=false;state.failed=false;
         }
         else {
-            if (backtracking>0) {failed=true; return ;}
+            if (state.backtracking>0) {state.failed=true; return ;}
             MismatchedSetException mse =
                 new MismatchedSetException(null,input);
             recoverFromMismatchedSet(input,mse,FOLLOW_set_in_synpred1320);    throw mse;
@@ -17048,17 +17048,17 @@ public class Creole10Parser extends Parser {
     // $ANTLR end synpred1
 
     public final boolean synpred1() {
-        backtracking++;
+        state.backtracking++;
         int start = input.mark();
         try {
             synpred1_fragment(); // can never throw exception
         } catch (RecognitionException re) {
             System.err.println("impossible: "+re);
         }
-        boolean success = !failed;
+        boolean success = !state.failed;
         input.rewind(start);
-        backtracking--;
-        failed=false;
+        state.backtracking--;
+        state.failed=false;
         return success;
     }
 

@@ -112,7 +112,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -130,7 +130,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -148,7 +148,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -166,7 +166,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -184,7 +184,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -202,7 +202,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -220,7 +220,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -238,7 +238,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -256,7 +256,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -274,7 +274,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -292,7 +292,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -310,7 +310,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -328,7 +328,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -346,7 +346,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -364,7 +364,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -382,7 +382,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -400,7 +400,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -418,7 +418,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -436,7 +436,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -454,7 +454,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -472,7 +472,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -490,7 +490,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -508,7 +508,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -526,7 +526,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -544,7 +544,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -562,7 +562,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -580,7 +580,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -598,7 +598,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -616,7 +616,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -634,7 +634,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -652,7 +652,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -670,7 +670,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -688,7 +688,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -706,7 +706,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -724,7 +724,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -742,7 +742,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -761,7 +761,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -780,7 +780,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -798,7 +798,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -817,7 +817,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -835,7 +835,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -855,7 +855,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -923,7 +923,7 @@ public class Creole10Lexer extends Lexer {
                     break;
 
             }
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -1011,7 +1011,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -1062,7 +1062,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -1081,7 +1081,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -1100,7 +1100,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -1119,7 +1119,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -1138,7 +1138,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -1158,7 +1158,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -1177,7 +1177,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -1196,7 +1196,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -1215,7 +1215,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -1234,7 +1234,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -1253,7 +1253,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -1271,7 +1271,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -1289,7 +1289,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -1307,7 +1307,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -1325,7 +1325,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -1343,7 +1343,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -1361,7 +1361,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -1380,7 +1380,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -1399,7 +1399,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
@@ -1417,7 +1417,7 @@ public class Creole10Lexer extends Lexer {
 
             }
 
-            this.type = _type;
+            this.state.type = _type;
         }
         finally {
         }
