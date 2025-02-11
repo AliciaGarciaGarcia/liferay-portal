@@ -398,6 +398,13 @@ public class ObjectEntryLocalServiceUtil {
 			groupId, objectDefinitionId, status, start, end);
 	}
 
+	public static int getObjectEntriesByObjectEntryFolderIdCount(
+		long groupId, long objectEntryFolderId) {
+
+		return getService().getObjectEntriesByObjectEntryFolderIdCount(
+			groupId, objectEntryFolderId);
+	}
+
 	/**
 	 * Returns all the object entries matching the UUID and company.
 	 *
