@@ -14,6 +14,7 @@ import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermi
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -74,6 +75,33 @@ public class ObjectEntryFolderServiceImpl
 			getPermissionChecker(), objectEntryFolder, ActionKeys.VIEW);
 
 		return objectEntryFolder;
+	}
+
+	@Override
+	public List<ObjectEntryFolder> getObjectEntryFolders(
+			long companyId, long groupId, long parentObjectEntryFolderId,
+			int start, int end)
+		throws PortalException {
+
+		ModelResourcePermissionUtil.check(
+			_modelResourcePermission, getPermissionChecker(), groupId,
+			parentObjectEntryFolderId, ActionKeys.VIEW);
+
+		return objectEntryFolderLocalService.getObjectEntryFolders(
+			companyId, groupId, parentObjectEntryFolderId, start, end);
+	}
+
+	@Override
+	public int getObjectEntryFoldersCount(
+			long companyId, long groupId, long parentObjectEntryFolderId)
+		throws PortalException {
+
+		ModelResourcePermissionUtil.check(
+			_modelResourcePermission, getPermissionChecker(), groupId,
+			parentObjectEntryFolderId, ActionKeys.VIEW);
+
+		return objectEntryFolderLocalService.getObjectEntryFoldersCount(
+			companyId, groupId, parentObjectEntryFolderId);
 	}
 
 	@Override
