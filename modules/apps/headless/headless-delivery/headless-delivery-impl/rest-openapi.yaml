@@ -3740,6 +3740,20 @@ components:
                         The ID of the object entry folder's parent, if it exists.
                     format: int64
                     type: integer
+                assetLibraryId:
+                    # @review
+                    description:
+                        The ID of the asset library to which this object entry folder is scoped.
+                    format: int64
+                    readOnly: true
+                    type: integer
+                siteId:
+                    # @review
+                    description:
+                        The ID of the site to which this object entry folder is scoped.
+                    format: int64
+                    readOnly: true
+                    type: integer
                 viewableBy:
                     description:
                         A write-only property that specifies the object entry folder's default permissions.
