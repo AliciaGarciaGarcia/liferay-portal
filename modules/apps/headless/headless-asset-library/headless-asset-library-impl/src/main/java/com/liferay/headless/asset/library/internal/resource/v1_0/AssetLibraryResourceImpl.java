@@ -16,17 +16,25 @@ import com.liferay.headless.asset.library.dto.v1_0.AssetLibrary;
 import com.liferay.headless.asset.library.resource.v1_0.AssetLibraryResource;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
+import com.liferay.portal.kernel.service.GroupService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
+import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.comparator.GroupNameComparator;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
 import com.liferay.portal.vulcan.dto.converter.DTOConverterRegistry;
 import com.liferay.portal.vulcan.dto.converter.DefaultDTOConverterContext;
+import com.liferay.portal.vulcan.pagination.Page;
+import com.liferay.portal.vulcan.pagination.Pagination;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -83,7 +91,44 @@ public class AssetLibraryResourceImpl extends BaseAssetLibraryResourceImpl {
 	}
 
 	@Override
+	public Page<AssetLibrary> getAssetLibrariesPage(
+			String keywords, Pagination pagination, Sort[] sorts)
+		throws Exception {
+
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-32649")) {
+			throw new UnsupportedOperationException();
+		}
+
+		return Page.of(
+			transform(
+				_groupService.search(
+					contextCompany.getCompanyId(),
+					new long[] {
+						_portal.getClassNameId(DepotEntry.class.getName())
+					},
+					null, _getParams(), pagination.getStartPosition(),
+					pagination.getEndPosition(), new GroupNameComparator(true)),
+				group -> _assetLibraryDTOConverter.toDTO(
+					new DefaultDTOConverterContext(
+						contextAcceptLanguage.isAcceptAllLanguages(),
+						new HashMap<>(), _dtoConverterRegistry,
+						group.getGroupId(),
+						contextAcceptLanguage.getPreferredLocale(),
+						contextUriInfo, contextUser),
+					_depotEntryService.getGroupDepotEntry(group.getGroupId()))),
+			pagination,
+			_groupService.searchCount(
+				contextCompany.getCompanyId(),
+				new long[] {_portal.getClassNameId(DepotEntry.class.getName())},
+				null, _getParams()));
+	}
+
+	@Override
 	public AssetLibrary getAssetLibrary(Long assetLibraryId) throws Exception {
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-32649")) {
+			throw new UnsupportedOperationException();
+		}
+
 		return getAssetLibraryBySite(assetLibraryId);
 	}
 
@@ -100,6 +145,10 @@ public class AssetLibraryResourceImpl extends BaseAssetLibraryResourceImpl {
 	public AssetLibrary patchAssetLibrary(
 			Long assetLibraryId, AssetLibrary assetLibrary)
 		throws Exception {
+
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-32649")) {
+			throw new UnsupportedOperationException();
+		}
 
 		return patchAssetLibraryBySite(assetLibraryId, assetLibrary);
 	}
@@ -207,6 +256,16 @@ public class AssetLibraryResourceImpl extends BaseAssetLibraryResourceImpl {
 		return getAssetLibrary(assetLibraryId);
 	}
 
+	private LinkedHashMap<String, Object> _getParams() {
+		return LinkedHashMapBuilder.<String, Object>put(
+			"actionId", ActionKeys.VIEW
+		).put(
+			"active", Boolean.TRUE
+		).put(
+			"site", Boolean.FALSE
+		).build();
+	}
+
 	private ServiceContext _getServiceContext() throws Exception {
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			DepotEntry.class.getName(), contextHttpServletRequest);
@@ -275,5 +334,11 @@ public class AssetLibraryResourceImpl extends BaseAssetLibraryResourceImpl {
 
 	@Reference
 	private DTOConverterRegistry _dtoConverterRegistry;
+
+	@Reference
+	private GroupService _groupService;
+
+	@Reference
+	private Portal _portal;
 
 }
