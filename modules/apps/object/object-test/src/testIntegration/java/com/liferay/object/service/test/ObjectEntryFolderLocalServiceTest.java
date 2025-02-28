@@ -251,7 +251,8 @@ public class ObjectEntryFolderLocalServiceTest {
 					TestPropsValues.getUserId(),
 					objectEntryFolder.getObjectEntryFolderId(),
 					objectEntryFolder.getParentObjectEntryFolderId(),
-					objectEntryFolder.getLabelMap(), name);
+					objectEntryFolder.getLabelMap(), name,
+					ServiceContextTestUtil.getServiceContext());
 			});
 
 		AssertUtils.assertFailure(
@@ -267,7 +268,8 @@ public class ObjectEntryFolderLocalServiceTest {
 					TestPropsValues.getUserId(),
 					objectEntryFolder.getObjectEntryFolderId(),
 					objectEntryFolder.getParentObjectEntryFolderId(),
-					objectEntryFolder.getLabelMap(), null);
+					objectEntryFolder.getLabelMap(), null,
+					ServiceContextTestUtil.getServiceContext());
 			});
 		AssertUtils.assertFailure(
 			ObjectEntryFolderScopeException.class,
@@ -294,7 +296,8 @@ public class ObjectEntryFolderLocalServiceTest {
 					objectEntryFolder.getObjectEntryFolderId(),
 					parentObjectEntryFolder.getObjectEntryFolderId(),
 					objectEntryFolder.getLabelMap(),
-					objectEntryFolder.getName());
+					objectEntryFolder.getName(),
+					ServiceContextTestUtil.getServiceContext());
 			});
 
 		ObjectEntryFolder objectEntryFolder1 = _addObjectEntryFolder(
@@ -312,7 +315,8 @@ public class ObjectEntryFolderLocalServiceTest {
 				objectEntryFolder1.getObjectEntryFolderId(),
 				ObjectEntryFolderConstants.
 					PARENT_OBJECT_ENTRY_FOLDER_ID_DEFAULT,
-				null, objectEntryFolder1.getName());
+				null, objectEntryFolder1.getName(),
+				ServiceContextTestUtil.getServiceContext());
 
 		AssertUtils.assertEquals(
 			HashMapBuilder.put(
