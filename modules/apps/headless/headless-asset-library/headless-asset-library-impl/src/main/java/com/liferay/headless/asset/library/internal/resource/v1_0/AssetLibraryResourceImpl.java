@@ -24,10 +24,12 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.service.UserGroupService;
 import com.liferay.portal.kernel.service.UserService;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.comparator.GroupNameComparator;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
 import com.liferay.portal.vulcan.dto.converter.DTOConverterRegistry;
 import com.liferay.portal.vulcan.dto.converter.DefaultDTOConverterContext;
@@ -130,9 +132,10 @@ public class AssetLibraryResourceImpl extends BaseAssetLibraryResourceImpl {
 			throw new UnsupportedOperationException();
 		}
 
-		OrderByComparator<Group> assetLibraryOrderByComparator = null;
+		OrderByComparator<Group> assetLibraryOrderByComparator =
+			new GroupNameComparator(true);
 
-		if (sorts != null) {
+		if (ArrayUtil.isNotEmpty(sorts)) {
 			assetLibraryOrderByComparator = new AssetLibraryOrderByComparator<>(
 				contextAcceptLanguage.getPreferredLocale(), sorts);
 		}
