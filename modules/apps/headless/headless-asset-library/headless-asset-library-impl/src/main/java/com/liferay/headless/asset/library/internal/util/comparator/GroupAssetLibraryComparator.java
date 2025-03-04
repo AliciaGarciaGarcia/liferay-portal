@@ -23,9 +23,9 @@ import java.util.Objects;
 /**
  * @author Alicia García
  */
-public class AssetLibraryOrderByComparator<T> extends OrderByComparator<T> {
+public class GroupAssetLibraryComparator<T> extends OrderByComparator<T> {
 
-	public AssetLibraryOrderByComparator(Locale locale, Sort[] sorts) {
+	public GroupAssetLibraryComparator(Locale locale, Sort[] sorts) {
 		List<Object> columns = new ArrayList<>();
 
 		for (Sort sort : sorts) {

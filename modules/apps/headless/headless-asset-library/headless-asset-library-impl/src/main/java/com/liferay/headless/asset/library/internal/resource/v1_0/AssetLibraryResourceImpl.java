@@ -13,7 +13,7 @@ import com.liferay.depot.service.DepotAppCustomizationLocalService;
 import com.liferay.depot.service.DepotEntryGroupRelService;
 import com.liferay.depot.service.DepotEntryService;
 import com.liferay.headless.asset.library.dto.v1_0.AssetLibrary;
-import com.liferay.headless.asset.library.internal.util.comparator.AssetLibraryOrderByComparator;
+import com.liferay.headless.asset.library.internal.util.comparator.GroupAssetLibraryComparator;
 import com.liferay.headless.asset.library.resource.v1_0.AssetLibraryResource;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.model.Group;
@@ -132,11 +132,11 @@ public class AssetLibraryResourceImpl extends BaseAssetLibraryResourceImpl {
 			throw new UnsupportedOperationException();
 		}
 
-		OrderByComparator<Group> assetLibraryOrderByComparator =
+		OrderByComparator<Group> groupOrderByComparator =
 			new GroupNameComparator(true);
 
 		if (ArrayUtil.isNotEmpty(sorts)) {
-			assetLibraryOrderByComparator = new AssetLibraryOrderByComparator<>(
+			groupOrderByComparator = new GroupAssetLibraryComparator<>(
 				contextAcceptLanguage.getPreferredLocale(), sorts);
 		}
 
@@ -148,7 +148,7 @@ public class AssetLibraryResourceImpl extends BaseAssetLibraryResourceImpl {
 						_portal.getClassNameId(DepotEntry.class.getName())
 					},
 					keywords, _getParams(), pagination.getStartPosition(),
-					pagination.getEndPosition(), assetLibraryOrderByComparator),
+					pagination.getEndPosition(), groupOrderByComparator),
 				group -> _assetLibraryDTOConverter.toDTO(
 					new DefaultDTOConverterContext(
 						contextAcceptLanguage.isAcceptAllLanguages(),
