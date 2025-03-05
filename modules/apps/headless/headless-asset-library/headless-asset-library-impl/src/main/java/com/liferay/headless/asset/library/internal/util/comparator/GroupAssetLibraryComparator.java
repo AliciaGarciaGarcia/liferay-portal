@@ -15,8 +15,6 @@ import com.liferay.portal.kernel.util.Validator;
 
 import java.text.Collator;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -26,27 +24,14 @@ import java.util.Objects;
 public class GroupAssetLibraryComparator<T> extends OrderByComparator<T> {
 
 	public GroupAssetLibraryComparator(Locale locale, Sort[] sorts) {
-		List<Object> columns = new ArrayList<>();
-
-		for (Sort sort : sorts) {
-			columns.add(sort.getFieldName());
-			columns.add(!sort.isReverse());
-		}
-
-		if (columns.isEmpty() || ((columns.size() % 2) != 0)) {
-			throw new IllegalArgumentException(
-				"Columns length is not an even number");
-		}
-
 		_locale = locale;
-
-		_columns = columns;
+		_sorts = sorts;
 	}
 
 	@Override
 	public int compare(T object1, T object2) {
-		for (int i = 0; i < _columns.size(); i += 2) {
-			String columnName = String.valueOf(_columns.get(i));
+		for (Sort sort : _sorts) {
+			String columnName = String.valueOf(sort.getFieldName());
 
 			if (Objects.equals(columnName, "assetLibraryKey")) {
 				columnName = "groupKey";
@@ -105,8 +90,8 @@ public class GroupAssetLibraryComparator<T> extends OrderByComparator<T> {
 				continue;
 			}
 
-			boolean columnAscending = Boolean.valueOf(
-				String.valueOf(_columns.get(i + 1)));
+			boolean columnAscending = Boolean.parseBoolean(
+				String.valueOf(!sort.isReverse()));
 
 			if (columnAscending) {
 				return value;
@@ -118,7 +103,7 @@ public class GroupAssetLibraryComparator<T> extends OrderByComparator<T> {
 		return 0;
 	}
 
-	private final List<Object> _columns;
 	private final Locale _locale;
+	private final Sort[] _sorts;
 
 }
