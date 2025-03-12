@@ -284,7 +284,8 @@ public abstract class BaseAssetLibraryResourceTestCase {
 			randomPatchAssetLibrary, expectedPatchAssetLibrary);
 
 		AssetLibrary getAssetLibrary =
-			assetLibraryResource.getAssetLibraryBySite(null);
+			assetLibraryResource.getAssetLibraryBySite(
+				patchAssetLibrary.getSiteId());
 
 		assertEquals(expectedPatchAssetLibrary, getAssetLibrary);
 		assertValid(getAssetLibrary);

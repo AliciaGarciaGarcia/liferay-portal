@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-package com.liferay.headless.delivery.dto.v1_0;
+package com.liferay.object.entry.folder.rest.dto.v1_0;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFilter;
@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import com.liferay.headless.delivery.dto.v1_0.Creator;
 import com.liferay.petra.function.UnsafeSupplier;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -41,7 +42,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * @author Javier Gamarra
+ * @author Alicia García
  * @generated
  */
 @Generated("")
@@ -111,51 +112,6 @@ public class ObjectEntryFolder implements Serializable {
 
 	@JsonIgnore
 	private Supplier<Map<String, Map<String, String>>> _actionsSupplier;
-
-	@Schema(
-		description = "The key of the asset library to which the object entry folder is scoped."
-	)
-	public String getAssetLibraryKey() {
-		if (_assetLibraryKeySupplier != null) {
-			assetLibraryKey = _assetLibraryKeySupplier.get();
-
-			_assetLibraryKeySupplier = null;
-		}
-
-		return assetLibraryKey;
-	}
-
-	public void setAssetLibraryKey(String assetLibraryKey) {
-		this.assetLibraryKey = assetLibraryKey;
-
-		_assetLibraryKeySupplier = null;
-	}
-
-	@JsonIgnore
-	public void setAssetLibraryKey(
-		UnsafeSupplier<String, Exception> assetLibraryKeyUnsafeSupplier) {
-
-		_assetLibraryKeySupplier = () -> {
-			try {
-				return assetLibraryKeyUnsafeSupplier.get();
-			}
-			catch (RuntimeException runtimeException) {
-				throw runtimeException;
-			}
-			catch (Exception exception) {
-				throw new RuntimeException(exception);
-			}
-		};
-	}
-
-	@GraphQLField(
-		description = "The key of the asset library to which the object entry folder is scoped."
-	)
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	protected String assetLibraryKey;
-
-	@JsonIgnore
-	private Supplier<String> _assetLibraryKeySupplier;
 
 	@Schema(description = "The object entry folder's creator.")
 	@Valid
@@ -488,101 +444,6 @@ public class ObjectEntryFolder implements Serializable {
 	private Supplier<String> _nameSupplier;
 
 	@Schema(
-		description = "The number of object entries in this object entry folder."
-	)
-	public Integer getNumberOfObjectEntries() {
-		if (_numberOfObjectEntriesSupplier != null) {
-			numberOfObjectEntries = _numberOfObjectEntriesSupplier.get();
-
-			_numberOfObjectEntriesSupplier = null;
-		}
-
-		return numberOfObjectEntries;
-	}
-
-	public void setNumberOfObjectEntries(Integer numberOfObjectEntries) {
-		this.numberOfObjectEntries = numberOfObjectEntries;
-
-		_numberOfObjectEntriesSupplier = null;
-	}
-
-	@JsonIgnore
-	public void setNumberOfObjectEntries(
-		UnsafeSupplier<Integer, Exception>
-			numberOfObjectEntriesUnsafeSupplier) {
-
-		_numberOfObjectEntriesSupplier = () -> {
-			try {
-				return numberOfObjectEntriesUnsafeSupplier.get();
-			}
-			catch (RuntimeException runtimeException) {
-				throw runtimeException;
-			}
-			catch (Exception exception) {
-				throw new RuntimeException(exception);
-			}
-		};
-	}
-
-	@GraphQLField(
-		description = "The number of object entries in this object entry folder."
-	)
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	protected Integer numberOfObjectEntries;
-
-	@JsonIgnore
-	private Supplier<Integer> _numberOfObjectEntriesSupplier;
-
-	@Schema(
-		description = "The number of this object entry folder's child object entry folders."
-	)
-	public Integer getNumberOfObjectEntryFolders() {
-		if (_numberOfObjectEntryFoldersSupplier != null) {
-			numberOfObjectEntryFolders =
-				_numberOfObjectEntryFoldersSupplier.get();
-
-			_numberOfObjectEntryFoldersSupplier = null;
-		}
-
-		return numberOfObjectEntryFolders;
-	}
-
-	public void setNumberOfObjectEntryFolders(
-		Integer numberOfObjectEntryFolders) {
-
-		this.numberOfObjectEntryFolders = numberOfObjectEntryFolders;
-
-		_numberOfObjectEntryFoldersSupplier = null;
-	}
-
-	@JsonIgnore
-	public void setNumberOfObjectEntryFolders(
-		UnsafeSupplier<Integer, Exception>
-			numberOfObjectEntryFoldersUnsafeSupplier) {
-
-		_numberOfObjectEntryFoldersSupplier = () -> {
-			try {
-				return numberOfObjectEntryFoldersUnsafeSupplier.get();
-			}
-			catch (RuntimeException runtimeException) {
-				throw runtimeException;
-			}
-			catch (Exception exception) {
-				throw new RuntimeException(exception);
-			}
-		};
-	}
-
-	@GraphQLField(
-		description = "The number of this object entry folder's child object entry folders."
-	)
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	protected Integer numberOfObjectEntryFolders;
-
-	@JsonIgnore
-	private Supplier<Integer> _numberOfObjectEntryFoldersSupplier;
-
-	@Schema(
 		description = "The ID of the object entry folder's parent, if it exists."
 	)
 	public Long getParentObjectEntryFolderId() {
@@ -628,6 +489,47 @@ public class ObjectEntryFolder implements Serializable {
 
 	@JsonIgnore
 	private Supplier<Long> _parentObjectEntryFolderIdSupplier;
+
+	@Schema(description = "The scope key of the object entry folder.")
+	public String getScopeKey() {
+		if (_scopeKeySupplier != null) {
+			scopeKey = _scopeKeySupplier.get();
+
+			_scopeKeySupplier = null;
+		}
+
+		return scopeKey;
+	}
+
+	public void setScopeKey(String scopeKey) {
+		this.scopeKey = scopeKey;
+
+		_scopeKeySupplier = null;
+	}
+
+	@JsonIgnore
+	public void setScopeKey(
+		UnsafeSupplier<String, Exception> scopeKeyUnsafeSupplier) {
+
+		_scopeKeySupplier = () -> {
+			try {
+				return scopeKeyUnsafeSupplier.get();
+			}
+			catch (RuntimeException runtimeException) {
+				throw runtimeException;
+			}
+			catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
+		};
+	}
+
+	@GraphQLField(description = "The scope key of the object entry folder.")
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	protected String scopeKey;
+
+	@JsonIgnore
+	private Supplier<String> _scopeKeySupplier;
 
 	@JsonGetter("viewableBy")
 	@Schema(
@@ -729,22 +631,6 @@ public class ObjectEntryFolder implements Serializable {
 			sb.append(_toJSON(actions));
 		}
 
-		String assetLibraryKey = getAssetLibraryKey();
-
-		if (assetLibraryKey != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"assetLibraryKey\": ");
-
-			sb.append("\"");
-
-			sb.append(_escape(assetLibraryKey));
-
-			sb.append("\"");
-		}
-
 		Creator creator = getCreator();
 
 		if (creator != null) {
@@ -754,7 +640,7 @@ public class ObjectEntryFolder implements Serializable {
 
 			sb.append("\"creator\": ");
 
-			sb.append(String.valueOf(creator));
+			sb.append(creator);
 		}
 
 		Date dateCreated = getDateCreated();
@@ -861,30 +747,6 @@ public class ObjectEntryFolder implements Serializable {
 			sb.append("\"");
 		}
 
-		Integer numberOfObjectEntries = getNumberOfObjectEntries();
-
-		if (numberOfObjectEntries != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"numberOfObjectEntries\": ");
-
-			sb.append(numberOfObjectEntries);
-		}
-
-		Integer numberOfObjectEntryFolders = getNumberOfObjectEntryFolders();
-
-		if (numberOfObjectEntryFolders != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"numberOfObjectEntryFolders\": ");
-
-			sb.append(numberOfObjectEntryFolders);
-		}
-
 		Long parentObjectEntryFolderId = getParentObjectEntryFolderId();
 
 		if (parentObjectEntryFolderId != null) {
@@ -895,6 +757,22 @@ public class ObjectEntryFolder implements Serializable {
 			sb.append("\"parentObjectEntryFolderId\": ");
 
 			sb.append(parentObjectEntryFolderId);
+		}
+
+		String scopeKey = getScopeKey();
+
+		if (scopeKey != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"scopeKey\": ");
+
+			sb.append("\"");
+
+			sb.append(_escape(scopeKey));
+
+			sb.append("\"");
 		}
 
 		ViewableBy viewableBy = getViewableBy();
@@ -920,7 +798,7 @@ public class ObjectEntryFolder implements Serializable {
 
 	@Schema(
 		accessMode = Schema.AccessMode.READ_ONLY,
-		defaultValue = "com.liferay.headless.delivery.dto.v1_0.ObjectEntryFolder",
+		defaultValue = "com.liferay.object.entry.folder.rest.dto.v1_0.ObjectEntryFolder",
 		name = "x-class-name"
 	)
 	public String xClassName;

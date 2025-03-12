@@ -197,6 +197,7 @@ paths:
             tags: ["ObjectEntryFolder"]
     "/scopes/{scopeKey}/object-entry-folder/by-external-reference-code/{externalReferenceCode}":
         delete:
+            operationId: deleteScopeScopeKeyObjectEntryFolderByExternalReferenceCode
             parameters:
                 - in: path
                   name: scopeKey
@@ -215,6 +216,7 @@ paths:
                         application/xml: {}
             tags: ["ObjectEntryFolder"]
         get:
+            operationId: getScopeScopeKeyObjectEntryFolderByExternalReferenceCode
             parameters:
                 - in: path
                   name: scopeKey
@@ -249,6 +251,7 @@ paths:
                                 $ref: "#/components/schemas/ObjectEntryFolder"
             tags: ["ObjectEntryFolder"]
         patch:
+            operationId: patchScopeScopeKeyObjectEntryFolderByExternalReferenceCode
             parameters:
                 - in: path
                   name: scopeKey
@@ -279,6 +282,7 @@ paths:
                                 $ref: "#/components/schemas/ObjectEntryFolder"
             tags: ["ObjectEntryFolder"]
         put:
+            operationId: putScopeScopeKeyObjectEntryFolderByExternalReferenceCode
             parameters:
                 - in: path
                   name: scopeKey
