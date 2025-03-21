@@ -22,6 +22,10 @@ public class ObjectEntryThreadLocal {
 		validatedObjectEntryIds.add(objectEntryId);
 	}
 
+	public static Long getObjectEntryFolderId() {
+		return _objectEntryFolderId.get();
+	}
+
 	public static boolean isDisassociateRelatedModels() {
 		return _disassociateRelatedModels.get();
 	}
@@ -51,6 +55,12 @@ public class ObjectEntryThreadLocal {
 			disassociateRelatedModels);
 	}
 
+	public static SafeCloseable setObjectEntryFolderIdWithSafeCloseable(
+		Long objectEntryFolderId) {
+
+		return _objectEntryFolderId.setWithSafeCloseable(objectEntryFolderId);
+	}
+
 	public static void setSkipObjectEntryResourcePermission(
 		boolean skipObjectEntryResourcePermission) {
 
@@ -74,6 +84,9 @@ public class ObjectEntryThreadLocal {
 		_disassociateRelatedModels = new CentralizedThreadLocal<>(
 			ObjectEntryThreadLocal.class + "._disassociateRelatedModels",
 			() -> false);
+	private static final CentralizedThreadLocal<Long> _objectEntryFolderId =
+		new CentralizedThreadLocal<>(
+			ObjectEntryThreadLocal.class + "._objectEntryFolderId", () -> null);
 	private static final ThreadLocal<Boolean>
 		_skipObjectEntryResourcePermission = new CentralizedThreadLocal<>(
 			ObjectEntryThreadLocal.class +
