@@ -31,7 +31,7 @@ public class AssetCategoryAssetDisplayPageFriendlyURLResolver
 
 	@Override
 	public boolean isURLSeparatorConfigurable() {
-		return true;
+		return false;
 	}
 
 }

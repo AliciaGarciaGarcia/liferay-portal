@@ -41,7 +41,7 @@ public class DepotEntryAssetDisplayPageFriendlyURLResolver
 
 	@Override
 	public boolean isURLSeparatorConfigurable() {
-		return true;
+		return false;
 	}
 
 	@Override

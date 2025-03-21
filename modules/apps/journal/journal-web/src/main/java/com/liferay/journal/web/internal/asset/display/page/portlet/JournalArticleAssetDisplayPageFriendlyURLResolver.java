@@ -31,7 +31,7 @@ public class JournalArticleAssetDisplayPageFriendlyURLResolver
 
 	@Override
 	public boolean isURLSeparatorConfigurable() {
-		return true;
+		return false;
 	}
 
 }

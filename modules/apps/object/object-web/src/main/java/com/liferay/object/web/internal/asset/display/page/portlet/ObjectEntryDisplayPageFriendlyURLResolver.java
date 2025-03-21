@@ -41,7 +41,7 @@ public class ObjectEntryDisplayPageFriendlyURLResolver
 
 	@Override
 	public boolean isURLSeparatorConfigurable() {
-		return true;
+		return false;
 	}
 
 	@Override

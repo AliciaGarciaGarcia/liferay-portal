@@ -70,7 +70,7 @@ public class CustomAssetDisplayPageFriendlyURLResolver
 
 	@Override
 	public boolean isURLSeparatorConfigurable() {
-		return true;
+		return false;
 	}
 
 	@Override

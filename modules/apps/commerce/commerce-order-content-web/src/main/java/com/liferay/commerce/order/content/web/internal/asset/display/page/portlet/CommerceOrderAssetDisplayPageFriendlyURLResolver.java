@@ -132,7 +132,7 @@ public class CommerceOrderAssetDisplayPageFriendlyURLResolver
 
 	@Override
 	public boolean isURLSeparatorConfigurable() {
-		return true;
+		return false;
 	}
 
 	private LayoutDisplayPageObjectProvider<?>
