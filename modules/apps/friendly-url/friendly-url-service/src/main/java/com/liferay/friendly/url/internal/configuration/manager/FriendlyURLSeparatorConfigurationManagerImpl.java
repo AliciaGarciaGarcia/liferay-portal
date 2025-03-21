@@ -17,7 +17,10 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Mikel Lorza
  */
-@Component(service = FriendlyURLSeparatorConfigurationManager.class)
+@Component(
+	configurationPid = "com.liferay.friendly.url.configuration.FriendlyURLSeparatorCompanyConfiguration",
+	service = FriendlyURLSeparatorConfigurationManager.class
+)
 public class FriendlyURLSeparatorConfigurationManagerImpl
 	implements FriendlyURLSeparatorConfigurationManager {
 
