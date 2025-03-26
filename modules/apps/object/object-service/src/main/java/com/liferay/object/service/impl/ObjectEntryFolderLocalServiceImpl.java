@@ -181,6 +181,12 @@ public class ObjectEntryFolderLocalServiceImpl
 			objectEntryFolder.getGroupId(), objectEntryFolder.getCompanyId(),
 			objectEntryFolder.getTreePath() + "%");
 
+		_workflowDefinitionLinkLocalService.deleteWorkflowDefinitionLink(
+			objectEntryFolder.getCompanyId(), objectEntryFolder.getGroupId(),
+			ObjectEntryFolder.class.getName(),
+			objectEntryFolder.getObjectEntryFolderId(),
+			ObjectDefinitionConstants.OBJECT_DEFINITION_ID_ALL);
+
 		return objectEntryFolder;
 	}
 
