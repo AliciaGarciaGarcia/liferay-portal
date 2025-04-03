@@ -6,6 +6,7 @@
 package com.liferay.journal.web.internal.portlet.action;
 
 import com.liferay.document.library.kernel.service.DLAppService;
+import com.liferay.document.library.kernel.util.DLUtil;
 import com.liferay.document.library.kernel.util.DLValidator;
 import com.liferay.item.selector.ItemSelectorUploadResponseHandler;
 import com.liferay.journal.configuration.JournalFileUploadsConfiguration;
@@ -13,17 +14,21 @@ import com.liferay.journal.constants.JournalConstants;
 import com.liferay.journal.constants.JournalPortletKeys;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalFolder;
+import com.liferay.journal.service.JournalArticleLocalService;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.exception.ImageTypeException;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.portletfilerepository.PortletFileRepository;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
@@ -105,6 +110,9 @@ public class UploadImageMVCActionCommand extends BaseMVCActionCommand {
 	private ItemSelectorUploadResponseHandler
 		_itemSelectorUploadResponseHandler;
 
+	@Reference
+	private JournalArticleLocalService _journalArticleLocalService;
+
 	@Reference(
 		target = "(model.class.name=com.liferay.journal.model.JournalArticle)"
 	)
@@ -119,6 +127,9 @@ public class UploadImageMVCActionCommand extends BaseMVCActionCommand {
 	)
 	private ModelResourcePermission<JournalFolder>
 		_journalFolderModelResourcePermission;
+
+	@Reference
+	private PortletFileRepository _portletFileRepository;
 
 	@Reference(
 		target = "(resource.name=" + JournalConstants.RESOURCE_NAME + ")"
@@ -171,7 +182,7 @@ public class UploadImageMVCActionCommand extends BaseMVCActionCommand {
 						uploadPortletRequest.getFileAsStream(
 							"imageSelectorFileName")) {
 
-					return _addTempFileEntry(
+					return _addFileEntry(
 						fileName, inputStream, "imageSelectorFileName",
 						uploadPortletRequest, themeDisplay);
 				}
@@ -180,7 +191,7 @@ public class UploadImageMVCActionCommand extends BaseMVCActionCommand {
 			return _editImageFileEntry(uploadPortletRequest, themeDisplay);
 		}
 
-		private FileEntry _addTempFileEntry(
+		private FileEntry _addFileEntry(
 				String fileName, InputStream inputStream, String parameterName,
 				UploadPortletRequest uploadPortletRequest,
 				ThemeDisplay themeDisplay)
@@ -197,9 +208,31 @@ public class UploadImageMVCActionCommand extends BaseMVCActionCommand {
 			String uniqueFileName = _uniqueFileNameProvider.provide(
 				fileName, curFileName -> _exists(themeDisplay, curFileName));
 
-			return TempFileEntryUtil.addTempFileEntry(
-				themeDisplay.getScopeGroupId(), themeDisplay.getUserId(),
-				_tempFolderName, uniqueFileName, inputStream, contentType);
+			JournalArticle journalArticle =
+				_journalArticleLocalService.fetchLatestArticle(
+					ParamUtil.getLong(uploadPortletRequest, "resourcePrimKey"));
+
+			if (!FeatureFlagManagerUtil.isEnabled(
+					themeDisplay.getCompanyId(), "LPD-11228") ||
+				(journalArticle == null)) {
+
+				return TempFileEntryUtil.addTempFileEntry(
+					themeDisplay.getScopeGroupId(), themeDisplay.getUserId(),
+					_tempFolderName, uniqueFileName, inputStream, contentType);
+			}
+
+			Folder folder = journalArticle.addImagesFolder();
+
+			String fileEntryName = DLUtil.getUniqueFileName(
+				folder.getGroupId(), folder.getFolderId(), uniqueFileName,
+				false);
+
+			return _portletFileRepository.addPortletFileEntry(
+				null, journalArticle.getGroupId(), themeDisplay.getUserId(),
+				JournalArticle.class.getName(),
+				journalArticle.getResourcePrimKey(),
+				JournalConstants.SERVICE_NAME, folder.getFolderId(),
+				inputStream, fileEntryName, contentType, false);
 		}
 
 		private FileEntry _editImageFileEntry(
@@ -215,7 +248,7 @@ public class UploadImageMVCActionCommand extends BaseMVCActionCommand {
 
 				FileEntry fileEntry = _dlAppService.getFileEntry(fileEntryId);
 
-				return _addTempFileEntry(
+				return _addFileEntry(
 					fileEntry.getFileName(), inputStream, "imageBlob",
 					uploadPortletRequest, themeDisplay);
 			}
