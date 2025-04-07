@@ -392,12 +392,13 @@ public class ObjectEntryFolderLocalServiceUtil {
 	public static ObjectEntryFolder updateObjectEntryFolder(
 			long userId, long objectEntryFolderId,
 			long parentObjectEntryFolderId,
-			Map<java.util.Locale, String> labelMap, String name)
+			Map<java.util.Locale, String> labelMap, String name,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
 		return getService().updateObjectEntryFolder(
 			userId, objectEntryFolderId, parentObjectEntryFolderId, labelMap,
-			name);
+			name, serviceContext);
 	}
 
 	/**
