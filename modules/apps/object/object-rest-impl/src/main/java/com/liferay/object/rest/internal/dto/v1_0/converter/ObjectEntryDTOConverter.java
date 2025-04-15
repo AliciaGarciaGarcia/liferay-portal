@@ -633,20 +633,31 @@ public class ObjectEntryDTOConverter
 				}));
 
 		fileEntry.setId(dlFileEntry::getFileEntryId);
+
+		com.liferay.portal.kernel.repository.model.FileEntry
+			persistedFileEntry = _dlAppService.getFileEntry(
+				dlFileEntry.getFileEntryId());
+
 		fileEntry.setLink(
 			() -> LinkUtil.toLink(
-				_dlAppService, dlFileEntry, _dlURLHelper,
+				dlFileEntry.getFileName(),
 				objectDefinition.getExternalReferenceCode(),
-				objectEntry.getExternalReferenceCode(), _portal));
+				objectEntry.getExternalReferenceCode(), _portal,
+				_dlURLHelper.getDownloadURL(
+					persistedFileEntry, persistedFileEntry.getFileVersion(),
+					null, StringPool.BLANK)));
+
 		fileEntry.setName(dlFileEntry::getFileName);
 		fileEntry.setPreviewLink(
 			() -> NestedFieldsSupplier.supply(
 				objectFieldName + ".previewLink",
-				fieldName -> LinkUtil.toPreviewLink(
-					_dlAppService, dlFileEntry, _dlURLHelper,
+				fieldName -> LinkUtil.toLink(
+					dlFileEntry.getFileName(),
 					objectDefinition.getExternalReferenceCode(),
-					objectEntry.getExternalReferenceCode(), _portal))
-		);
+					objectEntry.getExternalReferenceCode(), _portal,
+					_dlURLHelper.getPreviewURL(
+						persistedFileEntry, persistedFileEntry.getFileVersion(),
+						null, StringPool.BLANK, false, false))));
 		fileEntry.setScope(
 			() -> {
 				if ((objectEntry.getGroupId() == dlFileEntry.getGroupId()) &&

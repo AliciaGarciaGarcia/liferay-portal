@@ -98,6 +98,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
@@ -789,9 +790,14 @@ public class BatchEngineBrokerTest {
 
 		String template = StreamUtil.toString(_getInputStream(templateName));
 
+		FileEntry fileEntry = _dlAppService.getFileEntry(
+			dlFileEntry.getFileEntryId());
+
 		Link link = LinkUtil.toLink(
-			_dlAppService, dlFileEntry, _dlURLHelper, objectDefinitionERC,
-			objectEntryERC, _portal);
+			dlFileEntry.getFileName(), objectDefinitionERC, objectEntryERC,
+			_portal,
+			_dlURLHelper.getDownloadURL(
+				fileEntry, fileEntry.getFileVersion(), null, StringPool.BLANK));
 
 		template = StringUtil.replace(
 			template,
@@ -918,9 +924,14 @@ public class BatchEngineBrokerTest {
 			Long groupId, long id, Date modifiedDate)
 		throws Exception {
 
+		FileEntry fileEntry = _dlAppService.getFileEntry(
+			dlFileEntry.getFileEntryId());
+
 		Link link = LinkUtil.toLink(
-			_dlAppService, dlFileEntry, _dlURLHelper, objectDefinitionERC,
-			objectEntryERC, _portal);
+			dlFileEntry.getFileName(), objectDefinitionERC, objectEntryERC,
+			_portal,
+			_dlURLHelper.getDownloadURL(
+				fileEntry, fileEntry.getFileVersion(), null, StringPool.BLANK));
 
 		String scopeKey = null;
 
