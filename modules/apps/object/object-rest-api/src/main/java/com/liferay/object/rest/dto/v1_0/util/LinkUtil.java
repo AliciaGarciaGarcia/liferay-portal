@@ -64,6 +64,48 @@ public class LinkUtil {
 		};
 	}
 
+	public static Link toPreviewLink(
+		DLAppService dlAppService, DLFileEntry dlFileEntry,
+		DLURLHelper dlURLHelper, String objectDefinitionExternalReferenceCode,
+		String objectEntryExternalReferenceCode, Portal portal) {
+
+		return new Link() {
+			{
+				setHref(
+					() -> {
+						try {
+							FileEntry fileEntry = dlAppService.getFileEntry(
+								dlFileEntry.getFileEntryId());
+
+							String previewURL = dlURLHelper.getPreviewURL(
+								fileEntry, fileEntry.getFileVersion(), null,
+								StringPool.BLANK);
+
+							previewURL = HttpComponentsUtil.addParameter(
+								previewURL,
+								"objectDefinitionExternalReferenceCode",
+								objectDefinitionExternalReferenceCode);
+							previewURL = HttpComponentsUtil.addParameter(
+								previewURL, "objectEntryExternalReferenceCode",
+								objectEntryExternalReferenceCode);
+
+							return previewURL;
+						}
+						catch (Exception exception) {
+							if (_log.isWarnEnabled()) {
+								_log.warn(exception);
+							}
+						}
+
+						return StringBundler.concat(
+							portal.getPathContext(), portal.getPathMain(),
+							"/portal/login");
+					});
+				setLabel(dlFileEntry::getFileName);
+			}
+		};
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(LinkUtil.class);
 
 }

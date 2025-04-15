@@ -639,6 +639,14 @@ public class ObjectEntryDTOConverter
 				objectDefinition.getExternalReferenceCode(),
 				objectEntry.getExternalReferenceCode(), _portal));
 		fileEntry.setName(dlFileEntry::getFileName);
+		fileEntry.setPreviewLink(
+			() -> NestedFieldsSupplier.supply(
+				objectFieldName + ".previewLink",
+				fieldName -> LinkUtil.toPreviewLink(
+					_dlAppService, dlFileEntry, _dlURLHelper,
+					objectDefinition.getExternalReferenceCode(),
+					objectEntry.getExternalReferenceCode(), _portal))
+		);
 		fileEntry.setScope(
 			() -> {
 				if ((objectEntry.getGroupId() == dlFileEntry.getGroupId()) &&
