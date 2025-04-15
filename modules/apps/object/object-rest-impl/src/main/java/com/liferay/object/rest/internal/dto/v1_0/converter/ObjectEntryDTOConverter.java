@@ -10,7 +10,6 @@ import com.liferay.asset.kernel.service.AssetCategoryLocalService;
 import com.liferay.asset.kernel.service.AssetTagLocalService;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.model.DLFolder;
-import com.liferay.document.library.kernel.service.DLAppService;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
 import com.liferay.document.library.util.DLURLHelper;
 import com.liferay.list.type.model.ListTypeEntry;
@@ -87,6 +86,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.language.LanguageResources;
+import com.liferay.portal.repository.liferayrepository.model.LiferayFileEntry;
 import com.liferay.portal.security.audit.event.generators.constants.EventTypes;
 import com.liferay.portal.security.audit.storage.service.AuditEventLocalService;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
@@ -633,20 +633,29 @@ public class ObjectEntryDTOConverter
 				}));
 
 		fileEntry.setId(dlFileEntry::getFileEntryId);
+
+		LiferayFileEntry liferayFileEntry = new LiferayFileEntry(dlFileEntry);
+
 		fileEntry.setLink(
 			() -> LinkUtil.toLink(
-				_dlAppService, dlFileEntry, _dlURLHelper,
+				dlFileEntry.getFileName(), true, true,
 				objectDefinition.getExternalReferenceCode(),
-				objectEntry.getExternalReferenceCode(), _portal));
+				objectEntry.getExternalReferenceCode(), _portal,
+				_dlURLHelper.getDownloadURL(
+					liferayFileEntry, liferayFileEntry.getFileVersion(), null,
+					StringPool.BLANK)));
+
 		fileEntry.setName(dlFileEntry::getFileName);
 		fileEntry.setPreviewLink(
 			() -> NestedFieldsSupplier.supply(
 				objectFieldName + ".previewLink",
-				fieldName -> LinkUtil.toPreviewLink(
-					_dlAppService, dlFileEntry, _dlURLHelper,
+				fieldName -> LinkUtil.toLink(
+					dlFileEntry.getFileName(), true, true,
 					objectDefinition.getExternalReferenceCode(),
-					objectEntry.getExternalReferenceCode(), _portal))
-		);
+					objectEntry.getExternalReferenceCode(), _portal,
+					_dlURLHelper.getPreviewURL(
+						liferayFileEntry, liferayFileEntry.getFileVersion(),
+						null, StringPool.BLANK, false, false))));
 		fileEntry.setScope(
 			() -> {
 				if ((objectEntry.getGroupId() == dlFileEntry.getGroupId()) &&
@@ -1237,9 +1246,6 @@ public class ObjectEntryDTOConverter
 
 	@Reference
 	private AuditEventLocalService _auditEventLocalService;
-
-	@Reference
-	private DLAppService _dlAppService;
 
 	@Reference
 	private DLFileEntryLocalService _dLFileEntryLocalService;
