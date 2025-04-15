@@ -339,6 +339,52 @@ public class FileEntry implements Serializable {
 	@JsonIgnore
 	private Supplier<String> _nameSupplier;
 
+	@io.swagger.v3.oas.annotations.media.Schema(
+		description = "optional field that specifies the preview url of the file, can be embedded with nestedFields (the format of the nested field must be `<attachment field name>.previewLink`)"
+	)
+	@Valid
+	public Link getPreviewLink() {
+		if (_previewLinkSupplier != null) {
+			previewLink = _previewLinkSupplier.get();
+
+			_previewLinkSupplier = null;
+		}
+
+		return previewLink;
+	}
+
+	public void setPreviewLink(Link previewLink) {
+		this.previewLink = previewLink;
+
+		_previewLinkSupplier = null;
+	}
+
+	@JsonIgnore
+	public void setPreviewLink(
+		UnsafeSupplier<Link, Exception> previewLinkUnsafeSupplier) {
+
+		_previewLinkSupplier = () -> {
+			try {
+				return previewLinkUnsafeSupplier.get();
+			}
+			catch (RuntimeException runtimeException) {
+				throw runtimeException;
+			}
+			catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
+		};
+	}
+
+	@GraphQLField(
+		description = "optional field that specifies the preview url of the file, can be embedded with nestedFields (the format of the nested field must be `<attachment field name>.previewLink`)"
+	)
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	protected Link previewLink;
+
+	@JsonIgnore
+	private Supplier<Link> _previewLinkSupplier;
+
 	@io.swagger.v3.oas.annotations.media.Schema
 	@Valid
 	public Scope getScope() {
@@ -504,6 +550,18 @@ public class FileEntry implements Serializable {
 			sb.append(_escape(name));
 
 			sb.append("\"");
+		}
+
+		Link previewLink = getPreviewLink();
+
+		if (previewLink != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"previewLink\": ");
+
+			sb.append(String.valueOf(previewLink));
 		}
 
 		Scope scope = getScope();
