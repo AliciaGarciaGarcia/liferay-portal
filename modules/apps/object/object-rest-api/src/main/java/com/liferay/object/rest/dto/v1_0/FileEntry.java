@@ -339,9 +339,7 @@ public class FileEntry implements Serializable {
 	@JsonIgnore
 	private Supplier<String> _nameSupplier;
 
-	@io.swagger.v3.oas.annotations.media.Schema(
-		description = "optional field that specifies the preview url of the file, can be embedded with nestedFields (the format of the nested field must be `<attachment field name>.previewLink`)"
-	)
+	@io.swagger.v3.oas.annotations.media.Schema
 	@Valid
 	public Link getPreviewLink() {
 		if (_previewLinkSupplier != null) {
@@ -376,9 +374,7 @@ public class FileEntry implements Serializable {
 		};
 	}
 
-	@GraphQLField(
-		description = "optional field that specifies the preview url of the file, can be embedded with nestedFields (the format of the nested field must be `<attachment field name>.previewLink`)"
-	)
+	@GraphQLField
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	protected Link previewLink;
 
