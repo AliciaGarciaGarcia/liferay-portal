@@ -53,8 +53,14 @@
 					"name": {
 						"type": "string"
 					},
+					"previewLink": {
+						"$ref": "#/components/schemas/Link"
+					},
 					"scope": {
 						"$ref": "#/components/schemas/Scope"
+					},
+					"thumbnailLink": {
+						"$ref": "#/components/schemas/Link"
 					},
 					"x-class-name": {
 						"default": "com.liferay.object.rest.dto.v1_0.FileEntry",
