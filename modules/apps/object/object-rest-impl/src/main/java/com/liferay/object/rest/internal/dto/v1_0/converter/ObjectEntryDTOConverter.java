@@ -683,6 +683,16 @@ public class ObjectEntryDTOConverter
 
 				return scope;
 			});
+		fileEntry.setThumbnailLink(
+			() -> NestedFieldsSupplier.supply(
+				objectFieldName + ".thumbnailLink",
+				fieldName -> LinkUtil.toLink(
+					dlFileEntry.getFileName(), false, false,
+					objectDefinition.getExternalReferenceCode(),
+					objectEntry.getExternalReferenceCode(), _portal,
+					_dlURLHelper.getThumbnailSrc(
+						liferayFileEntry, liferayFileEntry.getFileVersion(),
+						null))));
 
 		return fileEntry;
 	}
