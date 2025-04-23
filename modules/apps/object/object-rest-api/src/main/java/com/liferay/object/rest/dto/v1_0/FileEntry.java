@@ -425,6 +425,48 @@ public class FileEntry implements Serializable {
 	@JsonIgnore
 	private Supplier<Scope> _scopeSupplier;
 
+	@io.swagger.v3.oas.annotations.media.Schema
+	@Valid
+	public Link getThumbnailLink() {
+		if (_thumbnailLinkSupplier != null) {
+			thumbnailLink = _thumbnailLinkSupplier.get();
+
+			_thumbnailLinkSupplier = null;
+		}
+
+		return thumbnailLink;
+	}
+
+	public void setThumbnailLink(Link thumbnailLink) {
+		this.thumbnailLink = thumbnailLink;
+
+		_thumbnailLinkSupplier = null;
+	}
+
+	@JsonIgnore
+	public void setThumbnailLink(
+		UnsafeSupplier<Link, Exception> thumbnailLinkUnsafeSupplier) {
+
+		_thumbnailLinkSupplier = () -> {
+			try {
+				return thumbnailLinkUnsafeSupplier.get();
+			}
+			catch (RuntimeException runtimeException) {
+				throw runtimeException;
+			}
+			catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
+		};
+	}
+
+	@GraphQLField
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	protected Link thumbnailLink;
+
+	@JsonIgnore
+	private Supplier<Link> _thumbnailLinkSupplier;
+
 	@Override
 	public boolean equals(Object object) {
 		if (this == object) {
@@ -574,6 +616,18 @@ public class FileEntry implements Serializable {
 			sb.append("\"scope\": ");
 
 			sb.append(String.valueOf(scope));
+		}
+
+		Link thumbnailLink = getThumbnailLink();
+
+		if (thumbnailLink != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"thumbnailLink\": ");
+
+			sb.append(String.valueOf(thumbnailLink));
 		}
 
 		sb.append("}");
