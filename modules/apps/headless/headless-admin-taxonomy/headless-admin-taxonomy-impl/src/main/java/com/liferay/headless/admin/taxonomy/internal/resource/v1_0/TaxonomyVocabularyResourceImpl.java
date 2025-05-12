@@ -21,6 +21,7 @@ import com.liferay.depot.service.DepotEntryLocalService;
 import com.liferay.depot.util.SiteConnectedGroupGroupProviderUtil;
 import com.liferay.headless.admin.taxonomy.dto.v1_0.AssetLibrary;
 import com.liferay.headless.admin.taxonomy.dto.v1_0.AssetType;
+import com.liferay.headless.admin.taxonomy.dto.v1_0.Scope;
 import com.liferay.headless.admin.taxonomy.dto.v1_0.TaxonomyVocabulary;
 import com.liferay.headless.admin.taxonomy.internal.dto.v1_0.util.CreatorUtil;
 import com.liferay.headless.admin.taxonomy.internal.odata.entity.v1_0.VocabularyEntityModel;
@@ -29,6 +30,7 @@ import com.liferay.headless.common.spi.service.context.ServiceContextBuilder;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.kernel.exception.NoSuchGroupException;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
@@ -109,17 +111,25 @@ public class TaxonomyVocabularyResourceImpl
 	}
 
 	@Override
+	public void deleteScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode(
+			String scopeKey, String externalReferenceCode)
+		throws Exception {
+
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-17564")) {
+			throw new UnsupportedOperationException();
+		}
+
+		_assetVocabularyService.deleteVocabularyByExternalReferenceCode(
+			externalReferenceCode, _getGroupId(scopeKey));
+	}
+
+	@Override
 	public void deleteSiteTaxonomyVocabularyByExternalReferenceCode(
 			Long siteId, String externalReferenceCode)
 		throws Exception {
 
-		AssetVocabulary assetVocabulary =
-			_assetVocabularyLocalService.
-				getAssetVocabularyByExternalReferenceCode(
-					externalReferenceCode, siteId);
-
-		_assetVocabularyService.deleteVocabulary(
-			assetVocabulary.getVocabularyId());
+		_assetVocabularyService.deleteVocabularyByExternalReferenceCode(
+			externalReferenceCode, siteId);
 	}
 
 	@Override
@@ -132,6 +142,21 @@ public class TaxonomyVocabularyResourceImpl
 	@Override
 	public EntityModel getEntityModel(MultivaluedMap multivaluedMap) {
 		return _entityModel;
+	}
+
+	@Override
+	public TaxonomyVocabulary
+			getScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode(
+				String scopeKey, String externalReferenceCode)
+		throws Exception {
+
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-17564")) {
+			throw new UnsupportedOperationException();
+		}
+
+		return _toTaxonomyVocabulary(
+			_assetVocabularyService.getAssetVocabularyByExternalReferenceCode(
+				_getGroupId(scopeKey), externalReferenceCode));
 	}
 
 	@Override
@@ -188,6 +213,32 @@ public class TaxonomyVocabularyResourceImpl
 			).build());
 
 		return _toTaxonomyVocabulary(assetVocabulary);
+	}
+
+	@Override
+	public TaxonomyVocabulary
+			putScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode(
+				String scopeKey, String externalReferenceCode,
+				TaxonomyVocabulary taxonomyVocabulary)
+		throws Exception {
+
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-17564")) {
+			throw new UnsupportedOperationException();
+		}
+
+		long groupId = _getGroupId(scopeKey);
+
+		AssetVocabulary persistedAssetVocabulary =
+			_assetVocabularyService.fetchVocabularyByExternalReferenceCode(
+				externalReferenceCode, groupId);
+
+		if (persistedAssetVocabulary == null) {
+			return _postTaxonomyVocabulary(
+				externalReferenceCode, groupId, taxonomyVocabulary);
+		}
+
+		return _toTaxonomyVocabulary(
+			_updateVocabulary(persistedAssetVocabulary, taxonomyVocabulary));
 	}
 
 	@Override
@@ -410,15 +461,9 @@ public class TaxonomyVocabularyResourceImpl
 			throw new UnsupportedOperationException();
 		}
 
-		AssetVocabulary assetVocabulary = _addAssetVocabulary(
+		return _postTaxonomyVocabulary(
 			taxonomyVocabulary.getExternalReferenceCode(),
 			GroupConstants.DEFAULT_LIVE_GROUP_ID, taxonomyVocabulary);
-
-		_assetVocabularyGroupRelLocalService.setAssetVocabularyGroupRels(
-			assetVocabulary.getVocabularyId(),
-			_getAssetLibraryGroupIds(taxonomyVocabulary));
-
-		return _toTaxonomyVocabulary(assetVocabulary);
 	}
 
 	@Override
@@ -815,6 +860,21 @@ public class TaxonomyVocabularyResourceImpl
 		throw new BadRequestException("Invalid subtype " + subtype);
 	}
 
+	private long _getGroupId(String scopeKey) throws Exception {
+		Long groupId = GroupUtil.getGroupId(
+			contextCompany.getCompanyId(), scopeKey, _groupLocalService);
+
+		if (groupId != null) {
+			return groupId;
+		}
+
+		if (Objects.equals(scopeKey, "0")) {
+			return 0;
+		}
+
+		throw new NoSuchGroupException();
+	}
+
 	private String _getModelResource(
 		AssetRendererFactory<?> assetRendererFactory) {
 
@@ -894,6 +954,23 @@ public class TaxonomyVocabularyResourceImpl
 						document.get(Field.ASSET_VOCABULARY_ID)))));
 	}
 
+	private TaxonomyVocabulary _postTaxonomyVocabulary(
+			String externalReferenceCode, long groupId,
+			TaxonomyVocabulary taxonomyVocabulary)
+		throws Exception {
+
+		AssetVocabulary assetVocabulary = _addAssetVocabulary(
+			externalReferenceCode, groupId, taxonomyVocabulary);
+
+		if (ArrayUtil.isNotEmpty(taxonomyVocabulary.getAssetLibraries())) {
+			_assetVocabularyGroupRelLocalService.setAssetVocabularyGroupRels(
+				assetVocabulary.getVocabularyId(),
+				_getAssetLibraryGroupIds(taxonomyVocabulary));
+		}
+
+		return _toTaxonomyVocabulary(assetVocabulary);
+	}
+
 	private TaxonomyVocabulary _toTaxonomyVocabulary(
 		AssetVocabulary assetVocabulary) {
 
@@ -959,6 +1036,31 @@ public class TaxonomyVocabularyResourceImpl
 						}
 
 						return 0;
+					});
+				setScope(
+					() -> {
+						if (group == null) {
+							return null;
+						}
+
+						Scope scope = new Scope();
+
+						scope.setExternalReferenceCode(
+							group::getExternalReferenceCode);
+						scope.setId(group::getGroupId);
+						scope.setScopeKey(group::getGroupKey);
+						scope.setType(
+							() -> {
+								if (group.getType() ==
+										GroupConstants.TYPE_DEPOT) {
+
+									return Scope.Type.ASSET_LIBRARY;
+								}
+
+								return Scope.Type.SITE;
+							});
+
+						return scope;
 					});
 				setSiteId(
 					() -> {

@@ -14,12 +14,14 @@ import com.liferay.asset.kernel.service.AssetCategoryLocalService;
 import com.liferay.asset.kernel.service.AssetCategoryService;
 import com.liferay.asset.kernel.service.AssetVocabularyService;
 import com.liferay.headless.admin.taxonomy.dto.v1_0.ParentTaxonomyCategory;
+import com.liferay.headless.admin.taxonomy.dto.v1_0.ParentTaxonomyVocabulary;
 import com.liferay.headless.admin.taxonomy.dto.v1_0.TaxonomyCategory;
 import com.liferay.headless.admin.taxonomy.dto.v1_0.TaxonomyCategoryProperty;
 import com.liferay.headless.admin.taxonomy.internal.odata.entity.v1_0.CategoryEntityModel;
 import com.liferay.headless.admin.taxonomy.resource.v1_0.TaxonomyCategoryResource;
 import com.liferay.headless.common.spi.service.context.ServiceContextBuilder;
 import com.liferay.petra.function.UnsafeConsumer;
+import com.liferay.petra.function.UnsafeFunction;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -28,6 +30,9 @@ import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.ProjectionList;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.Type;
+import com.liferay.portal.kernel.exception.NoSuchGroupException;
+import com.liferay.portal.kernel.exception.NoSuchModelException;
+import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.Field;
@@ -36,10 +41,13 @@ import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.search.filter.TermFilter;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.odata.entity.EntityModel;
 import com.liferay.portal.vulcan.aggregation.Aggregation;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
@@ -48,13 +56,17 @@ import com.liferay.portal.vulcan.dto.converter.DefaultDTOConverterContext;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
 import com.liferay.portal.vulcan.util.ContentLanguageUtil;
+import com.liferay.portal.vulcan.util.GroupUtil;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
 import com.liferay.portal.vulcan.util.SearchUtil;
 import com.liferay.portlet.asset.model.impl.AssetCategoryImpl;
 import com.liferay.portlet.asset.service.permission.AssetCategoriesPermission;
 
+import java.io.Serializable;
+
 import java.sql.Timestamp;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -64,6 +76,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.NotSupportedException;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -81,14 +94,24 @@ public class TaxonomyCategoryResourceImpl
 	extends BaseTaxonomyCategoryResourceImpl {
 
 	@Override
+	public void deleteScopeScopeKeyTaxonomyCategoryByExternalReferenceCode(
+			String scopeKey, String externalReferenceCode)
+		throws Exception {
+
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-17564")) {
+			throw new UnsupportedOperationException();
+		}
+
+		_assetCategoryService.deleteCategoryByExternalReferenceCode(
+			externalReferenceCode, _getGroupId(scopeKey));
+	}
+
+	@Override
 	public void deleteTaxonomyCategory(String taxonomyCategoryId)
 		throws Exception {
 
-		AssetCategory assetCategory =
-			_assetCategoryLocalService.getAssetCategory(
-				GetterUtil.getLong(taxonomyCategoryId));
-
-		_assetCategoryService.deleteCategory(assetCategory.getCategoryId());
+		_assetCategoryService.deleteCategory(
+			GetterUtil.getLong(taxonomyCategoryId));
 	}
 
 	@Override
@@ -109,6 +132,69 @@ public class TaxonomyCategoryResourceImpl
 	@Override
 	public EntityModel getEntityModel(MultivaluedMap multivaluedMap) {
 		return _entityModel;
+	}
+
+	@Override
+	public Page<TaxonomyCategory> getScopeScopeKeyTaxonomyCategoriesPage(
+			String scopeKey, String search, Aggregation aggregation,
+			Filter filter, Pagination pagination, Sort[] sorts)
+		throws Exception {
+
+		long groupId = _getGroupId(scopeKey);
+
+		return SearchUtil.search(
+			HashMapBuilder.<String, Map<String, String>>put(
+				"create",
+				addAction(
+					ActionKeys.ADD_CATEGORY,
+					"postScopeScopeKeyTaxonomyCategory",
+					AssetCategoriesPermission.RESOURCE_NAME, groupId)
+			).put(
+				"get",
+				addAction(
+					ActionKeys.VIEW, "getScopeScopeKeyTaxonomyCategoriesPage",
+					AssetCategoriesPermission.RESOURCE_NAME, groupId)
+			).build(),
+			booleanQuery -> {
+				BooleanFilter booleanFilter =
+					booleanQuery.getPreBooleanFilter();
+
+				booleanFilter.add(
+					new TermFilter(Field.GROUP_ID, String.valueOf(groupId)),
+					BooleanClauseOccur.MUST);
+			},
+			filter, AssetCategory.class.getName(), search, pagination,
+			queryConfig -> queryConfig.setSelectedFieldNames(
+				Field.ENTRY_CLASS_PK),
+			searchContext -> {
+				searchContext.addVulcanAggregation(aggregation);
+				searchContext.setCompanyId(contextCompany.getCompanyId());
+
+				if (Validator.isNotNull(search)) {
+					searchContext.setKeywords(search);
+				}
+
+				searchContext.setGroupIds(new long[] {groupId});
+			},
+			sorts,
+			document -> _toTaxonomyCategory(
+				_assetCategoryService.getCategory(
+					GetterUtil.getLong(document.get(Field.ENTRY_CLASS_PK)))));
+	}
+
+	@Override
+	public TaxonomyCategory
+			getScopeScopeKeyTaxonomyCategoryByExternalReferenceCode(
+				String scopeKey, String externalReferenceCode)
+		throws Exception {
+
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-17564")) {
+			throw new UnsupportedOperationException();
+		}
+
+		return _toTaxonomyCategory(
+			_assetCategoryService.getAssetCategoryByExternalReferenceCode(
+				_getGroupId(scopeKey), externalReferenceCode));
 	}
 
 	@Override
@@ -239,6 +325,56 @@ public class TaxonomyCategoryResourceImpl
 	}
 
 	@Override
+	public TaxonomyCategory postScopeScopeKeyTaxonomyCategory(
+			String scopeKey, TaxonomyCategory taxonomyCategory)
+		throws Exception {
+
+		ParentTaxonomyCategory parentTaxonomyCategory =
+			taxonomyCategory.getParentTaxonomyCategory();
+
+		long parentTaxonomyCategoryId =
+			AssetCategoryConstants.DEFAULT_PARENT_CATEGORY_ID;
+
+		long groupId = _getGroupId(scopeKey);
+
+		if (parentTaxonomyCategory != null) {
+			AssetCategory parentAssetCategory =
+				_assetCategoryService.getAssetCategoryByExternalReferenceCode(
+					groupId, parentTaxonomyCategory.getExternalReferenceCode());
+
+			parentTaxonomyCategoryId = parentAssetCategory.getCategoryId();
+		}
+
+		Long taxonomyVocabularyId = taxonomyCategory.getTaxonomyVocabularyId();
+
+		if (taxonomyVocabularyId == null) {
+			ParentTaxonomyVocabulary parentTaxonomyVocabulary =
+				taxonomyCategory.getParentTaxonomyVocabulary();
+
+			if ((parentTaxonomyVocabulary == null) ||
+				Validator.isBlank(
+					parentTaxonomyVocabulary.getExternalReferenceCode())) {
+
+				throw new BadRequestException(
+					"No Taxonomy Vocabulary reference code provided");
+			}
+
+			AssetVocabulary assetVocabulary =
+				_assetVocabularyService.
+					getAssetVocabularyByExternalReferenceCode(
+						groupId,
+						parentTaxonomyVocabulary.getExternalReferenceCode());
+
+			taxonomyVocabularyId = assetVocabulary.getVocabularyId();
+		}
+
+		return _addTaxonomyCategory(
+			taxonomyCategory.getExternalReferenceCode(), groupId,
+			contextAcceptLanguage.getPreferredLanguageId(),
+			parentTaxonomyCategoryId, taxonomyCategory, taxonomyVocabularyId);
+	}
+
+	@Override
 	public TaxonomyCategory postTaxonomyCategoryTaxonomyCategory(
 			String parentTaxonomyCategoryId, TaxonomyCategory taxonomyCategory)
 		throws Exception {
@@ -249,8 +385,99 @@ public class TaxonomyCategoryResourceImpl
 		return _addTaxonomyCategory(
 			taxonomyCategory.getExternalReferenceCode(),
 			assetCategory.getGroupId(), assetCategory.getDefaultLanguageId(),
-			taxonomyCategory, assetCategory.getCategoryId(),
+			assetCategory.getCategoryId(), taxonomyCategory,
 			assetCategory.getVocabularyId());
+	}
+
+	@Override
+	public TaxonomyCategory
+			putScopeScopeKeyTaxonomyCategoryByExternalReferenceCode(
+				String scopeKey, String externalReferenceCode,
+				TaxonomyCategory taxonomyCategory)
+		throws Exception {
+
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-17564")) {
+			throw new UnsupportedOperationException();
+		}
+
+		long groupId = _getGroupId(scopeKey);
+
+		AssetCategory persistedAssetCategory =
+			_assetCategoryService.fetchCategoryByExternalReferenceCode(
+				externalReferenceCode, groupId);
+
+		if (persistedAssetCategory == null) {
+			String parentTaxonomyCategoryExternalReferenceCode = null;
+
+			ParentTaxonomyCategory parentTaxonomyCategory =
+				taxonomyCategory.getParentTaxonomyCategory();
+
+			if (parentTaxonomyCategory != null) {
+				parentTaxonomyCategoryExternalReferenceCode =
+					parentTaxonomyCategory.getExternalReferenceCode();
+			}
+
+			ParentTaxonomyVocabulary parentTaxonomyVocabulary =
+				taxonomyCategory.getParentTaxonomyVocabulary();
+
+			String taxonomyVocabularyExternalReferenceCode = StringPool.BLANK;
+
+			if (parentTaxonomyVocabulary != null) {
+				taxonomyVocabularyExternalReferenceCode =
+					parentTaxonomyVocabulary.getExternalReferenceCode();
+			}
+			else if (taxonomyCategory.getTaxonomyVocabularyId() != null) {
+				AssetVocabulary assetVocabulary =
+					_assetVocabularyService.fetchVocabulary(
+						taxonomyCategory.getTaxonomyVocabularyId());
+
+				if (assetVocabulary != null) {
+					taxonomyVocabularyExternalReferenceCode =
+						assetVocabulary.getExternalReferenceCode();
+				}
+			}
+
+			if (Validator.isBlank(taxonomyVocabularyExternalReferenceCode)) {
+				throw new BadRequestException(
+					"No Taxonomy Vocabulary reference code provided");
+			}
+
+			return _addTaxonomyCategory(
+				taxonomyCategory.getExternalReferenceCode(), groupId,
+				contextAcceptLanguage.getPreferredLanguageId(),
+				parentTaxonomyCategoryExternalReferenceCode, taxonomyCategory,
+				taxonomyVocabularyExternalReferenceCode);
+		}
+
+		long assetVocabularyId = _getAssetVocabularyId(
+			persistedAssetCategory, taxonomyCategory);
+
+		return _toTaxonomyCategory(
+			_assetCategoryService.updateCategory(
+				persistedAssetCategory.getCategoryId(),
+				_getParentAssetCategoryId(
+					persistedAssetCategory, assetVocabularyId,
+					taxonomyCategory),
+				LocalizedMapUtil.patchLocalizedMap(
+					persistedAssetCategory.getTitleMap(),
+					contextAcceptLanguage.getPreferredLocale(),
+					taxonomyCategory.getName(),
+					taxonomyCategory.getName_i18n()),
+				LocalizedMapUtil.patchLocalizedMap(
+					persistedAssetCategory.getDescriptionMap(),
+					contextAcceptLanguage.getPreferredLocale(),
+					taxonomyCategory.getDescription(),
+					taxonomyCategory.getDescription_i18n()),
+				assetVocabularyId,
+				_merge(
+					_assetCategoryPropertyLocalService.getCategoryProperties(
+						persistedAssetCategory.getCategoryId()),
+					taxonomyCategory.getTaxonomyCategoryProperties()),
+				ServiceContextBuilder.create(
+					persistedAssetCategory.getGroupId(),
+					contextHttpServletRequest,
+					taxonomyCategory.getViewableByAsString()
+				).build()));
 	}
 
 	@Override
@@ -354,7 +581,7 @@ public class TaxonomyCategoryResourceImpl
 		return _addTaxonomyCategory(
 			taxonomyCategory.getExternalReferenceCode(),
 			assetVocabulary.getGroupId(),
-			assetVocabulary.getDefaultLanguageId(), taxonomyCategory, 0,
+			assetVocabulary.getDefaultLanguageId(), 0, taxonomyCategory,
 			assetVocabulary.getVocabularyId());
 	}
 
@@ -390,7 +617,7 @@ public class TaxonomyCategoryResourceImpl
 
 		return _addTaxonomyCategory(
 			externalReferenceCode, assetVocabulary.getGroupId(),
-			assetVocabulary.getDefaultLanguageId(), taxonomyCategory, 0,
+			assetVocabulary.getDefaultLanguageId(), 0, taxonomyCategory,
 			assetVocabulary.getVocabularyId());
 	}
 
@@ -413,7 +640,7 @@ public class TaxonomyCategoryResourceImpl
 
 	private TaxonomyCategory _addTaxonomyCategory(
 			String externalReferenceCode, long groupId, String languageId,
-			TaxonomyCategory taxonomyCategory, long taxonomyCategoryId,
+			long parentTaxonomyCategoryId, TaxonomyCategory taxonomyCategory,
 			long taxonomyVocabularyId)
 		throws Exception {
 
@@ -431,14 +658,30 @@ public class TaxonomyCategoryResourceImpl
 
 		return _toTaxonomyCategory(
 			_assetCategoryService.addCategory(
-				externalReferenceCode, groupId, taxonomyCategoryId, titleMap,
-				descriptionMap, taxonomyVocabularyId,
+				externalReferenceCode, groupId, parentTaxonomyCategoryId,
+				titleMap, descriptionMap, taxonomyVocabularyId,
 				_toStringArray(
 					taxonomyCategory.getTaxonomyCategoryProperties()),
 				ServiceContextBuilder.create(
 					groupId, contextHttpServletRequest,
 					taxonomyCategory.getViewableByAsString()
 				).build()));
+	}
+
+	private TaxonomyCategory _addTaxonomyCategory(
+			String externalReferenceCode, long groupId, String languageId,
+			String parentTaxonomyCategoryExternalReferenceCode,
+			TaxonomyCategory taxonomyCategory,
+			String taxonomyVocabularyExternalReferenceCode)
+		throws Exception {
+
+		return _addTaxonomyCategory(
+			externalReferenceCode, groupId, languageId,
+			_getParentTaxonomyCategoryCategoryId(
+				groupId, parentTaxonomyCategoryExternalReferenceCode),
+			taxonomyCategory,
+			_getTaxonomyVocabularyId(
+				groupId, taxonomyVocabularyExternalReferenceCode));
 	}
 
 	private AssetCategory _getAssetCategory(String taxonomyCategoryId)
@@ -487,6 +730,21 @@ public class TaxonomyCategoryResourceImpl
 						document.get(Field.ASSET_CATEGORY_ID)))));
 	}
 
+	private long _getGroupId(String scopeKey) throws Exception {
+		Long groupId = GroupUtil.getGroupId(
+			contextCompany.getCompanyId(), scopeKey, _groupLocalService);
+
+		if (groupId != null) {
+			return groupId;
+		}
+
+		if (Objects.equals(scopeKey, "0")) {
+			return 0;
+		}
+
+		throw new NoSuchGroupException();
+	}
+
 	private long _getParentAssetCategoryId(
 			AssetCategory assetCategory, long assetVocabularyId,
 			TaxonomyCategory taxonomyCategory)
@@ -519,6 +777,29 @@ public class TaxonomyCategoryResourceImpl
 		return AssetCategoryConstants.DEFAULT_PARENT_CATEGORY_ID;
 	}
 
+	private long _getParentTaxonomyCategoryCategoryId(
+			long groupId, String parentTaxonomyCategoryExternalReferenceCode)
+		throws Exception {
+
+		if (Validator.isBlank(parentTaxonomyCategoryExternalReferenceCode)) {
+			return AssetCategoryConstants.DEFAULT_PARENT_CATEGORY_ID;
+		}
+
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-47858")) {
+			AssetCategory parentTaxonomyCategory =
+				_assetCategoryService.getAssetCategoryByExternalReferenceCode(
+					groupId, parentTaxonomyCategoryExternalReferenceCode);
+
+			return parentTaxonomyCategory.getCategoryId();
+		}
+
+		AssetCategory parentTaxonomyCategory =
+			_assetCategoryService.getOrAddIncompleteCategory(
+				parentTaxonomyCategoryExternalReferenceCode, groupId);
+
+		return parentTaxonomyCategory.getCategoryId();
+	}
+
 	private ProjectionList _getProjectionList() {
 		ProjectionList projectionList = ProjectionFactoryUtil.projectionList();
 
@@ -546,6 +827,26 @@ public class TaxonomyCategoryResourceImpl
 		projectionList.add(ProjectionFactoryUtil.property("vocabularyId"));
 
 		return projectionList;
+	}
+
+	private long _getTaxonomyVocabularyId(
+			long groupId, String taxonomyVocabularyExternalReferenceCode)
+		throws Exception {
+
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-47858")) {
+			AssetVocabulary assetVocabulary =
+				_assetVocabularyService.
+					getAssetVocabularyByExternalReferenceCode(
+						groupId, taxonomyVocabularyExternalReferenceCode);
+
+			return assetVocabulary.getVocabularyId();
+		}
+
+		AssetVocabulary assetVocabulary =
+			_assetVocabularyService.getOrAddIncompleteVocabulary(
+				taxonomyVocabularyExternalReferenceCode, groupId);
+
+		return assetVocabulary.getVocabularyId();
 	}
 
 	private long _getTotalCount(Long siteId) {
@@ -705,6 +1006,9 @@ public class TaxonomyCategoryResourceImpl
 
 	@Reference
 	private DTOConverterRegistry _dtoConverterRegistry;
+
+	@Reference
+	private GroupLocalService _groupLocalService;
 
 	@Reference(
 		target = "(component.name=com.liferay.headless.admin.taxonomy.internal.dto.v1_0.converter.TaxonomyCategoryDTOConverter)"
