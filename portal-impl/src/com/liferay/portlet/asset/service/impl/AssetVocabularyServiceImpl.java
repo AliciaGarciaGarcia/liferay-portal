@@ -161,6 +161,23 @@ public class AssetVocabularyServiceImpl extends AssetVocabularyServiceBaseImpl {
 	}
 
 	@Override
+	public AssetVocabulary deleteVocabularyByExternalReferenceCode(
+			String externalReferenceCode, long groupId)
+		throws PortalException {
+
+		AssetVocabulary vocabulary =
+			assetVocabularyLocalService.
+				getAssetVocabularyByExternalReferenceCode(
+					externalReferenceCode, groupId);
+
+		AssetVocabularyPermission.check(
+			getPermissionChecker(), vocabulary.getVocabularyId(),
+			ActionKeys.DELETE);
+
+		return assetVocabularyLocalService.deleteVocabulary(vocabulary);
+	}
+
+	@Override
 	public AssetVocabulary fetchVocabulary(long vocabularyId)
 		throws PortalException {
 
@@ -170,6 +187,25 @@ public class AssetVocabularyServiceImpl extends AssetVocabularyServiceBaseImpl {
 		if (vocabulary != null) {
 			AssetVocabularyPermission.check(
 				getPermissionChecker(), vocabulary, ActionKeys.VIEW);
+		}
+
+		return vocabulary;
+	}
+
+	@Override
+	public AssetVocabulary fetchVocabularyByExternalReferenceCode(
+			String externalReferenceCode, long groupId)
+		throws PortalException {
+
+		AssetVocabulary vocabulary =
+			assetVocabularyLocalService.
+				fetchAssetVocabularyByExternalReferenceCode(
+					externalReferenceCode, groupId);
+
+		if (vocabulary != null) {
+			AssetVocabularyPermission.check(
+				getPermissionChecker(), vocabulary.getVocabularyId(),
+				ActionKeys.VIEW);
 		}
 
 		return vocabulary;
