@@ -15,10 +15,13 @@ import com.liferay.asset.kernel.service.AssetEntryLocalService;
 import com.liferay.asset.kernel.service.AssetVocabularyService;
 import com.liferay.headless.admin.taxonomy.dto.v1_0.ParentTaxonomyCategory;
 import com.liferay.headless.admin.taxonomy.dto.v1_0.ParentTaxonomyVocabulary;
+import com.liferay.headless.admin.taxonomy.dto.v1_0.Scope;
 import com.liferay.headless.admin.taxonomy.dto.v1_0.TaxonomyCategory;
 import com.liferay.headless.admin.taxonomy.dto.v1_0.TaxonomyCategoryProperty;
 import com.liferay.headless.admin.taxonomy.internal.dto.v1_0.util.CreatorUtil;
 import com.liferay.petra.function.transform.TransformUtil;
+import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
@@ -179,7 +182,32 @@ public class TaxonomyCategoryDTOConverter
 							}
 						};
 					});
-				setSiteId(assetCategory::getGroupId);
+				setScope(
+					() -> {
+						Group group = _groupLocalService.fetchGroup(
+							assetCategory.getGroupId());
+
+						if (group == null) {
+							return null;
+						}
+
+						Scope scope = new Scope();
+
+						scope.setExternalReferenceCode(
+							group::getExternalReferenceCode);
+						scope.setId(group::getGroupId);
+						scope.setScopeKey(group::getGroupKey);
+						scope.setType(
+							() -> {
+								if (group.isDepot()) {
+									return Scope.Type.ASSET_LIBRARY;
+								}
+
+								return Scope.Type.SITE;
+							});
+
+						return scope;
+					});
 				setTaxonomyCategoryProperties(
 					() -> TransformUtil.transformToArray(
 						_assetCategoryPropertyLocalService.
@@ -258,6 +286,9 @@ public class TaxonomyCategoryDTOConverter
 		target = "(dto.class.name=com.liferay.headless.admin.taxonomy.dto.v1_0.TaxonomyCategory)"
 	)
 	private DTOActionProvider _dtoActionProvider;
+
+	@Reference
+	private GroupLocalService _groupLocalService;
 
 	@Reference
 	private Portal _portal;
