@@ -12,6 +12,7 @@ import com.liferay.depot.model.DepotEntry;
 import com.liferay.depot.service.DepotEntryLocalService;
 import com.liferay.headless.admin.taxonomy.client.dto.v1_0.AssetLibrary;
 import com.liferay.headless.admin.taxonomy.client.dto.v1_0.AssetType;
+import com.liferay.headless.admin.taxonomy.client.dto.v1_0.Scope;
 import com.liferay.headless.admin.taxonomy.client.dto.v1_0.TaxonomyVocabulary;
 import com.liferay.headless.admin.taxonomy.client.pagination.Page;
 import com.liferay.headless.admin.taxonomy.client.pagination.Pagination;
@@ -507,6 +508,13 @@ public class TaxonomyVocabularyResourceTest
 					RandomTestUtil.randomString());
 				multiValued = RandomTestUtil.randomBoolean();
 				name = RandomTestUtil.randomString();
+				scope = new Scope() {
+					{
+						externalReferenceCode =
+							testGroup.getExternalReferenceCode();
+						id = testGroup.getGroupId();
+					}
+				};
 				siteId = testGroup.getGroupId();
 				visibilityType = VisibilityType.PUBLIC;
 			}
@@ -522,11 +530,27 @@ public class TaxonomyVocabularyResourceTest
 	}
 
 	@Override
+	protected String
+			testDeleteScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_getScopeKey()
+		throws Exception {
+
+		return String.valueOf(testGroup.getGroupId());
+	}
+
+	@Override
 	protected Long
 			testGetAssetLibraryTaxonomyVocabularyByExternalReferenceCode_getAssetLibraryId()
 		throws Exception {
 
 		return testDepotEntry.getDepotEntryId();
+	}
+
+	@Override
+	protected String
+			testGetScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_getScopeKey()
+		throws Exception {
+
+		return String.valueOf(testGroup.getGroupId());
 	}
 
 	@Override
@@ -559,6 +583,14 @@ public class TaxonomyVocabularyResourceTest
 	}
 
 	@Override
+	protected String
+			testGraphQLGetScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_getScopeKey()
+		throws Exception {
+
+		return testGroup.getGroupKey();
+	}
+
+	@Override
 	protected TaxonomyVocabulary
 			testGraphQLGetTaxonomyVocabulariesPage_addTaxonomyVocabulary()
 		throws Exception {
@@ -573,6 +605,14 @@ public class TaxonomyVocabularyResourceTest
 		throws Exception {
 
 		return testDepotEntry.getDepotEntryId();
+	}
+
+	@Override
+	protected String
+			testPutScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_getScopeKey()
+		throws Exception {
+
+		return testGroup.getGroupKey();
 	}
 
 	private AssetLibrary _randomAssetLibrary() throws Exception {
@@ -597,7 +637,12 @@ public class TaxonomyVocabularyResourceTest
 		TaxonomyVocabulary taxonomyVocabulary = randomTaxonomyVocabulary();
 
 		taxonomyVocabulary.setAssetLibraries(assetLibraries);
-		taxonomyVocabulary.setSiteId(GroupConstants.DEFAULT_LIVE_GROUP_ID);
+		taxonomyVocabulary.setScope(
+			new Scope() {
+				{
+					id = GroupConstants.DEFAULT_LIVE_GROUP_ID;
+				}
+			});
 
 		return taxonomyVocabulary;
 	}

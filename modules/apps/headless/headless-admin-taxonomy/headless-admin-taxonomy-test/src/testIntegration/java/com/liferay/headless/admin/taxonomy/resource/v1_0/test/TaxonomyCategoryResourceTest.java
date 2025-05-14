@@ -19,6 +19,8 @@ import com.liferay.depot.model.DepotEntry;
 import com.liferay.depot.service.DepotEntryLocalService;
 import com.liferay.headless.admin.taxonomy.client.dto.v1_0.AssetType;
 import com.liferay.headless.admin.taxonomy.client.dto.v1_0.ParentTaxonomyCategory;
+import com.liferay.headless.admin.taxonomy.client.dto.v1_0.ParentTaxonomyVocabulary;
+import com.liferay.headless.admin.taxonomy.client.dto.v1_0.Scope;
 import com.liferay.headless.admin.taxonomy.client.dto.v1_0.TaxonomyCategory;
 import com.liferay.headless.admin.taxonomy.client.dto.v1_0.TaxonomyCategoryProperty;
 import com.liferay.headless.admin.taxonomy.client.dto.v1_0.TaxonomyVocabulary;
@@ -253,6 +255,22 @@ public class TaxonomyCategoryResourceTest
 	}
 
 	@Override
+	protected TaxonomyCategory
+			testDeleteScopeScopeKeyTaxonomyCategoryByExternalReferenceCode_addTaxonomyCategory()
+		throws Exception {
+
+		return testGetTaxonomyCategory_addTaxonomyCategory();
+	}
+
+	@Override
+	protected String
+			testDeleteScopeScopeKeyTaxonomyCategoryByExternalReferenceCode_getScopeKey()
+		throws Exception {
+
+		return testGroup.getGroupKey();
+	}
+
+	@Override
 	protected TaxonomyCategory testDeleteTaxonomyCategory_addTaxonomyCategory()
 		throws Exception {
 
@@ -265,6 +283,40 @@ public class TaxonomyCategoryResourceTest
 		throws Exception {
 
 		return testGetTaxonomyCategory_addTaxonomyCategory();
+	}
+
+	@Override
+	protected TaxonomyCategory
+			testGetScopeScopeKeyTaxonomyCategoriesPage_addTaxonomyCategory(
+				String scopeKey, TaxonomyCategory taxonomyCategory)
+		throws Exception {
+
+		return taxonomyCategoryResource.postScopeScopeKeyTaxonomyCategory(
+			scopeKey, taxonomyCategory);
+	}
+
+	@Override
+	protected String testGetScopeScopeKeyTaxonomyCategoriesPage_getScopeKey()
+		throws Exception {
+
+		return testGroup.getGroupKey();
+	}
+
+	@Override
+	protected TaxonomyCategory
+			testGetScopeScopeKeyTaxonomyCategoryByExternalReferenceCode_addTaxonomyCategory()
+		throws Exception {
+
+		return taxonomyCategoryResource.postTaxonomyCategoryTaxonomyCategory(
+			testGetTaxonomyCategoryTaxonomyCategoriesPage_getParentTaxonomyCategoryId(),
+			randomTaxonomyCategory());
+	}
+
+	@Override
+	protected String
+		testGetScopeScopeKeyTaxonomyCategoryByExternalReferenceCode_getScopeKey() {
+
+		return String.valueOf(testGroup.getGroupId());
 	}
 
 	@Override
@@ -323,6 +375,14 @@ public class TaxonomyCategoryResourceTest
 	}
 
 	@Override
+	protected String
+			testGraphQLGetScopeScopeKeyTaxonomyCategoryByExternalReferenceCode_getScopeKey()
+		throws Exception {
+
+		return String.valueOf(testGroup.getGroupId());
+	}
+
+	@Override
 	protected TaxonomyCategory testGraphQLTaxonomyCategory_addTaxonomyCategory()
 		throws Exception {
 
@@ -335,6 +395,16 @@ public class TaxonomyCategoryResourceTest
 		throws Exception {
 
 		return testGetTaxonomyCategory_addTaxonomyCategory();
+	}
+
+	@Override
+	protected TaxonomyCategory
+			testPostScopeScopeKeyTaxonomyCategory_addTaxonomyCategory(
+				TaxonomyCategory taxonomyCategory)
+		throws Exception {
+
+		return taxonomyCategoryResource.postScopeScopeKeyTaxonomyCategory(
+			String.valueOf(testGroup.getGroupId()), taxonomyCategory);
 	}
 
 	@Override
@@ -355,6 +425,56 @@ public class TaxonomyCategoryResourceTest
 
 		return testPostTaxonomyCategoryTaxonomyCategory_addTaxonomyCategory(
 			taxonomyCategory);
+	}
+
+	@Override
+	protected TaxonomyCategory
+			testPutScopeScopeKeyTaxonomyCategoryByExternalReferenceCode_addTaxonomyCategory()
+		throws Exception {
+
+		return taxonomyCategoryResource.postTaxonomyCategoryTaxonomyCategory(
+			testGetTaxonomyCategoryTaxonomyCategoriesPage_getParentTaxonomyCategoryId(),
+			randomTaxonomyCategory());
+	}
+
+	@Override
+	protected TaxonomyCategory
+			testPutScopeScopeKeyTaxonomyCategoryByExternalReferenceCode_createTaxonomyCategory()
+		throws Exception {
+
+		TaxonomyCategory taxonomyCategory = randomTaxonomyCategory();
+
+		TaxonomyCategory parentTaxonomyCategory =
+			taxonomyCategoryResource.postTaxonomyCategoryTaxonomyCategory(
+				testGetTaxonomyCategoryTaxonomyCategoriesPage_getParentTaxonomyCategoryId(),
+				randomTaxonomyCategory());
+
+		taxonomyCategory.setParentTaxonomyCategory(
+			new ParentTaxonomyCategory() {
+				{
+					externalReferenceCode =
+						parentTaxonomyCategory.getExternalReferenceCode();
+					id = Long.valueOf(parentTaxonomyCategory.getId());
+				}
+			});
+
+		taxonomyCategory.setParentTaxonomyVocabulary(
+			new ParentTaxonomyVocabulary() {
+				{
+					externalReferenceCode =
+						_assetVocabulary.getExternalReferenceCode();
+					id = _assetVocabulary.getVocabularyId();
+				}
+			});
+
+		return taxonomyCategory;
+	}
+
+	@Override
+	protected String
+		testPutScopeScopeKeyTaxonomyCategoryByExternalReferenceCode_getScopeKey() {
+
+		return testGroup.getGroupKey();
 	}
 
 	@Override
@@ -469,7 +589,13 @@ public class TaxonomyCategoryResourceTest
 					RandomTestUtil.randomString());
 				id = RandomTestUtil.randomLong();
 				name = RandomTestUtil.randomString();
-				siteId = testGroup.getGroupId();
+				scope = new Scope() {
+					{
+						externalReferenceCode =
+							testGroup.getExternalReferenceCode();
+						id = testGroup.getGroupId();
+					}
+				};
 			}
 		};
 	}

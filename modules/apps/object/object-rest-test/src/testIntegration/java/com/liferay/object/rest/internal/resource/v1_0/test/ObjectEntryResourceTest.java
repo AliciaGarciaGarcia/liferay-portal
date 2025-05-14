@@ -13728,7 +13728,16 @@ public class ObjectEntryResourceTest {
 					name = StringUtil.toLowerCase(
 						RandomTestUtil.randomString());
 					numberOfTaxonomyCategories = RandomTestUtil.randomInt();
-					siteId = _testGroupId;
+					scope =
+						new com.liferay.headless.admin.taxonomy.client.dto.v1_0.
+							Scope() {
+
+							{
+								externalReferenceCode =
+									RandomTestUtil.randomString();
+								id = TestPropsValues.getGroupId();
+							}
+						};
 					taxonomyCategoryUsageCount = RandomTestUtil.randomInt();
 					taxonomyVocabularyId = RandomTestUtil.randomLong();
 				}
