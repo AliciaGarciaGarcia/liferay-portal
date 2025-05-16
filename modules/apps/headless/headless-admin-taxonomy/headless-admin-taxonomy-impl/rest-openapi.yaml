@@ -311,17 +311,6 @@ components:
                 scope:
                     $ref: "#/components/schemas/Scope"
                     readOnly: true
-                siteExternalReferenceCode:
-                    description:
-                        The external reference code of the site to which this vocabulary is scoped.
-                    readOnly: true
-                    type: string
-                siteId:
-                    description:
-                        The ID of the site to which this vocabulary is scoped.
-                    format: int64
-                    readOnly: true
-                    type: integer
                 taxonomyCategoryProperties:
                     # @review
                     description:
