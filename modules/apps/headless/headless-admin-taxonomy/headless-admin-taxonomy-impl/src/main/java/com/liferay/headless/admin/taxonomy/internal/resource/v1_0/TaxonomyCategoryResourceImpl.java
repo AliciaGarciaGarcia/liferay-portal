@@ -33,6 +33,8 @@ import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.exception.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.NoSuchModelException;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.Field;
@@ -92,6 +94,147 @@ import org.osgi.service.component.annotations.ServiceScope;
 )
 public class TaxonomyCategoryResourceImpl
 	extends BaseTaxonomyCategoryResourceImpl {
+
+	@Override
+	public void create(
+			Collection<TaxonomyCategory> taxonomyCategories,
+			Map<String, Serializable> parameters)
+		throws Exception {
+
+		UnsafeFunction<TaxonomyCategory, TaxonomyCategory, Exception>
+			taxonomyCategoryUnsafeFunction = null;
+
+		String createStrategy = (String)parameters.getOrDefault(
+			"createStrategy", "INSERT");
+
+		if (StringUtil.equalsIgnoreCase(createStrategy, "INSERT")) {
+			if (parameters.containsKey("taxonomyVocabularyId")) {
+				taxonomyCategoryUnsafeFunction =
+					taxonomyCategory -> postTaxonomyVocabularyTaxonomyCategory(
+						GetterUtil.getLong(
+							(String)parameters.get("taxonomyVocabularyId")),
+						taxonomyCategory);
+			}
+			else if (parameters.containsKey("scopeKey")) {
+				taxonomyCategoryUnsafeFunction =
+					taxonomyCategory -> postScopeScopeKeyTaxonomyCategory(
+						(String)parameters.get("scopeKey"), taxonomyCategory);
+			}
+			else {
+				throw new NotSupportedException(
+					"One of the following parameters must be specified: " +
+						"[taxonomyVocabularyId, scopeKey]");
+			}
+		}
+
+		if (StringUtil.equalsIgnoreCase(createStrategy, "UPSERT")) {
+			String updateStrategy = (String)parameters.getOrDefault(
+				"updateStrategy", "UPDATE");
+
+			if (StringUtil.equalsIgnoreCase(updateStrategy, "PARTIAL_UPDATE")) {
+				taxonomyCategoryUnsafeFunction = taxonomyCategory -> {
+					TaxonomyCategory persistedTaxonomyCategory = null;
+
+					try {
+						Long taxonomyVocabularyId =
+							taxonomyCategory.getTaxonomyVocabularyId();
+
+						if (taxonomyVocabularyId == null) {
+							taxonomyVocabularyId = GetterUtil.getLong(
+								(String)parameters.get("taxonomyVocabularyId"));
+						}
+
+						TaxonomyCategory getTaxonomyCategory =
+							getTaxonomyVocabularyTaxonomyCategoryByExternalReferenceCode(
+								taxonomyVocabularyId,
+								taxonomyCategory.getExternalReferenceCode());
+
+						String taxonomyCategoryId = getTaxonomyCategory.getId();
+
+						if (Validator.isBlank(taxonomyCategoryId)) {
+							taxonomyCategoryId = (String)parameters.get(
+								"taxonomyCategoryId");
+						}
+
+						persistedTaxonomyCategory = patchTaxonomyCategory(
+							taxonomyCategoryId, taxonomyCategory);
+					}
+					catch (NoSuchModelException noSuchModelException) {
+						if (_log.isDebugEnabled()) {
+							_log.debug(noSuchModelException);
+						}
+
+						if (parameters.containsKey("taxonomyVocabularyId")) {
+							persistedTaxonomyCategory =
+								postTaxonomyVocabularyTaxonomyCategory(
+									GetterUtil.getLong(
+										(String)parameters.get(
+											"taxonomyVocabularyId")),
+									taxonomyCategory);
+						}
+						else {
+							throw new NotSupportedException(
+								"One of the following parameters must be " +
+									"specified: [taxonomyVocabularyId]");
+						}
+					}
+
+					return persistedTaxonomyCategory;
+				};
+			}
+
+			if (StringUtil.equalsIgnoreCase(updateStrategy, "UPDATE")) {
+				if (parameters.containsKey("taxonomyVocabularyId")) {
+					taxonomyCategoryUnsafeFunction = taxonomyCategory -> {
+						Long taxonomyVocabularyId =
+							taxonomyCategory.getTaxonomyVocabularyId();
+
+						if (taxonomyVocabularyId == null) {
+							taxonomyVocabularyId = GetterUtil.getLong(
+								(String)parameters.get("taxonomyVocabularyId"));
+						}
+
+						return putTaxonomyVocabularyTaxonomyCategoryByExternalReferenceCode(
+							taxonomyVocabularyId,
+							taxonomyCategory.getExternalReferenceCode(),
+							taxonomyCategory);
+					};
+				}
+				else if (parameters.containsKey("scopeKey")) {
+					taxonomyCategoryUnsafeFunction = taxonomyCategory ->
+						putScopeScopeKeyTaxonomyCategoryByExternalReferenceCode(
+							(String)parameters.get("scopeKey"),
+							taxonomyCategory.getExternalReferenceCode(),
+							taxonomyCategory);
+				}
+				else {
+					throw new NotSupportedException(
+						"One of the following parameters must be specified: " +
+							"[taxonomyVocabularyId, scopeKey]");
+				}
+			}
+		}
+
+		if (taxonomyCategoryUnsafeFunction == null) {
+			throw new NotSupportedException(
+				"Create strategy \"" + createStrategy +
+					"\" is not supported for TaxonomyCategory");
+		}
+
+		if (contextBatchUnsafeBiConsumer != null) {
+			contextBatchUnsafeBiConsumer.accept(
+				taxonomyCategories, taxonomyCategoryUnsafeFunction);
+		}
+		else if (contextBatchUnsafeConsumer != null) {
+			contextBatchUnsafeConsumer.accept(
+				taxonomyCategories, taxonomyCategoryUnsafeFunction::apply);
+		}
+		else {
+			for (TaxonomyCategory taxonomyCategory : taxonomyCategories) {
+				taxonomyCategoryUnsafeFunction.apply(taxonomyCategory);
+			}
+		}
+	}
 
 	@Override
 	public void deleteScopeScopeKeyTaxonomyCategoryByExternalReferenceCode(
@@ -329,49 +472,8 @@ public class TaxonomyCategoryResourceImpl
 			String scopeKey, TaxonomyCategory taxonomyCategory)
 		throws Exception {
 
-		ParentTaxonomyCategory parentTaxonomyCategory =
-			taxonomyCategory.getParentTaxonomyCategory();
-
-		long parentTaxonomyCategoryId =
-			AssetCategoryConstants.DEFAULT_PARENT_CATEGORY_ID;
-
-		long groupId = _getGroupId(scopeKey);
-
-		if (parentTaxonomyCategory != null) {
-			AssetCategory parentAssetCategory =
-				_assetCategoryService.getAssetCategoryByExternalReferenceCode(
-					groupId, parentTaxonomyCategory.getExternalReferenceCode());
-
-			parentTaxonomyCategoryId = parentAssetCategory.getCategoryId();
-		}
-
-		Long taxonomyVocabularyId = taxonomyCategory.getTaxonomyVocabularyId();
-
-		if (taxonomyVocabularyId == null) {
-			ParentTaxonomyVocabulary parentTaxonomyVocabulary =
-				taxonomyCategory.getParentTaxonomyVocabulary();
-
-			if ((parentTaxonomyVocabulary == null) ||
-				Validator.isBlank(
-					parentTaxonomyVocabulary.getExternalReferenceCode())) {
-
-				throw new BadRequestException(
-					"No Taxonomy Vocabulary reference code provided");
-			}
-
-			AssetVocabulary assetVocabulary =
-				_assetVocabularyService.
-					getAssetVocabularyByExternalReferenceCode(
-						groupId,
-						parentTaxonomyVocabulary.getExternalReferenceCode());
-
-			taxonomyVocabularyId = assetVocabulary.getVocabularyId();
-		}
-
-		return _addTaxonomyCategory(
-			taxonomyCategory.getExternalReferenceCode(), groupId,
-			contextAcceptLanguage.getPreferredLanguageId(),
-			parentTaxonomyCategoryId, taxonomyCategory, taxonomyVocabularyId);
+		return _postScopeScopeKeyTaxonomyCategory(
+			_getGroupId(scopeKey), taxonomyCategory);
 	}
 
 	@Override
@@ -407,46 +509,8 @@ public class TaxonomyCategoryResourceImpl
 				externalReferenceCode, groupId);
 
 		if (persistedAssetCategory == null) {
-			String parentTaxonomyCategoryExternalReferenceCode = null;
-
-			ParentTaxonomyCategory parentTaxonomyCategory =
-				taxonomyCategory.getParentTaxonomyCategory();
-
-			if (parentTaxonomyCategory != null) {
-				parentTaxonomyCategoryExternalReferenceCode =
-					parentTaxonomyCategory.getExternalReferenceCode();
-			}
-
-			ParentTaxonomyVocabulary parentTaxonomyVocabulary =
-				taxonomyCategory.getParentTaxonomyVocabulary();
-
-			String taxonomyVocabularyExternalReferenceCode = StringPool.BLANK;
-
-			if (parentTaxonomyVocabulary != null) {
-				taxonomyVocabularyExternalReferenceCode =
-					parentTaxonomyVocabulary.getExternalReferenceCode();
-			}
-			else if (taxonomyCategory.getTaxonomyVocabularyId() != null) {
-				AssetVocabulary assetVocabulary =
-					_assetVocabularyService.fetchVocabulary(
-						taxonomyCategory.getTaxonomyVocabularyId());
-
-				if (assetVocabulary != null) {
-					taxonomyVocabularyExternalReferenceCode =
-						assetVocabulary.getExternalReferenceCode();
-				}
-			}
-
-			if (Validator.isBlank(taxonomyVocabularyExternalReferenceCode)) {
-				throw new BadRequestException(
-					"No Taxonomy Vocabulary reference code provided");
-			}
-
-			return _addTaxonomyCategory(
-				taxonomyCategory.getExternalReferenceCode(), groupId,
-				contextAcceptLanguage.getPreferredLanguageId(),
-				parentTaxonomyCategoryExternalReferenceCode, taxonomyCategory,
-				taxonomyVocabularyExternalReferenceCode);
+			return _postScopeScopeKeyTaxonomyCategory(
+				groupId, taxonomyCategory);
 		}
 
 		long assetVocabularyId = _getAssetVocabularyId(
@@ -478,6 +542,30 @@ public class TaxonomyCategoryResourceImpl
 					contextHttpServletRequest,
 					taxonomyCategory.getViewableByAsString()
 				).build()));
+	}
+
+	@Override
+	public Page<TaxonomyCategory> read(
+			Filter filter, Pagination pagination, Sort[] sorts,
+			Map<String, Serializable> parameters, String search)
+		throws Exception {
+
+		if (parameters.containsKey("taxonomyVocabularyId")) {
+			return getTaxonomyVocabularyTaxonomyCategoriesPage(
+				GetterUtil.getLong(
+					(String)parameters.get("taxonomyVocabularyId")),
+				GetterUtil.getBoolean((String)parameters.get("flatten")),
+				search, null, filter, pagination, sorts);
+		}
+		else if (parameters.containsKey("scopeKey")) {
+			return getScopeScopeKeyTaxonomyCategoriesPage(
+				(String)parameters.get("scopeKey"), search, null, filter,
+				pagination, sorts);
+		}
+
+		throw new NotSupportedException(
+			"One of the following parameters must be specified: " +
+				"[taxonomyVocabularyId]");
 	}
 
 	@Override
@@ -668,22 +756,6 @@ public class TaxonomyCategoryResourceImpl
 				).build()));
 	}
 
-	private TaxonomyCategory _addTaxonomyCategory(
-			String externalReferenceCode, long groupId, String languageId,
-			String parentTaxonomyCategoryExternalReferenceCode,
-			TaxonomyCategory taxonomyCategory,
-			String taxonomyVocabularyExternalReferenceCode)
-		throws Exception {
-
-		return _addTaxonomyCategory(
-			externalReferenceCode, groupId, languageId,
-			_getParentTaxonomyCategoryCategoryId(
-				groupId, parentTaxonomyCategoryExternalReferenceCode),
-			taxonomyCategory,
-			_getTaxonomyVocabularyId(
-				groupId, taxonomyVocabularyExternalReferenceCode));
-	}
-
 	private AssetCategory _getAssetCategory(String taxonomyCategoryId)
 		throws Exception {
 
@@ -777,7 +849,7 @@ public class TaxonomyCategoryResourceImpl
 		return AssetCategoryConstants.DEFAULT_PARENT_CATEGORY_ID;
 	}
 
-	private long _getParentTaxonomyCategoryCategoryId(
+	private long _getParentTaxonomyCategoryId(
 			long groupId, String parentTaxonomyCategoryExternalReferenceCode)
 		throws Exception {
 
@@ -905,6 +977,55 @@ public class TaxonomyCategoryResourceImpl
 		return strings;
 	}
 
+	private TaxonomyCategory _postScopeScopeKeyTaxonomyCategory(
+			long groupId, TaxonomyCategory taxonomyCategory)
+		throws Exception {
+
+		String parentTaxonomyCategoryExternalReferenceCode = null;
+
+		ParentTaxonomyCategory parentTaxonomyCategory =
+			taxonomyCategory.getParentTaxonomyCategory();
+
+		if (parentTaxonomyCategory != null) {
+			parentTaxonomyCategoryExternalReferenceCode =
+				parentTaxonomyCategory.getExternalReferenceCode();
+		}
+
+		ParentTaxonomyVocabulary parentTaxonomyVocabulary =
+			taxonomyCategory.getParentTaxonomyVocabulary();
+
+		String taxonomyVocabularyExternalReferenceCode = StringPool.BLANK;
+
+		if (parentTaxonomyVocabulary != null) {
+			taxonomyVocabularyExternalReferenceCode =
+				parentTaxonomyVocabulary.getExternalReferenceCode();
+		}
+		else if (taxonomyCategory.getTaxonomyVocabularyId() != null) {
+			AssetVocabulary assetVocabulary =
+				_assetVocabularyService.fetchVocabulary(
+					taxonomyCategory.getTaxonomyVocabularyId());
+
+			if (assetVocabulary != null) {
+				taxonomyVocabularyExternalReferenceCode =
+					assetVocabulary.getExternalReferenceCode();
+			}
+		}
+
+		if (Validator.isBlank(taxonomyVocabularyExternalReferenceCode)) {
+			throw new BadRequestException(
+				"No Taxonomy Vocabulary reference code provided");
+		}
+
+		return _addTaxonomyCategory(
+			taxonomyCategory.getExternalReferenceCode(), groupId,
+			contextAcceptLanguage.getPreferredLanguageId(),
+			_getParentTaxonomyCategoryId(
+				groupId, parentTaxonomyCategoryExternalReferenceCode),
+			taxonomyCategory,
+			_getTaxonomyVocabularyId(
+				groupId, taxonomyVocabularyExternalReferenceCode));
+	}
+
 	private AssetCategory _toAssetCategory(Object[] assetCategory) {
 		return new AssetCategoryImpl() {
 			{
@@ -988,6 +1109,9 @@ public class TaxonomyCategoryResourceImpl
 				taxonomyCategory.getViewableByAsString()
 			).build());
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		TaxonomyCategoryResourceImpl.class);
 
 	private static final EntityModel _entityModel = new CategoryEntityModel();
 
