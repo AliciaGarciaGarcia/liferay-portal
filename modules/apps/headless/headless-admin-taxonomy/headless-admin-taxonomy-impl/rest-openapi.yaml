@@ -1196,6 +1196,7 @@ paths:
             # @review
             description:
                 Retrieves the scope's taxonomy categories.
+            operationId: getScopeScopeKeyTaxonomyCategoriesPage
             parameters:
                 -   in: path
                     name: scopeKey
@@ -1253,6 +1254,7 @@ paths:
         post:
             description:
                 Inserts a new Category in a Scope.
+            operationId: postScopeScopeKeyTaxonomyCategory
             parameters:
                 -   in: path
                     name: scopeKey
@@ -1282,6 +1284,7 @@ paths:
             # @review
             description:
                 Deletes the scope's taxonomy category by external reference code.
+            operationId: deleteScopeScopeKeyTaxonomyCategoryByExternalReferenceCode
             parameters:
                 -   in: path
                     name: scopeKey
@@ -1303,6 +1306,7 @@ paths:
             # @review
             description:
                 Retrieves the scope's taxonomy category by external reference code.
+            operationId: getScopeScopeKeyTaxonomyCategoryByExternalReferenceCode
             parameters:
                 -   in: path
                     name: scopeKey
@@ -1337,6 +1341,7 @@ paths:
             description:
                 Updates the scope's taxonomy category with the given external reference code, or creates it if it not
                 exists.
+            operationId: putScopeScopeKeyTaxonomyCategoryByExternalReferenceCode
             parameters:
                 -   in: path
                     name: scopeKey
@@ -1371,6 +1376,7 @@ paths:
             # @review
             description:
                 Deletes the scope's taxonomy vocabulary by external reference code.
+            operationId: deleteScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode
             parameters:
                 -   in: path
                     name: scopeKey
@@ -1392,6 +1398,7 @@ paths:
             # @review
             description:
                 Retrieves the scope's taxonomy vocabulary by external reference code.
+            operationId: getScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode
             parameters:
                 -   in: path
                     name: scopeKey
@@ -1426,6 +1433,7 @@ paths:
             description:
                 Updates the scope's taxonomy vocabulary with the given external reference code, or creates it if it not
                 exists.
+            operationId: putScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode
             parameters:
                 -   in: path
                     name: scopeKey

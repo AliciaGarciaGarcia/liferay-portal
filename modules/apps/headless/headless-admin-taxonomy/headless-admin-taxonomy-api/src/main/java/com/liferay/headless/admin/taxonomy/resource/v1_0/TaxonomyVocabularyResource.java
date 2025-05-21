@@ -50,6 +50,10 @@ public interface TaxonomyVocabularyResource {
 			Long assetLibraryId, String externalReferenceCode)
 		throws Exception;
 
+	public void deleteScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode(
+			String scopeKey, String externalReferenceCode)
+		throws Exception;
+
 	public void deleteSiteTaxonomyVocabularyByExternalReferenceCode(
 			Long siteId, String externalReferenceCode)
 		throws Exception;
@@ -77,6 +81,11 @@ public interface TaxonomyVocabularyResource {
 	public Page<com.liferay.portal.vulcan.permission.Permission>
 			getAssetLibraryTaxonomyVocabularyPermissionsPage(
 				Long assetLibraryId, String roleNames)
+		throws Exception;
+
+	public TaxonomyVocabulary
+			getScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode(
+				String scopeKey, String externalReferenceCode)
 		throws Exception;
 
 	public Page<TaxonomyVocabulary> getSiteTaxonomyVocabulariesPage(
@@ -171,6 +180,12 @@ public interface TaxonomyVocabularyResource {
 			putAssetLibraryTaxonomyVocabularyPermissionsPage(
 				Long assetLibraryId,
 				com.liferay.portal.vulcan.permission.Permission[] permissions)
+		throws Exception;
+
+	public TaxonomyVocabulary
+			putScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode(
+				String scopeKey, String externalReferenceCode,
+				TaxonomyVocabulary taxonomyVocabulary)
 		throws Exception;
 
 	public TaxonomyVocabulary putSiteTaxonomyVocabularyByExternalReferenceCode(

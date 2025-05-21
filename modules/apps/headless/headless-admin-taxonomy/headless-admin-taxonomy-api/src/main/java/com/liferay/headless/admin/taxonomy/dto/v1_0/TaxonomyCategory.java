@@ -675,7 +675,7 @@ public class TaxonomyCategory implements Serializable {
 	@GraphQLField(
 		description = "The parent category's `TaxonomyVocabulary`, if such a parent category exists."
 	)
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
 	protected ParentTaxonomyVocabulary parentTaxonomyVocabulary;
 
 	@JsonIgnore
@@ -729,34 +729,29 @@ public class TaxonomyCategory implements Serializable {
 	private Supplier<com.liferay.portal.vulcan.permission.Permission[]>
 		_permissionsSupplier;
 
-	@io.swagger.v3.oas.annotations.media.Schema(
-		description = "The external reference code of the site to which this category is scoped."
-	)
-	public String getSiteExternalReferenceCode() {
-		if (_siteExternalReferenceCodeSupplier != null) {
-			siteExternalReferenceCode =
-				_siteExternalReferenceCodeSupplier.get();
+	@io.swagger.v3.oas.annotations.media.Schema
+	@Valid
+	public Scope getScope() {
+		if (_scopeSupplier != null) {
+			scope = _scopeSupplier.get();
 
-			_siteExternalReferenceCodeSupplier = null;
+			_scopeSupplier = null;
 		}
 
-		return siteExternalReferenceCode;
+		return scope;
 	}
 
-	public void setSiteExternalReferenceCode(String siteExternalReferenceCode) {
-		this.siteExternalReferenceCode = siteExternalReferenceCode;
+	public void setScope(Scope scope) {
+		this.scope = scope;
 
-		_siteExternalReferenceCodeSupplier = null;
+		_scopeSupplier = null;
 	}
 
 	@JsonIgnore
-	public void setSiteExternalReferenceCode(
-		UnsafeSupplier<String, Exception>
-			siteExternalReferenceCodeUnsafeSupplier) {
-
-		_siteExternalReferenceCodeSupplier = () -> {
+	public void setScope(UnsafeSupplier<Scope, Exception> scopeUnsafeSupplier) {
+		_scopeSupplier = () -> {
 			try {
-				return siteExternalReferenceCodeUnsafeSupplier.get();
+				return scopeUnsafeSupplier.get();
 			}
 			catch (RuntimeException runtimeException) {
 				throw runtimeException;
@@ -767,59 +762,12 @@ public class TaxonomyCategory implements Serializable {
 		};
 	}
 
-	@GraphQLField(
-		description = "The external reference code of the site to which this category is scoped."
-	)
+	@GraphQLField
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	protected String siteExternalReferenceCode;
+	protected Scope scope;
 
 	@JsonIgnore
-	private Supplier<String> _siteExternalReferenceCodeSupplier;
-
-	@io.swagger.v3.oas.annotations.media.Schema(
-		description = "The ID of the site to which this category is scoped."
-	)
-	public Long getSiteId() {
-		if (_siteIdSupplier != null) {
-			siteId = _siteIdSupplier.get();
-
-			_siteIdSupplier = null;
-		}
-
-		return siteId;
-	}
-
-	public void setSiteId(Long siteId) {
-		this.siteId = siteId;
-
-		_siteIdSupplier = null;
-	}
-
-	@JsonIgnore
-	public void setSiteId(
-		UnsafeSupplier<Long, Exception> siteIdUnsafeSupplier) {
-
-		_siteIdSupplier = () -> {
-			try {
-				return siteIdUnsafeSupplier.get();
-			}
-			catch (RuntimeException runtimeException) {
-				throw runtimeException;
-			}
-			catch (Exception exception) {
-				throw new RuntimeException(exception);
-			}
-		};
-	}
-
-	@GraphQLField(
-		description = "The ID of the site to which this category is scoped."
-	)
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	protected Long siteId;
-
-	@JsonIgnore
-	private Supplier<Long> _siteIdSupplier;
+	private Supplier<Scope> _scopeSupplier;
 
 	@io.swagger.v3.oas.annotations.media.Schema(
 		description = "The category's properties."
@@ -1279,32 +1227,16 @@ public class TaxonomyCategory implements Serializable {
 			sb.append("]");
 		}
 
-		String siteExternalReferenceCode = getSiteExternalReferenceCode();
+		Scope scope = getScope();
 
-		if (siteExternalReferenceCode != null) {
+		if (scope != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
-			sb.append("\"siteExternalReferenceCode\": ");
+			sb.append("\"scope\": ");
 
-			sb.append("\"");
-
-			sb.append(_escape(siteExternalReferenceCode));
-
-			sb.append("\"");
-		}
-
-		Long siteId = getSiteId();
-
-		if (siteId != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"siteId\": ");
-
-			sb.append(siteId);
+			sb.append(String.valueOf(scope));
 		}
 
 		TaxonomyCategoryProperty[] taxonomyCategoryProperties =

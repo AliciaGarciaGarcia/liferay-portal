@@ -46,6 +46,10 @@ import org.osgi.annotation.versioning.ProviderType;
 @ProviderType
 public interface TaxonomyCategoryResource {
 
+	public void deleteScopeScopeKeyTaxonomyCategoryByExternalReferenceCode(
+			String scopeKey, String externalReferenceCode)
+		throws Exception;
+
 	public void deleteTaxonomyCategory(String taxonomyCategoryId)
 		throws Exception;
 
@@ -55,6 +59,19 @@ public interface TaxonomyCategoryResource {
 
 	public void deleteTaxonomyVocabularyTaxonomyCategoryByExternalReferenceCode(
 			Long taxonomyVocabularyId, String externalReferenceCode)
+		throws Exception;
+
+	public Page<TaxonomyCategory> getScopeScopeKeyTaxonomyCategoriesPage(
+			String scopeKey, String search,
+			com.liferay.portal.vulcan.aggregation.Aggregation aggregation,
+			com.liferay.portal.kernel.search.filter.Filter filter,
+			Pagination pagination,
+			com.liferay.portal.kernel.search.Sort[] sorts)
+		throws Exception;
+
+	public TaxonomyCategory
+			getScopeScopeKeyTaxonomyCategoryByExternalReferenceCode(
+				String scopeKey, String externalReferenceCode)
 		throws Exception;
 
 	public Page<TaxonomyCategory> getTaxonomyCategoriesRankedPage(
@@ -94,6 +111,10 @@ public interface TaxonomyCategoryResource {
 			String taxonomyCategoryId, TaxonomyCategory taxonomyCategory)
 		throws Exception;
 
+	public TaxonomyCategory postScopeScopeKeyTaxonomyCategory(
+			String scopeKey, TaxonomyCategory taxonomyCategory)
+		throws Exception;
+
 	public TaxonomyCategory postTaxonomyCategoryTaxonomyCategory(
 			String parentTaxonomyCategoryId, TaxonomyCategory taxonomyCategory)
 		throws Exception;
@@ -111,6 +132,12 @@ public interface TaxonomyCategoryResource {
 
 	public Response postTaxonomyVocabularyTaxonomyCategoryBatch(
 			Long taxonomyVocabularyId, String callbackURL, Object object)
+		throws Exception;
+
+	public TaxonomyCategory
+			putScopeScopeKeyTaxonomyCategoryByExternalReferenceCode(
+				String scopeKey, String externalReferenceCode,
+				TaxonomyCategory taxonomyCategory)
 		throws Exception;
 
 	public TaxonomyCategory putTaxonomyCategory(

@@ -188,6 +188,11 @@ public class ServletDataImpl implements ServletData {
 							KeywordResourceImpl.class,
 							"putSiteKeywordPermissionsPage"));
 					put(
+						"mutation#deleteScopeScopeKeyTaxonomyCategoryByExternalReferenceCode",
+						new ObjectValuePair<>(
+							TaxonomyCategoryResourceImpl.class,
+							"deleteScopeScopeKeyTaxonomyCategoryByExternalReferenceCode"));
+					put(
 						"mutation#deleteTaxonomyCategory",
 						new ObjectValuePair<>(
 							TaxonomyCategoryResourceImpl.class,
@@ -208,6 +213,11 @@ public class ServletDataImpl implements ServletData {
 							TaxonomyCategoryResourceImpl.class,
 							"patchTaxonomyCategory"));
 					put(
+						"mutation#createScopeScopeKeyTaxonomyCategory",
+						new ObjectValuePair<>(
+							TaxonomyCategoryResourceImpl.class,
+							"postScopeScopeKeyTaxonomyCategory"));
+					put(
 						"mutation#createTaxonomyCategoryTaxonomyCategory",
 						new ObjectValuePair<>(
 							TaxonomyCategoryResourceImpl.class,
@@ -227,6 +237,11 @@ public class ServletDataImpl implements ServletData {
 						new ObjectValuePair<>(
 							TaxonomyCategoryResourceImpl.class,
 							"postTaxonomyVocabularyTaxonomyCategoryBatch"));
+					put(
+						"mutation#updateScopeScopeKeyTaxonomyCategoryByExternalReferenceCode",
+						new ObjectValuePair<>(
+							TaxonomyCategoryResourceImpl.class,
+							"putScopeScopeKeyTaxonomyCategoryByExternalReferenceCode"));
 					put(
 						"mutation#updateTaxonomyCategory",
 						new ObjectValuePair<>(
@@ -252,6 +267,11 @@ public class ServletDataImpl implements ServletData {
 						new ObjectValuePair<>(
 							TaxonomyVocabularyResourceImpl.class,
 							"deleteAssetLibraryTaxonomyVocabularyByExternalReferenceCode"));
+					put(
+						"mutation#deleteScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode",
+						new ObjectValuePair<>(
+							TaxonomyVocabularyResourceImpl.class,
+							"deleteScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode"));
 					put(
 						"mutation#deleteSiteTaxonomyVocabularyByExternalReferenceCode",
 						new ObjectValuePair<>(
@@ -328,6 +348,11 @@ public class ServletDataImpl implements ServletData {
 							TaxonomyVocabularyResourceImpl.class,
 							"putAssetLibraryTaxonomyVocabularyPermissionsPage"));
 					put(
+						"mutation#updateScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode",
+						new ObjectValuePair<>(
+							TaxonomyVocabularyResourceImpl.class,
+							"putScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode"));
+					put(
 						"mutation#updateSiteTaxonomyVocabularyByExternalReferenceCode",
 						new ObjectValuePair<>(
 							TaxonomyVocabularyResourceImpl.class,
@@ -396,6 +421,16 @@ public class ServletDataImpl implements ServletData {
 						new ObjectValuePair<>(
 							KeywordResourceImpl.class, "getSiteKeywordsPage"));
 					put(
+						"query#scopeScopeKeyTaxonomyCategories",
+						new ObjectValuePair<>(
+							TaxonomyCategoryResourceImpl.class,
+							"getScopeScopeKeyTaxonomyCategoriesPage"));
+					put(
+						"query#scopeScopeKeyTaxonomyCategoryByExternalReferenceCode",
+						new ObjectValuePair<>(
+							TaxonomyCategoryResourceImpl.class,
+							"getScopeScopeKeyTaxonomyCategoryByExternalReferenceCode"));
+					put(
 						"query#taxonomyCategoriesRanked",
 						new ObjectValuePair<>(
 							TaxonomyCategoryResourceImpl.class,
@@ -440,6 +475,11 @@ public class ServletDataImpl implements ServletData {
 						new ObjectValuePair<>(
 							TaxonomyVocabularyResourceImpl.class,
 							"getAssetLibraryTaxonomyVocabularyPermissionsPage"));
+					put(
+						"query#scopeScopeKeyTaxonomyVocabularyByExternalReferenceCode",
+						new ObjectValuePair<>(
+							TaxonomyVocabularyResourceImpl.class,
+							"getScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode"));
 					put(
 						"query#siteTaxonomyVocabularies",
 						new ObjectValuePair<>(

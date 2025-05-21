@@ -417,6 +417,25 @@ public class Mutation {
 	}
 
 	@GraphQLField(
+		description = "Deletes the scope's taxonomy category by external reference code."
+	)
+	public boolean deleteScopeScopeKeyTaxonomyCategoryByExternalReferenceCode(
+			@GraphQLName("scopeKey") String scopeKey,
+			@GraphQLName("externalReferenceCode") String externalReferenceCode)
+		throws Exception {
+
+		_applyVoidComponentServiceObjects(
+			_taxonomyCategoryResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			taxonomyCategoryResource ->
+				taxonomyCategoryResource.
+					deleteScopeScopeKeyTaxonomyCategoryByExternalReferenceCode(
+						scopeKey, externalReferenceCode));
+
+		return true;
+	}
+
+	@GraphQLField(
 		description = "Deletes the taxonomy category and returns a 204 if the operation succeeds."
 	)
 	public boolean deleteTaxonomyCategory(
@@ -482,6 +501,20 @@ public class Mutation {
 			taxonomyCategoryResource ->
 				taxonomyCategoryResource.patchTaxonomyCategory(
 					taxonomyCategoryId, taxonomyCategory));
+	}
+
+	@GraphQLField(description = "Inserts a new Category in a Scope.")
+	public TaxonomyCategory createScopeScopeKeyTaxonomyCategory(
+			@GraphQLName("scopeKey") String scopeKey,
+			@GraphQLName("taxonomyCategory") TaxonomyCategory taxonomyCategory)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_taxonomyCategoryResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			taxonomyCategoryResource ->
+				taxonomyCategoryResource.postScopeScopeKeyTaxonomyCategory(
+					scopeKey, taxonomyCategory));
 	}
 
 	@GraphQLField(description = "Inserts a new child taxonomy category.")
@@ -554,6 +587,27 @@ public class Mutation {
 				taxonomyCategoryResource.
 					postTaxonomyVocabularyTaxonomyCategoryBatch(
 						taxonomyVocabularyId, callbackURL, object));
+	}
+
+	@GraphQLField(
+		description = "Updates the scope's taxonomy category with the given external reference code, or creates it if it not exists."
+	)
+	public TaxonomyCategory
+			updateScopeScopeKeyTaxonomyCategoryByExternalReferenceCode(
+				@GraphQLName("scopeKey") String scopeKey,
+				@GraphQLName("externalReferenceCode") String
+					externalReferenceCode,
+				@GraphQLName("taxonomyCategory") TaxonomyCategory
+					taxonomyCategory)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_taxonomyCategoryResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			taxonomyCategoryResource ->
+				taxonomyCategoryResource.
+					putScopeScopeKeyTaxonomyCategoryByExternalReferenceCode(
+						scopeKey, externalReferenceCode, taxonomyCategory));
 	}
 
 	@GraphQLField(
@@ -644,6 +698,25 @@ public class Mutation {
 				taxonomyVocabularyResource.
 					deleteAssetLibraryTaxonomyVocabularyByExternalReferenceCode(
 						Long.valueOf(assetLibraryId), externalReferenceCode));
+
+		return true;
+	}
+
+	@GraphQLField(
+		description = "Deletes the scope's taxonomy vocabulary by external reference code."
+	)
+	public boolean deleteScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode(
+			@GraphQLName("scopeKey") String scopeKey,
+			@GraphQLName("externalReferenceCode") String externalReferenceCode)
+		throws Exception {
+
+		_applyVoidComponentServiceObjects(
+			_taxonomyVocabularyResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			taxonomyVocabularyResource ->
+				taxonomyVocabularyResource.
+					deleteScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode(
+						scopeKey, externalReferenceCode));
 
 		return true;
 	}
@@ -922,6 +995,27 @@ public class Mutation {
 
 				return paginationPage.getItems();
 			});
+	}
+
+	@GraphQLField(
+		description = "Updates the scope's taxonomy vocabulary with the given external reference code, or creates it if it not exists."
+	)
+	public TaxonomyVocabulary
+			updateScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode(
+				@GraphQLName("scopeKey") String scopeKey,
+				@GraphQLName("externalReferenceCode") String
+					externalReferenceCode,
+				@GraphQLName("taxonomyVocabulary") TaxonomyVocabulary
+					taxonomyVocabulary)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_taxonomyVocabularyResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			taxonomyVocabularyResource ->
+				taxonomyVocabularyResource.
+					putScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode(
+						scopeKey, externalReferenceCode, taxonomyVocabulary));
 	}
 
 	@GraphQLField(

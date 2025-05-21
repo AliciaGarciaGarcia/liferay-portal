@@ -308,6 +308,51 @@ public abstract class BaseTaxonomyVocabularyResourceTestCase {
 	}
 
 	@Test
+	public void testDeleteScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode()
+		throws Exception {
+
+		@SuppressWarnings("PMD.UnusedLocalVariable")
+		TaxonomyVocabulary taxonomyVocabulary =
+			testDeleteScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_addTaxonomyVocabulary();
+
+		assertHttpResponseStatusCode(
+			204,
+			taxonomyVocabularyResource.
+				deleteScopeScopeKeyTaxonomyVocabularyByExternalReferenceCodeHttpResponse(
+					testDeleteScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_getScopeKey(),
+					taxonomyVocabulary.getExternalReferenceCode()));
+
+		assertHttpResponseStatusCode(
+			404,
+			taxonomyVocabularyResource.
+				getScopeScopeKeyTaxonomyVocabularyByExternalReferenceCodeHttpResponse(
+					testDeleteScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_getScopeKey(),
+					taxonomyVocabulary.getExternalReferenceCode()));
+		assertHttpResponseStatusCode(
+			404,
+			taxonomyVocabularyResource.
+				getScopeScopeKeyTaxonomyVocabularyByExternalReferenceCodeHttpResponse(
+					testDeleteScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_getScopeKey(),
+					"-"));
+	}
+
+	protected String
+			testDeleteScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_getScopeKey()
+		throws Exception {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	protected TaxonomyVocabulary
+			testDeleteScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_addTaxonomyVocabulary()
+		throws Exception {
+
+		return taxonomyVocabularyResource.postSiteTaxonomyVocabulary(
+			testGroup.getGroupId(), randomTaxonomyVocabulary());
+	}
+
+	@Test
 	public void testDeleteSiteTaxonomyVocabularyByExternalReferenceCode()
 		throws Exception {
 
@@ -1223,6 +1268,176 @@ public abstract class BaseTaxonomyVocabularyResourceTestCase {
 
 		return testPostAssetLibraryTaxonomyVocabulary_addTaxonomyVocabulary(
 			randomTaxonomyVocabulary());
+	}
+
+	@Test
+	public void testGetScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode()
+		throws Exception {
+
+		TaxonomyVocabulary postTaxonomyVocabulary =
+			testGetScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_addTaxonomyVocabulary();
+
+		TaxonomyVocabulary getTaxonomyVocabulary =
+			taxonomyVocabularyResource.
+				getScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode(
+					testGetScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_getScopeKey(),
+					postTaxonomyVocabulary.getExternalReferenceCode());
+
+		assertEquals(postTaxonomyVocabulary, getTaxonomyVocabulary);
+		assertValid(getTaxonomyVocabulary);
+	}
+
+	protected String
+			testGetScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_getScopeKey()
+		throws Exception {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	protected TaxonomyVocabulary
+			testGetScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_addTaxonomyVocabulary()
+		throws Exception {
+
+		return taxonomyVocabularyResource.postSiteTaxonomyVocabulary(
+			testGroup.getGroupId(), randomTaxonomyVocabulary());
+	}
+
+	@Test
+	public void testGraphQLGetScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode()
+		throws Exception {
+
+		TaxonomyVocabulary taxonomyVocabulary =
+			testGraphQLGetScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_addTaxonomyVocabulary();
+
+		// No namespace
+
+		Assert.assertTrue(
+			equals(
+				taxonomyVocabulary,
+				TaxonomyVocabularySerDes.toDTO(
+					JSONUtil.getValueAsString(
+						invokeGraphQLQuery(
+							new GraphQLField(
+								"scopeScopeKeyTaxonomyVocabularyByExternalReferenceCode",
+								new HashMap<String, Object>() {
+									{
+										put(
+											"scopeKey",
+											"\"" +
+												testGraphQLGetScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_getScopeKey() +
+													"\"");
+
+										put(
+											"externalReferenceCode",
+											"\"" +
+												taxonomyVocabulary.
+													getExternalReferenceCode() +
+														"\"");
+									}
+								},
+								getGraphQLFields())),
+						"JSONObject/data",
+						"Object/scopeScopeKeyTaxonomyVocabularyByExternalReferenceCode"))));
+
+		// Using the namespace headlessAdminTaxonomy_v1_0
+
+		Assert.assertTrue(
+			equals(
+				taxonomyVocabulary,
+				TaxonomyVocabularySerDes.toDTO(
+					JSONUtil.getValueAsString(
+						invokeGraphQLQuery(
+							new GraphQLField(
+								"headlessAdminTaxonomy_v1_0",
+								new GraphQLField(
+									"scopeScopeKeyTaxonomyVocabularyByExternalReferenceCode",
+									new HashMap<String, Object>() {
+										{
+											put(
+												"scopeKey",
+												"\"" +
+													testGraphQLGetScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_getScopeKey() +
+														"\"");
+
+											put(
+												"externalReferenceCode",
+												"\"" +
+													taxonomyVocabulary.
+														getExternalReferenceCode() +
+															"\"");
+										}
+									},
+									getGraphQLFields()))),
+						"JSONObject/data",
+						"JSONObject/headlessAdminTaxonomy_v1_0",
+						"Object/scopeScopeKeyTaxonomyVocabularyByExternalReferenceCode"))));
+	}
+
+	protected String
+			testGraphQLGetScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_getScopeKey()
+		throws Exception {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	@Test
+	public void testGraphQLGetScopeScopeKeyTaxonomyVocabularyByExternalReferenceCodeNotFound()
+		throws Exception {
+
+		String irrelevantScopeKey = "\"" + RandomTestUtil.randomString() + "\"";
+		String irrelevantExternalReferenceCode =
+			"\"" + RandomTestUtil.randomString() + "\"";
+
+		// No namespace
+
+		Assert.assertEquals(
+			"Not Found",
+			JSONUtil.getValueAsString(
+				invokeGraphQLQuery(
+					new GraphQLField(
+						"scopeScopeKeyTaxonomyVocabularyByExternalReferenceCode",
+						new HashMap<String, Object>() {
+							{
+								put("scopeKey", irrelevantScopeKey);
+								put(
+									"externalReferenceCode",
+									irrelevantExternalReferenceCode);
+							}
+						},
+						getGraphQLFields())),
+				"JSONArray/errors", "Object/0", "JSONObject/extensions",
+				"Object/code"));
+
+		// Using the namespace headlessAdminTaxonomy_v1_0
+
+		Assert.assertEquals(
+			"Not Found",
+			JSONUtil.getValueAsString(
+				invokeGraphQLQuery(
+					new GraphQLField(
+						"headlessAdminTaxonomy_v1_0",
+						new GraphQLField(
+							"scopeScopeKeyTaxonomyVocabularyByExternalReferenceCode",
+							new HashMap<String, Object>() {
+								{
+									put("scopeKey", irrelevantScopeKey);
+									put(
+										"externalReferenceCode",
+										irrelevantExternalReferenceCode);
+								}
+							},
+							getGraphQLFields()))),
+				"JSONArray/errors", "Object/0", "JSONObject/extensions",
+				"Object/code"));
+	}
+
+	protected TaxonomyVocabulary
+			testGraphQLGetScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_addTaxonomyVocabulary()
+		throws Exception {
+
+		return testGraphQLTaxonomyVocabulary_addTaxonomyVocabulary();
 	}
 
 	@Test
@@ -3113,6 +3328,84 @@ public abstract class BaseTaxonomyVocabularyResourceTestCase {
 	}
 
 	@Test
+	public void testPutScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode()
+		throws Exception {
+
+		TaxonomyVocabulary postTaxonomyVocabulary =
+			testPutScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_addTaxonomyVocabulary();
+
+		TaxonomyVocabulary randomTaxonomyVocabulary =
+			randomTaxonomyVocabulary();
+
+		TaxonomyVocabulary putTaxonomyVocabulary =
+			taxonomyVocabularyResource.
+				putScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode(
+					testPutScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_getScopeKey(),
+					postTaxonomyVocabulary.getExternalReferenceCode(),
+					randomTaxonomyVocabulary);
+
+		assertEquals(randomTaxonomyVocabulary, putTaxonomyVocabulary);
+		assertValid(putTaxonomyVocabulary);
+
+		TaxonomyVocabulary getTaxonomyVocabulary =
+			taxonomyVocabularyResource.
+				getScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode(
+					testPutScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_getScopeKey(),
+					putTaxonomyVocabulary.getExternalReferenceCode());
+
+		assertEquals(randomTaxonomyVocabulary, getTaxonomyVocabulary);
+		assertValid(getTaxonomyVocabulary);
+
+		TaxonomyVocabulary newTaxonomyVocabulary =
+			testPutScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_createTaxonomyVocabulary();
+
+		putTaxonomyVocabulary =
+			taxonomyVocabularyResource.
+				putScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode(
+					testPutScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_getScopeKey(),
+					newTaxonomyVocabulary.getExternalReferenceCode(),
+					newTaxonomyVocabulary);
+
+		assertEquals(newTaxonomyVocabulary, putTaxonomyVocabulary);
+		assertValid(putTaxonomyVocabulary);
+
+		getTaxonomyVocabulary =
+			taxonomyVocabularyResource.
+				getScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode(
+					testPutScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_getScopeKey(),
+					putTaxonomyVocabulary.getExternalReferenceCode());
+
+		assertEquals(newTaxonomyVocabulary, getTaxonomyVocabulary);
+
+		Assert.assertEquals(
+			newTaxonomyVocabulary.getExternalReferenceCode(),
+			putTaxonomyVocabulary.getExternalReferenceCode());
+	}
+
+	protected String
+			testPutScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_getScopeKey()
+		throws Exception {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	protected TaxonomyVocabulary
+			testPutScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_createTaxonomyVocabulary()
+		throws Exception {
+
+		return randomTaxonomyVocabulary();
+	}
+
+	protected TaxonomyVocabulary
+			testPutScopeScopeKeyTaxonomyVocabularyByExternalReferenceCode_addTaxonomyVocabulary()
+		throws Exception {
+
+		return taxonomyVocabularyResource.postSiteTaxonomyVocabulary(
+			testGroup.getGroupId(), randomTaxonomyVocabulary());
+	}
+
+	@Test
 	public void testPutSiteTaxonomyVocabularyByExternalReferenceCode()
 		throws Exception {
 
@@ -3714,6 +4007,14 @@ public abstract class BaseTaxonomyVocabularyResourceTestCase {
 				continue;
 			}
 
+			if (Objects.equals("scope", additionalAssertFieldName)) {
+				if (taxonomyVocabulary.getScope() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
 			if (Objects.equals(
 					"siteExternalReferenceCode", additionalAssertFieldName)) {
 
@@ -4038,6 +4339,17 @@ public abstract class BaseTaxonomyVocabularyResourceTestCase {
 				if (!Objects.deepEquals(
 						taxonomyVocabulary1.getPermissions(),
 						taxonomyVocabulary2.getPermissions())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("scope", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						taxonomyVocabulary1.getScope(),
+						taxonomyVocabulary2.getScope())) {
 
 					return false;
 				}
@@ -4484,6 +4796,11 @@ public abstract class BaseTaxonomyVocabularyResourceTestCase {
 		}
 
 		if (entityFieldName.equals("permissions")) {
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
+		}
+
+		if (entityFieldName.equals("scope")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
 		}

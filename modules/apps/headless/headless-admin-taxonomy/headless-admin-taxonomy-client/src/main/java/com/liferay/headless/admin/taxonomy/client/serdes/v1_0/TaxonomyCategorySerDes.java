@@ -255,28 +255,14 @@ public class TaxonomyCategorySerDes {
 			sb.append("]");
 		}
 
-		if (taxonomyCategory.getSiteExternalReferenceCode() != null) {
+		if (taxonomyCategory.getScope() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
-			sb.append("\"siteExternalReferenceCode\": ");
+			sb.append("\"scope\": ");
 
-			sb.append("\"");
-
-			sb.append(_escape(taxonomyCategory.getSiteExternalReferenceCode()));
-
-			sb.append("\"");
-		}
-
-		if (taxonomyCategory.getSiteId() != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"siteId\": ");
-
-			sb.append(taxonomyCategory.getSiteId());
+			sb.append(String.valueOf(taxonomyCategory.getScope()));
 		}
 
 		if (taxonomyCategory.getTaxonomyCategoryProperties() != null) {
@@ -492,21 +478,11 @@ public class TaxonomyCategorySerDes {
 				String.valueOf(taxonomyCategory.getPermissions()));
 		}
 
-		if (taxonomyCategory.getSiteExternalReferenceCode() == null) {
-			map.put("siteExternalReferenceCode", null);
+		if (taxonomyCategory.getScope() == null) {
+			map.put("scope", null);
 		}
 		else {
-			map.put(
-				"siteExternalReferenceCode",
-				String.valueOf(
-					taxonomyCategory.getSiteExternalReferenceCode()));
-		}
-
-		if (taxonomyCategory.getSiteId() == null) {
-			map.put("siteId", null);
-		}
-		else {
-			map.put("siteId", String.valueOf(taxonomyCategory.getSiteId()));
+			map.put("scope", String.valueOf(taxonomyCategory.getScope()));
 		}
 
 		if (taxonomyCategory.getTaxonomyCategoryProperties() == null) {
@@ -619,12 +595,7 @@ public class TaxonomyCategorySerDes {
 			else if (Objects.equals(jsonParserFieldName, "permissions")) {
 				return false;
 			}
-			else if (Objects.equals(
-						jsonParserFieldName, "siteExternalReferenceCode")) {
-
-				return false;
-			}
-			else if (Objects.equals(jsonParserFieldName, "siteId")) {
+			else if (Objects.equals(jsonParserFieldName, "scope")) {
 				return false;
 			}
 			else if (Objects.equals(
@@ -768,18 +739,10 @@ public class TaxonomyCategorySerDes {
 					taxonomyCategory.setPermissions(permissionsArray);
 				}
 			}
-			else if (Objects.equals(
-						jsonParserFieldName, "siteExternalReferenceCode")) {
-
+			else if (Objects.equals(jsonParserFieldName, "scope")) {
 				if (jsonParserFieldValue != null) {
-					taxonomyCategory.setSiteExternalReferenceCode(
-						(String)jsonParserFieldValue);
-				}
-			}
-			else if (Objects.equals(jsonParserFieldName, "siteId")) {
-				if (jsonParserFieldValue != null) {
-					taxonomyCategory.setSiteId(
-						Long.valueOf((String)jsonParserFieldValue));
+					taxonomyCategory.setScope(
+						ScopeSerDes.toDTO((String)jsonParserFieldValue));
 				}
 			}
 			else if (Objects.equals(

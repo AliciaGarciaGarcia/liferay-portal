@@ -1,13 +1,16 @@
 /**
- * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-FileCopyrightText: (c) 2025 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
 package com.liferay.headless.admin.taxonomy.dto.v1_0;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import com.liferay.petra.function.UnsafeSupplier;
 import com.liferay.petra.string.StringBundler;
@@ -35,25 +38,21 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @generated
  */
 @Generated("")
-@GraphQLName(
-	description = "The parent category's `TaxonomyVocabulary`, if such a parent category exists.",
-	value = "ParentTaxonomyVocabulary"
-)
+@GraphQLName("Scope")
 @JsonFilter("Liferay.Vulcan")
-@XmlRootElement(name = "ParentTaxonomyVocabulary")
-public class ParentTaxonomyVocabulary implements Serializable {
+@XmlRootElement(name = "Scope")
+public class Scope implements Serializable {
 
-	public static ParentTaxonomyVocabulary toDTO(String json) {
-		return ObjectMapperUtil.readValue(ParentTaxonomyVocabulary.class, json);
+	public static Scope toDTO(String json) {
+		return ObjectMapperUtil.readValue(Scope.class, json);
 	}
 
-	public static ParentTaxonomyVocabulary unsafeToDTO(String json) {
-		return ObjectMapperUtil.unsafeReadValue(
-			ParentTaxonomyVocabulary.class, json);
+	public static Scope unsafeToDTO(String json) {
+		return ObjectMapperUtil.unsafeReadValue(Scope.class, json);
 	}
 
 	@io.swagger.v3.oas.annotations.media.Schema(
-		description = "The parent category's `TaxonomyVocabulary` external reference code."
+		description = "The external reference code of the scope."
 	)
 	public String getExternalReferenceCode() {
 		if (_externalReferenceCodeSupplier != null) {
@@ -88,16 +87,16 @@ public class ParentTaxonomyVocabulary implements Serializable {
 		};
 	}
 
-	@GraphQLField(
-		description = "The parent category's `TaxonomyVocabulary` external reference code."
-	)
+	@GraphQLField(description = "The external reference code of the scope.")
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
 	protected String externalReferenceCode;
 
 	@JsonIgnore
 	private Supplier<String> _externalReferenceCodeSupplier;
 
-	@io.swagger.v3.oas.annotations.media.Schema
+	@io.swagger.v3.oas.annotations.media.Schema(
+		description = "The ID of the scope."
+	)
 	public Long getId() {
 		if (_idSupplier != null) {
 			id = _idSupplier.get();
@@ -129,35 +128,37 @@ public class ParentTaxonomyVocabulary implements Serializable {
 		};
 	}
 
-	@GraphQLField
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	@GraphQLField(description = "The ID of the scope.")
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
 	protected Long id;
 
 	@JsonIgnore
 	private Supplier<Long> _idSupplier;
 
-	@io.swagger.v3.oas.annotations.media.Schema
-	public String getName() {
-		if (_nameSupplier != null) {
-			name = _nameSupplier.get();
+	@io.swagger.v3.oas.annotations.media.Schema(description = "The scope key.")
+	public String getScopeKey() {
+		if (_scopeKeySupplier != null) {
+			scopeKey = _scopeKeySupplier.get();
 
-			_nameSupplier = null;
+			_scopeKeySupplier = null;
 		}
 
-		return name;
+		return scopeKey;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setScopeKey(String scopeKey) {
+		this.scopeKey = scopeKey;
 
-		_nameSupplier = null;
+		_scopeKeySupplier = null;
 	}
 
 	@JsonIgnore
-	public void setName(UnsafeSupplier<String, Exception> nameUnsafeSupplier) {
-		_nameSupplier = () -> {
+	public void setScopeKey(
+		UnsafeSupplier<String, Exception> scopeKeyUnsafeSupplier) {
+
+		_scopeKeySupplier = () -> {
 			try {
-				return nameUnsafeSupplier.get();
+				return scopeKeyUnsafeSupplier.get();
 			}
 			catch (RuntimeException runtimeException) {
 				throw runtimeException;
@@ -168,39 +169,48 @@ public class ParentTaxonomyVocabulary implements Serializable {
 		};
 	}
 
-	@GraphQLField
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	protected String name;
+	@GraphQLField(description = "The scope key.")
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	protected String scopeKey;
 
 	@JsonIgnore
-	private Supplier<String> _nameSupplier;
+	private Supplier<String> _scopeKeySupplier;
 
 	@io.swagger.v3.oas.annotations.media.Schema
+	@JsonGetter("type")
 	@Valid
-	public Map<String, String> getName_i18n() {
-		if (_name_i18nSupplier != null) {
-			name_i18n = _name_i18nSupplier.get();
+	public Type getType() {
+		if (_typeSupplier != null) {
+			type = _typeSupplier.get();
 
-			_name_i18nSupplier = null;
+			_typeSupplier = null;
 		}
 
-		return name_i18n;
-	}
-
-	public void setName_i18n(Map<String, String> name_i18n) {
-		this.name_i18n = name_i18n;
-
-		_name_i18nSupplier = null;
+		return type;
 	}
 
 	@JsonIgnore
-	public void setName_i18n(
-		UnsafeSupplier<Map<String, String>, Exception>
-			name_i18nUnsafeSupplier) {
+	public String getTypeAsString() {
+		Type type = getType();
 
-		_name_i18nSupplier = () -> {
+		if (type == null) {
+			return null;
+		}
+
+		return type.toString();
+	}
+
+	public void setType(Type type) {
+		this.type = type;
+
+		_typeSupplier = null;
+	}
+
+	@JsonIgnore
+	public void setType(UnsafeSupplier<Type, Exception> typeUnsafeSupplier) {
+		_typeSupplier = () -> {
 			try {
-				return name_i18nUnsafeSupplier.get();
+				return typeUnsafeSupplier.get();
 			}
 			catch (RuntimeException runtimeException) {
 				throw runtimeException;
@@ -212,11 +222,11 @@ public class ParentTaxonomyVocabulary implements Serializable {
 	}
 
 	@GraphQLField
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	protected Map<String, String> name_i18n;
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	protected Type type;
 
 	@JsonIgnore
-	private Supplier<Map<String, String>> _name_i18nSupplier;
+	private Supplier<Type> _typeSupplier;
 
 	@Override
 	public boolean equals(Object object) {
@@ -224,14 +234,13 @@ public class ParentTaxonomyVocabulary implements Serializable {
 			return true;
 		}
 
-		if (!(object instanceof ParentTaxonomyVocabulary)) {
+		if (!(object instanceof Scope)) {
 			return false;
 		}
 
-		ParentTaxonomyVocabulary parentTaxonomyVocabulary =
-			(ParentTaxonomyVocabulary)object;
+		Scope scope = (Scope)object;
 
-		return Objects.equals(toString(), parentTaxonomyVocabulary.toString());
+		return Objects.equals(toString(), scope.toString());
 	}
 
 	@Override
@@ -274,32 +283,36 @@ public class ParentTaxonomyVocabulary implements Serializable {
 			sb.append(id);
 		}
 
-		String name = getName();
+		String scopeKey = getScopeKey();
 
-		if (name != null) {
+		if (scopeKey != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
-			sb.append("\"name\": ");
+			sb.append("\"scopeKey\": ");
 
 			sb.append("\"");
 
-			sb.append(_escape(name));
+			sb.append(_escape(scopeKey));
 
 			sb.append("\"");
 		}
 
-		Map<String, String> name_i18n = getName_i18n();
+		Type type = getType();
 
-		if (name_i18n != null) {
+		if (type != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
-			sb.append("\"name_i18n\": ");
+			sb.append("\"type\": ");
 
-			sb.append(_toJSON(name_i18n));
+			sb.append("\"");
+
+			sb.append(type);
+
+			sb.append("\"");
 		}
 
 		sb.append("}");
@@ -309,10 +322,48 @@ public class ParentTaxonomyVocabulary implements Serializable {
 
 	@io.swagger.v3.oas.annotations.media.Schema(
 		accessMode = io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY,
-		defaultValue = "com.liferay.headless.admin.taxonomy.dto.v1_0.ParentTaxonomyVocabulary",
+		defaultValue = "com.liferay.headless.admin.taxonomy.dto.v1_0.Scope",
 		name = "x-class-name"
 	)
 	public String xClassName;
+
+	@GraphQLName("Type")
+	public static enum Type {
+
+		ASSET_LIBRARY("AssetLibrary"), SITE("Site");
+
+		@JsonCreator
+		public static Type create(String value) {
+			if ((value == null) || value.equals("")) {
+				return null;
+			}
+
+			for (Type type : values()) {
+				if (Objects.equals(type.getValue(), value)) {
+					return type;
+				}
+			}
+
+			throw new IllegalArgumentException("Invalid enum value: " + value);
+		}
+
+		@JsonValue
+		public String getValue() {
+			return _value;
+		}
+
+		@Override
+		public String toString() {
+			return _value;
+		}
+
+		private Type(String value) {
+			_value = value;
+		}
+
+		private final String _value;
+
+	}
 
 	private static String _escape(Object object) {
 		return StringUtil.replace(

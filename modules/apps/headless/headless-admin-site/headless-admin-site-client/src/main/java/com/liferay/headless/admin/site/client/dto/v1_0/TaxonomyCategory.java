@@ -360,49 +360,24 @@ public class TaxonomyCategory implements Cloneable, Serializable {
 	protected com.liferay.headless.admin.site.client.permission.Permission[]
 		permissions;
 
-	public String getSiteExternalReferenceCode() {
-		return siteExternalReferenceCode;
+	public Scope getScope() {
+		return scope;
 	}
 
-	public void setSiteExternalReferenceCode(String siteExternalReferenceCode) {
-		this.siteExternalReferenceCode = siteExternalReferenceCode;
+	public void setScope(Scope scope) {
+		this.scope = scope;
 	}
 
-	public void setSiteExternalReferenceCode(
-		UnsafeSupplier<String, Exception>
-			siteExternalReferenceCodeUnsafeSupplier) {
-
+	public void setScope(UnsafeSupplier<Scope, Exception> scopeUnsafeSupplier) {
 		try {
-			siteExternalReferenceCode =
-				siteExternalReferenceCodeUnsafeSupplier.get();
+			scope = scopeUnsafeSupplier.get();
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	protected String siteExternalReferenceCode;
-
-	public Long getSiteId() {
-		return siteId;
-	}
-
-	public void setSiteId(Long siteId) {
-		this.siteId = siteId;
-	}
-
-	public void setSiteId(
-		UnsafeSupplier<Long, Exception> siteIdUnsafeSupplier) {
-
-		try {
-			siteId = siteIdUnsafeSupplier.get();
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	protected Long siteId;
+	protected Scope scope;
 
 	public TaxonomyCategoryProperty[] getTaxonomyCategoryProperties() {
 		return taxonomyCategoryProperties;
