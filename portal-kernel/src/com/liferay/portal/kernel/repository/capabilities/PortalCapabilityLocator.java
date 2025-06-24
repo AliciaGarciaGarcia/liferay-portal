@@ -30,6 +30,8 @@ public interface PortalCapabilityLocator {
 
 	public FileEntryTypeCapability getFileEntryTypeCapability();
 
+	public FileEntryValidatorCapability getFileEntryValidatorCapability();
+
 	public ProcessorCapability getProcessorCapability(
 		DocumentRepository documentRepository,
 		ProcessorCapability.ResourceGenerationStrategy

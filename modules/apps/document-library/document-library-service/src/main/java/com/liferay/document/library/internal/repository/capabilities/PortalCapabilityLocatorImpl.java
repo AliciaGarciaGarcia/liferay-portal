@@ -7,6 +7,7 @@ package com.liferay.document.library.internal.repository.capabilities;
 
 import com.liferay.document.library.kernel.service.DLAppHelperLocalService;
 import com.liferay.document.library.kernel.service.DLFolderService;
+import com.liferay.document.library.kernel.util.DLValidator;
 import com.liferay.document.library.security.io.InputStreamSanitizer;
 import com.liferay.document.library.service.DLFileVersionPreviewLocalService;
 import com.liferay.portal.kernel.cache.CacheRegistryItem;
@@ -16,6 +17,7 @@ import com.liferay.portal.kernel.repository.capabilities.CommentCapability;
 import com.liferay.portal.kernel.repository.capabilities.ConfigurationCapability;
 import com.liferay.portal.kernel.repository.capabilities.DynamicCapability;
 import com.liferay.portal.kernel.repository.capabilities.FileEntryTypeCapability;
+import com.liferay.portal.kernel.repository.capabilities.FileEntryValidatorCapability;
 import com.liferay.portal.kernel.repository.capabilities.PortalCapabilityLocator;
 import com.liferay.portal.kernel.repository.capabilities.ProcessorCapability;
 import com.liferay.portal.kernel.repository.capabilities.RelatedModelCapability;
@@ -91,6 +93,11 @@ public class PortalCapabilityLocatorImpl implements PortalCapabilityLocator {
 	@Override
 	public FileEntryTypeCapability getFileEntryTypeCapability() {
 		return new LiferayFileEntryTypeCapability(_dlFolderService);
+	}
+
+	@Override
+	public FileEntryValidatorCapability getFileEntryValidatorCapability() {
+		return new LiferayFileEntryValidatorCapability(_dlValidator);
 	}
 
 	@Override
@@ -220,6 +227,9 @@ public class PortalCapabilityLocatorImpl implements PortalCapabilityLocator {
 
 	@Reference
 	private DLFolderService _dlFolderService;
+
+	@Reference
+	private DLValidator _dlValidator;
 
 	@Reference
 	private InputStreamSanitizer _inputStreamSanitizer;
