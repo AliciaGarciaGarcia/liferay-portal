@@ -125,28 +125,33 @@ public abstract class BaseSectionDisplayContext {
 	public CreationMenu getCreationMenu() {
 		return new CreationMenu() {
 			{
-				if (getRootObjectEntryFolderExternalReferenceCode() != null) {
-					addPrimaryDropdownItem(
-						dropdownItem -> {
-							dropdownItem.putData("action", "createFolder");
-							dropdownItem.putData(
-								"assetLibraries", _getDepotEntriesJSONArray());
-							dropdownItem.putData(
-								"baseAssetLibraryViewURL",
-								ActionUtil.getBaseSpaceURL(themeDisplay));
-							dropdownItem.putData(
-								"baseFolderViewURL",
-								ActionUtil.getBaseViewFolderURL(themeDisplay));
-							dropdownItem.putData(
-								"parentObjectEntryFolderExternalReferenceCode",
-								_getParentObjectEntryFolderExternalReferenceCode());
-							dropdownItem.setIcon("folder");
-							dropdownItem.setLabel(
-								language.get(httpServletRequest, "folder"));
-						});
-				}
-
 				if (_hasAddEntryPermission()) {
+					if (getRootObjectEntryFolderExternalReferenceCode() !=
+							null) {
+
+						addPrimaryDropdownItem(
+							dropdownItem -> {
+								dropdownItem.putData("action", "createFolder");
+								dropdownItem.putData(
+									"assetLibraries",
+									_getDepotEntriesJSONArray());
+								dropdownItem.putData(
+									"baseAssetLibraryViewURL",
+									ActionUtil.getBaseSpaceURL(themeDisplay));
+								dropdownItem.putData(
+									"baseFolderViewURL",
+									ActionUtil.getBaseViewFolderURL(
+										themeDisplay));
+								dropdownItem.putData(
+									"parentObjectEntryFolderExternalReference" +
+										"Code",
+									_getParentObjectEntryFolderExternalReferenceCode());
+								dropdownItem.setIcon("folder");
+								dropdownItem.setLabel(
+									language.get(httpServletRequest, "folder"));
+							});
+					}
+
 					if (!Objects.equals(
 							getRootObjectEntryFolderExternalReferenceCode(),
 							ObjectEntryFolderConstants.
