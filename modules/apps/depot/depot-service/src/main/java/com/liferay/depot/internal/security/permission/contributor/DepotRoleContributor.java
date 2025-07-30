@@ -10,14 +10,12 @@ import com.liferay.depot.model.DepotEntryGroupRel;
 import com.liferay.depot.service.DepotEntryGroupRelLocalService;
 import com.liferay.depot.service.DepotEntryLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.UserGroup;
-import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.security.permission.UserBag;
 import com.liferay.portal.kernel.security.permission.contributor.RoleCollection;
 import com.liferay.portal.kernel.security.permission.contributor.RoleContributor;
@@ -79,13 +77,6 @@ public class DepotRoleContributor implements RoleContributor {
 						break;
 					}
 				}
-			}
-
-			if (FeatureFlagManagerUtil.isEnabled(
-					group.getCompanyId(), "LPD-17564") &&
-				group.isCMS()) {
-
-				_addRoleId(roleCollection, RoleConstants.CMS_MEMBER);
 			}
 		}
 		catch (PortalException portalException) {

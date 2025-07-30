@@ -9,7 +9,6 @@ import com.liferay.depot.constants.DepotRolesConstants;
 import com.liferay.depot.internal.instance.lifecycle.DepotRolesPortalInstanceLifecycleListener;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.language.Language;
-import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -31,7 +30,7 @@ public class DepotRoleUtil {
 		DepotRolesConstants.ASSET_LIBRARY_CONNECTED_SITE_MEMBER,
 		DepotRolesConstants.ASSET_LIBRARY_CONTENT_REVIEWER,
 		DepotRolesConstants.ASSET_LIBRARY_MEMBER,
-		DepotRolesConstants.ASSET_LIBRARY_OWNER, RoleConstants.CMS_MEMBER
+		DepotRolesConstants.ASSET_LIBRARY_OWNER
 	};
 
 	public static Map<Locale, String> getDescriptionMap(

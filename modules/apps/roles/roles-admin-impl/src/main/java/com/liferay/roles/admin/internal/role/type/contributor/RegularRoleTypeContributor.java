@@ -13,6 +13,7 @@ import com.liferay.portal.util.PropsValues;
 import com.liferay.roles.admin.role.type.contributor.RoleTypeContributor;
 
 import java.util.Locale;
+import java.util.Objects;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -78,7 +79,9 @@ public class RegularRoleTypeContributor implements RoleTypeContributor {
 
 	@Override
 	public boolean isAllowDelete(Role role) {
-		if (role == null) {
+		if ((role == null) ||
+			Objects.equals(role.getName(), RoleConstants.CMS_MEMBER)) {
+
 			return false;
 		}
 
@@ -92,7 +95,8 @@ public class RegularRoleTypeContributor implements RoleTypeContributor {
 	}
 
 	private static final String[] _AUTOMATICALLY_ASSIGNED_ROLE_NAMES = {
-		RoleConstants.GUEST, RoleConstants.OWNER, RoleConstants.USER
+		RoleConstants.CMS_MEMBER, RoleConstants.GUEST, RoleConstants.OWNER,
+		RoleConstants.USER
 	};
 
 	@Reference
