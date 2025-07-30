@@ -14,6 +14,7 @@ import com.liferay.depot.test.util.DepotTestUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.Role;
+import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactory;
 import com.liferay.portal.kernel.service.RoleLocalService;
@@ -60,9 +61,9 @@ public class DepotRoleContributorTest {
 
 	@FeatureFlag("LPD-17564")
 	@Test
-	public void testCMSConsumerRoleAssignment() throws Exception {
+	public void testCMSMemberRoleAssignment() throws Exception {
 		Role role = _roleLocalService.fetchRole(
-			_group.getCompanyId(), DepotRolesConstants.CMS_CONSUMER);
+			_group.getCompanyId(), RoleConstants.CMS_MEMBER);
 
 		Assume.assumeNotNull(role);
 

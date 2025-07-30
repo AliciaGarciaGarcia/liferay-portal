@@ -26,6 +26,8 @@ public class RoleConstants {
 
 	public static final String CMS_ADMINISTRATOR = "CMS Administrator";
 
+	public static final String CMS_MEMBER = "CMS Member";
+
 	public static final String GUEST = "Guest";
 
 	public static final String NAME_INVALID_CHARACTERS =

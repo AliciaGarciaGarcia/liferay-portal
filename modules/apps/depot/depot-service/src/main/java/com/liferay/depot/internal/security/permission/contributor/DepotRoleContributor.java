@@ -17,6 +17,7 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.UserGroup;
+import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.security.permission.UserBag;
 import com.liferay.portal.kernel.security.permission.contributor.RoleCollection;
 import com.liferay.portal.kernel.security.permission.contributor.RoleContributor;
@@ -84,7 +85,7 @@ public class DepotRoleContributor implements RoleContributor {
 					group.getCompanyId(), "LPD-17564") &&
 				group.isCMS()) {
 
-				_addRoleId(roleCollection, DepotRolesConstants.CMS_CONSUMER);
+				_addRoleId(roleCollection, RoleConstants.CMS_MEMBER);
 			}
 		}
 		catch (PortalException portalException) {

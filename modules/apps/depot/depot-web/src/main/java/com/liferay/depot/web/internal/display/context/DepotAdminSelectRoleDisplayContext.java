@@ -380,7 +380,7 @@ public class DepotAdminSelectRoleDisplayContext {
 							DepotRolesConstants.ASSET_LIBRARY_MEMBER,
 							role.getName()) &&
 						!Objects.equals(
-							DepotRolesConstants.CMS_CONSUMER, role.getName()));
+							RoleConstants.CMS_MEMBER, role.getName()));
 			}
 
 			if (!GroupPermissionUtil.contains(
@@ -404,8 +404,7 @@ public class DepotAdminSelectRoleDisplayContext {
 					!Objects.equals(
 						DepotRolesConstants.ASSET_LIBRARY_OWNER,
 						role.getName()) &&
-					!Objects.equals(
-						DepotRolesConstants.CMS_CONSUMER, role.getName()) &&
+					!Objects.equals(RoleConstants.CMS_MEMBER, role.getName()) &&
 					RolePermissionUtil.contains(
 						permissionChecker, _group.getGroupId(),
 						role.getRoleId(), ActionKeys.ASSIGN_MEMBERS));
