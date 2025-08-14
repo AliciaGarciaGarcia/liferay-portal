@@ -115,6 +115,7 @@ public class AssetLibraryDTOConverter
 								group.getGroupId())));
 				setSettings(() -> _toSettings(group));
 				setSiteId(group::getGroupId);
+				setType(depotEntry::getType);
 			}
 		};
 	}
