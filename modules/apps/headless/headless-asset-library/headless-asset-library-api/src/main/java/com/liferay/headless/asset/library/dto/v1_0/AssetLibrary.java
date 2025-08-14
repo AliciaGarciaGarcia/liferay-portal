@@ -798,6 +798,47 @@ public class AssetLibrary implements Serializable {
 	private Supplier<Site[]> _sitesSupplier;
 
 	@io.swagger.v3.oas.annotations.media.Schema(
+		description = "The asset library's type."
+	)
+	public Integer getType() {
+		if (_typeSupplier != null) {
+			type = _typeSupplier.get();
+
+			_typeSupplier = null;
+		}
+
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+
+		_typeSupplier = null;
+	}
+
+	@JsonIgnore
+	public void setType(UnsafeSupplier<Integer, Exception> typeUnsafeSupplier) {
+		_typeSupplier = () -> {
+			try {
+				return typeUnsafeSupplier.get();
+			}
+			catch (RuntimeException runtimeException) {
+				throw runtimeException;
+			}
+			catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
+		};
+	}
+
+	@GraphQLField(description = "The asset library's type.")
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	protected Integer type;
+
+	@JsonIgnore
+	private Supplier<Integer> _typeSupplier;
+
+	@io.swagger.v3.oas.annotations.media.Schema(
 		description = "The asset library's associated users."
 	)
 	@Valid
@@ -1151,6 +1192,18 @@ public class AssetLibrary implements Serializable {
 			}
 
 			sb.append("]");
+		}
+
+		Integer type = getType();
+
+		if (type != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"type\": ");
+
+			sb.append(type);
 		}
 
 		UserAccount[] userAccounts = getUserAccounts();

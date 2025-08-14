@@ -383,6 +383,25 @@ public class AssetLibrary implements Cloneable, Serializable {
 
 	protected Site[] sites;
 
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	public void setType(UnsafeSupplier<Integer, Exception> typeUnsafeSupplier) {
+		try {
+			type = typeUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected Integer type;
+
 	public UserAccount[] getUserAccounts() {
 		return userAccounts;
 	}
