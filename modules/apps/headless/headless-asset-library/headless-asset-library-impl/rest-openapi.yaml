@@ -98,6 +98,10 @@ components:
                         $ref: "#/components/schemas/Site"
                     readOnly: true
                     type: array
+                type:
+                    description:
+                        The asset library's type.
+                    type: integer
                 userAccounts:
                     description:
                         The asset library's associated users.
