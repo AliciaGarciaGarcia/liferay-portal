@@ -6,6 +6,7 @@
 package com.liferay.headless.asset.library.resource.v1_0.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.depot.constants.DepotConstants;
 import com.liferay.depot.model.DepotEntry;
 import com.liferay.depot.service.DepotEntryGroupRelLocalService;
 import com.liferay.depot.service.DepotEntryLocalService;
@@ -139,6 +140,18 @@ public class AssetLibraryResourceTest extends BaseAssetLibraryResourceTestCase {
 				}
 			});
 		_testPostAssetLibrary(new MimeTypeLimit[0]);
+
+		AssetLibrary randomAssetLibrary = randomAssetLibrary();
+
+		randomAssetLibrary.setType(DepotConstants.TYPE_SPACE);
+
+		AssetLibrary postAssetLibrary = testPostAssetLibrary_addAssetLibrary(
+			randomAssetLibrary);
+
+		Assert.assertEquals(
+			Integer.valueOf(DepotConstants.TYPE_SPACE),
+			postAssetLibrary.getType());
+		assertValid(postAssetLibrary);
 	}
 
 	@Override
@@ -183,6 +196,7 @@ public class AssetLibraryResourceTest extends BaseAssetLibraryResourceTestCase {
 	protected AssetLibrary randomAssetLibrary() throws Exception {
 		AssetLibrary assetLibrary = super.randomAssetLibrary();
 
+		assetLibrary.setType(DepotConstants.TYPE_ASSET_LIBRARY);
 		assetLibrary.setSettings(
 			new Settings() {
 				{
