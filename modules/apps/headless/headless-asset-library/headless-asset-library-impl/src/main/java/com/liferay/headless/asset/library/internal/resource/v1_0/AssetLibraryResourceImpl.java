@@ -383,9 +383,14 @@ public class AssetLibraryResourceImpl extends BaseAssetLibraryResourceImpl {
 				unicodeProperties, serviceContext);
 		}
 
+		int type = DepotConstants.TYPE_ASSET_LIBRARY;
+
+		if (assetLibrary.getType() != null) {
+			type = assetLibrary.getType();
+		}
+
 		DepotEntry depotEntry = _depotEntryService.addDepotEntry(
-			nameMap, descriptionMap, DepotConstants.TYPE_ASSET_LIBRARY,
-			serviceContext);
+			nameMap, descriptionMap, type, serviceContext);
 
 		group = depotEntry.getGroup();
 
