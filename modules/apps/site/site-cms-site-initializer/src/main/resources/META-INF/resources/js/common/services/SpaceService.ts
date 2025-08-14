@@ -7,6 +7,8 @@ import {Space} from '../../common/types/Space';
 import {UserAccount, UserGroup} from '../../common/types/UserAccount';
 import ApiHelper from './ApiHelper';
 
+const DEFAULT_SPACE_TYPE = 1;
+
 async function addSpace({
 	description,
 	name,
@@ -22,6 +24,7 @@ async function addSpace({
 			description,
 			name,
 			settings,
+			type: DEFAULT_SPACE_TYPE,
 		}
 	);
 }
