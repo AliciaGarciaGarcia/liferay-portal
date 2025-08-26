@@ -8,8 +8,11 @@ package com.liferay.site.cms.site.initializer.internal.display.context;
 import com.liferay.frontend.data.set.model.FDSActionDropdownItem;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -25,6 +28,9 @@ public class ViewSharedWithMeSectionDisplayContext {
 		HttpServletRequest httpServletRequest) {
 
 		_httpServletRequest = httpServletRequest;
+
+		_themeDisplay = (ThemeDisplay)httpServletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
 	}
 
 	public String getAPIURL() {
@@ -56,6 +62,26 @@ public class ViewSharedWithMeSectionDisplayContext {
 				"view", null));
 	}
 
+	public Map<String, Object> getToolbarProps() throws PortalException {
+		return HashMapBuilder.<String, Object>put(
+			"title",
+			() -> {
+				Layout layout = _themeDisplay.getLayout();
+
+				if (layout == null) {
+					return null;
+				}
+
+				return layout.getName(_themeDisplay.getLocale(), true);
+			}
+		).put(
+			"toolbarClassName", "section-toolbar tbar-light"
+		).put(
+			"toolbarTitleClassName", "section-toolbar-title"
+		).build();
+	}
+
 	private final HttpServletRequest _httpServletRequest;
+	private final ThemeDisplay _themeDisplay;
 
 }
