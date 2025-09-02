@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-export {default as DDMStructuresManagementToolbarPropsTransformer} from './document_library/DDMStructuresManagementToolbarPropsTransformer';
+export {default as ClipboardModal} from './document_library/ClipboardModal.es';
 
+export {default as DDMStructuresManagementToolbarPropsTransformer} from './document_library/DDMStructuresManagementToolbarPropsTransformer';
 export {default as DLFileEntryDropdownPropsTransformer} from './document_library/DLFileEntryDropdownPropsTransformer';
 export {default as DLFolderDropdownPropsTransformer} from './document_library/DLFolderDropdownPropsTransformer';
 export {default as DLFolderSelector} from './document_library/DLFolderSelector';

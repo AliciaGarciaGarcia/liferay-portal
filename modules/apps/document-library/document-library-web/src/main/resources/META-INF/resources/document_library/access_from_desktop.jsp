@@ -22,7 +22,31 @@ DLAccessFromDesktopDisplayContext dlAccessFromDesktopDisplayContext = new DLAcce
 
 		<br /><br />
 
-		<aui:input cssClass="webdav-url-resource" id='<%= dlAccessFromDesktopDisplayContext.getRandomNamespace() + "webDavURL" %>' name="webDavURL" type="resource" value="<%= dlAccessFromDesktopDisplayContext.getWebDAVURL() %>" />
+		<%
+		String webDavURLInputId = dlAccessFromDesktopDisplayContext.getRandomNamespace() + "webDavURLInput_modal";
+		%>
+
+		<div class="form-group">
+			<label for="<%= webDavURLInputId %>">
+				<liferay-ui:message key='<%= TextFormatter.format("webDavURL", TextFormatter.K) %>' />
+			</label>
+
+			<div class="input-group input-group-sm">
+				<div class="input-group-item input-group-prepend">
+					<input class="form-control"  readonly  id="<%= webDavURLInputId %>" name="webDavURL" type="text" value="<%= dlAccessFromDesktopDisplayContext.getWebDAVURL() %>" />
+				</div>
+
+				<span class="input-group-append input-group-item input-group-item-shrink">
+					<clay:button
+						cssClass="dm-modal-copy-clipboard lfr-portal-tooltip"
+						data-clipboard-target='<%= "#" + webDavURLInputId %>'
+						displayType="secondary"
+						icon="paste"
+						title="copy-link"
+					/>
+				</span>
+			</div>
+		</div>
 
 		<div class="alert alert-info">
 			<liferay-ui:message arguments='<%= "<a href=" + PersonalApplicationURLUtil.getPersonalApplicationURL(request, PortletKeys.MY_ACCOUNT) + ">" + LanguageUtil.get(resourceBundle, "my-account") + "</a>" %>' key="webdav-access-requires-generation-of-a-webdav-specific-password-at-x" />
@@ -47,7 +71,7 @@ DLAccessFromDesktopDisplayContext dlAccessFromDesktopDisplayContext = new DLAcce
 					bodyHTML: html,
 					onOpen: function (event) {
 						var webdavURLInput = document.getElementById(
-							'<portlet:namespace /><%= dlAccessFromDesktopDisplayContext.getRandomNamespace() %>webDavURL'
+							'<portlet:namespace /><%= webDavURLInputId %>'
 						);
 
 						if (webdavURLInput) {
@@ -60,3 +84,7 @@ DLAccessFromDesktopDisplayContext dlAccessFromDesktopDisplayContext = new DLAcce
 		}
 	);
 </aui:script>
+
+<liferay-frontend:component
+	module="{ClipboardModal} from document-library-web"
+/>
