@@ -44,6 +44,10 @@ export default function FilesFDSPropsTransformer({
 		autocompleteURL: string;
 		cmsGroupId?: number;
 		collaboratorURLs: Record<string, string>;
+		fileMimeTypeCssClasses: Record<string, string>;
+		fileMimeTypeIcons: Record<string, string>;
+		objectDefinitionCssClasses: Record<string, string>;
+		objectDefinitionIcons: Record<string, string>;
 	};
 	creationMenu: any;
 	itemsActions?: any[];
@@ -112,10 +116,19 @@ export default function FilesFDSPropsTransformer({
 						),
 				};
 			}
+			else if (
+				action?.data?.id === 'export-for-translation' ||
+				action?.data?.id === 'import-translation'
+			) {
+				return {
+					...action,
+					isVisible: (item: any) => Boolean(!item?.embedded?.file),
+				};
+			}
 			else if (action?.data?.id === 'view-content') {
 				return {
 					...action,
-					isVisible: () => false,
+					isVisible: () => Boolean(false),
 				};
 			}
 			else if (action?.data?.id === 'view-file') {
@@ -183,6 +196,13 @@ export default function FilesFDSPropsTransformer({
 				});
 			}
 		},
-		views: transformViewsItemsProps(views),
+		views: transformViewsItemsProps({
+			fileMimeTypeCssClasses: additionalProps.fileMimeTypeCssClasses,
+			fileMimeTypeIcons: additionalProps.fileMimeTypeIcons,
+			objectDefinitionCssClasses:
+				additionalProps.objectDefinitionCssClasses,
+			objectDefinitionIcons: additionalProps.objectDefinitionIcons,
+			views,
+		}),
 	};
 }

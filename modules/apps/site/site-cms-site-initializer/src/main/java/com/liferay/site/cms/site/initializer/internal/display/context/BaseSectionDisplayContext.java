@@ -54,6 +54,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.site.cms.site.initializer.internal.util.ActionUtil;
+import com.liferay.translation.constants.TranslationPortletKeys;
 
 import jakarta.portlet.ActionRequest;
 
@@ -172,11 +173,33 @@ public abstract class BaseSectionDisplayContext {
 
 				return _getFileMimeTypeIcons();
 			}
+		).put(
+			"objectDefinitionCssClasses",
+			HashMapBuilder.put(
+				"default", "content-icon-custom-structure"
+			).put(
+				"L_BASIC_WEB_CONTENT", "content-icon-basic-content"
+			).put(
+				"L_BLOG", "content-icon-blog"
+			).put(
+				"L_KNOWLEDGE_BASE", "content-icon-knowledge-base"
+			).build()
+		).put(
+			"objectDefinitionIcons",
+			HashMapBuilder.put(
+				"default", "web-content"
+			).put(
+				"L_BASIC_WEB_CONTENT", "forms"
+			).put(
+				"L_BLOG", "blogs"
+			).put(
+				"L_KNOWLEDGE_BASE", "wiki"
+			).build()
 		).build();
 	}
 
 	public String getAPIURL() {
-		StringBundler sb = new StringBundler(7);
+		StringBundler sb = new StringBundler(8);
 
 		sb.append("/o/search/v1.0/search?emptySearch=true&filter=");
 
@@ -200,7 +223,8 @@ public abstract class BaseSectionDisplayContext {
 			sb.append(getCMSSectionFilterString());
 		}
 
-		sb.append("&nestedFields=embedded,file.thumbnailURL");
+		sb.append("&nestedFields=embedded,file.thumbnailURL,");
+		sb.append("systemProperties.objectDefinitionBrief");
 
 		return sb.toString();
 	}
@@ -306,6 +330,10 @@ public abstract class BaseSectionDisplayContext {
 				LanguageUtil.get(httpServletRequest, "edit"), "get", "update",
 				null),
 			new FDSActionDropdownItem(
+				null, "share", "share",
+				LanguageUtil.get(httpServletRequest, "share"), "get", "share",
+				"link"),
+			new FDSActionDropdownItem(
 				"{actions.expire.href}", "time", "expire",
 				LanguageUtil.get(httpServletRequest, "expire"), "post",
 				"expire", "headless"),
@@ -331,6 +359,44 @@ public abstract class BaseSectionDisplayContext {
 				"date-time", "version-history",
 				LanguageUtil.get(httpServletRequest, "view-history"), "get",
 				"versions", null),
+			new FDSActionDropdownItem(
+				PortletURLBuilder.create(
+					portal.getControlPanelPortletURL(
+						httpServletRequest, TranslationPortletKeys.TRANSLATION,
+						ActionRequest.RENDER_PHASE)
+				).setMVCRenderCommandName(
+					"/translation/import_translation"
+				).setParameter(
+					"className", "{entryClassName}"
+				).setParameter(
+					"classPK", "{embedded.id}"
+				).setParameter(
+					"groupId", "{embedded.scopeId}"
+				).setWindowState(
+					LiferayWindowState.POP_UP
+				).buildString(),
+				"upload", "export-for-translation",
+				LanguageUtil.get(httpServletRequest, "export-for-translation"),
+				null, null, null),
+			new FDSActionDropdownItem(
+				PortletURLBuilder.create(
+					portal.getControlPanelPortletURL(
+						httpServletRequest, TranslationPortletKeys.TRANSLATION,
+						ActionRequest.RENDER_PHASE)
+				).setMVCRenderCommandName(
+					"/translation/import_translation"
+				).setParameter(
+					"className", "{entryClassName}"
+				).setParameter(
+					"classPK", "{embedded.id}"
+				).setParameter(
+					"groupId", "{embedded.scopeId}"
+				).setWindowState(
+					LiferayWindowState.POP_UP
+				).buildString(),
+				"download", "import-translation",
+				LanguageUtil.get(httpServletRequest, "import-translation"),
+				null, null, null),
 			new FDSActionDropdownItem(
 				PortletURLBuilder.create(
 					portal.getControlPanelPortletURL(

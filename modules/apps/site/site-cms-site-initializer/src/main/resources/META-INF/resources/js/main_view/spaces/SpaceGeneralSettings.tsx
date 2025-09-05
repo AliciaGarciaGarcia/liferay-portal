@@ -71,6 +71,7 @@ export default function SpaceGeneralSettings({
 		values,
 	} = useFormik({
 		initialValues: {
+			currentErc: space.externalReferenceCode,
 			description: space.description,
 			erc: space.externalReferenceCode,
 			logoColor: space.settings?.logoColor as LogoColor,
@@ -80,6 +81,7 @@ export default function SpaceGeneralSettings({
 		},
 		onSubmit: async (values) => {
 			const {
+				currentErc,
 				description,
 				erc,
 				logoColor = 'outline-0',
@@ -88,7 +90,7 @@ export default function SpaceGeneralSettings({
 				sharingEnabled,
 			} = values;
 
-			const {data, error} = await SpaceService.updateSpace(erc, {
+			const {data, error} = await SpaceService.updateSpace(currentErc, {
 				description,
 				externalReferenceCode: erc,
 				name,
@@ -120,8 +122,12 @@ export default function SpaceGeneralSettings({
 					type: 'success',
 				});
 
+				const updatedSpace = data as Space;
+
+				setFieldValue('currentErc', updatedSpace.externalReferenceCode);
+
 				if (setSpace) {
-					setSpace(data);
+					setSpace(updatedSpace);
 				}
 			}
 		},

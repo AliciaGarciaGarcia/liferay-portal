@@ -8,7 +8,6 @@ package com.liferay.list.type.service.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.list.type.exception.DuplicateListTypeEntryException;
 import com.liferay.list.type.exception.DuplicateListTypeEntryExternalReferenceCodeException;
-import com.liferay.list.type.exception.ListTypeDefinitionSystemException;
 import com.liferay.list.type.exception.ListTypeEntryKeyException;
 import com.liferay.list.type.exception.ListTypeEntrySystemException;
 import com.liferay.list.type.exception.NoSuchListTypeDefinitionException;
@@ -27,7 +26,6 @@ import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
-import com.liferay.portal.test.rule.FeatureFlag;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
@@ -89,7 +87,6 @@ public class ListTypeEntryLocalServiceTest {
 			_listTypeDefinition);
 	}
 
-	@FeatureFlag("LPD-24055")
 	@Test
 	public void testAddListTypeEntry() throws Exception {
 		String externalReferenceCode =
@@ -113,12 +110,6 @@ public class ListTypeEntryLocalServiceTest {
 					LocaleUtil.US, RandomTestUtil.randomString()),
 				_listTypeDefinition.isSystem()));
 		AssertUtils.assertFailure(
-			ListTypeDefinitionSystemException.class, false,
-			"Only allowed bundles can add system list type entries",
-			() -> _testAddListTypeEntry(
-				_systemListTypeDefinition.getListTypeDefinitionId(), "baker",
-				_systemListTypeDefinition.isSystem()));
-		AssertUtils.assertFailure(
 			ListTypeEntryKeyException.class, "Key is null",
 			() -> _testAddListTypeEntry(
 				_listTypeDefinition.getListTypeDefinitionId(), null,
@@ -129,6 +120,12 @@ public class ListTypeEntryLocalServiceTest {
 			() -> _testAddListTypeEntry(
 				_listTypeDefinition.getListTypeDefinitionId(), " able ",
 				_listTypeDefinition.isSystem()));
+		AssertUtils.assertFailure(
+			ListTypeEntrySystemException.class, false,
+			"Only allowed bundles can add system list type entries",
+			() -> _testAddListTypeEntry(
+				_systemListTypeDefinition.getListTypeDefinitionId(), "baker",
+				_systemListTypeDefinition.isSystem()));
 		AssertUtils.assertFailure(
 			ListTypeEntrySystemException.class, true,
 			"System list type entries cannot be added to custom list type " +
@@ -156,7 +153,7 @@ public class ListTypeEntryLocalServiceTest {
 	@Test
 	public void testDeleteListTypeEntry() throws Exception {
 		AssertUtils.assertFailure(
-			ListTypeDefinitionSystemException.class, false,
+			ListTypeEntrySystemException.class, false,
 			"Only allowed bundles can delete system list type entries",
 			() -> _listTypeEntryLocalService.deleteListTypeEntry(
 				_systemListTypeEntry.getListTypeEntryId()));
@@ -250,7 +247,6 @@ public class ListTypeEntryLocalServiceTest {
 		}
 	}
 
-	@FeatureFlag("LPD-24055")
 	@Test
 	public void testUpdateListTypeEntry() throws Exception {
 		String externalReferenceCode = "externalReferenceCode";

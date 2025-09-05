@@ -118,6 +118,14 @@ test(
 
 			await segmentsPage.editSegmentsEntry(segmentName);
 
+			await segmentsPage.saveButton.click();
+
+			await segmentsPage.viewSegmentsItemTable(segmentName);
+
+			await page.reload();
+
+			await segmentsPage.clickLinkByText(segmentName);
+
 			await segmentsPage.viewMembers({
 				expectedEmail: 'userea@liferay.com',
 			});
@@ -521,6 +529,10 @@ test(
 			await segmentsPage.fillField(`O'Neal`);
 
 			await segmentsPage.saveButton.click();
+
+			await segmentsPage.viewSegmentsItemTable(segmentName);
+
+			await page.reload();
 		});
 
 		await test.step('Then asserts that the segment is correctly created including the user', async () => {

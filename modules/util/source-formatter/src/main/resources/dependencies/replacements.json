@@ -112,6 +112,19 @@
 	},
 	{
 		"classNames": [
+			"AutoBatchPreparedStatementUtil"
+		],
+		"from": "autoBatch(PreparedStatement  preparedStatement)",
+		"hasMessage": true,
+		"issueKey": "LPD-8010"
+	},
+	{
+		"from": "regex:(?<prefixMethodName>AutoBatchPreparedStatementUtil\\.autoBatch\\(\\s*)(?<variableName>\\w+)\\.prepareStatement\\((?<messageVariable>[\\s\\S]*?)\\)\\)",
+		"issueKey": "LPD-8010",
+		"to": "${prefixMethodName}${variableName},${messageVariable})"
+	},
+	{
+		"classNames": [
 			"InfoCollectionProvider"
 		],
 		"classStructurePattern": true,
@@ -4512,6 +4525,16 @@
 			"com.liferay.petra.string.StringPool"
 		],
 		"to": "getCommerceInventoryBookedQuantity(param#0#, param#1#, StringPool.BLANK)"
+	},
+	{
+		"classNames": [
+			"CommerceShippingEngine"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-48918",
+		"newMethods": [
+			"@Override\n\tpublic String getKey() {\n\t\treturn KEY;\n\t}"
+		]
 	},
 	{
 		"classNames": [

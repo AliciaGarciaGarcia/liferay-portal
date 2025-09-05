@@ -10,7 +10,6 @@ import React from 'react';
 import formatActionURL from '../../common/utils/formatActionURL';
 import {ISearchAssetObjectEntry} from '../../structure_builder/types/AssetType';
 import AssetTypeInfoPanel from '../info_panel/AssetTypeInfoPanelContent';
-import FilePreviewerModalContent from '../modal/FilePreviewerModalContent';
 import createAssetAction from './actions/createAssetAction';
 import createFolderAction from './actions/createFolderAction';
 import deleteAssetEntriesBulkAction from './actions/deleteAssetEntriesBulkAction';
@@ -42,6 +41,10 @@ export default function ContentFDSPropsTransformer({
 		autocompleteURL: string;
 		cmsGroupId?: number;
 		collaboratorURLs: Record<string, string>;
+		fileMimeTypeCssClasses: Record<string, string>;
+		fileMimeTypeIcons: Record<string, string>;
+		objectDefinitionCssClasses: Record<string, string>;
+		objectDefinitionIcons: Record<string, string>;
 	};
 	creationMenu: any;
 	itemsActions?: any[];
@@ -93,17 +96,12 @@ export default function ContentFDSPropsTransformer({
 			/>
 		),
 		itemsActions: itemsActions.map((action) => {
-			if (action?.data?.id === 'actionLink') {
-				return {
-					...action,
-					isVisible: (item: any) =>
-						Boolean(
-							item?.entryClassName !==
-								OBJECT_ENTRY_FOLDER_CLASS_NAME
-						),
-				};
-			}
-			else if (action?.data?.id === 'view-content') {
+			if (
+				action?.data?.id === 'actionLink' ||
+				action?.data?.id === 'export-for-translation' ||
+				action?.data?.id === 'import-translation' ||
+				action?.data?.id === 'view-content'
+			) {
 				return {
 					...action,
 					isVisible: (item: any) =>
@@ -116,7 +114,7 @@ export default function ContentFDSPropsTransformer({
 			else if (action?.data?.id === 'view-file') {
 				return {
 					...action,
-					isVisible: (item: any) => Boolean(item?.embedded?.file),
+					isVisible: () => Boolean(false),
 				};
 			}
 
@@ -140,6 +138,18 @@ export default function ContentFDSPropsTransformer({
 					creator: itemData.embedded.creator,
 					itemId: itemData.embedded.id,
 					title: itemData.embedded?.title,
+				});
+			}
+			else if (
+				action?.data?.id === 'export-for-translation' ||
+				action?.data?.id === 'import-translation'
+			) {
+				event?.preventDefault();
+
+				openModal({
+					size: 'full-screen',
+					title: action.label,
+					url: formatActionURL(itemData, action.href),
 				});
 			}
 			else if (action?.data?.id === 'view-content') {
@@ -166,6 +176,13 @@ export default function ContentFDSPropsTransformer({
 				});
 			}
 		},
-		views: transformViewsItemsProps(views),
+		views: transformViewsItemsProps({
+			fileMimeTypeCssClasses: additionalProps.fileMimeTypeCssClasses,
+			fileMimeTypeIcons: additionalProps.fileMimeTypeIcons,
+			objectDefinitionCssClasses:
+				additionalProps.objectDefinitionCssClasses,
+			objectDefinitionIcons: additionalProps.objectDefinitionIcons,
+			views,
+		}),
 	};
 }
