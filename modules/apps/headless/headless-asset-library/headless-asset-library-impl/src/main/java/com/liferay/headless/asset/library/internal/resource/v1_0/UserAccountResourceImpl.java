@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.security.permission.PermissionCacheUtil;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
 import com.liferay.portal.vulcan.dto.converter.DTOConverterRegistry;
 import com.liferay.portal.vulcan.dto.converter.DefaultDTOConverterContext;
@@ -301,7 +302,7 @@ public class UserAccountResourceImpl extends BaseUserAccountResourceImpl {
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			User.class.getName(), contextHttpServletRequest);
 
-		return _userService.updateUser(
+		user = _userService.updateUser(
 			user.getUserId(), user.getPassword(), null, null,
 			user.isPasswordReset(), null, null, user.getScreenName(),
 			user.getEmailAddress(), user.getLanguageId(), user.getTimeZoneId(),
@@ -315,6 +316,10 @@ public class UserAccountResourceImpl extends BaseUserAccountResourceImpl {
 			_getUserGroupIds(user, assetLibraryId, add),
 			user.getOrganizationIds(), null, null, user.getUserGroupIds(),
 			serviceContext);
+
+		PermissionCacheUtil.clearCache(user.getUserId());
+
+		return user;
 	}
 
 	@Reference
