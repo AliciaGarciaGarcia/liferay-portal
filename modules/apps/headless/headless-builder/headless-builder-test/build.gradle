@@ -9,6 +9,7 @@ dependencies {
 	testIntegrationImplementation project(":apps:batch-engine:batch-engine-api")
 	testIntegrationImplementation project(":apps:headless:headless-builder:headless-builder-api")
 	testIntegrationImplementation project(":apps:headless:headless-delivery:headless-delivery-client")
+	testIntegrationImplementation project(":apps:headless:headless-object:headless-object-api")
 	testIntegrationImplementation project(":apps:info:info-api")
 	testIntegrationImplementation project(":apps:list-type:list-type-api")
 	testIntegrationImplementation project(":apps:object:object-api")

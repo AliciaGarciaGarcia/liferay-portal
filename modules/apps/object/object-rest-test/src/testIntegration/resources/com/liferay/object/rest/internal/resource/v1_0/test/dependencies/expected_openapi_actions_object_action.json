@@ -535,6 +535,9 @@
 						"x-parent-map": "properties",
 						"x-timeStorage": "convertToUTC"
 					},
+					"scope": {
+						"$ref": "#/components/schemas/Scope"
+					},
 					"scopeId": {
 						"format": "int64",
 						"readOnly": true,
