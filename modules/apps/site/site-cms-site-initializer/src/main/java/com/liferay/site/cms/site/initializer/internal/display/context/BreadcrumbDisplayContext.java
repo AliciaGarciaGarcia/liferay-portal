@@ -117,9 +117,8 @@ public class BreadcrumbDisplayContext {
 						group.getDescriptiveName())
 				).put(
 					"href",
-					"/o/headless-asset-library/v1.0/asset-libraries" +
-						"/by-external-reference-code/" +
-							group.getExternalReferenceCode()
+					"/o/headless-asset-library/v1.0/asset-libraries/" +
+						group.getExternalReferenceCode()
 				).put(
 					"label", LanguageUtil.get(_httpServletRequest, "delete")
 				).put(
