@@ -5,6 +5,7 @@
 
 package com.liferay.translation.internal.exporter;
 
+import com.liferay.document.library.kernel.exception.FileMimeTypeException;
 import com.liferay.info.item.ClassPKInfoItemIdentifier;
 import com.liferay.info.item.InfoItemReference;
 import com.liferay.info.item.InfoItemServiceRegistry;
@@ -24,6 +25,7 @@ import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PropsValues;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.zip.ZipWriter;
 import com.liferay.portal.kernel.zip.ZipWriterFactory;
 import com.liferay.translation.exporter.TranslationInfoItemFieldValuesExporter;
@@ -143,13 +145,17 @@ public class TranslationManagerImpl implements TranslationManager {
 			String sourceLanguageId, String targetLanguageId)
 		throws IOException, PortalException {
 
+		if (Validator.isBlank(exportMimeType)) {
+			throw new FileMimeTypeException("Unknown export mime type");
+		}
+
 		TranslationInfoItemFieldValuesExporter
 			translationInfoItemFieldValuesExporter =
 				_translationInfoItemFieldValuesExporterRegistry.
 					getTranslationInfoItemFieldValuesExporter(exportMimeType);
 
 		if (translationInfoItemFieldValuesExporter == null) {
-			throw new PortalException(
+			throw new FileMimeTypeException(
 				"Unknown export mime type: " + exportMimeType);
 		}
 
