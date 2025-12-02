@@ -79,13 +79,13 @@ public class TranslationManagerTest {
 	private void _validateZipContent(String fileName, String mimetype)
 		throws Exception {
 
-		File xliffZipFile = _translationManager.exportXLIFFZipFile(
+		File file = _translationManager.exportXLIFFZipFile(
 			JournalArticle.class.getName(),
 			_journalArticle.getResourcePrimKey(), mimetype, LocaleUtil.US,
 			LocaleUtil.toLanguageId(LocaleUtil.US), _TARGET_LANGUAGE_IDS,
 			TestPropsValues.getUser());
 
-		try (ZipFile zipFile = new ZipFile(xliffZipFile)) {
+		try (ZipFile zipFile = new ZipFile(file)) {
 			int count = 0;
 
 			Enumeration<? extends ZipEntry> enumeration = zipFile.entries();
@@ -107,6 +107,11 @@ public class TranslationManagerTest {
 			}
 
 			Assert.assertEquals(1, count);
+		}
+		finally {
+			if ((file != null) && file.exists()) {
+				file.delete();
+			}
 		}
 	}
 
