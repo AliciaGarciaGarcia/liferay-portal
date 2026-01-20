@@ -5,6 +5,9 @@
 
 package com.liferay.sharing.web.internal.display.context;
 
+import com.liferay.asset.kernel.AssetRendererFactoryRegistryUtil;
+import com.liferay.asset.kernel.model.AssetRenderer;
+import com.liferay.asset.kernel.model.AssetRendererFactory;
 import com.liferay.frontend.taglib.clay.servlet.taglib.display.context.ManagementToolbarDisplayContext;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemListBuilder;
@@ -245,14 +248,14 @@ public class ViewSharedAssetsDisplayContext {
 		).build();
 	}
 
-	public PortletURL getSharingEntryRowPortletURL(SharingEntry sharingEntry)
+	public String getSharingEntryRowPortletURL(SharingEntry sharingEntry)
 		throws PortalException {
 
 		if (!isSharingEntryVisible(sharingEntry)) {
 			return null;
 		}
 
-		return PortletURLBuilder.createRenderURL(
+		String viewSharingEntryURL = PortletURLBuilder.createRenderURL(
 			_liferayPortletResponse
 		).setMVCRenderCommandName(
 			"/sharing/view_sharing_entry"
@@ -260,7 +263,32 @@ public class ViewSharedAssetsDisplayContext {
 			_currentURLObj
 		).setParameter(
 			"sharingEntryId", sharingEntry.getSharingEntryId()
-		).buildRenderURL();
+		).buildString();
+
+		AssetRendererFactory<Object> assetRendererFactory =
+			AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(
+				sharingEntry.getClassName());
+
+		if (assetRendererFactory == null) {
+			return viewSharingEntryURL;
+		}
+
+		AssetRenderer<Object> assetRenderer =
+			assetRendererFactory.getAssetRenderer(sharingEntry.getClassPK());
+
+		try {
+			String viewInContextURL = assetRenderer.getURLViewInContext(
+				_themeDisplay, StringPool.BLANK);
+
+			if (Validator.isNotNull(viewInContextURL)) {
+				return viewInContextURL;
+			}
+
+			return viewSharingEntryURL;
+		}
+		catch (Exception exception) {
+			throw new PortalException(exception);
+		}
 	}
 
 	public String getSharingEntryTitle(SharingEntry sharingEntry) {
