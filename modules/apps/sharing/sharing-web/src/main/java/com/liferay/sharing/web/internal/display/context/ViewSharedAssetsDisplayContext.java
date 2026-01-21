@@ -20,6 +20,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
+import com.liferay.portal.kernel.portlet.PortletProvider;
+import com.liferay.portal.kernel.portlet.PortletProviderUtil;
 import com.liferay.portal.kernel.portlet.PortletURLUtil;
 import com.liferay.portal.kernel.portlet.SearchOrderByUtil;
 import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
@@ -265,6 +267,19 @@ public class ViewSharedAssetsDisplayContext {
 			"sharingEntryId", sharingEntry.getSharingEntryId()
 		).buildString();
 
+		if (portletRequest != null) {
+			return PortletURLBuilder.create(
+				PortletProviderUtil.getPortletURL(
+					portletRequest, SharingEntry.class.getName(),
+					PortletProvider.Action.PREVIEW)
+			).setParameter(
+				"classNameId", sharingEntry.getClassNameId()
+			).setParameter(
+				"classPK", sharingEntry.getClassPK()
+			).setParameter(
+				"sharingEntryId", sharingEntry.getSharingEntryId()
+			).buildString();
+		}
 		AssetRendererFactory<Object> assetRendererFactory =
 			AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(
 				sharingEntry.getClassName());

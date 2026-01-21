@@ -242,7 +242,7 @@ public class NotificationsSharingEntryLocalServiceWrapper
 			_getActionName(sharingEntry, resourceBundle), expirationDateString);
 	}
 
-	private String _getNotificationURL(
+	public String _getNotificationURL(
 			SharingEntry sharingEntry, PortletRequest portletRequest)
 		throws Exception {
 
