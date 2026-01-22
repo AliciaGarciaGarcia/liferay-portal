@@ -267,15 +267,17 @@ public class ViewSharedAssetsDisplayContext {
 			"sharingEntryId", sharingEntry.getSharingEntryId()
 		).buildString();
 
-		if (portletRequest != null) {
-			return PortletURLBuilder.create(
+		if (_liferayPortletRequest != null) {
+			viewSharingEntryURL = PortletURLBuilder.create(
 				PortletProviderUtil.getPortletURL(
-					portletRequest, SharingEntry.class.getName(),
+					_liferayPortletRequest, SharingEntry.class.getName(),
 					PortletProvider.Action.PREVIEW)
 			).setParameter(
 				"classNameId", sharingEntry.getClassNameId()
 			).setParameter(
 				"classPK", sharingEntry.getClassPK()
+			).setParameter("redirect",
+				_currentURLObj
 			).setParameter(
 				"sharingEntryId", sharingEntry.getSharingEntryId()
 			).buildString();
