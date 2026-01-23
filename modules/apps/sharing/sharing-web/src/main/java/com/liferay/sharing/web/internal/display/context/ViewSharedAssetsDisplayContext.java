@@ -276,12 +276,13 @@ public class ViewSharedAssetsDisplayContext {
 				"classNameId", sharingEntry.getClassNameId()
 			).setParameter(
 				"classPK", sharingEntry.getClassPK()
-			).setParameter("redirect",
-				_currentURLObj
+			).setParameter(
+				"redirect", _currentURLObj
 			).setParameter(
 				"sharingEntryId", sharingEntry.getSharingEntryId()
 			).buildString();
 		}
+
 		AssetRendererFactory<Object> assetRendererFactory =
 			AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(
 				sharingEntry.getClassName());

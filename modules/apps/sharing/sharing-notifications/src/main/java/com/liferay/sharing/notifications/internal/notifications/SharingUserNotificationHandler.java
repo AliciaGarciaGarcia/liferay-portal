@@ -26,8 +26,6 @@ import com.liferay.sharing.model.SharingEntry;
 import com.liferay.sharing.security.permission.SharingEntryAction;
 import com.liferay.sharing.service.SharingEntryLocalService;
 
-import jakarta.portlet.PortletURL;
-
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -92,14 +90,15 @@ public class SharingUserNotificationHandler
 		String link = StringPool.BLANK;
 
 		if (sharingEntry.hasSharingPermission(SharingEntryAction.UPDATE)) {
-			link = String.valueOf(assetRenderer.getURLEdit(
-				serviceContext.getLiferayPortletRequest(),
-				serviceContext.getLiferayPortletResponse()));
+			link = String.valueOf(
+				assetRenderer.getURLEdit(
+					serviceContext.getLiferayPortletRequest(),
+					serviceContext.getLiferayPortletResponse()));
 		}
 		else {
-			link = assetRenderer.getURLSharingNotification(
-				themeDisplay);
+			link = assetRenderer.getURLSharingNotification(themeDisplay);
 		}
+
 		if (Validator.isBlank(link)) {
 			return super.getLink(userNotificationEvent, serviceContext);
 		}

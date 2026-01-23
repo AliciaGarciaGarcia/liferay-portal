@@ -57,6 +57,27 @@ import org.osgi.service.component.annotations.Reference;
 public class NotificationsSharingEntryLocalServiceWrapper
 	extends SharingEntryLocalServiceWrapper {
 
+	public String _getNotificationURL(
+			SharingEntry sharingEntry, PortletRequest portletRequest)
+		throws Exception {
+
+		if (portletRequest != null) {
+			return PortletURLBuilder.create(
+				PortletProviderUtil.getPortletURL(
+					portletRequest, SharingEntry.class.getName(),
+					PortletProvider.Action.PREVIEW)
+			).setParameter(
+				"classNameId", sharingEntry.getClassNameId()
+			).setParameter(
+				"classPK", sharingEntry.getClassPK()
+			).setParameter(
+				"sharingEntryId", sharingEntry.getSharingEntryId()
+			).buildString();
+		}
+
+		return null;
+	}
+
 	@Override
 	public SharingEntry addSharingEntry(
 			String externalReferenceCode, long fromUserId, long userGroupId,
@@ -240,27 +261,6 @@ public class NotificationsSharingEntryLocalServiceWrapper
 			_getSharingEntryObjectTitle(
 				sharingEntry, resourceBundle, portletRequest),
 			_getActionName(sharingEntry, resourceBundle), expirationDateString);
-	}
-
-	public String _getNotificationURL(
-			SharingEntry sharingEntry, PortletRequest portletRequest)
-		throws Exception {
-
-		if (portletRequest != null) {
-			return PortletURLBuilder.create(
-				PortletProviderUtil.getPortletURL(
-					portletRequest, SharingEntry.class.getName(),
-					PortletProvider.Action.PREVIEW)
-			).setParameter(
-				"classNameId", sharingEntry.getClassNameId()
-			).setParameter(
-				"classPK", sharingEntry.getClassPK()
-			).setParameter(
-				"sharingEntryId", sharingEntry.getSharingEntryId()
-			).buildString();
-		}
-
-		return null;
 	}
 
 	private SharingEntryInterpreter _getSharingEntryInterpreter(
