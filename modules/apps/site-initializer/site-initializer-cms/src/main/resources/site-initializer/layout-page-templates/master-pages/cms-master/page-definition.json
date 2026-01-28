@@ -198,12 +198,6 @@
 										"key": "com.liferay.site.cms.site.initializer.internal.fragment.renderer.TestFragmentRender"
 									},
 									"fragmentConfig": {
-										"ariaLabel": "CMS Test Fragment Render",
-										"displayStyle": "stacked",
-										"hoveredItemColor": "",
-										"selectedItemColor": "",
-										"source": "",
-										"sublevels": "-1"
 									},
 									"fragmentFields": [
 									],
