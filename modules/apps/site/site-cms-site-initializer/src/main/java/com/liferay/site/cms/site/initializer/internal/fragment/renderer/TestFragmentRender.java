@@ -19,7 +19,7 @@ import java.util.Locale;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = FragmentRenderer.class)
-public class TestFragmentRender extends BaseSectionFragmentRenderer {
+public class TestFragmentRender implements FragmentRenderer {
 
 	@Override
 	public String getCollectionKey() {
@@ -33,7 +33,7 @@ public class TestFragmentRender extends BaseSectionFragmentRenderer {
 
 	@Override
 	public boolean isSelectable(HttpServletRequest httpServletRequest) {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -46,9 +46,7 @@ public class TestFragmentRender extends BaseSectionFragmentRenderer {
 		try {
 			PrintWriter printWriter = httpServletResponse.getWriter();
 
-			printWriter.write("<div><span aria-hidden=\"true\" class=\"");
-			printWriter.write("loading-animation\">hello</span>");
-			printWriter.write("</div>");
+			printWriter.write("<div><H1>HOLA MUNDO</H1></div>");
 		}
 		catch (IOException | RuntimeException exception) {
 			throw exception;
