@@ -27,5 +27,7 @@ public interface DLFileEntryConfiguration {
 
 	@Meta.AD(deflt = "20971520", name = "maximum-file-size", required = false)
 	public long previewableProcessorMaxSize();
+	@Meta.AD(deflt = "20971520", name = "maximum-file-size", required = false)
+	public long FAKE();
 
 }
