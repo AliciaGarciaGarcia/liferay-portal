@@ -9,6 +9,7 @@ import com.liferay.bulk.rest.dto.v1_0.AssignToBulkAction;
 import com.liferay.bulk.rest.dto.v1_0.BulkAction;
 import com.liferay.bulk.rest.dto.v1_0.BulkActionItem;
 import com.liferay.bulk.rest.dto.v1_0.BulkActionTask;
+import com.liferay.bulk.rest.dto.v1_0.CopyBulkAction;
 import com.liferay.bulk.rest.dto.v1_0.DefaultPermissionBulkAction;
 import com.liferay.bulk.rest.dto.v1_0.DueDateBulkAction;
 import com.liferay.bulk.rest.dto.v1_0.KeywordBulkAction;
@@ -399,6 +400,9 @@ public class BulkActionResourceImpl extends BaseBulkActionResourceImpl {
 		if (BulkAction.Type.ASSIGN_TO_BULK_ACTION.equals(type)) {
 			return _assignToObjectBulkSelectionAction;
 		}
+		else if (BulkAction.Type.COPY_BULK_ACTION.equals(type)) {
+			return _copyObjectBulkSelectionAction;
+		}
 		else if (BulkAction.Type.DEFAULT_PERMISSION_BULK_ACTION.equals(type)) {
 			return _defaultPermissionObjectBulkSelectionAction;
 		}
@@ -457,6 +461,13 @@ public class BulkActionResourceImpl extends BaseBulkActionResourceImpl {
 				"name", assignToBulkAction::getName
 			).put(
 				"type", assignToBulkAction::getClassName
+			).build();
+		}
+		else if (BulkAction.Type.COPY_BULK_ACTION.equals(type)) {
+			CopyBulkAction copyBulkAction = (CopyBulkAction)bulkAction;
+
+			return hashMapWrapper.put(
+				"objectEntryFolderId", copyBulkAction.getObjectEntryFolderId()
 			).build();
 		}
 		else if (BulkAction.Type.DEFAULT_PERMISSION_BULK_ACTION.equals(type)) {
@@ -857,6 +868,9 @@ public class BulkActionResourceImpl extends BaseBulkActionResourceImpl {
 
 	@Reference
 	private BulkSelectionRunner _bulkSelectionRunner;
+
+	@Reference(target = "(bulk.selection.action.key=copy.object)")
+	private BulkSelectionAction<Object> _copyObjectBulkSelectionAction;
 
 	@Reference(target = "(bulk.selection.action.key=default.permission.object)")
 	private BulkSelectionAction<Object>
