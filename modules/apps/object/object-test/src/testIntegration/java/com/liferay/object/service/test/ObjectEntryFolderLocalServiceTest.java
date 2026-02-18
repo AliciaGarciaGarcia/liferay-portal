@@ -244,6 +244,18 @@ public class ObjectEntryFolderLocalServiceTest {
 				ResourceConstants.SCOPE_INDIVIDUAL,
 				String.valueOf(objectEntryFolder.getObjectEntryFolderId()),
 				role.getRoleId(), ActionKeys.ADD_ENTRY));
+
+		role = _roleLocalService.fetchRole(
+			TestPropsValues.getCompanyId(),
+			DepotRolesConstants.ASSET_LIBRARY_MEMBER);
+
+		Assert.assertTrue(
+			_resourcePermissionLocalService.hasResourcePermission(
+				TestPropsValues.getCompanyId(),
+				ObjectEntryFolder.class.getName(),
+				ResourceConstants.SCOPE_INDIVIDUAL,
+				String.valueOf(objectEntryFolder.getObjectEntryFolderId()),
+				role.getRoleId(), ActionKeys.VIEW));
 	}
 
 	@FeatureFlag("LPD-17564")
