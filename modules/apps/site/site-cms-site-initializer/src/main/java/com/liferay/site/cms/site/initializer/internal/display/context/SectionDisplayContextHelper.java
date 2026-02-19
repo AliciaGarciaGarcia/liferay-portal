@@ -345,6 +345,24 @@ public class SectionDisplayContextHelper {
 				null));
 	}
 
+	private boolean _containsAddEntryPermission(
+		ObjectEntryFolder objectEntryFolder, ThemeDisplay themeDisplay) {
+
+		try {
+			return _objectEntryFolderModelResourcePermission.contains(
+				themeDisplay.getPermissionChecker(),
+				objectEntryFolder.getObjectEntryFolderId(),
+				ActionKeys.ADD_ENTRY);
+		}
+		catch (PortalException portalException) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(portalException);
+			}
+		}
+
+		return false;
+	}
+
 	private List<Long> _getAcceptedGroupIds(long objectDefinitionId) {
 		List<Long> acceptedGroupIds = new ArrayList<>();
 
@@ -582,32 +600,48 @@ public class SectionDisplayContextHelper {
 		HttpServletRequest httpServletRequest,
 		String rootObjectEntryFolderExternalReferenceCode) {
 
+		Object object = httpServletRequest.getAttribute(
+			InfoDisplayWebKeys.INFO_ITEM);
+
 		ThemeDisplay themeDisplay =
 			(ThemeDisplay)httpServletRequest.getAttribute(
 				WebKeys.THEME_DISPLAY);
 
+		if ((object == null) &&
+			(rootObjectEntryFolderExternalReferenceCode != null)) {
+
+			List<DepotEntry> depotEntries =
+				_depotEntryLocalService.getDepotEntries(
+					themeDisplay.getCompanyId(), DepotConstants.TYPE_SPACE);
+
+			for (DepotEntry depotEntry : depotEntries) {
+				ObjectEntryFolder objectEntryFolder =
+					ObjectEntryFolderLocalServiceUtil.
+						fetchObjectEntryFolderByExternalReferenceCode(
+							rootObjectEntryFolderExternalReferenceCode,
+							depotEntry.getGroupId(),
+							themeDisplay.getCompanyId());
+
+				if ((objectEntryFolder != null) &&
+					_containsAddEntryPermission(
+						objectEntryFolder, themeDisplay)) {
+
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		ObjectEntryFolder objectEntryFolder = _getObjectEntryFolder(
-			themeDisplay.getCompanyId(),
-			httpServletRequest.getAttribute(InfoDisplayWebKeys.INFO_ITEM),
+			themeDisplay.getCompanyId(), object,
 			rootObjectEntryFolderExternalReferenceCode);
 
 		if (objectEntryFolder == null) {
 			return true;
 		}
 
-		try {
-			return _objectEntryFolderModelResourcePermission.contains(
-				themeDisplay.getPermissionChecker(),
-				objectEntryFolder.getObjectEntryFolderId(),
-				ActionKeys.ADD_ENTRY);
-		}
-		catch (PortalException portalException) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(portalException);
-			}
-		}
-
-		return false;
+		return _containsAddEntryPermission(objectEntryFolder, themeDisplay);
 	}
 
 	private boolean _isAcceptAllGroups(long objectDefinitionId) {
