@@ -23,6 +23,7 @@ const AssetTags = ({
 	assetLibraryId,
 	cmsGroupId,
 	collapsable = true,
+	hasCreatePermission = true,
 	hasUpdatePermission,
 	inputSize,
 	objectEntry,
@@ -32,6 +33,7 @@ const AssetTags = ({
 	assetLibraryId?: number | string | null | undefined;
 	cmsGroupId: number | string;
 	collapsable?: boolean;
+	hasCreatePermission?: boolean;
 	hasUpdatePermission?: boolean;
 	inputSize?: CategorizationInputSize;
 	objectEntry: IAssetObjectEntry | EntryCategorizationDTO;
@@ -77,10 +79,14 @@ const AssetTags = ({
 	);
 
 	const createAndAddKeyword = useCallback(async () => {
+		if (!hasCreatePermission || !hasUpdatePermission || !value.trim()) {
+			return;
+		}
+
 		const {data, error} = await TagService.createTag({
 			assetLibraryId: scopeId,
 			cmsGroupId,
-			name: value,
+			name: value.trim(),
 		});
 
 		if (data) {
@@ -91,7 +97,7 @@ const AssetTags = ({
 		else if (error) {
 			console.error('Failed to create new keyword.', error);
 		}
-	}, [addKeyword, cmsGroupId, scopeId, value]);
+	}, [addKeyword, cmsGroupId, hasCreatePermission, hasUpdatePermission, scopeId, value]);
 
 	const removeKeyword = useCallback(
 		async (keyword: string) => {
@@ -113,6 +119,11 @@ const AssetTags = ({
 		},
 		[objectEntry, updateObjectEntry]
 	);
+
+	const showCreateAction =
+		hasCreatePermission &&
+		!!value.trim().length &&
+		!(objectEntry?.keywords || []).includes(value.trim());
 
 	return (
 		<ClayPanel
@@ -154,14 +165,17 @@ const AssetTags = ({
 					}}
 					placeholder={Liferay.Language.get('add-tag')}
 					primaryAction={
-						!!value.length &&
-						!(objectEntry?.keywords || []).includes(value) && {
-							label: sub(
-								Liferay.Language.get('create-new-tag-x'),
-								value
-							),
-							onClick: createAndAddKeyword,
-						}
+						showCreateAction
+							? {
+									label: sub(
+										Liferay.Language.get(
+											'create-new-tag-x'
+										),
+										value
+									),
+									onClick: createAndAddKeyword,
+								}
+							: undefined
 					}
 					refetchOnActive
 					sizing={inputSize}
