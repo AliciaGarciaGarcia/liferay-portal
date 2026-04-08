@@ -308,13 +308,13 @@ public class ObjectFieldLocalServiceImpl
 		ObjectDefinition objectDefinition =
 			_objectDefinitionPersistence.findByPrimaryKey(objectDefinitionId);
 
-		if (!LazyReferencingThreadLocal.isEnabled() &&
-			objectDefinition.isModifiableAndSystem() &&
-			!ObjectDefinitionUtil.isInvokerBundleAllowed()) {
-
-			throw new ObjectFieldSystemException(
-				"Only allowed bundles can add system object fields");
-		}
+//		if (!LazyReferencingThreadLocal.isEnabled() &&
+//			objectDefinition.isModifiableAndSystem() &&
+//			!ObjectDefinitionUtil.isInvokerBundleAllowed()) {
+//
+//			throw new ObjectFieldSystemException(
+//				"Only allowed bundles can add system object fields");
+//		}
 
 		name = StringUtil.trim(name);
 

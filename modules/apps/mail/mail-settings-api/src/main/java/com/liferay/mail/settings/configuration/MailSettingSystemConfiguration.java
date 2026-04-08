@@ -47,9 +47,8 @@ public interface MailSettingSystemConfiguration {
 	public String popServerSubdomain();
 
 	@Meta.AD(
-		deflt = "noreply@liferay.com|test@liferay.com|noreply@domain.invalid|test@domain.invalid",
-		description = "send-blacklist-description", name = "send-blacklist",
-		required = false
+		deflt = "", description = "send-blacklist-description",
+		name = "send-blacklist", required = false
 	)
 	public String[] sendBlacklist();
 
