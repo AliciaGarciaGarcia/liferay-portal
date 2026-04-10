@@ -1981,6 +1981,104 @@ paths:
                             schema:
                                 $ref: "#/components/schemas/ObjectEntry"
             tags: ["ObjectEntry"]
+    "/scopes/{scopeKey}/by-external-reference-code/{externalReferenceCode}/invited-collaborators":
+        get:
+            description:
+                Retrieves the invited collaborators of an object entry.
+            parameters:
+                -   in: path
+                    name: scopeKey
+                    required: true
+                    schema:
+                        type: string
+                -   in: path
+                    name: externalReferenceCode
+                    required: true
+                    schema:
+                        type: string
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                items:
+                                    $ref: ../../headless/headless-object/headless-object-impl/rest-openapi.yaml#InvitedCollaborator
+                                type: array
+                        application/xml:
+                            schema:
+                                items:
+                                    $ref: ../../headless/headless-object/headless-object-impl/rest-openapi.yaml#InvitedCollaborator
+                                type: array
+            tags: ["InvitedCollaborator"]
+    "/scopes/{scopeKey}/by-external-reference-code/{externalReferenceCode}/invited-collaborators/{invitedCollaboratorId}":
+        delete:
+            description:
+                Deletes the invited collaborator for an object entry.
+            parameters:
+                -   in: path
+                    name: scopeKey
+                    required: true
+                    schema:
+                        type: string
+                -   in: path
+                    name: externalReferenceCode
+                    required: true
+                    schema:
+                        type: string
+                -   in: path
+                    name: invitedCollaboratorId
+                    required: true
+                    schema:
+                        format: int64
+                        type: integer
+            responses:
+                204:
+                    content:
+                        application/json: {}
+                        application/xml: {}
+            tags: ["InvitedCollaborator"]
+        get:
+            description:
+                Retrieves the invited collaborator for an object entry.
+            parameters:
+                -   in: path
+                    name: scopeKey
+                    required: true
+                    schema:
+                        type: string
+                -   in: path
+                    name: externalReferenceCode
+                    required: true
+                    schema:
+                        type: string
+                -   in: path
+                    name: invitedCollaboratorId
+                    required: true
+                    schema:
+                        format: int64
+                        type: integer
+                -   in: query
+                    name: fields
+                    schema:
+                        type: string
+                -   in: query
+                    name: nestedFields
+                    schema:
+                        type: string
+                -   in: query
+                    name: restrictFields
+                    schema:
+                        type: string
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: ../../headless/headless-object/headless-object-impl/rest-openapi.yaml#InvitedCollaborator
+                        application/xml:
+                            schema:
+                                $ref: ../../headless/headless-object/headless-object-impl/rest-openapi.yaml#InvitedCollaborator
+            tags: ["InvitedCollaborator"]
     "/scopes/{scopeKey}/by-external-reference-code/{externalReferenceCode}/object-actions/{objectActionName}":
         put:
             operationId: putScopeScopeKeyByExternalReferenceCodeObjectActionObjectActionName
@@ -2682,6 +2780,92 @@ paths:
                             schema:
                                 $ref: ../../headless/headless-object/headless-object-impl/rest-openapi.yaml#Collaborator
             tags: ["Collaborator"]
+    "/{objectEntryId}/invited-collaborators":
+        get:
+            description:
+                Retrieves the invited collaborators of an object entry.
+            parameters:
+                -   in: path
+                    name: objectEntryId
+                    required: true
+                    schema:
+                        format: int64
+                        type: integer
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                items:
+                                    $ref: ../../headless/headless-object/headless-object-impl/rest-openapi.yaml#InvitedCollaborator
+                                    type: array
+                        application/xml:
+                            schema:
+                                items:
+                                    $ref: ../../headless/headless-object/headless-object-impl/rest-openapi.yaml#InvitedCollaborator
+                                    type: array
+            tags: ["InvitedCollaborator"]
+    "/{objectEntryId}/invited-collaborators/{invitedCollaboratorId}":
+        delete:
+            description:
+                Deletes the invited collaborator for an object entry.
+            parameters:
+                -   in: path
+                    name: objectEntryId
+                    required: true
+                    schema:
+                        format: int64
+                        type: integer
+                -   in: path
+                    name: invitedCollaboratorId
+                    required: true
+                    schema:
+                        format: int64
+                        type: integer
+            responses:
+                204:
+                    content:
+                        application/json: {}
+                        application/xml: {}
+            tags: ["InvitedCollaborator"]
+        get:
+            description:
+                Retrieves the invited collaborator for an object entry.
+            parameters:
+                -   in: path
+                    name: objectEntryId
+                    required: true
+                    schema:
+                        format: int64
+                        type: integer
+                -   in: path
+                    name: invitedCollaboratorId
+                    required: true
+                    schema:
+                        format: int64
+                        type: integer
+                -   in: query
+                    name: fields
+                    schema:
+                        type: string
+                -   in: query
+                    name: nestedFields
+                    schema:
+                        type: string
+                -   in: query
+                    name: restrictFields
+                    schema:
+                        type: string
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: ../../headless/headless-object/headless-object-impl/rest-openapi.yaml#InvitedCollaborator
+                        application/xml:
+                            schema:
+                                $ref: ../../headless/headless-object/headless-object-impl/rest-openapi.yaml#InvitedCollaborator
+            tags: ["InvitedCollaborator"]
     "/{objectEntryId}/object-actions/{objectActionName}":
         put:
             operationId: putObjectEntryObjectActionObjectActionName
