@@ -924,4 +924,4 @@ public class ObjectEntryFolderSerDes {
 	}
 
 }
-// LIFERAY-REST-BUILDER-HASH:-950512821
+// LIFERAY-REST-BUILDER-HASH:-430577134

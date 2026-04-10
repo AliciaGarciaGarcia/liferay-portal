@@ -1,5 +1,5 @@
 /**
- * SPDX-FileCopyrightText: (c) 2025 Liferay, Inc. https://liferay.com
+ * SPDX-FileCopyrightText: (c) 2026 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import com.liferay.headless.delivery.dto.v1_0.Creator;
 import com.liferay.petra.function.UnsafeSupplier;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -19,7 +18,6 @@ import com.liferay.portal.vulcan.util.ObjectMapperUtil;
 
 import jakarta.annotation.Generated;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
@@ -27,10 +25,6 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 import java.io.Serializable;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
@@ -42,28 +36,25 @@ import java.util.function.Supplier;
  * @generated
  */
 @Generated("")
-@GraphQLName(
-	description = "Represents a collaborator for an entry.",
-	value = "Collaborator"
-)
+@GraphQLName("InvitedCollaborator")
 @io.swagger.v3.oas.annotations.media.Schema(
-	description = "Represents a collaborator for an entry.",
-	requiredProperties = {"actionIds", "type"}
+	requiredProperties = {"actionIds", "emailAddress"}
 )
 @JsonFilter("Liferay.Vulcan")
-@XmlRootElement(name = "Collaborator")
-public class Collaborator implements Serializable {
+@XmlRootElement(name = "InvitedCollaborator")
+public class InvitedCollaborator implements Serializable {
 
-	public static Collaborator toDTO(String json) {
-		return ObjectMapperUtil.readValue(Collaborator.class, json);
+	public static InvitedCollaborator toDTO(String json) {
+		return ObjectMapperUtil.readValue(InvitedCollaborator.class, json);
 	}
 
-	public static Collaborator unsafeToDTO(String json) {
-		return ObjectMapperUtil.unsafeReadValue(Collaborator.class, json);
+	public static InvitedCollaborator unsafeToDTO(String json) {
+		return ObjectMapperUtil.unsafeReadValue(
+			InvitedCollaborator.class, json);
 	}
 
 	@io.swagger.v3.oas.annotations.media.Schema(
-		description = "The collaborator actions for the shared asset."
+		description = "The invited collaborator actions for the shared asset."
 	)
 	public String[] getActionIds() {
 		if (_actionIdsSupplier != null) {
@@ -99,7 +90,7 @@ public class Collaborator implements Serializable {
 	}
 
 	@GraphQLField(
-		description = "The collaborator actions for the shared asset."
+		description = "The invited collaborator actions for the shared asset."
 	)
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
 	@NotNull
@@ -107,141 +98,6 @@ public class Collaborator implements Serializable {
 
 	@JsonIgnore
 	private Supplier<String[]> _actionIdsSupplier;
-
-	@io.swagger.v3.oas.annotations.media.Schema(
-		description = "Block of actions allowed by the user making the request."
-	)
-	@Valid
-	public Map<String, Object> getActions() {
-		if (_actionsSupplier != null) {
-			actions = _actionsSupplier.get();
-
-			_actionsSupplier = null;
-		}
-
-		return actions;
-	}
-
-	public void setActions(Map<String, Object> actions) {
-		this.actions = actions;
-
-		_actionsSupplier = null;
-	}
-
-	@JsonIgnore
-	public void setActions(
-		UnsafeSupplier<Map<String, Object>, Exception> actionsUnsafeSupplier) {
-
-		_actionsSupplier = () -> {
-			try {
-				return actionsUnsafeSupplier.get();
-			}
-			catch (RuntimeException runtimeException) {
-				throw runtimeException;
-			}
-			catch (Exception exception) {
-				throw new RuntimeException(exception);
-			}
-		};
-	}
-
-	@GraphQLField(
-		description = "Block of actions allowed by the user making the request."
-	)
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	protected Map<String, Object> actions;
-
-	@JsonIgnore
-	private Supplier<Map<String, Object>> _actionsSupplier;
-
-	@io.swagger.v3.oas.annotations.media.Schema(
-		description = "The object entry folder's creator."
-	)
-	@Valid
-	public Creator getCreator() {
-		if (_creatorSupplier != null) {
-			creator = _creatorSupplier.get();
-
-			_creatorSupplier = null;
-		}
-
-		return creator;
-	}
-
-	public void setCreator(Creator creator) {
-		this.creator = creator;
-
-		_creatorSupplier = null;
-	}
-
-	@JsonIgnore
-	public void setCreator(
-		UnsafeSupplier<Creator, Exception> creatorUnsafeSupplier) {
-
-		_creatorSupplier = () -> {
-			try {
-				return creatorUnsafeSupplier.get();
-			}
-			catch (RuntimeException runtimeException) {
-				throw runtimeException;
-			}
-			catch (Exception exception) {
-				throw new RuntimeException(exception);
-			}
-		};
-	}
-
-	@GraphQLField(description = "The object entry folder's creator.")
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	protected Creator creator;
-
-	@JsonIgnore
-	private Supplier<Creator> _creatorSupplier;
-
-	@io.swagger.v3.oas.annotations.media.Schema(
-		description = "The expiration date to be a collaborator of the asset."
-	)
-	public Date getDateExpired() {
-		if (_dateExpiredSupplier != null) {
-			dateExpired = _dateExpiredSupplier.get();
-
-			_dateExpiredSupplier = null;
-		}
-
-		return dateExpired;
-	}
-
-	public void setDateExpired(Date dateExpired) {
-		this.dateExpired = dateExpired;
-
-		_dateExpiredSupplier = null;
-	}
-
-	@JsonIgnore
-	public void setDateExpired(
-		UnsafeSupplier<Date, Exception> dateExpiredUnsafeSupplier) {
-
-		_dateExpiredSupplier = () -> {
-			try {
-				return dateExpiredUnsafeSupplier.get();
-			}
-			catch (RuntimeException runtimeException) {
-				throw runtimeException;
-			}
-			catch (Exception exception) {
-				throw new RuntimeException(exception);
-			}
-		};
-	}
-
-	@GraphQLField(
-		description = "The expiration date to be a collaborator of the asset."
-	)
-	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected Date dateExpired;
-
-	@JsonIgnore
-	private Supplier<Date> _dateExpiredSupplier;
 
 	@io.swagger.v3.oas.annotations.media.Schema
 	public String getEmailAddress() {
@@ -278,58 +134,14 @@ public class Collaborator implements Serializable {
 	}
 
 	@GraphQLField
-	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	@NotEmpty
 	protected String emailAddress;
 
 	@JsonIgnore
 	private Supplier<String> _emailAddressSupplier;
 
-	@io.swagger.v3.oas.annotations.media.Schema(
-		description = "The collaborator external reference code."
-	)
-	public String getExternalReferenceCode() {
-		if (_externalReferenceCodeSupplier != null) {
-			externalReferenceCode = _externalReferenceCodeSupplier.get();
-
-			_externalReferenceCodeSupplier = null;
-		}
-
-		return externalReferenceCode;
-	}
-
-	public void setExternalReferenceCode(String externalReferenceCode) {
-		this.externalReferenceCode = externalReferenceCode;
-
-		_externalReferenceCodeSupplier = null;
-	}
-
-	@JsonIgnore
-	public void setExternalReferenceCode(
-		UnsafeSupplier<String, Exception> externalReferenceCodeUnsafeSupplier) {
-
-		_externalReferenceCodeSupplier = () -> {
-			try {
-				return externalReferenceCodeUnsafeSupplier.get();
-			}
-			catch (RuntimeException runtimeException) {
-				throw runtimeException;
-			}
-			catch (Exception exception) {
-				throw new RuntimeException(exception);
-			}
-		};
-	}
-
-	@GraphQLField(description = "The collaborator external reference code.")
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	protected String externalReferenceCode;
-
-	@JsonIgnore
-	private Supplier<String> _externalReferenceCodeSupplier;
-
-	@io.swagger.v3.oas.annotations.media.Schema(
-		description = "The collaborator ID."
-	)
+	@io.swagger.v3.oas.annotations.media.Schema
 	public Long getId() {
 		if (_idSupplier != null) {
 			id = _idSupplier.get();
@@ -361,96 +173,12 @@ public class Collaborator implements Serializable {
 		};
 	}
 
-	@GraphQLField(description = "The collaborator ID.")
-	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	@GraphQLField
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	protected Long id;
 
 	@JsonIgnore
 	private Supplier<Long> _idSupplier;
-
-	@io.swagger.v3.oas.annotations.media.Schema(
-		description = "The collaborator name."
-	)
-	public String getName() {
-		if (_nameSupplier != null) {
-			name = _nameSupplier.get();
-
-			_nameSupplier = null;
-		}
-
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-
-		_nameSupplier = null;
-	}
-
-	@JsonIgnore
-	public void setName(UnsafeSupplier<String, Exception> nameUnsafeSupplier) {
-		_nameSupplier = () -> {
-			try {
-				return nameUnsafeSupplier.get();
-			}
-			catch (RuntimeException runtimeException) {
-				throw runtimeException;
-			}
-			catch (Exception exception) {
-				throw new RuntimeException(exception);
-			}
-		};
-	}
-
-	@GraphQLField(description = "The collaborator name.")
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	protected String name;
-
-	@JsonIgnore
-	private Supplier<String> _nameSupplier;
-
-	@io.swagger.v3.oas.annotations.media.Schema(
-		description = "The collaborator portrait."
-	)
-	public String getPortrait() {
-		if (_portraitSupplier != null) {
-			portrait = _portraitSupplier.get();
-
-			_portraitSupplier = null;
-		}
-
-		return portrait;
-	}
-
-	public void setPortrait(String portrait) {
-		this.portrait = portrait;
-
-		_portraitSupplier = null;
-	}
-
-	@JsonIgnore
-	public void setPortrait(
-		UnsafeSupplier<String, Exception> portraitUnsafeSupplier) {
-
-		_portraitSupplier = () -> {
-			try {
-				return portraitUnsafeSupplier.get();
-			}
-			catch (RuntimeException runtimeException) {
-				throw runtimeException;
-			}
-			catch (Exception exception) {
-				throw new RuntimeException(exception);
-			}
-		};
-	}
-
-	@GraphQLField(description = "The collaborator portrait.")
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	protected String portrait;
-
-	@JsonIgnore
-	private Supplier<String> _portraitSupplier;
 
 	@io.swagger.v3.oas.annotations.media.Schema(
 		description = "If the collaborator can share or not the asset."
@@ -533,7 +261,6 @@ public class Collaborator implements Serializable {
 
 	@GraphQLField(description = "The collaborator type.")
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	@NotEmpty
 	protected String type;
 
 	@JsonIgnore
@@ -545,13 +272,13 @@ public class Collaborator implements Serializable {
 			return true;
 		}
 
-		if (!(object instanceof Collaborator)) {
+		if (!(object instanceof InvitedCollaborator)) {
 			return false;
 		}
 
-		Collaborator collaborator = (Collaborator)object;
+		InvitedCollaborator invitedCollaborator = (InvitedCollaborator)object;
 
-		return Objects.equals(toString(), collaborator.toString());
+		return Objects.equals(toString(), invitedCollaborator.toString());
 	}
 
 	@Override
@@ -565,9 +292,6 @@ public class Collaborator implements Serializable {
 		StringBundler sb = new StringBundler();
 
 		sb.append("{");
-
-		DateFormat liferayToJSONDateFormat = new SimpleDateFormat(
-			"yyyy-MM-dd'T'HH:mm:ss'Z'");
 
 		String[] actionIds = getActionIds();
 
@@ -595,46 +319,6 @@ public class Collaborator implements Serializable {
 			sb.append("]");
 		}
 
-		Map<String, Object> actions = getActions();
-
-		if (actions != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"actions\": ");
-
-			sb.append(_toJSON(actions));
-		}
-
-		Creator creator = getCreator();
-
-		if (creator != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"creator\": ");
-
-			sb.append(creator);
-		}
-
-		Date dateExpired = getDateExpired();
-
-		if (dateExpired != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"dateExpired\": ");
-
-			sb.append("\"");
-
-			sb.append(liferayToJSONDateFormat.format(dateExpired));
-
-			sb.append("\"");
-		}
-
 		String emailAddress = getEmailAddress();
 
 		if (emailAddress != null) {
@@ -651,22 +335,6 @@ public class Collaborator implements Serializable {
 			sb.append("\"");
 		}
 
-		String externalReferenceCode = getExternalReferenceCode();
-
-		if (externalReferenceCode != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"externalReferenceCode\": ");
-
-			sb.append("\"");
-
-			sb.append(_escape(externalReferenceCode));
-
-			sb.append("\"");
-		}
-
 		Long id = getId();
 
 		if (id != null) {
@@ -677,38 +345,6 @@ public class Collaborator implements Serializable {
 			sb.append("\"id\": ");
 
 			sb.append(id);
-		}
-
-		String name = getName();
-
-		if (name != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"name\": ");
-
-			sb.append("\"");
-
-			sb.append(_escape(name));
-
-			sb.append("\"");
-		}
-
-		String portrait = getPortrait();
-
-		if (portrait != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"portrait\": ");
-
-			sb.append("\"");
-
-			sb.append(_escape(portrait));
-
-			sb.append("\"");
 		}
 
 		Boolean share = getShare();
@@ -746,7 +382,7 @@ public class Collaborator implements Serializable {
 
 	@io.swagger.v3.oas.annotations.media.Schema(
 		accessMode = io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY,
-		defaultValue = "com.liferay.headless.object.dto.v1_0.Collaborator",
+		defaultValue = "com.liferay.headless.object.dto.v1_0.InvitedCollaborator",
 		name = "x-class-name"
 	)
 	public String xClassName;
@@ -840,4 +476,4 @@ public class Collaborator implements Serializable {
 	private Map<String, Serializable> _extendedProperties;
 
 }
-// LIFERAY-REST-BUILDER-HASH:1784333370
+// LIFERAY-REST-BUILDER-HASH:878778047
