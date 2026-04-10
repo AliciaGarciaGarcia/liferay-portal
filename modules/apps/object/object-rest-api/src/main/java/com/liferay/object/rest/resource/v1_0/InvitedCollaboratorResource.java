@@ -1,10 +1,11 @@
 /**
- * SPDX-FileCopyrightText: (c) 2025 Liferay, Inc. https://liferay.com
+ * SPDX-FileCopyrightText: (c) 2026 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
 package com.liferay.object.rest.resource.v1_0;
 
+import com.liferay.object.rest.dto.v1_0.InvitedCollaborator;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.ResourceActionLocalService;
 import com.liferay.portal.kernel.service.ResourcePermissionLocalService;
@@ -16,13 +17,13 @@ import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
 import com.liferay.portal.vulcan.batch.engine.resource.VulcanBatchEngineExportTaskResource;
 import com.liferay.portal.vulcan.batch.engine.resource.VulcanBatchEngineImportTaskResource;
 import com.liferay.portal.vulcan.pagination.Page;
-import com.liferay.portal.vulcan.pagination.Pagination;
 
 import jakarta.annotation.Generated;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 
 import java.util.Collections;
@@ -38,101 +39,29 @@ import org.osgi.annotation.versioning.ProviderType;
  */
 @Generated("")
 @ProviderType
-public interface CommentResource {
+public interface InvitedCollaboratorResource {
 
-	public void deleteByExternalReferenceCodeComment(
-			String externalReferenceCode, String commentExternalReferenceCode)
+	public void deleteObjectEntryInvitedCollaborator(
+			Long objectEntryId, Long invitedCollaboratorId)
 		throws Exception;
 
-	public void deleteScopeScopeKeyByExternalReferenceCodeComment(
+	public void deleteScopeScopeKeyByExternalReferenceCodeInvitedCollaborator(
 			String scopeKey, String externalReferenceCode,
-			String commentExternalReferenceCode)
+			Long invitedCollaboratorId)
 		throws Exception;
 
-	public com.liferay.headless.delivery.dto.v1_0.Comment
-			getByExternalReferenceCodeComment(
-				String externalReferenceCode,
-				String commentExternalReferenceCode)
+	public Page<InvitedCollaborator> getObjectEntryInvitedCollaboratorsPage(
+			Long objectEntryId)
 		throws Exception;
 
-	public Page<com.liferay.headless.delivery.dto.v1_0.Comment>
-			getByExternalReferenceCodeCommentChildCommentsPage(
-				String externalReferenceCode,
-				String commentExternalReferenceCode, String search,
-				com.liferay.portal.vulcan.aggregation.Aggregation aggregation,
-				Pagination pagination,
-				com.liferay.portal.kernel.search.Sort[] sorts)
+	public Page<InvitedCollaborator>
+			getScopeScopeKeyByExternalReferenceCodeInvitedCollaboratorsPage(
+				String scopeKey, String externalReferenceCode)
 		throws Exception;
 
-	public Page<com.liferay.headless.delivery.dto.v1_0.Comment>
-			getByExternalReferenceCodeCommentsPage(
-				String externalReferenceCode, String search,
-				com.liferay.portal.vulcan.aggregation.Aggregation aggregation,
-				Pagination pagination,
-				com.liferay.portal.kernel.search.Sort[] sorts)
-		throws Exception;
-
-	public com.liferay.headless.delivery.dto.v1_0.Comment
-			getScopeScopeKeyByExternalReferenceCodeComment(
-				String scopeKey, String externalReferenceCode,
-				String commentExternalReferenceCode)
-		throws Exception;
-
-	public Page<com.liferay.headless.delivery.dto.v1_0.Comment>
-			getScopeScopeKeyByExternalReferenceCodeCommentChildCommentsPage(
-				String scopeKey, String externalReferenceCode,
-				String commentExternalReferenceCode, String search,
-				com.liferay.portal.vulcan.aggregation.Aggregation aggregation,
-				Pagination pagination,
-				com.liferay.portal.kernel.search.Sort[] sorts)
-		throws Exception;
-
-	public Page<com.liferay.headless.delivery.dto.v1_0.Comment>
-			getScopeScopeKeyByExternalReferenceCodeCommentsPage(
-				String scopeKey, String externalReferenceCode, String search,
-				com.liferay.portal.vulcan.aggregation.Aggregation aggregation,
-				Pagination pagination,
-				com.liferay.portal.kernel.search.Sort[] sorts)
-		throws Exception;
-
-	public com.liferay.headless.delivery.dto.v1_0.Comment
-			postByExternalReferenceCodeComment(
-				String externalReferenceCode,
-				com.liferay.headless.delivery.dto.v1_0.Comment comment)
-		throws Exception;
-
-	public com.liferay.headless.delivery.dto.v1_0.Comment
-			postByExternalReferenceCodeCommentChildComment(
-				String externalReferenceCode,
-				String commentExternalReferenceCode,
-				com.liferay.headless.delivery.dto.v1_0.Comment comment)
-		throws Exception;
-
-	public com.liferay.headless.delivery.dto.v1_0.Comment
-			postScopeScopeKeyByExternalReferenceCodeComment(
-				String scopeKey, String externalReferenceCode,
-				com.liferay.headless.delivery.dto.v1_0.Comment comment)
-		throws Exception;
-
-	public com.liferay.headless.delivery.dto.v1_0.Comment
-			postScopeScopeKeyByExternalReferenceCodeCommentChildComment(
-				String scopeKey, String externalReferenceCode,
-				String commentExternalReferenceCode,
-				com.liferay.headless.delivery.dto.v1_0.Comment comment)
-		throws Exception;
-
-	public com.liferay.headless.delivery.dto.v1_0.Comment
-			putByExternalReferenceCodeComment(
-				String externalReferenceCode,
-				String commentExternalReferenceCode,
-				com.liferay.headless.delivery.dto.v1_0.Comment comment)
-		throws Exception;
-
-	public com.liferay.headless.delivery.dto.v1_0.Comment
-			putScopeScopeKeyByExternalReferenceCodeComment(
-				String scopeKey, String externalReferenceCode,
-				String commentExternalReferenceCode,
-				com.liferay.headless.delivery.dto.v1_0.Comment comment)
+	public Response postObjectEntryInvitedCollaboratorsPageExportBatch(
+			Long objectEntryId, String callbackURL, String contentType,
+			String fieldNames)
 		throws Exception;
 
 	public default void setContextAcceptLanguage(
@@ -205,7 +134,7 @@ public interface CommentResource {
 	@ProviderType
 	public interface Builder {
 
-		public CommentResource build();
+		public InvitedCollaboratorResource build();
 
 		public Builder checkPermissions(boolean checkPermissions);
 
@@ -231,4 +160,4 @@ public interface CommentResource {
 	}
 
 }
-// LIFERAY-REST-BUILDER-HASH:951762985
+// LIFERAY-REST-BUILDER-HASH:185748151

@@ -1,12 +1,13 @@
 /**
- * SPDX-FileCopyrightText: (c) 2025 Liferay, Inc. https://liferay.com
+ * SPDX-FileCopyrightText: (c) 2026 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
 package com.liferay.object.rest.internal.resource.v1_0;
 
 import com.liferay.exportimport.kernel.lar.ExportImportThreadLocal;
-import com.liferay.object.rest.resource.v1_0.CollaboratorResource;
+import com.liferay.object.rest.dto.v1_0.InvitedCollaborator;
+import com.liferay.object.rest.resource.v1_0.InvitedCollaboratorResource;
 import com.liferay.petra.function.UnsafeBiConsumer;
 import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.function.UnsafeFunction;
@@ -62,14 +63,10 @@ import java.util.Set;
  * @generated
  */
 @Generated("")
-public abstract class BaseCollaboratorResourceImpl
-	implements CollaboratorResource, EntityModelResource,
-			   VulcanBatchEngineTaskItemDelegate
-				   <com.liferay.headless.object.dto.v1_0.Collaborator> {
+public abstract class BaseInvitedCollaboratorResourceImpl
+	implements EntityModelResource, InvitedCollaboratorResource,
+			   VulcanBatchEngineTaskItemDelegate<InvitedCollaborator> {
 
-	@io.swagger.v3.oas.annotations.Operation(
-		description = "Deletes the collaborator for an object entry and returns a 204 if the operation succeeds."
-	)
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
 			@io.swagger.v3.oas.annotations.Parameter(
@@ -78,42 +75,35 @@ public abstract class BaseCollaboratorResourceImpl
 			),
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "type"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "collaboratorId"
+				name = "invitedCollaboratorId"
 			)
 		}
 	)
 	@io.swagger.v3.oas.annotations.tags.Tags(
-		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Collaborator")}
+		value = {
+			@io.swagger.v3.oas.annotations.tags.Tag(
+				name = "InvitedCollaborator"
+			)
+		}
 	)
 	@jakarta.ws.rs.DELETE
 	@jakarta.ws.rs.Path(
-		"/{objectEntryId}/collaborators/by-type/{type}/{collaboratorId}"
+		"/{objectEntryId}/invited-collaborators/{invitedCollaboratorId}"
 	)
 	@jakarta.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public void deleteObjectEntryCollaboratorByTypeCollaborator(
+	public void deleteObjectEntryInvitedCollaborator(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@jakarta.validation.constraints.NotNull
 			@jakarta.ws.rs.PathParam("objectEntryId")
 			Long objectEntryId,
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@jakarta.validation.constraints.NotNull
-			@jakarta.ws.rs.PathParam("type")
-			String type,
-			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-			@jakarta.validation.constraints.NotNull
-			@jakarta.ws.rs.PathParam("collaboratorId")
-			Long collaboratorId)
+			@jakarta.ws.rs.PathParam("invitedCollaboratorId")
+			Long invitedCollaboratorId)
 		throws Exception {
 	}
 
-	@io.swagger.v3.oas.annotations.Operation(
-		description = "Deletes the collaborator for an object entry and returns a 204 if the operation succeeds."
-	)
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
 			@io.swagger.v3.oas.annotations.Parameter(
@@ -126,155 +116,73 @@ public abstract class BaseCollaboratorResourceImpl
 			),
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "type"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "collaboratorId"
+				name = "invitedCollaboratorId"
 			)
 		}
 	)
 	@io.swagger.v3.oas.annotations.tags.Tags(
-		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Collaborator")}
+		value = {
+			@io.swagger.v3.oas.annotations.tags.Tag(
+				name = "InvitedCollaborator"
+			)
+		}
 	)
 	@jakarta.ws.rs.DELETE
 	@jakarta.ws.rs.Path(
-		"/scopes/{scopeKey}/by-external-reference-code/{externalReferenceCode}/collaborators/by-type/{type}/{collaboratorId}"
+		"/scopes/{scopeKey}/by-external-reference-code/{externalReferenceCode}/{invitedCollaboratorId}"
 	)
 	@jakarta.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public void
-			deleteScopeScopeKeyByExternalReferenceCodeCollaboratorByTypeCollaborator(
-				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-				@jakarta.validation.constraints.NotNull
-				@jakarta.ws.rs.PathParam("scopeKey")
-				String scopeKey,
-				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-				@jakarta.validation.constraints.NotNull
-				@jakarta.ws.rs.PathParam("externalReferenceCode")
-				String externalReferenceCode,
-				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-				@jakarta.validation.constraints.NotNull
-				@jakarta.ws.rs.PathParam("type")
-				String type,
-				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-				@jakarta.validation.constraints.NotNull
-				@jakarta.ws.rs.PathParam("collaboratorId")
-				Long collaboratorId)
+	public void deleteScopeScopeKeyByExternalReferenceCodeInvitedCollaborator(
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@jakarta.validation.constraints.NotNull
+			@jakarta.ws.rs.PathParam("scopeKey")
+			String scopeKey,
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@jakarta.validation.constraints.NotNull
+			@jakarta.ws.rs.PathParam("externalReferenceCode")
+			String externalReferenceCode,
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@jakarta.validation.constraints.NotNull
+			@jakarta.ws.rs.PathParam("invitedCollaboratorId")
+			Long invitedCollaboratorId)
 		throws Exception {
 	}
 
 	@io.swagger.v3.oas.annotations.Operation(
-		description = "Retrieves the collaborator for an object entry."
+		description = "Retrieves the invited collaborators of an object entry."
 	)
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
 				name = "objectEntryId"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "type"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "collaboratorId"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
-				name = "fields"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
-				name = "nestedFields"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
-				name = "restrictFields"
 			)
 		}
 	)
 	@io.swagger.v3.oas.annotations.tags.Tags(
-		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Collaborator")}
-	)
-	@jakarta.ws.rs.GET
-	@jakarta.ws.rs.Path(
-		"/{objectEntryId}/collaborators/by-type/{type}/{collaboratorId}"
-	)
-	@jakarta.ws.rs.Produces({"application/json", "application/xml"})
-	@Override
-	public com.liferay.headless.object.dto.v1_0.Collaborator
-			getObjectEntryCollaboratorByTypeCollaborator(
-				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-				@jakarta.validation.constraints.NotNull
-				@jakarta.ws.rs.PathParam("objectEntryId")
-				Long objectEntryId,
-				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-				@jakarta.validation.constraints.NotNull
-				@jakarta.ws.rs.PathParam("type")
-				String type,
-				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-				@jakarta.validation.constraints.NotNull
-				@jakarta.ws.rs.PathParam("collaboratorId")
-				Long collaboratorId)
-		throws Exception {
-
-		return new com.liferay.headless.object.dto.v1_0.Collaborator();
-	}
-
-	@io.swagger.v3.oas.annotations.Operation(
-		description = "Retrieves the collaborators of an object entry."
-	)
-	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "objectEntryId"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
-				name = "fields"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
-				name = "nestedFields"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
-				name = "page"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
-				name = "pageSize"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
-				name = "restrictFields"
+			@io.swagger.v3.oas.annotations.tags.Tag(
+				name = "InvitedCollaborator"
 			)
 		}
 	)
-	@io.swagger.v3.oas.annotations.tags.Tags(
-		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Collaborator")}
-	)
 	@jakarta.ws.rs.GET
-	@jakarta.ws.rs.Path("/{objectEntryId}/collaborators")
+	@jakarta.ws.rs.Path("/{objectEntryId}/invited-collaborators")
 	@jakarta.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public Page<com.liferay.headless.object.dto.v1_0.Collaborator>
-			getObjectEntryCollaboratorsPage(
-				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-				@jakarta.validation.constraints.NotNull
-				@jakarta.ws.rs.PathParam("objectEntryId")
-				Long objectEntryId,
-				@jakarta.ws.rs.core.Context Pagination pagination)
+	public Page<InvitedCollaborator> getObjectEntryInvitedCollaboratorsPage(
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@jakarta.validation.constraints.NotNull
+			@jakarta.ws.rs.PathParam("objectEntryId")
+			Long objectEntryId)
 		throws Exception {
 
 		return Page.of(Collections.emptyList());
 	}
 
 	@io.swagger.v3.oas.annotations.Operation(
-		description = "Retrieves the collaborator for an object entry."
+		description = "Retrieves the invited collaborators of an object entry."
 	)
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
@@ -285,40 +193,24 @@ public abstract class BaseCollaboratorResourceImpl
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
 				name = "externalReferenceCode"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "type"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "collaboratorId"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
-				name = "fields"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
-				name = "nestedFields"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
-				name = "restrictFields"
 			)
 		}
 	)
 	@io.swagger.v3.oas.annotations.tags.Tags(
-		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Collaborator")}
+		value = {
+			@io.swagger.v3.oas.annotations.tags.Tag(
+				name = "InvitedCollaborator"
+			)
+		}
 	)
 	@jakarta.ws.rs.GET
 	@jakarta.ws.rs.Path(
-		"/scopes/{scopeKey}/by-external-reference-code/{externalReferenceCode}/collaborators/by-type/{type}/{collaboratorId}"
+		"/scopes/{scopeKey}/by-external-reference-code/{externalReferenceCode}/invited-collaborators"
 	)
 	@jakarta.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public com.liferay.headless.object.dto.v1_0.Collaborator
-			getScopeScopeKeyByExternalReferenceCodeCollaboratorByTypeCollaborator(
+	public Page<InvitedCollaborator>
+			getScopeScopeKeyByExternalReferenceCodeInvitedCollaboratorsPage(
 				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 				@jakarta.validation.constraints.NotNull
 				@jakarta.ws.rs.PathParam("scopeKey")
@@ -326,107 +218,7 @@ public abstract class BaseCollaboratorResourceImpl
 				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 				@jakarta.validation.constraints.NotNull
 				@jakarta.ws.rs.PathParam("externalReferenceCode")
-				String externalReferenceCode,
-				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-				@jakarta.validation.constraints.NotNull
-				@jakarta.ws.rs.PathParam("type")
-				String type,
-				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-				@jakarta.validation.constraints.NotNull
-				@jakarta.ws.rs.PathParam("collaboratorId")
-				Long collaboratorId)
-		throws Exception {
-
-		return new com.liferay.headless.object.dto.v1_0.Collaborator();
-	}
-
-	@io.swagger.v3.oas.annotations.Operation(
-		description = "Retrieves the collaborators of an object entry."
-	)
-	@io.swagger.v3.oas.annotations.Parameters(
-		value = {
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "scopeKey"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "externalReferenceCode"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
-				name = "fields"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
-				name = "nestedFields"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
-				name = "page"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
-				name = "pageSize"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
-				name = "restrictFields"
-			)
-		}
-	)
-	@io.swagger.v3.oas.annotations.tags.Tags(
-		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Collaborator")}
-	)
-	@jakarta.ws.rs.GET
-	@jakarta.ws.rs.Path(
-		"/scopes/{scopeKey}/by-external-reference-code/{externalReferenceCode}/collaborators"
-	)
-	@jakarta.ws.rs.Produces({"application/json", "application/xml"})
-	@Override
-	public Page<com.liferay.headless.object.dto.v1_0.Collaborator>
-			getScopeScopeKeyByExternalReferenceCodeCollaboratorsPage(
-				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-				@jakarta.validation.constraints.NotNull
-				@jakarta.ws.rs.PathParam("scopeKey")
-				String scopeKey,
-				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-				@jakarta.validation.constraints.NotNull
-				@jakarta.ws.rs.PathParam("externalReferenceCode")
-				String externalReferenceCode,
-				@jakarta.ws.rs.core.Context Pagination pagination)
-		throws Exception {
-
-		return Page.of(Collections.emptyList());
-	}
-
-	@io.swagger.v3.oas.annotations.Operation(
-		description = "Add or update all the collaborators received in the request. Delete existing collaborators that are not included in the request."
-	)
-	@io.swagger.v3.oas.annotations.Parameters(
-		value = {
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "objectEntryId"
-			)
-		}
-	)
-	@io.swagger.v3.oas.annotations.tags.Tags(
-		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Collaborator")}
-	)
-	@jakarta.ws.rs.Consumes({"application/json", "application/xml"})
-	@jakarta.ws.rs.Path("/{objectEntryId}/collaborators")
-	@jakarta.ws.rs.POST
-	@jakarta.ws.rs.Produces({"application/json", "application/xml"})
-	@Override
-	public Page<com.liferay.headless.object.dto.v1_0.Collaborator>
-			postObjectEntryCollaboratorsPage(
-				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-				@jakarta.validation.constraints.NotNull
-				@jakarta.ws.rs.PathParam("objectEntryId")
-				Long objectEntryId,
-				com.liferay.headless.object.dto.v1_0.Collaborator[]
-					collaborators)
+				String externalReferenceCode)
 		throws Exception {
 
 		return Page.of(Collections.emptyList());
@@ -453,14 +245,18 @@ public abstract class BaseCollaboratorResourceImpl
 		}
 	)
 	@io.swagger.v3.oas.annotations.tags.Tags(
-		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Collaborator")}
+		value = {
+			@io.swagger.v3.oas.annotations.tags.Tag(
+				name = "InvitedCollaborator"
+			)
+		}
 	)
 	@jakarta.ws.rs.Consumes("application/json")
-	@jakarta.ws.rs.Path("/{objectEntryId}/collaborators/export-batch")
+	@jakarta.ws.rs.Path("/{objectEntryId}/invited-collaborators/export-batch")
 	@jakarta.ws.rs.POST
 	@jakarta.ws.rs.Produces("application/json")
 	@Override
-	public Response postObjectEntryCollaboratorsPageExportBatch(
+	public Response postObjectEntryInvitedCollaboratorsPageExportBatch(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@jakarta.validation.constraints.NotNull
 			@jakarta.ws.rs.PathParam("objectEntryId")
@@ -491,165 +287,15 @@ public abstract class BaseCollaboratorResourceImpl
 
 		return responseBuilder.entity(
 			vulcanBatchEngineExportTaskResource.postExportTask(
-				com.liferay.headless.object.dto.v1_0.Collaborator.class.
-					getName(),
-				callbackURL, contentType, fieldNames)
+				InvitedCollaborator.class.getName(), callbackURL, contentType,
+				fieldNames)
 		).build();
-	}
-
-	@io.swagger.v3.oas.annotations.Operation(
-		description = "Add or update all the collaborators received in the request. Delete existing collaborators that are not included in the request. Send a notification for the new collaborators and those whose permissions are different."
-	)
-	@io.swagger.v3.oas.annotations.Parameters(
-		value = {
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "scopeKey"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "externalReferenceCode"
-			)
-		}
-	)
-	@io.swagger.v3.oas.annotations.tags.Tags(
-		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Collaborator")}
-	)
-	@jakarta.ws.rs.Consumes({"application/json", "application/xml"})
-	@jakarta.ws.rs.Path(
-		"/scopes/{scopeKey}/by-external-reference-code/{externalReferenceCode}/collaborators"
-	)
-	@jakarta.ws.rs.POST
-	@jakarta.ws.rs.Produces({"application/json", "application/xml"})
-	@Override
-	public Page<com.liferay.headless.object.dto.v1_0.Collaborator>
-			postScopeScopeKeyByExternalReferenceCodeCollaboratorsPage(
-				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-				@jakarta.validation.constraints.NotNull
-				@jakarta.ws.rs.PathParam("scopeKey")
-				String scopeKey,
-				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-				@jakarta.validation.constraints.NotNull
-				@jakarta.ws.rs.PathParam("externalReferenceCode")
-				String externalReferenceCode,
-				com.liferay.headless.object.dto.v1_0.Collaborator[]
-					collaborators)
-		throws Exception {
-
-		return Page.of(Collections.emptyList());
-	}
-
-	@io.swagger.v3.oas.annotations.Operation(
-		description = "Add or update a collaborator received in the request."
-	)
-	@io.swagger.v3.oas.annotations.Parameters(
-		value = {
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "objectEntryId"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "type"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "collaboratorId"
-			)
-		}
-	)
-	@io.swagger.v3.oas.annotations.tags.Tags(
-		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Collaborator")}
-	)
-	@jakarta.ws.rs.Consumes({"application/json", "application/xml"})
-	@jakarta.ws.rs.Path(
-		"/{objectEntryId}/collaborators/by-type/{type}/{collaboratorId}"
-	)
-	@jakarta.ws.rs.Produces({"application/json", "application/xml"})
-	@jakarta.ws.rs.PUT
-	@Override
-	public com.liferay.headless.object.dto.v1_0.Collaborator
-			putObjectEntryCollaboratorByTypeCollaborator(
-				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-				@jakarta.validation.constraints.NotNull
-				@jakarta.ws.rs.PathParam("objectEntryId")
-				Long objectEntryId,
-				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-				@jakarta.validation.constraints.NotNull
-				@jakarta.ws.rs.PathParam("type")
-				String type,
-				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-				@jakarta.validation.constraints.NotNull
-				@jakarta.ws.rs.PathParam("collaboratorId")
-				Long collaboratorId,
-				com.liferay.headless.object.dto.v1_0.Collaborator collaborator)
-		throws Exception {
-
-		return new com.liferay.headless.object.dto.v1_0.Collaborator();
-	}
-
-	@io.swagger.v3.oas.annotations.Operation(
-		description = "Add or update a collaborator received in the request."
-	)
-	@io.swagger.v3.oas.annotations.Parameters(
-		value = {
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "scopeKey"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "externalReferenceCode"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "type"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "collaboratorId"
-			)
-		}
-	)
-	@io.swagger.v3.oas.annotations.tags.Tags(
-		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Collaborator")}
-	)
-	@jakarta.ws.rs.Consumes({"application/json", "application/xml"})
-	@jakarta.ws.rs.Path(
-		"/scopes/{scopeKey}/by-external-reference-code/{externalReferenceCode}/collaborators/by-type/{type}/{collaboratorId}"
-	)
-	@jakarta.ws.rs.Produces({"application/json", "application/xml"})
-	@jakarta.ws.rs.PUT
-	@Override
-	public com.liferay.headless.object.dto.v1_0.Collaborator
-			putScopeScopeKeyByExternalReferenceCodeCollaboratorByTypeCollaborator(
-				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-				@jakarta.validation.constraints.NotNull
-				@jakarta.ws.rs.PathParam("scopeKey")
-				String scopeKey,
-				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-				@jakarta.validation.constraints.NotNull
-				@jakarta.ws.rs.PathParam("externalReferenceCode")
-				String externalReferenceCode,
-				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-				@jakarta.validation.constraints.NotNull
-				@jakarta.ws.rs.PathParam("type")
-				String type,
-				@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-				@jakarta.validation.constraints.NotNull
-				@jakarta.ws.rs.PathParam("collaboratorId")
-				Long collaboratorId,
-				com.liferay.headless.object.dto.v1_0.Collaborator collaborator)
-		throws Exception {
-
-		return new com.liferay.headless.object.dto.v1_0.Collaborator();
 	}
 
 	@Override
 	@SuppressWarnings("PMD.UnusedLocalVariable")
 	public void create(
-			Collection<com.liferay.headless.object.dto.v1_0.Collaborator>
-				collaborators,
+			Collection<InvitedCollaborator> invitedCollaborators,
 			Map<String, Serializable> parameters)
 		throws Exception {
 
@@ -659,8 +305,7 @@ public abstract class BaseCollaboratorResourceImpl
 
 	@Override
 	public void delete(
-			Collection<com.liferay.headless.object.dto.v1_0.Collaborator>
-				collaborators,
+			Collection<InvitedCollaborator> invitedCollaborators,
 			Map<String, Serializable> parameters)
 		throws Exception {
 
@@ -685,7 +330,7 @@ public abstract class BaseCollaboratorResourceImpl
 	}
 
 	public String getResourceName() {
-		return "Collaborator";
+		return "InvitedCollaborator";
 	}
 
 	public String getVersion() {
@@ -693,7 +338,7 @@ public abstract class BaseCollaboratorResourceImpl
 	}
 
 	@Override
-	public Page<com.liferay.headless.object.dto.v1_0.Collaborator> read(
+	public Page<InvitedCollaborator> read(
 			com.liferay.portal.kernel.search.filter.Filter filter,
 			Pagination pagination,
 			com.liferay.portal.kernel.search.Sort[] sorts,
@@ -701,9 +346,8 @@ public abstract class BaseCollaboratorResourceImpl
 		throws Exception {
 
 		if (parameters.containsKey("objectEntryId")) {
-			return getObjectEntryCollaboratorsPage(
-				_parseLong((String)parameters.get("objectEntryId")),
-				pagination);
+			return getObjectEntryInvitedCollaboratorsPage(
+				_parseLong((String)parameters.get("objectEntryId")));
 		}
 		else {
 			throw new NotSupportedException(
@@ -744,8 +388,7 @@ public abstract class BaseCollaboratorResourceImpl
 
 	@Override
 	public void update(
-			Collection<com.liferay.headless.object.dto.v1_0.Collaborator>
-				collaborators,
+			Collection<InvitedCollaborator> invitedCollaborators,
 			Map<String, Serializable> parameters)
 		throws Exception {
 
@@ -774,10 +417,9 @@ public abstract class BaseCollaboratorResourceImpl
 
 	public void setContextBatchUnsafeBiConsumer(
 		UnsafeBiConsumer
-			<Collection<com.liferay.headless.object.dto.v1_0.Collaborator>,
+			<Collection<InvitedCollaborator>,
 			 UnsafeFunction
-				 <com.liferay.headless.object.dto.v1_0.Collaborator,
-				  com.liferay.headless.object.dto.v1_0.Collaborator, Exception>,
+				 <InvitedCollaborator, InvitedCollaborator, Exception>,
 			 Exception> contextBatchUnsafeBiConsumer) {
 
 		this.contextBatchUnsafeBiConsumer = contextBatchUnsafeBiConsumer;
@@ -785,10 +427,9 @@ public abstract class BaseCollaboratorResourceImpl
 
 	public void setContextBatchUnsafeConsumer(
 		UnsafeBiConsumer
-			<Collection<com.liferay.headless.object.dto.v1_0.Collaborator>,
-			 UnsafeConsumer
-				 <com.liferay.headless.object.dto.v1_0.Collaborator, Exception>,
-			 Exception> contextBatchUnsafeConsumer) {
+			<Collection<InvitedCollaborator>,
+			 UnsafeConsumer<InvitedCollaborator, Exception>, Exception>
+				contextBatchUnsafeConsumer) {
 
 		this.contextBatchUnsafeConsumer = contextBatchUnsafeConsumer;
 	}
@@ -1297,16 +938,13 @@ public abstract class BaseCollaboratorResourceImpl
 
 	protected AcceptLanguage contextAcceptLanguage;
 	protected UnsafeBiConsumer
-		<Collection<com.liferay.headless.object.dto.v1_0.Collaborator>,
-		 UnsafeFunction
-			 <com.liferay.headless.object.dto.v1_0.Collaborator,
-			  com.liferay.headless.object.dto.v1_0.Collaborator, Exception>,
+		<Collection<InvitedCollaborator>,
+		 UnsafeFunction<InvitedCollaborator, InvitedCollaborator, Exception>,
 		 Exception> contextBatchUnsafeBiConsumer;
 	protected UnsafeBiConsumer
-		<Collection<com.liferay.headless.object.dto.v1_0.Collaborator>,
-		 UnsafeConsumer
-			 <com.liferay.headless.object.dto.v1_0.Collaborator, Exception>,
-		 Exception> contextBatchUnsafeConsumer;
+		<Collection<InvitedCollaborator>,
+		 UnsafeConsumer<InvitedCollaborator, Exception>, Exception>
+			contextBatchUnsafeConsumer;
 	protected com.liferay.portal.kernel.model.Company contextCompany;
 	protected HttpServletRequest contextHttpServletRequest;
 	protected HttpServletResponse contextHttpServletResponse;
@@ -1327,7 +965,7 @@ public abstract class BaseCollaboratorResourceImpl
 		vulcanBatchEngineImportTaskResource;
 
 	private static final com.liferay.portal.kernel.log.Log _log =
-		LogFactoryUtil.getLog(BaseCollaboratorResourceImpl.class);
+		LogFactoryUtil.getLog(BaseInvitedCollaboratorResourceImpl.class);
 
 }
-// LIFERAY-REST-BUILDER-HASH:1234779522
+// LIFERAY-REST-BUILDER-HASH:1785177149

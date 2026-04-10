@@ -2009,6 +2009,7 @@ paths:
         get:
             description:
                 Retrieves the invited collaborators of an object entry.
+            operationId: getScopeScopeKeyByExternalReferenceCodeInvitedCollaboratorsPage
             parameters:
                 -   in: path
                     name: scopeKey
@@ -2285,6 +2286,7 @@ paths:
             tags: ["ObjectEntry"]
     "/scopes/{scopeKey}/by-external-reference-code/{externalReferenceCode}/{invitedCollaboratorId}":
         delete:
+            operationId: deleteScopeScopeKeyByExternalReferenceCodeInvitedCollaborator
             parameters:
                 -   in: path
                     name: scopeKey
@@ -2764,6 +2766,7 @@ paths:
         get:
             description:
                 Retrieves the invited collaborators of an object entry.
+            operationId: getObjectEntryInvitedCollaboratorsPage
             parameters:
                 -   in: path
                     name: objectEntryId
@@ -2787,6 +2790,7 @@ paths:
             tags: ["InvitedCollaborator"]
     "/{objectEntryId}/invited-collaborators/{invitedCollaboratorId}":
         delete:
+            operationId: deleteObjectEntryInvitedCollaborator
             parameters:
                 -   in: path
                     name: objectEntryId
