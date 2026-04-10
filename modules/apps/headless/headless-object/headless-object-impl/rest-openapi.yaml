@@ -28,6 +28,8 @@ components:
                         The expiration date to be a collaborator of the asset.
                     format: date-time
                     type: string
+                emailAddress:
+                    type: string
                 externalReferenceCode:
                     # @review
                     description:
@@ -61,6 +63,34 @@ components:
             required:
                 -   actionIds
                 -   type
+            type: object
+        InvitedCollaborator:
+            properties:
+                actionIds:
+                    description:
+                        The invited collaborator actions for the shared asset.
+                    items:
+                        type: string
+                    type: array
+                emailAddress:
+                    readOnly: true
+                    type: string
+                id:
+                    format: int64
+                    readOnly: true
+                    type: integer
+                share:
+                    description:
+                        If the collaborator can share or not the asset.
+                    type: boolean
+                type:
+                    description:
+                        The collaborator type.
+                    example: User
+                    type: string
+            required:
+                -   actionIds
+                -   emailAddress
             type: object
         ObjectEntryFolder:
             description:
