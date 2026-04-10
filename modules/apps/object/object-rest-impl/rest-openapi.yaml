@@ -109,6 +109,30 @@ components:
                 siteId:
                     format: int64
                     type: integer
+        InvitedCollaborator:
+            properties:
+                actionIds:
+                    description:
+                        The invited collaborator actions for the shared asset.
+                    items:
+                        type: string
+                    type: array
+                emailAddress:
+                    readOnly: true
+                    type: string
+                id:
+                    format: int64
+                    readOnly: true
+                    type: integer
+                share:
+                    description:
+                        If the invited collaborator can share or not the asset.
+                    type: boolean
+                type:
+                    description:
+                        The invited collaborator type.
+                    example: User
+                    type: string
         Link:
             properties:
                 href:
@@ -1981,6 +2005,35 @@ paths:
                             schema:
                                 $ref: "#/components/schemas/ObjectEntry"
             tags: ["ObjectEntry"]
+    "/scopes/{scopeKey}/by-external-reference-code/{externalReferenceCode}/invited-collaborators":
+        get:
+            description:
+                Retrieves the invited collaborators of an object entry.
+            parameters:
+                -   in: path
+                    name: scopeKey
+                    required: true
+                    schema:
+                        type: string
+                -   in: path
+                    name: externalReferenceCode
+                    required: true
+                    schema:
+                        type: string
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                items:
+                                    $ref: "#/components/schemas/InvitedCollaborator"
+                                type: array
+                        application/xml:
+                            schema:
+                                items:
+                                    $ref: "#/components/schemas/InvitedCollaborator"
+                                type: array
+            tags: ["InvitedCollaborator"]
     "/scopes/{scopeKey}/by-external-reference-code/{externalReferenceCode}/object-actions/{objectActionName}":
         put:
             operationId: putScopeScopeKeyByExternalReferenceCodeObjectActionObjectActionName
@@ -2230,6 +2283,31 @@ paths:
                                     $ref: "#/components/schemas/ObjectEntry"
                                 type: array
             tags: ["ObjectEntry"]
+    "/scopes/{scopeKey}/by-external-reference-code/{externalReferenceCode}/{invitedCollaboratorId}":
+        delete:
+            parameters:
+                -   in: path
+                    name: scopeKey
+                    required: true
+                    schema:
+                        type: string
+                -   in: path
+                    name: externalReferenceCode
+                    required: true
+                    schema:
+                        type: string
+                -   in: path
+                    name: invitedCollaboratorId
+                    required: true
+                    schema:
+                        format: int64
+                        type: integer
+            responses:
+                204:
+                    content:
+                        application/json: {}
+                        application/xml: {}
+            tags: ["InvitedCollaborator"]
     "/scopes/{scopeKey}/validate":
         post:
             operationId: postScopeScopeKeyValidate
@@ -2682,6 +2760,52 @@ paths:
                             schema:
                                 $ref: ../../headless/headless-object/headless-object-impl/rest-openapi.yaml#Collaborator
             tags: ["Collaborator"]
+    "/{objectEntryId}/invited-collaborators":
+        get:
+            description:
+                Retrieves the invited collaborators of an object entry.
+            parameters:
+                -   in: path
+                    name: objectEntryId
+                    required: true
+                    schema:
+                        format: int64
+                        type: integer
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                items:
+                                    $ref: "#/components/schemas/InvitedCollaborator"
+                                    type: array
+                        application/xml:
+                            schema:
+                                items:
+                                    $ref: "#/components/schemas/InvitedCollaborator"
+                                    type: array
+            tags: ["InvitedCollaborator"]
+    "/{objectEntryId}/invited-collaborators/{invitedCollaboratorId}":
+        delete:
+            parameters:
+                -   in: path
+                    name: objectEntryId
+                    required: true
+                    schema:
+                        format: int64
+                        type: integer
+                -   in: path
+                    name: invitedCollaboratorId
+                    required: true
+                    schema:
+                        format: int64
+                        type: integer
+            responses:
+                204:
+                    content:
+                        application/json: {}
+                        application/xml: {}
+            tags: ["InvitedCollaborator"]
     "/{objectEntryId}/object-actions/{objectActionName}":
         put:
             operationId: putObjectEntryObjectActionObjectActionName
