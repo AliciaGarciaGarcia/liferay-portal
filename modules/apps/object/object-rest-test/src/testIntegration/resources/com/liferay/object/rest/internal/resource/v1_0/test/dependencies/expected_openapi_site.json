@@ -88,6 +88,9 @@
 						"format": "date-time",
 						"type": "string"
 					},
+					"emailAddress": {
+						"type": "string"
+					},
 					"externalReferenceCode": {
 						"description": "The collaborator external reference code.",
 						"readOnly": true,
@@ -309,6 +312,64 @@
 					},
 					"term": {
 						"type": "string"
+					}
+				},
+				"type": "object",
+				"x-filterable": {
+				}
+			},
+			"InvitedCollaborator": {
+				"properties": {
+					"actionIds": {
+						"description": "The invited collaborator actions for the shared asset.",
+						"items": {
+							"description": "The invited collaborator actions for the shared asset.",
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"emailAddress": {
+						"readOnly": true,
+						"type": "string"
+					},
+					"id": {
+						"format": "int64",
+						"readOnly": true,
+						"type": "integer"
+					},
+					"share": {
+						"description": "If the collaborator can share or not the asset.",
+						"type": "boolean"
+					},
+					"type": {
+						"description": "The collaborator type.",
+						"example": "User",
+						"type": "string"
+					},
+					"x-class-name": {
+						"default": "com.liferay.headless.object.dto.v1_0.InvitedCollaborator",
+						"readOnly": true,
+						"type": "string"
+					}
+				},
+				"required": [
+					"actionIds",
+					"emailAddress"
+				],
+				"type": "object",
+				"x-filterable": {
+				},
+				"xml": {
+					"name": "InvitedCollaborator"
+				}
+			},
+			"MultipartBody": {
+				"properties": {
+					"values": {
+						"additionalProperties": {
+							"type": "string"
+						},
+						"type": "object"
 					}
 				},
 				"type": "object",
@@ -661,6 +722,50 @@
 				"x-filterable": {
 				}
 			},
+			"PageInvitedCollaborator": {
+				"properties": {
+					"actions": {
+						"additionalProperties": {
+							"additionalProperties": {
+								"type": "string"
+							},
+							"type": "object"
+						},
+						"type": "object"
+					},
+					"facets": {
+						"items": {
+							"$ref": "#/components/schemas/Facet"
+						},
+						"type": "array"
+					},
+					"items": {
+						"items": {
+							"$ref": "#/components/schemas/InvitedCollaborator"
+						},
+						"type": "array"
+					},
+					"lastPage": {
+						"format": "int64",
+						"type": "integer"
+					},
+					"page": {
+						"format": "int64",
+						"type": "integer"
+					},
+					"pageSize": {
+						"format": "int64",
+						"type": "integer"
+					},
+					"totalCount": {
+						"format": "int64",
+						"type": "integer"
+					}
+				},
+				"type": "object",
+				"x-filterable": {
+				}
+			},
 			"PageObject8": {
 				"properties": {
 					"actions": {
@@ -819,6 +924,30 @@
 					"name": "Permission"
 				}
 			},
+			"PostObjectEntryTranslationRequestBody": {
+				"properties": {
+					"file": {
+						"description": "File",
+						"format": "binary",
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"x-filterable": {
+				}
+			},
+			"PostScopeScopeKeyByExternalReferenceCodeTranslationRequestBody": {
+				"properties": {
+					"file": {
+						"description": "File",
+						"format": "binary",
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"x-filterable": {
+				}
+			},
 			"Scope": {
 				"properties": {
 					"externalReferenceCode": {
@@ -935,6 +1064,35 @@
 				},
 				"xml": {
 					"name": "TaxonomyCategoryBrief"
+				}
+			},
+			"TranslationResponse": {
+				"properties": {
+					"failureMessagesJSON": {
+						"items": {
+							"type": "string"
+						},
+						"readOnly": true,
+						"type": "array"
+					},
+					"successMessages": {
+						"items": {
+							"type": "string"
+						},
+						"readOnly": true,
+						"type": "array"
+					},
+					"x-class-name": {
+						"default": "com.liferay.object.rest.dto.v1_0.TranslationResponse",
+						"readOnly": true,
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"x-filterable": {
+				},
+				"xml": {
+					"name": "TranslationResponse"
 				}
 			},
 			"UserGroupBrief": {
@@ -2721,6 +2879,50 @@
 				]
 			}
 		},
+		"/scopes/{scopeKey}/by-external-reference-code/{externalReferenceCode}/invited-collaborators": {
+			"get": {
+				"description": "Retrieves the invited collaborators of an object entry.",
+				"operationId": "getScopeScopeKeyByExternalReferenceCodeInvitedCollaboratorsPage",
+				"parameters": [
+					{
+						"in": "path",
+						"name": "scopeKey",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "path",
+						"name": "externalReferenceCode",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"default": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PageInvitedCollaborator"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/PageInvitedCollaborator"
+								}
+							}
+						},
+						"description": "default response"
+					}
+				},
+				"tags": [
+					"InvitedCollaborator"
+				]
+			}
+		},
 		"/scopes/{scopeKey}/by-external-reference-code/{externalReferenceCode}/restore": {
 			"put": {
 				"operationId": "putScopeScopeKeyByExternalReferenceCodeRestore",
@@ -2847,6 +3049,56 @@
 					"default": {
 						"content": {
 							"application/zip": {
+							}
+						},
+						"description": "default response"
+					}
+				},
+				"tags": [
+					"Object8"
+				]
+			},
+			"post": {
+				"operationId": "postScopeScopeKeyByExternalReferenceCodeTranslation",
+				"parameters": [
+					{
+						"in": "path",
+						"name": "scopeKey",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "path",
+						"name": "externalReferenceCode",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"$ref": "#/components/schemas/PostScopeScopeKeyByExternalReferenceCodeTranslationRequestBody"
+							}
+						}
+					}
+				},
+				"responses": {
+					"default": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TranslationResponse"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/TranslationResponse"
+								}
 							}
 						},
 						"description": "default response"
@@ -3014,6 +3266,51 @@
 				},
 				"tags": [
 					"Object8"
+				]
+			}
+		},
+		"/scopes/{scopeKey}/by-external-reference-code/{externalReferenceCode}/{invitedCollaboratorId}": {
+			"delete": {
+				"operationId": "deleteScopeScopeKeyByExternalReferenceCodeInvitedCollaborator",
+				"parameters": [
+					{
+						"in": "path",
+						"name": "scopeKey",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "path",
+						"name": "externalReferenceCode",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "path",
+						"name": "invitedCollaboratorId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"default": {
+						"content": {
+							"application/json": {
+							},
+							"application/xml": {
+							}
+						},
+						"description": "default response"
+					}
+				},
+				"tags": [
+					"InvitedCollaborator"
 				]
 			}
 		},
@@ -3769,6 +4066,127 @@
 				]
 			}
 		},
+		"/{object8Id}/invited-collaborators": {
+			"get": {
+				"description": "Retrieves the invited collaborators of an object entry.",
+				"operationId": "getObject8InvitedCollaboratorsPage",
+				"parameters": [
+					{
+						"in": "path",
+						"name": "object8Id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"default": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PageInvitedCollaborator"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/PageInvitedCollaborator"
+								}
+							}
+						},
+						"description": "default response"
+					}
+				},
+				"tags": [
+					"InvitedCollaborator"
+				]
+			}
+		},
+		"/{object8Id}/invited-collaborators/export-batch": {
+			"post": {
+				"operationId": "postObject8InvitedCollaboratorsPageExportBatch",
+				"parameters": [
+					{
+						"in": "path",
+						"name": "object8Id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "callbackURL",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "contentType",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "fieldNames",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"default": {
+						"content": {
+							"application/json": {
+							}
+						},
+						"description": "default response"
+					}
+				},
+				"tags": [
+					"InvitedCollaborator"
+				]
+			}
+		},
+		"/{object8Id}/invited-collaborators/{invitedCollaboratorId}": {
+			"delete": {
+				"operationId": "deleteObject8InvitedCollaborator",
+				"parameters": [
+					{
+						"in": "path",
+						"name": "object8Id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "path",
+						"name": "invitedCollaboratorId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"default": {
+						"content": {
+							"application/json": {
+							},
+							"application/xml": {
+							}
+						},
+						"description": "default response"
+					}
+				},
+				"tags": [
+					"InvitedCollaborator"
+				]
+			}
+		},
 		"/{object8Id}/permissions": {
 			"get": {
 				"operationId": "getObject8PermissionsPage",
@@ -3923,6 +4341,48 @@
 					"default": {
 						"content": {
 							"application/zip": {
+							}
+						},
+						"description": "default response"
+					}
+				},
+				"tags": [
+					"Object8"
+				]
+			},
+			"post": {
+				"operationId": "postObject8Translation",
+				"parameters": [
+					{
+						"in": "path",
+						"name": "object8Id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"$ref": "#/components/schemas/PostObjectEntryTranslationRequestBody"
+							}
+						}
+					}
+				},
+				"responses": {
+					"default": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TranslationResponse"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/TranslationResponse"
+								}
 							}
 						},
 						"description": "default response"
