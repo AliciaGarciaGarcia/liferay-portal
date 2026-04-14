@@ -11,8 +11,10 @@ import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectEntry;
 import com.liferay.object.service.ObjectEntryLocalService;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
+import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.TicketLocalService;
 import com.liferay.portal.kernel.service.UserGroupLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
@@ -34,10 +36,11 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 		ClassNameLocalService classNameLocalService,
 		DTOConverter<SharingEntry, Collaborator> collaboratorDTOConverter,
 		DTOConverterRegistry dtoConverterRegistry,
-		GroupLocalService groupLocalService,
+		GroupLocalService groupLocalService, JSONFactory jsonFactory,
 		ObjectEntryLocalService objectEntryLocalService,
 		SharingEntryService sharingEntryService,
 		SharingEntryLocalService sharingEntryLocalService,
+		TicketLocalService ticketLocalService,
 		UserGroupLocalService userGroupLocalService,
 		UserLocalService userLocalService) {
 
@@ -45,9 +48,11 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 		_collaboratorDTOConverter = collaboratorDTOConverter;
 		_dtoConverterRegistry = dtoConverterRegistry;
 		_groupLocalService = groupLocalService;
+		_jsonFactory = jsonFactory;
 		_objectEntryLocalService = objectEntryLocalService;
 		_sharingEntryService = sharingEntryService;
 		_sharingEntryLocalService = sharingEntryLocalService;
+		_ticketLocalService = ticketLocalService;
 		_userGroupLocalService = userGroupLocalService;
 		_userLocalService = userLocalService;
 	}
@@ -65,10 +70,11 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 			objectEntryId);
 
 		CollaboratorUtil.deleteCollaborator(
+			objectEntry.getModelClassName(),
 			_classNameLocalService.getClassNameId(
 				objectEntry.getModelClassName()),
 			objectEntry.getObjectEntryId(), collaboratorId,
-			_sharingEntryService, type);
+			_sharingEntryService, _ticketLocalService, type);
 	}
 
 	@Override
@@ -89,10 +95,11 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 			_objectDefinition.getObjectDefinitionId());
 
 		CollaboratorUtil.deleteCollaborator(
+			objectEntry.getModelClassName(),
 			_classNameLocalService.getClassNameId(
 				objectEntry.getModelClassName()),
 			objectEntry.getObjectEntryId(), collaboratorId,
-			_sharingEntryService, type);
+			_sharingEntryService, _ticketLocalService, type);
 	}
 
 	@Override
@@ -108,12 +115,13 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 			objectEntryId);
 
 		return CollaboratorUtil.getCollaborator(
-			contextAcceptLanguage,
+			contextAcceptLanguage, objectEntry.getModelClassName(),
 			_classNameLocalService.getClassNameId(
 				objectEntry.getModelClassName()),
 			objectEntry.getObjectEntryId(), collaboratorId,
-			_collaboratorDTOConverter, _dtoConverterRegistry,
-			_sharingEntryService, type, contextUriInfo, contextUser);
+			_collaboratorDTOConverter, _dtoConverterRegistry, _jsonFactory,
+			_sharingEntryService, _ticketLocalService, type, contextUriInfo,
+			contextUser);
 	}
 
 	@Override
@@ -129,13 +137,13 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 			objectEntryId);
 
 		return CollaboratorUtil.getCollaborators(
-			contextAcceptLanguage,
+			contextAcceptLanguage, objectEntry.getModelClassName(),
 			_classNameLocalService.getClassNameId(
 				objectEntry.getModelClassName()),
 			objectEntry.getObjectEntryId(), _collaboratorDTOConverter,
-			_dtoConverterRegistry, objectEntry.getGroupId(), pagination,
-			_sharingEntryLocalService, _sharingEntryService, contextUriInfo,
-			contextUser);
+			_dtoConverterRegistry, objectEntry.getGroupId(), _jsonFactory,
+			pagination, _sharingEntryLocalService, _sharingEntryService,
+			_ticketLocalService, contextUriInfo, contextUser);
 	}
 
 	@Override
@@ -156,12 +164,13 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 			_objectDefinition.getObjectDefinitionId());
 
 		return CollaboratorUtil.getCollaborator(
-			contextAcceptLanguage,
+			contextAcceptLanguage, objectEntry.getModelClassName(),
 			_classNameLocalService.getClassNameId(
 				objectEntry.getModelClassName()),
 			objectEntry.getObjectEntryId(), collaboratorId,
-			_collaboratorDTOConverter, _dtoConverterRegistry,
-			_sharingEntryService, type, contextUriInfo, contextUser);
+			_collaboratorDTOConverter, _dtoConverterRegistry, _jsonFactory,
+			_sharingEntryService, _ticketLocalService, type, contextUriInfo,
+			contextUser);
 	}
 
 	@Override
@@ -182,13 +191,13 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 			_objectDefinition.getObjectDefinitionId());
 
 		return CollaboratorUtil.getCollaborators(
-			contextAcceptLanguage,
+			contextAcceptLanguage, objectEntry.getModelClassName(),
 			_classNameLocalService.getClassNameId(
 				objectEntry.getModelClassName()),
 			objectEntry.getObjectEntryId(), _collaboratorDTOConverter,
-			_dtoConverterRegistry, objectEntry.getGroupId(), pagination,
-			_sharingEntryLocalService, _sharingEntryService, contextUriInfo,
-			contextUser);
+			_dtoConverterRegistry, objectEntry.getGroupId(), _jsonFactory,
+			pagination, _sharingEntryLocalService, _sharingEntryService,
+			_ticketLocalService, contextUriInfo, contextUser);
 	}
 
 	@Override
@@ -301,6 +310,7 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 		_collaboratorDTOConverter;
 	private final DTOConverterRegistry _dtoConverterRegistry;
 	private final GroupLocalService _groupLocalService;
+	private final JSONFactory _jsonFactory;
 
 	@Context
 	private ObjectDefinition _objectDefinition;
@@ -308,6 +318,7 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 	private final ObjectEntryLocalService _objectEntryLocalService;
 	private final SharingEntryLocalService _sharingEntryLocalService;
 	private final SharingEntryService _sharingEntryService;
+	private final TicketLocalService _ticketLocalService;
 	private final UserGroupLocalService _userGroupLocalService;
 	private final UserLocalService _userLocalService;
 

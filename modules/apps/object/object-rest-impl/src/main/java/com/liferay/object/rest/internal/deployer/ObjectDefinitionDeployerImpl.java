@@ -85,6 +85,7 @@ import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.ResourceActionLocalService;
 import com.liferay.portal.kernel.service.ResourcePermissionLocalService;
 import com.liferay.portal.kernel.service.RoleLocalService;
+import com.liferay.portal.kernel.service.TicketLocalService;
 import com.liferay.portal.kernel.service.UserGroupLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
@@ -217,8 +218,9 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 	private CollaboratorResourceImpl _createCollaboratorResourceImpl() {
 		return new CollaboratorResourceImpl(
 			_classNameLocalService, _collaboratorDTOConverter,
-			_dtoConverterRegistry, _groupLocalService, _objectEntryLocalService,
-			_sharingEntryService, _sharingEntryLocalService,
+			_dtoConverterRegistry, _groupLocalService, _jsonFactory,
+			_objectEntryLocalService, _sharingEntryService,
+			_sharingEntryLocalService, _ticketLocalService,
 			_userGroupLocalService, _userLocalService);
 	}
 
@@ -1281,6 +1283,9 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 	@Reference
 	private SystemObjectDefinitionManagerRegistry
 		_systemObjectDefinitionManagerRegistry;
+
+	@Reference
+	private TicketLocalService _ticketLocalService;
 
 	@Reference
 	private TranslationManager _translationManager;

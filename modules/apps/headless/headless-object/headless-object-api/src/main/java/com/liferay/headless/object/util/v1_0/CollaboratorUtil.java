@@ -5,14 +5,23 @@
 
 package com.liferay.headless.object.util.v1_0;
 
+import com.liferay.headless.object.constants.v1_0.CollaboratorTicketConstants;
 import com.liferay.headless.object.dto.v1_0.Collaborator;
 import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.NoSuchGroupException;
+import com.liferay.portal.kernel.exception.NoSuchModelException;
+import com.liferay.portal.kernel.json.JSONFactory;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.json.JSONUtil;
+import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.Ticket;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserGroup;
 import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.TicketLocalService;
 import com.liferay.portal.kernel.service.UserGroupLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
@@ -55,6 +64,10 @@ public class CollaboratorUtil {
 
 		_validateType(type);
 
+		if ("Email".equals(type)) {
+			return null;
+		}
+
 		return toCollaborator(
 			acceptLanguage, dtoConverter, dtoConverterRegistry,
 			_addOrUpdateSharingEntry(
@@ -84,6 +97,10 @@ public class CollaboratorUtil {
 		List<Long> sharingEntriesIds = new ArrayList<>();
 
 		for (Collaborator collaborator : collaborators) {
+			if ("Email".equals(collaborator.getType())) {
+				return null;
+			}
+
 			SharingEntry sharingEntry = _addOrUpdateSharingEntry(
 				classNameId, classPK, collaborator, collaborator.getId(),
 				groupId, sharingEntryService, collaborator.getType(),
@@ -116,32 +133,52 @@ public class CollaboratorUtil {
 	}
 
 	public static void deleteCollaborator(
-			long classNameId, long classPK, Long collaboratorId,
-			SharingEntryService sharingEntryService, String type)
+			String className, long classNameId, long classPK,
+			Long collaboratorId, SharingEntryService sharingEntryService,
+			TicketLocalService ticketLocalService, String type)
 		throws Exception {
 
 		_validateType(type);
 
-		if (StringUtil.equals("User", type)) {
+		if (StringUtil.equals("Email", type)) {
+			_deleteInvitedCollaborator(
+				collaboratorId, className, classPK, ticketLocalService);
+		}
+		else if (StringUtil.equals("User", type)) {
 			sharingEntryService.deleteSharingEntry(
 				0, collaboratorId, classNameId, classPK);
 		}
-		else {
+		else if (StringUtil.equals("UserGroup", type)) {
 			sharingEntryService.deleteSharingEntry(
 				collaboratorId, 0, classNameId, classPK);
 		}
 	}
 
 	public static Collaborator getCollaborator(
-			AcceptLanguage acceptLanguage, long classNameId, long classPK,
-			Long collaboratorId,
+			AcceptLanguage acceptLanguage, String className, long classNameId,
+			long classPK, Long collaboratorId,
 			DTOConverter<SharingEntry, Collaborator> dtoConverter,
-			DTOConverterRegistry dtoConverterRegistry,
-			SharingEntryService sharingEntryService, String type,
-			UriInfo uriInfo, User user)
+			DTOConverterRegistry dtoConverterRegistry, JSONFactory jsonFactory,
+			SharingEntryService sharingEntryService,
+			TicketLocalService ticketLocalService, String type, UriInfo uriInfo,
+			User user)
 		throws Exception {
 
 		_validateType(type);
+
+		if (StringUtil.equals("Email", type)) {
+			Ticket ticket = ticketLocalService.getTicket(collaboratorId);
+
+			if (!Objects.equals(className, ticket.getClassName()) ||
+				(classPK != ticket.getClassPK()) ||
+				(ticket.getType() !=
+					CollaboratorTicketConstants.TYPE_INVITE_COLLABORATOR)) {
+
+				throw new NoSuchModelException();
+			}
+
+			return toCollaborator(jsonFactory, ticket);
+		}
 
 		if (StringUtil.equals("User", type)) {
 			return toCollaborator(
@@ -159,28 +196,42 @@ public class CollaboratorUtil {
 	}
 
 	public static Page<Collaborator> getCollaborators(
-			AcceptLanguage acceptLanguage, long classNameId, long classPK,
-			DTOConverter<SharingEntry, Collaborator> dtoConverter,
+			AcceptLanguage acceptLanguage, String className, long classNameId,
+			long classPK, DTOConverter<SharingEntry, Collaborator> dtoConverter,
 			DTOConverterRegistry dtoConverterRegistry, long groupId,
-			Pagination pagination,
+			JSONFactory jsonFactory, Pagination pagination,
 			SharingEntryLocalService sharingEntryLocalService,
-			SharingEntryService sharingEntryService, UriInfo uriInfo, User user)
+			SharingEntryService sharingEntryService,
+			TicketLocalService ticketLocalService, UriInfo uriInfo, User user)
 		throws Exception {
 
-		return Page.of(
-			TransformUtil.transform(
-				sharingEntryService.getSharingEntries(
-					classNameId, classPK, groupId,
-					pagination.getStartPosition(), pagination.getEndPosition(),
-					OrderByComparatorFactoryUtil.create(
-						"SharingEntry", "createDate", false, "sharingEntryId",
-						false)),
-				sharingEntry -> toCollaborator(
-					acceptLanguage, dtoConverter, dtoConverterRegistry,
-					sharingEntry, uriInfo, user)),
-			pagination,
+		List<Collaborator> collaborators = TransformUtil.transform(
+			sharingEntryService.getSharingEntries(
+				classNameId, classPK, groupId, pagination.getStartPosition(),
+				pagination.getEndPosition(),
+				OrderByComparatorFactoryUtil.create(
+					"SharingEntry", "createDate", false, "sharingEntryId",
+					false)),
+			sharingEntry -> toCollaborator(
+				acceptLanguage, dtoConverter, dtoConverterRegistry,
+				sharingEntry, uriInfo, user));
+
+		int collaboratorsCount =
 			sharingEntryLocalService.getSharingEntriesCount(
-				classNameId, classPK));
+				classNameId, classPK);
+
+		Group group = GroupLocalServiceUtil.fetchGroup(groupId);
+
+		List<Ticket> tickets = ticketLocalService.getTickets(
+			group.getCompanyId(), className, classPK,
+			CollaboratorTicketConstants.TYPE_INVITE_COLLABORATOR);
+
+		for (Ticket ticket : tickets) {
+			collaborators.add(toCollaborator(jsonFactory, ticket));
+			collaboratorsCount++;
+		}
+
+		return Page.of(collaborators, pagination, collaboratorsCount);
 	}
 
 	public static long getGroupId(
@@ -215,6 +266,26 @@ public class CollaboratorUtil {
 				dtoConverterRegistry, sharingEntry.getSharingEntryId(),
 				acceptLanguage.getPreferredLocale(), uriInfo, user),
 			sharingEntry);
+	}
+
+	public static Collaborator toCollaborator(
+			JSONFactory jsonFactory, Ticket ticket)
+		throws Exception {
+
+		JSONObject jsonObject = jsonFactory.createJSONObject(
+			ticket.getExtraInfo());
+
+		return new Collaborator() {
+			{
+				setActionIds(
+					() -> JSONUtil.toStringArray(
+						jsonObject.getJSONArray("actionIds")));
+				setEmailAddress(() -> jsonObject.getString("emailAddress"));
+				setId(ticket::getTicketId);
+				setShare(() -> jsonObject.getBoolean("share"));
+				setType(() -> "Email");
+			}
+		};
 	}
 
 	private static SharingEntry _addOrUpdateSharingEntry(
@@ -257,12 +328,31 @@ public class CollaboratorUtil {
 			collaborator.getDateExpired(), new ServiceContext());
 	}
 
+	private static void _deleteInvitedCollaborator(
+			Long invitedCollaboratorId, String className, long classPK,
+			TicketLocalService ticketLocalService)
+		throws Exception {
+
+		Ticket ticket = ticketLocalService.getTicket(invitedCollaboratorId);
+
+		if (!Objects.equals(className, ticket.getClassName()) ||
+			(classPK != ticket.getClassPK()) ||
+			(ticket.getType() !=
+				CollaboratorTicketConstants.TYPE_INVITE_COLLABORATOR)) {
+
+			throw new NoSuchModelException();
+		}
+
+		ticketLocalService.deleteTicket(ticket.getTicketId());
+	}
+
 	private static void _validateType(String type) {
-		if (!StringUtil.equals("User", type) &&
+		if (!StringUtil.equals("Email", type) &&
+			!StringUtil.equals("User", type) &&
 			!StringUtil.equals("UserGroup", type)) {
 
 			throw new IllegalArgumentException(
-				"Collaborator type must be \"User\" or \"UserGroup\"");
+				"Collaborator type must be \"Email\", \"User\" or \"UserGroup\"");
 		}
 	}
 

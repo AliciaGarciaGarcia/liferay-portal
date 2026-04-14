@@ -11,8 +11,10 @@ import com.liferay.headless.object.util.v1_0.CollaboratorUtil;
 import com.liferay.object.model.ObjectEntryFolder;
 import com.liferay.object.service.ObjectEntryFolderLocalService;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
+import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.TicketLocalService;
 import com.liferay.portal.kernel.service.UserGroupLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
@@ -22,6 +24,8 @@ import com.liferay.portal.vulcan.pagination.Pagination;
 import com.liferay.sharing.model.SharingEntry;
 import com.liferay.sharing.service.SharingEntryLocalService;
 import com.liferay.sharing.service.SharingEntryService;
+
+import java.util.Objects;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -41,7 +45,9 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 			Long objectEntryFolderId, String type, Long collaboratorId)
 		throws Exception {
 
-		if (!FeatureFlagManagerUtil.isEnabled("LPD-17564")) {
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-17564") ||
+			Objects.equals(type, "Email")) {
+
 			throw new UnsupportedOperationException();
 		}
 
@@ -50,10 +56,11 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 				objectEntryFolderId);
 
 		CollaboratorUtil.deleteCollaborator(
+			ObjectEntryFolder.class.getName(),
 			_classNameLocalService.getClassNameId(
 				ObjectEntryFolder.class.getName()),
 			objectEntryFolder.getObjectEntryFolderId(), collaboratorId,
-			_sharingEntryService, type);
+			_sharingEntryService, _ticketLocalService, type);
 	}
 
 	@Override
@@ -63,7 +70,9 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 				Long collaboratorId)
 		throws Exception {
 
-		if (!FeatureFlagManagerUtil.isEnabled("LPD-17564")) {
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-17564") ||
+			Objects.equals(type, "Email")) {
+
 			throw new UnsupportedOperationException();
 		}
 
@@ -77,10 +86,11 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 					contextCompany.getCompanyId());
 
 		CollaboratorUtil.deleteCollaborator(
+			ObjectEntryFolder.class.getName(),
 			_classNameLocalService.getClassNameId(
 				ObjectEntryFolder.class.getName()),
 			objectEntryFolder.getObjectEntryFolderId(), collaboratorId,
-			_sharingEntryService, type);
+			_sharingEntryService, _ticketLocalService, type);
 	}
 
 	@Override
@@ -88,7 +98,9 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 			Long objectEntryFolderId, String type, Long collaboratorId)
 		throws Exception {
 
-		if (!FeatureFlagManagerUtil.isEnabled("LPD-17564")) {
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-17564") ||
+			Objects.equals(type, "Email")) {
+
 			throw new UnsupportedOperationException();
 		}
 
@@ -97,12 +109,13 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 				objectEntryFolderId);
 
 		return CollaboratorUtil.getCollaborator(
-			contextAcceptLanguage,
+			contextAcceptLanguage, ObjectEntryFolder.class.getName(),
 			_classNameLocalService.getClassNameId(
 				ObjectEntryFolder.class.getName()),
 			objectEntryFolder.getObjectEntryFolderId(), collaboratorId,
-			_collaboratorDTOConverter, _dtoConverterRegistry,
-			_sharingEntryService, type, contextUriInfo, contextUser);
+			_collaboratorDTOConverter, _dtoConverterRegistry, _jsonFactory,
+			_sharingEntryService, _ticketLocalService, type, contextUriInfo,
+			contextUser);
 	}
 
 	@Override
@@ -119,14 +132,14 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 				objectEntryFolderId);
 
 		return CollaboratorUtil.getCollaborators(
-			contextAcceptLanguage,
+			contextAcceptLanguage, ObjectEntryFolder.class.getName(),
 			_classNameLocalService.getClassNameId(
 				ObjectEntryFolder.class.getName()),
 			objectEntryFolder.getObjectEntryFolderId(),
 			_collaboratorDTOConverter, _dtoConverterRegistry,
-			objectEntryFolder.getGroupId(), pagination,
-			_sharingEntryLocalService, _sharingEntryService, contextUriInfo,
-			contextUser);
+			objectEntryFolder.getGroupId(), _jsonFactory, pagination,
+			_sharingEntryLocalService, _sharingEntryService,
+			_ticketLocalService, contextUriInfo, contextUser);
 	}
 
 	@Override
@@ -136,7 +149,9 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 				Long collaboratorId)
 		throws Exception {
 
-		if (!FeatureFlagManagerUtil.isEnabled("LPD-17564")) {
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-17564") ||
+			Objects.equals(type, "Email")) {
+
 			throw new UnsupportedOperationException();
 		}
 
@@ -150,12 +165,13 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 					contextCompany.getCompanyId());
 
 		return CollaboratorUtil.getCollaborator(
-			contextAcceptLanguage,
+			contextAcceptLanguage, ObjectEntryFolder.class.getName(),
 			_classNameLocalService.getClassNameId(
 				ObjectEntryFolder.class.getName()),
 			objectEntryFolder.getObjectEntryFolderId(), collaboratorId,
-			_collaboratorDTOConverter, _dtoConverterRegistry,
-			_sharingEntryService, type, contextUriInfo, contextUser);
+			_collaboratorDTOConverter, _dtoConverterRegistry, _jsonFactory,
+			_sharingEntryService, _ticketLocalService, type, contextUriInfo,
+			contextUser);
 	}
 
 	@Override
@@ -179,14 +195,14 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 					contextCompany.getCompanyId());
 
 		return CollaboratorUtil.getCollaborators(
-			contextAcceptLanguage,
+			contextAcceptLanguage, ObjectEntryFolder.class.getName(),
 			_classNameLocalService.getClassNameId(
 				ObjectEntryFolder.class.getName()),
 			objectEntryFolder.getObjectEntryFolderId(),
 			_collaboratorDTOConverter, _dtoConverterRegistry,
-			objectEntryFolder.getGroupId(), pagination,
-			_sharingEntryLocalService, _sharingEntryService, contextUriInfo,
-			contextUser);
+			objectEntryFolder.getGroupId(), _jsonFactory, pagination,
+			_sharingEntryLocalService, _sharingEntryService,
+			_ticketLocalService, contextUriInfo, contextUser);
 	}
 
 	@Override
@@ -196,6 +212,12 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 
 		if (!FeatureFlagManagerUtil.isEnabled("LPD-17564")) {
 			throw new UnsupportedOperationException();
+		}
+
+		for (Collaborator collaborator : collaborators) {
+			if (Objects.equals(collaborator.getType(), "Email")) {
+				throw new UnsupportedOperationException();
+			}
 		}
 
 		ObjectEntryFolder objectEntryFolder =
@@ -222,6 +244,12 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 
 		if (!FeatureFlagManagerUtil.isEnabled("LPD-17564")) {
 			throw new UnsupportedOperationException();
+		}
+
+		for (Collaborator collaborator : collaborators) {
+			if (Objects.equals(collaborator.getType(), "Email")) {
+				throw new UnsupportedOperationException();
+			}
 		}
 
 		ObjectEntryFolder objectEntryFolder =
@@ -315,6 +343,9 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 	private GroupLocalService _groupLocalService;
 
 	@Reference
+	private JSONFactory _jsonFactory;
+
+	@Reference
 	private ObjectEntryFolderLocalService _objectEntryFolderLocalService;
 
 	@Reference
@@ -322,6 +353,9 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 
 	@Reference
 	private SharingEntryService _sharingEntryService;
+
+	@Reference
+	private TicketLocalService _ticketLocalService;
 
 	@Reference
 	private UserGroupLocalService _userGroupLocalService;
