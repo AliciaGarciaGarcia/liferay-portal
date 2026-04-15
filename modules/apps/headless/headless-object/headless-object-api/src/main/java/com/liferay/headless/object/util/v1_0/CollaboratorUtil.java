@@ -14,12 +14,10 @@ import com.liferay.portal.kernel.exception.NoSuchModelException;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
-import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Ticket;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserGroup;
 import com.liferay.portal.kernel.service.GroupLocalService;
-import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.TicketLocalService;
 import com.liferay.portal.kernel.service.UserGroupLocalService;
@@ -265,7 +263,8 @@ public class CollaboratorUtil {
 
 	public static Page<Collaborator> getCollaborators(
 			AcceptLanguage acceptLanguage, String className, long classNameId,
-			long classPK, DTOConverter<SharingEntry, Collaborator> dtoConverter,
+			long classPK, long companyId,
+			DTOConverter<SharingEntry, Collaborator> dtoConverter,
 			DTOConverterRegistry dtoConverterRegistry, long groupId,
 			JSONFactory jsonFactory, Pagination pagination,
 			SharingEntryLocalService sharingEntryLocalService,
@@ -273,33 +272,67 @@ public class CollaboratorUtil {
 			TicketLocalService ticketLocalService, UriInfo uriInfo, User user)
 		throws Exception {
 
-		List<Collaborator> collaborators = TransformUtil.transform(
-			sharingEntryService.getSharingEntries(
-				classNameId, classPK, groupId, pagination.getStartPosition(),
-				pagination.getEndPosition(),
-				OrderByComparatorFactoryUtil.create(
-					"SharingEntry", "createDate", false, "sharingEntryId",
-					false)),
-			sharingEntry -> toCollaborator(
-				acceptLanguage, dtoConverter, dtoConverterRegistry,
-				sharingEntry, uriInfo, user));
-
-		int collaboratorsCount =
+		int sharingEntriesCount =
 			sharingEntryLocalService.getSharingEntriesCount(
 				classNameId, classPK);
 
-		Group group = GroupLocalServiceUtil.fetchGroup(groupId);
-
-		List<Ticket> tickets = ticketLocalService.getTickets(
-			group.getCompanyId(), className, classPK,
+		int ticketsCount = ticketLocalService.getTicketsCount(
+			companyId, className, classPK,
 			CollaboratorTicketConstants.TYPE_INVITE_COLLABORATOR);
 
-		for (Ticket ticket : tickets) {
-			collaborators.add(toCollaborator(jsonFactory, ticket));
-			collaboratorsCount++;
+		int totalCount = sharingEntriesCount + ticketsCount;
+
+		List<Collaborator> collaborators = new ArrayList<>();
+
+		if (pagination.getStartPosition() < sharingEntriesCount) {
+			collaborators = TransformUtil.transform(
+				sharingEntryService.getSharingEntries(
+					classNameId, classPK, groupId,
+					pagination.getStartPosition(), pagination.getEndPosition(),
+					OrderByComparatorFactoryUtil.create(
+						"SharingEntry", "createDate", false, "sharingEntryId",
+						false)),
+				sharingEntry -> toCollaborator(
+					acceptLanguage, dtoConverter, dtoConverterRegistry,
+					sharingEntry, uriInfo, user));
 		}
 
-		return Page.of(collaborators, pagination, collaboratorsCount);
+		if ((pagination.getEndPosition() > sharingEntriesCount) &&
+			(collaborators.size() <
+				(pagination.getEndPosition() -
+					pagination.getStartPosition()))) {
+
+			int ticketStart = Math.max(
+				0, pagination.getStartPosition() - sharingEntriesCount);
+			int ticketEnd = pagination.getEndPosition() - sharingEntriesCount;
+
+			List<Ticket> tickets = ticketLocalService.getTickets(
+				companyId, className, classPK,
+				CollaboratorTicketConstants.TYPE_INVITE_COLLABORATOR,
+				ticketStart, ticketEnd, null);
+
+			for (Ticket ticket : tickets) {
+				JSONObject jsonObject = jsonFactory.createJSONObject(
+					ticket.getExtraInfo());
+
+				Collaborator collaborator = new Collaborator() {
+					{
+						setActionIds(
+							() -> JSONUtil.toStringArray(
+								jsonObject.getJSONArray("actionIds")));
+						setEmailAddress(
+							() -> jsonObject.getString("emailAddress"));
+						setId(ticket::getTicketId);
+						setShare(() -> jsonObject.getBoolean("share"));
+						setType(() -> "Email");
+					}
+				};
+
+				collaborators.add(collaborator);
+			}
+		}
+
+		return Page.of(collaborators, pagination, totalCount);
 	}
 
 	public static long getGroupId(
