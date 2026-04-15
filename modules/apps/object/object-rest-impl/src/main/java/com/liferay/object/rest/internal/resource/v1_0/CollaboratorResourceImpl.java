@@ -234,9 +234,10 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 				objectEntry.getModelClassName()),
 			objectEntry.getObjectEntryId(), collaborators,
 			contextCompany.getCompanyId(), _collaboratorDTOConverter,
-			_dtoConverterRegistry, objectEntry.getGroupId(), _jsonFactory,
-			_sharingEntryService, _ticketLocalService, contextUriInfo,
-			contextUser, _userGroupLocalService, _userLocalService);
+			_dtoConverterRegistry, objectEntry.getGroupId(),
+			contextHttpServletRequest, _jsonFactory, _sharingEntryService,
+			_ticketLocalService, contextUriInfo, contextUser,
+			_userGroupLocalService, _userLocalService);
 	}
 
 	@Override
@@ -264,9 +265,10 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 				objectEntry.getModelClassName()),
 			objectEntry.getObjectEntryId(), collaborators,
 			contextCompany.getCompanyId(), _collaboratorDTOConverter,
-			_dtoConverterRegistry, objectEntry.getGroupId(), _jsonFactory,
-			_sharingEntryService, _ticketLocalService, contextUriInfo,
-			contextUser, _userGroupLocalService, _userLocalService);
+			_dtoConverterRegistry, objectEntry.getGroupId(),
+			contextHttpServletRequest, _jsonFactory, _sharingEntryService,
+			_ticketLocalService, contextUriInfo, contextUser,
+			_userGroupLocalService, _userLocalService);
 	}
 
 	@Override
@@ -290,10 +292,10 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 				objectEntry.getModelClassName()),
 			objectEntry.getObjectEntryId(), collaborator, collaboratorId,
 			_collaboratorDTOConverter, contextCompany.getCompanyId(),
-			_dtoConverterRegistry, objectEntry.getGroupId(), _jsonFactory,
-			_sharingEntryService, _ticketLocalService, type,
-			_userGroupLocalService, contextUriInfo, contextUser,
-			_userLocalService);
+			_dtoConverterRegistry, objectEntry.getGroupId(),
+			contextHttpServletRequest, _jsonFactory, _sharingEntryService,
+			_ticketLocalService, type, _userGroupLocalService, contextUriInfo,
+			contextUser, _userLocalService);
 	}
 
 	@Override
@@ -321,10 +323,10 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 				objectEntry.getModelClassName()),
 			objectEntry.getObjectEntryId(), collaborator, collaboratorId,
 			_collaboratorDTOConverter, contextCompany.getCompanyId(),
-			_dtoConverterRegistry, objectEntry.getGroupId(), _jsonFactory,
-			_sharingEntryService, _ticketLocalService, type,
-			_userGroupLocalService, contextUriInfo, contextUser,
-			_userLocalService);
+			_dtoConverterRegistry, objectEntry.getGroupId(),
+			contextHttpServletRequest, _jsonFactory, _sharingEntryService,
+			_ticketLocalService, type, _userGroupLocalService, contextUriInfo,
+			contextUser, _userLocalService);
 	}
 
 	public void setObjectDefinition(ObjectDefinition objectDefinition) {

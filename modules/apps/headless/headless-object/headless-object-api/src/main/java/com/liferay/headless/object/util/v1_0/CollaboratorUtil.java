@@ -7,10 +7,13 @@ package com.liferay.headless.object.util.v1_0;
 
 import com.liferay.headless.object.constants.v1_0.CollaboratorTicketConstants;
 import com.liferay.headless.object.dto.v1_0.Collaborator;
+import com.liferay.mail.kernel.model.MailMessage;
+import com.liferay.mail.kernel.service.MailServiceUtil;
 import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.NoSuchModelException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
@@ -22,9 +25,12 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.TicketLocalService;
 import com.liferay.portal.kernel.service.UserGroupLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
 import com.liferay.portal.vulcan.dto.converter.DTOConverterRegistry;
@@ -37,6 +43,10 @@ import com.liferay.sharing.security.permission.SharingEntryAction;
 import com.liferay.sharing.service.SharingEntryLocalService;
 import com.liferay.sharing.service.SharingEntryService;
 
+import jakarta.mail.internet.InternetAddress;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import jakarta.ws.rs.core.UriInfo;
 
 import java.util.ArrayList;
@@ -46,7 +56,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Mikel Lorza
@@ -58,8 +67,8 @@ public class CollaboratorUtil {
 			long classPK, Collaborator collaborator, long collaboratorId,
 			DTOConverter<SharingEntry, Collaborator> dtoConverter,
 			long companyId, DTOConverterRegistry dtoConverterRegistry,
-			long groupId, JSONFactory jsonFactory,
-			SharingEntryService sharingEntryService,
+			long groupId, HttpServletRequest httpServletRequest,
+			JSONFactory jsonFactory, SharingEntryService sharingEntryService,
 			TicketLocalService ticketLocalService, String type,
 			UserGroupLocalService userGroupLocalService, UriInfo uriInfo,
 			User user, UserLocalService userLocalService)
@@ -77,7 +86,7 @@ public class CollaboratorUtil {
 				jsonFactory,
 				_addOrUpdateTicket(
 					className, classPK, collaborator, collaboratorId, companyId,
-					ticketLocalService, type));
+					httpServletRequest, ticketLocalService, type, user));
 		}
 
 		return toCollaborator(
@@ -94,7 +103,8 @@ public class CollaboratorUtil {
 			long classPK, Collaborator[] collaborators, long companyId,
 			DTOConverter<SharingEntry, Collaborator> dtoConverter,
 			DTOConverterRegistry dtoConverterRegistry, long groupId,
-			JSONFactory jsonFactory, SharingEntryService sharingEntryService,
+			HttpServletRequest httpServletRequest, JSONFactory jsonFactory,
+			SharingEntryService sharingEntryService,
 			TicketLocalService ticketLocalService, UriInfo uriInfo, User user,
 			UserGroupLocalService userGroupLocalService,
 			UserLocalService userLocalService)
@@ -141,8 +151,8 @@ public class CollaboratorUtil {
 						jsonFactory,
 						_addOrUpdateTicket(
 							className, classPK, collaborator,
-							collaborator.getId(), companyId, ticketLocalService,
-							collaborator.getType())));
+							collaborator.getId(), companyId, httpServletRequest,
+							ticketLocalService, collaborator.getType(), user)));
 			}
 
 			SharingEntry sharingEntry = _addOrUpdateSharingEntry(
@@ -430,9 +440,11 @@ public class CollaboratorUtil {
 	}
 
 	private static Ticket _addOrUpdateTicket(
-		String className, long classPK, Collaborator collaborator,
-		long collaboratorId, long companyId,
-		TicketLocalService ticketLocalService, String type) {
+			String className, long classPK, Collaborator collaborator,
+			long collaboratorId, long companyId,
+			HttpServletRequest httpServletRequest,
+			TicketLocalService ticketLocalService, String type, User user)
+		throws Exception {
 
 		Ticket ticket = ticketLocalService.fetchTicket(collaboratorId);
 
@@ -447,17 +459,35 @@ public class CollaboratorUtil {
 		).toString();
 
 		if (ticket == null) {
-			Date expirationDate = new Date(
-				System.currentTimeMillis() + TimeUnit.HOURS.toMillis(48));
+			Date expirationDate = collaborator.getDateExpired();
 
-			if (collaborator.getDateExpired() != null) {
-				expirationDate = collaborator.getDateExpired();
-			}
+			//			if (expirationDate == null) {
+
+			// 				AccountEntryEmailConfiguration accountEntryEmailConfiguration =
+
+			//					ConfigurationProviderUtil.getCompanyConfiguration(
+			//						AccountEntryEmailConfiguration.class, companyId);
+
+			//
+
+			// 				int invitationTokenExpirationTime =
+			// 					accountEntryEmailConfiguration.
+
+			//						invitationTokenExpirationTime();
+			//
+			//				expirationDate = new Date(
+			//					System.currentTimeMillis() +
+			//						TimeUnit.HOURS.toMillis(invitationTokenExpirationTime));
+			//			}
 
 			ticket = ticketLocalService.addTicket(
 				companyId, className, classPK,
 				CollaboratorTicketConstants.TYPE_INVITE_COLLABORATOR, extraInfo,
 				expirationDate, null);
+
+			_sendEmail(
+				collaborator.getEmailAddress(), httpServletRequest, user,
+				ticket);
 		}
 		else {
 			if (collaborator.getDateExpired() != null) {
@@ -490,6 +520,50 @@ public class CollaboratorUtil {
 		ticketLocalService.deleteTicket(ticket.getTicketId());
 	}
 
+	private static String _getCreateAccountURL(
+			HttpServletRequest httpServletRequest)
+		throws Exception {
+
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay)httpServletRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
+
+		return PortalUtil.getCreateAccountURL(httpServletRequest, themeDisplay);
+	}
+
+	private static void _sendEmail(
+			String emailAddress, HttpServletRequest httpServletRequest,
+			User inviter, Ticket ticket)
+		throws Exception {
+
+		//		_validateEmailAddress(
+		//			_accountEntryEmailAddressValidatorFactory.create(
+		//				inviter.getCompanyId(), _getAccountDomains(accountEntryId)),
+		//			emailAddress);
+
+		try {
+			String url = _getCreateAccountURL(httpServletRequest);
+
+			String subject = StringUtil.read(
+				CollaboratorUtil.class.getClassLoader(),
+				"com/liferay/headless/object/util/v1_0/subject.tmpl");
+
+			subject = StringUtil.replace(
+				subject, new String[] {"[$MEMBER_REQUEST_USER$]"},
+				new String[] {inviter.getFullName()});
+
+			MailMessage mailMessage = new MailMessage(
+				new InternetAddress(
+					inviter.getEmailAddress(), inviter.getFullName()),
+				new InternetAddress(emailAddress), subject, url, true);
+
+			MailServiceUtil.sendEmail(mailMessage);
+		}
+		catch (Exception exception) {
+			throw new SystemException(exception);
+		}
+	}
+
 	private static void _validateType(String type) {
 		if (!StringUtil.equals("Email", type) &&
 			!StringUtil.equals("User", type) &&
@@ -500,5 +574,26 @@ public class CollaboratorUtil {
 					"\"UserGroup\"");
 		}
 	}
+
+	//	private void _validateEmailAddress(
+	//			AccountEntryEmailAddressValidator accountEntryEmailAddressValidator,
+	//			String emailAddress)
+	//		throws PortalException {
+	//
+	//		if (accountEntryEmailAddressValidator.isBlockedDomain(emailAddress)) {
+	//			throw new UserEmailAddressException.MustNotUseBlockedDomain(
+	//				emailAddress,
+	//				StringUtil.merge(
+	//					accountEntryEmailAddressValidator.getBlockedDomains(),
+	//					StringPool.COMMA_AND_SPACE));
+	//		}
+	//
+	//		if (!accountEntryEmailAddressValidator.isValidDomain(emailAddress)) {
+	//			throw new UserEmailAddressException.MustHaveValidDomain(
+	//				emailAddress,
+	//				StringUtil.merge(
+	//					accountEntryEmailAddressValidator.getValidDomains()));
+	//		}
+	//	}
 
 }

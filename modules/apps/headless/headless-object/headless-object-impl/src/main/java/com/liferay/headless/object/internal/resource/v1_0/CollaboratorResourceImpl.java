@@ -240,9 +240,10 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 				ObjectEntryFolder.class.getName()),
 			objectEntryFolder.getObjectEntryFolderId(), collaborators,
 			contextCompany.getCompanyId(), _collaboratorDTOConverter,
-			_dtoConverterRegistry, objectEntryFolder.getGroupId(), _jsonFactory,
-			_sharingEntryService, _ticketLocalService, contextUriInfo,
-			contextUser, _userGroupLocalService, _userLocalService);
+			_dtoConverterRegistry, objectEntryFolder.getGroupId(),
+			contextHttpServletRequest, _jsonFactory, _sharingEntryService,
+			_ticketLocalService, contextUriInfo, contextUser,
+			_userGroupLocalService, _userLocalService);
 	}
 
 	@Override
@@ -279,9 +280,10 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 				ObjectEntryFolder.class.getName()),
 			objectEntryFolder.getObjectEntryFolderId(), collaborators,
 			contextCompany.getCompanyId(), _collaboratorDTOConverter,
-			_dtoConverterRegistry, objectEntryFolder.getGroupId(), _jsonFactory,
-			_sharingEntryService, _ticketLocalService, contextUriInfo,
-			contextUser, _userGroupLocalService, _userLocalService);
+			_dtoConverterRegistry, objectEntryFolder.getGroupId(),
+			contextHttpServletRequest, _jsonFactory, _sharingEntryService,
+			_ticketLocalService, contextUriInfo, contextUser,
+			_userGroupLocalService, _userLocalService);
 	}
 
 	@Override
@@ -308,9 +310,10 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 			objectEntryFolder.getObjectEntryFolderId(), collaborator,
 			collaboratorId, _collaboratorDTOConverter,
 			contextCompany.getCompanyId(), _dtoConverterRegistry,
-			objectEntryFolder.getGroupId(), _jsonFactory, _sharingEntryService,
-			_ticketLocalService, type, _userGroupLocalService, contextUriInfo,
-			contextUser, _userLocalService);
+			objectEntryFolder.getGroupId(), contextHttpServletRequest,
+			_jsonFactory, _sharingEntryService, _ticketLocalService, type,
+			_userGroupLocalService, contextUriInfo, contextUser,
+			_userLocalService);
 	}
 
 	@Override
@@ -343,9 +346,10 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 			objectEntryFolder.getObjectEntryFolderId(), collaborator,
 			collaboratorId, _collaboratorDTOConverter,
 			contextCompany.getCompanyId(), _dtoConverterRegistry,
-			objectEntryFolder.getGroupId(), _jsonFactory, _sharingEntryService,
-			_ticketLocalService, type, _userGroupLocalService, contextUriInfo,
-			contextUser, _userLocalService);
+			objectEntryFolder.getGroupId(), contextHttpServletRequest,
+			_jsonFactory, _sharingEntryService, _ticketLocalService, type,
+			_userGroupLocalService, contextUriInfo, contextUser,
+			_userLocalService);
 	}
 
 	@Reference
