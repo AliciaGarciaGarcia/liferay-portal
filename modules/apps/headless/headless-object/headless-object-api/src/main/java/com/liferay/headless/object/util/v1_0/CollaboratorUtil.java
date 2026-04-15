@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.service.UserGroupLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
 import com.liferay.portal.vulcan.dto.converter.DTOConverterRegistry;
@@ -43,9 +44,11 @@ import jakarta.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Mikel Lorza
@@ -53,19 +56,30 @@ import java.util.Objects;
 public class CollaboratorUtil {
 
 	public static Collaborator addOrUpdateCollaborator(
-			AcceptLanguage acceptLanguage, long classNameId, long classPK,
-			Collaborator collaborator, long collaboratorId,
+			AcceptLanguage acceptLanguage, String className, long classNameId,
+			long classPK, Collaborator collaborator, long collaboratorId,
 			DTOConverter<SharingEntry, Collaborator> dtoConverter,
-			DTOConverterRegistry dtoConverterRegistry, long groupId,
-			SharingEntryService sharingEntryService, String type,
+			long companyId, DTOConverterRegistry dtoConverterRegistry,
+			long groupId, JSONFactory jsonFactory,
+			SharingEntryService sharingEntryService,
+			TicketLocalService ticketLocalService, String type,
 			UserGroupLocalService userGroupLocalService, UriInfo uriInfo,
 			User user, UserLocalService userLocalService)
 		throws Exception {
 
 		_validateType(type);
 
-		if ("Email".equals(type)) {
-			return null;
+		if (Objects.equals(type, "Email")) {
+			if (Validator.isNull(collaborator.getEmailAddress())) {
+				throw new IllegalArgumentException(
+					"Collaborator type \"Email\" must have an email address");
+			}
+
+			return toCollaborator(
+				jsonFactory,
+				_addOrUpdateTicket(
+					className, classPK, collaborator, collaboratorId, companyId,
+					ticketLocalService, type));
 		}
 
 		return toCollaborator(
@@ -78,11 +92,12 @@ public class CollaboratorUtil {
 	}
 
 	public static Page<Collaborator> addOrUpdateCollaborators(
-			AcceptLanguage acceptLanguage, long classNameId, long classPK,
-			Collaborator[] collaborators,
+			AcceptLanguage acceptLanguage, String className, long classNameId,
+			long classPK, Collaborator[] collaborators, long companyId,
 			DTOConverter<SharingEntry, Collaborator> dtoConverter,
 			DTOConverterRegistry dtoConverterRegistry, long groupId,
-			SharingEntryService sharingEntryService, UriInfo uriInfo, User user,
+			JSONFactory jsonFactory, SharingEntryService sharingEntryService,
+			TicketLocalService ticketLocalService, UriInfo uriInfo, User user,
 			UserGroupLocalService userGroupLocalService,
 			UserLocalService userLocalService)
 		throws Exception {
@@ -92,13 +107,44 @@ public class CollaboratorUtil {
 				classNameId, classPK, groupId, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null);
 
-		List<SharingEntry> newSharingEntries = new ArrayList<>();
+		List<Collaborator> oldInvitedCollaborators = new ArrayList<>();
+		List<String> collaboratorEmailAddresses = new ArrayList<>();
 
+		List<Ticket> tickets = ticketLocalService.getTickets(
+			className, classPK,
+			CollaboratorTicketConstants.TYPE_INVITE_COLLABORATOR);
+
+		for (Ticket ticket : tickets) {
+			oldInvitedCollaborators.add(toCollaborator(jsonFactory, ticket));
+
+			JSONObject jsonObject = jsonFactory.createJSONObject(
+				ticket.getExtraInfo());
+
+			collaboratorEmailAddresses.add(
+				jsonObject.getString("emailAddress"));
+		}
+
+		List<Collaborator> newInvitedCollaborators = new ArrayList<>();
+		List<SharingEntry> newSharingEntries = new ArrayList<>();
 		List<Long> sharingEntriesIds = new ArrayList<>();
 
 		for (Collaborator collaborator : collaborators) {
-			if ("Email".equals(collaborator.getType())) {
-				return null;
+			if (Objects.equals(collaborator.getType(), "Email")) {
+				if (Validator.isNull(collaborator.getEmailAddress())) {
+					throw new IllegalArgumentException(
+						"Collaborator type \"Email\" must have an email " +
+							"address");
+				}
+
+				collaboratorEmailAddresses.add(collaborator.getEmailAddress());
+
+				newInvitedCollaborators.add(
+					toCollaborator(
+						jsonFactory,
+						_addOrUpdateTicket(
+							className, classPK, collaborator,
+							collaborator.getId(), companyId, ticketLocalService,
+							collaborator.getType())));
 			}
 
 			SharingEntry sharingEntry = _addOrUpdateSharingEntry(
@@ -110,11 +156,29 @@ public class CollaboratorUtil {
 			sharingEntriesIds.add(sharingEntry.getSharingEntryId());
 		}
 
+		for (Collaborator collaborator : oldInvitedCollaborators) {
+			if (!collaboratorEmailAddresses.contains(
+					collaborator.getEmailAddress())) {
+
+				_deleteInvitedCollaborator(
+					collaborator.getId(), className, classPK,
+					ticketLocalService);
+			}
+		}
+
 		for (SharingEntry sharingEntry : oldSharingEntries) {
 			if (!sharingEntriesIds.contains(sharingEntry.getSharingEntryId())) {
 				sharingEntryService.deleteSharingEntry(sharingEntry);
 			}
 		}
+
+		Collections.sort(
+			newInvitedCollaborators,
+			Comparator.comparing(
+				Collaborator::getEmailAddress, Comparator.naturalOrder()
+			).thenComparing(
+				Collaborator::getId, Comparator.reverseOrder()
+			));
 
 		Collections.sort(
 			newSharingEntries,
@@ -124,12 +188,16 @@ public class CollaboratorUtil {
 				SharingEntry::getSharingEntryId, Comparator.reverseOrder()
 			));
 
-		return Page.of(
+		List<Collaborator> sharingEntriesCollaborators =
 			TransformUtil.transform(
 				newSharingEntries,
 				sharingEntry -> toCollaborator(
 					acceptLanguage, dtoConverter, dtoConverterRegistry,
-					sharingEntry, uriInfo, user)));
+					sharingEntry, uriInfo, user));
+
+		sharingEntriesCollaborators.addAll(newInvitedCollaborators);
+
+		return Page.of(sharingEntriesCollaborators);
 	}
 
 	public static void deleteCollaborator(
@@ -328,6 +396,49 @@ public class CollaboratorUtil {
 			collaborator.getDateExpired(), new ServiceContext());
 	}
 
+	private static Ticket _addOrUpdateTicket(
+		String className, long classPK, Collaborator collaborator,
+		long collaboratorId, long companyId,
+		TicketLocalService ticketLocalService, String type) {
+
+		Ticket ticket = ticketLocalService.fetchTicket(collaboratorId);
+
+		String extraInfo = JSONUtil.put(
+			"actionIds", collaborator.getActionIds()
+		).put(
+			"emailAddress", collaborator.getEmailAddress()
+		).put(
+			"share", collaborator.getShare()
+		).put(
+			"type", type
+		).toString();
+
+		if (ticket == null) {
+			Date expirationDate = new Date(
+				System.currentTimeMillis() + TimeUnit.HOURS.toMillis(48));
+
+			if (collaborator.getDateExpired() != null) {
+				expirationDate = collaborator.getDateExpired();
+			}
+
+			ticket = ticketLocalService.addTicket(
+				companyId, className, classPK,
+				CollaboratorTicketConstants.TYPE_INVITE_COLLABORATOR, extraInfo,
+				expirationDate, null);
+		}
+		else {
+			if (collaborator.getDateExpired() != null) {
+				ticket.setExpirationDate(collaborator.getDateExpired());
+			}
+
+			ticket.setExtraInfo(extraInfo);
+
+			ticket = ticketLocalService.updateTicket(ticket);
+		}
+
+		return ticket;
+	}
+
 	private static void _deleteInvitedCollaborator(
 			Long invitedCollaboratorId, String className, long classPK,
 			TicketLocalService ticketLocalService)
@@ -352,7 +463,8 @@ public class CollaboratorUtil {
 			!StringUtil.equals("UserGroup", type)) {
 
 			throw new IllegalArgumentException(
-				"Collaborator type must be \"Email\", \"User\" or \"UserGroup\"");
+				"Collaborator type must be \"Email\", \"User\" or " +
+					"\"UserGroup\"");
 		}
 	}
 
