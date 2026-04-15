@@ -10,6 +10,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Ticket;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.service.base.TicketLocalServiceBaseImpl;
 
@@ -101,9 +102,28 @@ public class TicketLocalServiceImpl extends TicketLocalServiceBaseImpl {
 	}
 
 	@Override
+	public List<Ticket> getTickets(
+		long companyId, String className, long classPK, int type, int start,
+		int end, OrderByComparator<Ticket> orderByComparator) {
+
+		return ticketPersistence.findByC_C_C_T(
+			companyId, _classNameLocalService.getClassNameId(className),
+			classPK, type, start, end, orderByComparator);
+	}
+
+	@Override
 	public List<Ticket> getTickets(String className, long classPK, int type) {
 		return ticketPersistence.findByC_C_T(
 			_classNameLocalService.getClassNameId(className), classPK, type);
+	}
+
+	@Override
+	public int getTicketsCount(
+		long companyId, String className, long classPK, int type) {
+
+		return ticketPersistence.countByC_C_C_T(
+			companyId, _classNameLocalService.getClassNameId(className),
+			classPK, type);
 	}
 
 	@Override
