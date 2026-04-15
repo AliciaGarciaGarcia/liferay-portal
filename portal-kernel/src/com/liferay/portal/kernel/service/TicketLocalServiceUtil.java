@@ -307,6 +307,14 @@ public class TicketLocalServiceUtil {
 	}
 
 	public static List<Ticket> getTickets(
+		long companyId, String className, long classPK, int type, int start,
+		int end, OrderByComparator<Ticket> orderByComparator) {
+
+		return getService().getTickets(
+			companyId, className, classPK, type, start, end, orderByComparator);
+	}
+
+	public static List<Ticket> getTickets(
 		String className, long classPK, int type) {
 
 		return getService().getTickets(className, classPK, type);
@@ -319,6 +327,13 @@ public class TicketLocalServiceUtil {
 	 */
 	public static int getTicketsCount() {
 		return getService().getTicketsCount();
+	}
+
+	public static int getTicketsCount(
+		long companyId, String className, long classPK, int type) {
+
+		return getService().getTicketsCount(
+			companyId, className, classPK, type);
 	}
 
 	public static Ticket updateTicket(
@@ -355,4 +370,4 @@ public class TicketLocalServiceUtil {
 	private static volatile TicketLocalService _service;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:646365471
+// LIFERAY-SERVICE-BUILDER-HASH:-1951406929

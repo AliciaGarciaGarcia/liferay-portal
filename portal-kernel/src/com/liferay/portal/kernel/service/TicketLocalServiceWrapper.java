@@ -346,6 +346,17 @@ public class TicketLocalServiceWrapper
 
 	@Override
 	public java.util.List<com.liferay.portal.kernel.model.Ticket> getTickets(
+		long companyId, String className, long classPK, int type, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator
+			<com.liferay.portal.kernel.model.Ticket> orderByComparator) {
+
+		return _ticketLocalService.getTickets(
+			companyId, className, classPK, type, start, end, orderByComparator);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portal.kernel.model.Ticket> getTickets(
 		String className, long classPK, int type) {
 
 		return _ticketLocalService.getTickets(className, classPK, type);
@@ -359,6 +370,14 @@ public class TicketLocalServiceWrapper
 	@Override
 	public int getTicketsCount() {
 		return _ticketLocalService.getTicketsCount();
+	}
+
+	@Override
+	public int getTicketsCount(
+		long companyId, String className, long classPK, int type) {
+
+		return _ticketLocalService.getTicketsCount(
+			companyId, className, classPK, type);
 	}
 
 	@Override
@@ -406,4 +425,4 @@ public class TicketLocalServiceWrapper
 	private TicketLocalService _ticketLocalService;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1625118419
+// LIFERAY-SERVICE-BUILDER-HASH:-1421872827

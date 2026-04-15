@@ -265,6 +265,11 @@ public interface TicketLocalService
 		long companyId, String className, long classPK, int type);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Ticket> getTickets(
+		long companyId, String className, long classPK, int type, int start,
+		int end, OrderByComparator<Ticket> orderByComparator);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Ticket> getTickets(String className, long classPK, int type);
 
 	/**
@@ -274,6 +279,10 @@ public interface TicketLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getTicketsCount();
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int getTicketsCount(
+		long companyId, String className, long classPK, int type);
 
 	public Ticket updateTicket(
 			long ticketId, String className, long classPK, int type,
@@ -294,4 +303,4 @@ public interface TicketLocalService
 	public Ticket updateTicket(Ticket ticket);
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-608146887
+// LIFERAY-SERVICE-BUILDER-HASH:559611333
