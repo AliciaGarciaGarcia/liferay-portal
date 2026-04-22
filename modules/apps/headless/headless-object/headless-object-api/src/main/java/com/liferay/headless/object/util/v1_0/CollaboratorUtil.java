@@ -91,7 +91,10 @@ public class CollaboratorUtil {
 			}
 
 			Ticket ticket = _addOrUpdateTicket(
-				className, classPK, collaborator, collaboratorId, companyId,
+				className, classPK, collaborator, companyId,
+				_fetchTicket(
+					companyId, className, classPK, collaborator, collaboratorId,
+					jsonFactory, ticketLocalService),
 				ticketLocalService, type);
 
 			return toCollaborator(
@@ -143,8 +146,12 @@ public class CollaboratorUtil {
 
 				if (existingUser == null) {
 					Ticket ticket = _addOrUpdateTicket(
-						className, classPK, collaborator, collaborator.getId(),
-						companyId, ticketLocalService, collaborator.getType());
+						className, classPK, collaborator, companyId,
+						_fetchTicket(
+							companyId, className, classPK, collaborator,
+							collaborator.getId(), jsonFactory,
+							ticketLocalService),
+						ticketLocalService, collaborator.getType());
 
 					sharingEntry = _addOrUpdateSharingEntry(
 						classNameId, classPK, collaborator,
@@ -385,11 +392,9 @@ public class CollaboratorUtil {
 
 	private static Ticket _addOrUpdateTicket(
 			String className, long classPK, Collaborator collaborator,
-			long collaboratorId, long companyId,
+			long companyId, Ticket ticket,
 			TicketLocalService ticketLocalService, String type)
 		throws Exception {
-
-		Ticket ticket = ticketLocalService.fetchTicket(collaboratorId);
 
 		if ((ticket != null) &&
 			(!Objects.equals(className, ticket.getClassName()) ||
@@ -456,14 +461,54 @@ public class CollaboratorUtil {
 			throw new NoSuchModelException();
 		}
 
-		ticketLocalService.deleteTicket(ticket.getTicketId());
-
 		SharingEntry sharingEntry = sharingEntryService.fetchSharingEntry(
 			invitedCollaboratorId, 0, 0, classNameId, classPK);
 
 		if (sharingEntry != null) {
 			sharingEntryService.deleteSharingEntry(sharingEntry);
 		}
+
+		ticketLocalService.deleteTicket(ticket.getTicketId());
+	}
+
+	private static Ticket _fetchTicket(
+			long companyId, String className, long classPK,
+			Collaborator collaborator, long collaboratorId,
+			JSONFactory jsonFactory, TicketLocalService ticketLocalService)
+		throws Exception {
+
+		Ticket ticket = ticketLocalService.fetchTicket(collaboratorId);
+
+		if (ticket != null) {
+			return ticket;
+		}
+
+		return _fetchTicketByEmailAddress(
+			companyId, className, classPK, collaborator.getEmailAddress(),
+			jsonFactory, ticketLocalService);
+	}
+
+	private static Ticket _fetchTicketByEmailAddress(
+			long companyId, String className, long classPK, String emailAddress,
+			JSONFactory jsonFactory, TicketLocalService ticketLocalService)
+		throws Exception {
+
+		List<Ticket> tickets = ticketLocalService.getTickets(
+			companyId, className, classPK,
+			SharingTicketConstants.TYPE_INVITE_COLLABORATOR);
+
+		for (Ticket ticket : tickets) {
+			JSONObject jsonObject = jsonFactory.createJSONObject(
+				ticket.getExtraInfo());
+
+			if (Objects.equals(
+					emailAddress, jsonObject.getString("emailAddress"))) {
+
+				return ticket;
+			}
+		}
+
+		return null;
 	}
 
 	private static void _validateEmailAddress(String emailAddress) {
