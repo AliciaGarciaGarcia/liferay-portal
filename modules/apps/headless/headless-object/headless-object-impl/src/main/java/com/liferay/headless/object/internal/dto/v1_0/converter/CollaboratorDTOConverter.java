@@ -8,8 +8,12 @@ package com.liferay.headless.object.internal.dto.v1_0.converter;
 import com.liferay.headless.delivery.dto.v1_0.util.CreatorUtil;
 import com.liferay.headless.object.dto.v1_0.Collaborator;
 import com.liferay.petra.function.transform.TransformUtil;
+import com.liferay.portal.kernel.json.JSONFactory;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.model.Ticket;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserGroup;
+import com.liferay.portal.kernel.service.TicketLocalService;
 import com.liferay.portal.kernel.service.UserGroupLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -44,6 +48,7 @@ public class CollaboratorDTOConverter
 
 		User user = _getUser(sharingEntry);
 		UserGroup userGroup = _getUserGroup(sharingEntry);
+		Ticket ticket = _getTicket(sharingEntry);
 
 		return new Collaborator() {
 			{
@@ -57,13 +62,29 @@ public class CollaboratorDTOConverter
 						dtoConverterContext, _portal,
 						_userLocalService.getUser(sharingEntry.getUserId())));
 				setDateExpired(sharingEntry::getExpirationDate);
+				setEmailAddress(
+					() -> {
+						if (ticket != null) {
+							JSONObject jsonObject =
+								_jsonFactory.createJSONObject(
+									ticket.getExtraInfo());
+
+							return jsonObject.getString("emailAddress");
+						}
+
+						return null;
+					});
 				setExternalReferenceCode(
 					() -> {
 						if (user != null) {
 							return user.getExternalReferenceCode();
 						}
 
-						return userGroup.getExternalReferenceCode();
+						if (userGroup != null) {
+							return userGroup.getExternalReferenceCode();
+						}
+
+						return null;
 					});
 				setId(
 					() -> {
@@ -71,7 +92,15 @@ public class CollaboratorDTOConverter
 							return user.getUserId();
 						}
 
-						return userGroup.getUserGroupId();
+						if (userGroup != null) {
+							return userGroup.getUserGroupId();
+						}
+
+						if (ticket != null) {
+							return ticket.getTicketId();
+						}
+
+						return null;
 					});
 				setName(
 					() -> {
@@ -79,7 +108,19 @@ public class CollaboratorDTOConverter
 							return user.getFullName();
 						}
 
-						return userGroup.getName();
+						if (userGroup != null) {
+							return userGroup.getName();
+						}
+
+						if (ticket != null) {
+							JSONObject jsonObject =
+								_jsonFactory.createJSONObject(
+									ticket.getExtraInfo());
+
+							return jsonObject.getString("emailAddress");
+						}
+
+						return null;
 					});
 				setPortrait(
 					() -> {
@@ -106,10 +147,22 @@ public class CollaboratorDTOConverter
 							return "User";
 						}
 
-						return "UserGroup";
+						if (userGroup != null) {
+							return "UserGroup";
+						}
+
+						return "Email";
 					});
 			}
 		};
+	}
+
+	private Ticket _getTicket(SharingEntry sharingEntry) throws Exception {
+		if (sharingEntry.getToTicketId() > 0) {
+			return _ticketLocalService.getTicket(sharingEntry.getToTicketId());
+		}
+
+		return null;
 	}
 
 	private User _getUser(SharingEntry sharingEntry) throws Exception {
@@ -132,7 +185,13 @@ public class CollaboratorDTOConverter
 	}
 
 	@Reference
+	private JSONFactory _jsonFactory;
+
+	@Reference
 	private Portal _portal;
+
+	@Reference
+	private TicketLocalService _ticketLocalService;
 
 	@Reference
 	private UserGroupLocalService _userGroupLocalService;
