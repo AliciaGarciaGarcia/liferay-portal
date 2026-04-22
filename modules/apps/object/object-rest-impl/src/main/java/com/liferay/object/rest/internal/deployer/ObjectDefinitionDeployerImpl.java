@@ -221,9 +221,9 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 		return new CollaboratorResourceImpl(
 			_classNameLocalService, _collaboratorDTOConverter,
 			_dtoConverterRegistry, _groupLocalService, _jsonFactory,
-			_objectEntryLocalService, _sharingEntryService,
-			_sharingEntryLocalService, _ticketLocalService,
-			_userGroupLocalService, _userLocalService);
+			_objectEntryLocalService, _sharingEntryLocalService,
+			_sharingEntryService, _ticketLocalService, _userGroupLocalService,
+			_userLocalService);
 	}
 
 	private CommentResourceImpl _createCommentResourceImpl(

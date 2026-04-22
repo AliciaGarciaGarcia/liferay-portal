@@ -11,8 +11,10 @@ import com.liferay.headless.object.util.v1_0.CollaboratorUtil;
 import com.liferay.object.model.ObjectEntryFolder;
 import com.liferay.object.service.ObjectEntryFolderLocalService;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
+import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.TicketLocalService;
 import com.liferay.portal.kernel.service.UserGroupLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
@@ -50,10 +52,11 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 				objectEntryFolderId);
 
 		CollaboratorUtil.deleteCollaborator(
+			ObjectEntryFolder.class.getName(),
 			_classNameLocalService.getClassNameId(
 				ObjectEntryFolder.class.getName()),
 			objectEntryFolder.getObjectEntryFolderId(), collaboratorId,
-			_sharingEntryService, type);
+			_sharingEntryService, _ticketLocalService, type);
 	}
 
 	@Override
@@ -77,10 +80,11 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 					contextCompany.getCompanyId());
 
 		CollaboratorUtil.deleteCollaborator(
+			ObjectEntryFolder.class.getName(),
 			_classNameLocalService.getClassNameId(
 				ObjectEntryFolder.class.getName()),
 			objectEntryFolder.getObjectEntryFolderId(), collaboratorId,
-			_sharingEntryService, type);
+			_sharingEntryService, _ticketLocalService, type);
 	}
 
 	@Override
@@ -97,12 +101,13 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 				objectEntryFolderId);
 
 		return CollaboratorUtil.getCollaborator(
-			contextAcceptLanguage,
+			contextAcceptLanguage, ObjectEntryFolder.class.getName(),
 			_classNameLocalService.getClassNameId(
 				ObjectEntryFolder.class.getName()),
 			objectEntryFolder.getObjectEntryFolderId(), collaboratorId,
-			_collaboratorDTOConverter, _dtoConverterRegistry,
-			_sharingEntryService, type, contextUriInfo, contextUser);
+			_collaboratorDTOConverter, _dtoConverterRegistry, _jsonFactory,
+			_sharingEntryService, _ticketLocalService, type, contextUriInfo,
+			contextUser);
 	}
 
 	@Override
@@ -150,12 +155,13 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 					contextCompany.getCompanyId());
 
 		return CollaboratorUtil.getCollaborator(
-			contextAcceptLanguage,
+			contextAcceptLanguage, ObjectEntryFolder.class.getName(),
 			_classNameLocalService.getClassNameId(
 				ObjectEntryFolder.class.getName()),
 			objectEntryFolder.getObjectEntryFolderId(), collaboratorId,
-			_collaboratorDTOConverter, _dtoConverterRegistry,
-			_sharingEntryService, type, contextUriInfo, contextUser);
+			_collaboratorDTOConverter, _dtoConverterRegistry, _jsonFactory,
+			_sharingEntryService, _ticketLocalService, type, contextUriInfo,
+			contextUser);
 	}
 
 	@Override
@@ -203,14 +209,14 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 				objectEntryFolderId);
 
 		return CollaboratorUtil.addOrUpdateCollaborators(
-			contextAcceptLanguage,
+			contextAcceptLanguage, ObjectEntryFolder.class.getName(),
 			_classNameLocalService.getClassNameId(
 				ObjectEntryFolder.class.getName()),
 			objectEntryFolder.getObjectEntryFolderId(), collaborators,
-			_collaboratorDTOConverter, _dtoConverterRegistry,
-			objectEntryFolder.getGroupId(), _sharingEntryService,
-			contextUriInfo, contextUser, _userGroupLocalService,
-			_userLocalService);
+			contextCompany.getCompanyId(), _collaboratorDTOConverter,
+			_dtoConverterRegistry, objectEntryFolder.getGroupId(), _jsonFactory,
+			_sharingEntryService, _ticketLocalService, contextUriInfo,
+			contextUser, _userGroupLocalService, _userLocalService);
 	}
 
 	@Override
@@ -234,14 +240,14 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 					contextCompany.getCompanyId());
 
 		return CollaboratorUtil.addOrUpdateCollaborators(
-			contextAcceptLanguage,
+			contextAcceptLanguage, ObjectEntryFolder.class.getName(),
 			_classNameLocalService.getClassNameId(
 				ObjectEntryFolder.class.getName()),
 			objectEntryFolder.getObjectEntryFolderId(), collaborators,
-			_collaboratorDTOConverter, _dtoConverterRegistry,
-			objectEntryFolder.getGroupId(), _sharingEntryService,
-			contextUriInfo, contextUser, _userGroupLocalService,
-			_userLocalService);
+			contextCompany.getCompanyId(), _collaboratorDTOConverter,
+			_dtoConverterRegistry, objectEntryFolder.getGroupId(), _jsonFactory,
+			_sharingEntryService, _ticketLocalService, contextUriInfo,
+			contextUser, _userGroupLocalService, _userLocalService);
 	}
 
 	@Override
@@ -259,14 +265,15 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 				objectEntryFolderId);
 
 		return CollaboratorUtil.addOrUpdateCollaborator(
-			contextAcceptLanguage,
+			contextAcceptLanguage, ObjectEntryFolder.class.getName(),
 			_classNameLocalService.getClassNameId(
 				ObjectEntryFolder.class.getName()),
 			objectEntryFolder.getObjectEntryFolderId(), collaborator,
-			collaboratorId, _collaboratorDTOConverter, _dtoConverterRegistry,
-			objectEntryFolder.getGroupId(), _sharingEntryService, type,
-			_userGroupLocalService, contextUriInfo, contextUser,
-			_userLocalService);
+			collaboratorId, _collaboratorDTOConverter,
+			contextCompany.getCompanyId(), _dtoConverterRegistry,
+			objectEntryFolder.getGroupId(), _jsonFactory, _sharingEntryService,
+			_ticketLocalService, type, _userGroupLocalService, contextUriInfo,
+			contextUser, _userLocalService);
 	}
 
 	@Override
@@ -290,14 +297,15 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 					contextCompany.getCompanyId());
 
 		return CollaboratorUtil.addOrUpdateCollaborator(
-			contextAcceptLanguage,
+			contextAcceptLanguage, ObjectEntryFolder.class.getName(),
 			_classNameLocalService.getClassNameId(
 				ObjectEntryFolder.class.getName()),
 			objectEntryFolder.getObjectEntryFolderId(), collaborator,
-			collaboratorId, _collaboratorDTOConverter, _dtoConverterRegistry,
-			objectEntryFolder.getGroupId(), _sharingEntryService, type,
-			_userGroupLocalService, contextUriInfo, contextUser,
-			_userLocalService);
+			collaboratorId, _collaboratorDTOConverter,
+			contextCompany.getCompanyId(), _dtoConverterRegistry,
+			objectEntryFolder.getGroupId(), _jsonFactory, _sharingEntryService,
+			_ticketLocalService, type, _userGroupLocalService, contextUriInfo,
+			contextUser, _userLocalService);
 	}
 
 	@Reference
@@ -315,6 +323,9 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 	private GroupLocalService _groupLocalService;
 
 	@Reference
+	private JSONFactory _jsonFactory;
+
+	@Reference
 	private ObjectEntryFolderLocalService _objectEntryFolderLocalService;
 
 	@Reference
@@ -322,6 +333,9 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 
 	@Reference
 	private SharingEntryService _sharingEntryService;
+
+	@Reference
+	private TicketLocalService _ticketLocalService;
 
 	@Reference
 	private UserGroupLocalService _userGroupLocalService;
