@@ -74,13 +74,23 @@ public class CollaboratorUtil {
 				companyId, collaborator.getEmailAddress());
 
 			if (existingUser != null) {
+				SharingEntry sharingEntry = _addOrUpdateSharingEntry(
+					classNameId, classPK, collaborator,
+					existingUser.getUserId(), groupId, sharingEntryService,
+					"User", userGroupLocalService, userLocalService);
+
+				Ticket ticket = _fetchTicketByEmailAddress(
+					companyId, className, classPK,
+					collaborator.getEmailAddress(), jsonFactory,
+					ticketLocalService);
+
+				if (ticket != null) {
+					ticketLocalService.deleteTicket(ticket.getTicketId());
+				}
+
 				return toCollaborator(
 					acceptLanguage, dtoConverter, dtoConverterRegistry,
-					_addOrUpdateSharingEntry(
-						classNameId, classPK, collaborator,
-						existingUser.getUserId(), groupId, sharingEntryService,
-						"User", userGroupLocalService, userLocalService),
-					uriInfo, user);
+					sharingEntry, uriInfo, user);
 			}
 
 			Ticket ticket = _addOrUpdateTicket(
