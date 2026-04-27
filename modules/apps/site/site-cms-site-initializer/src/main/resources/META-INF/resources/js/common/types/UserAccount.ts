@@ -25,3 +25,8 @@ export interface UserGroup {
 	numberOfUserAccounts?: string;
 	roles: UserRole[];
 }
+
+export interface Email {
+	id: string;
+	name: string;
+}
