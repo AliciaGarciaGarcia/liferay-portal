@@ -232,7 +232,7 @@ describe('ShareModalContent', () => {
 		).not.toBeInTheDocument();
 	});
 
-	it('offers an invite-by-email option when the search text is a valid email without matches', async () => {
+	it('offers an invite-external-user option when the search text is a valid email without matches', async () => {
 		const {container, getByText} = renderComponent();
 
 		const input = container.querySelector<HTMLInputElement>(
@@ -250,11 +250,11 @@ describe('ShareModalContent', () => {
 		});
 
 		await waitFor(() => {
-			expect(getByText('invite-by-email')).toBeInTheDocument();
+			expect(getByText('invite-external-user')).toBeInTheDocument();
 		});
 	});
 
-	it('does not offer the invite-by-email option when the search text is not a valid email', async () => {
+	it('does not offer the invite-external-user option when the search text is not a valid email', async () => {
 		const {container, queryByText} = renderComponent();
 
 		const input = container.querySelector<HTMLInputElement>(
@@ -271,10 +271,10 @@ describe('ShareModalContent', () => {
 			jest.advanceTimersByTime(300);
 		});
 
-		expect(queryByText('invite-by-email')).not.toBeInTheDocument();
+		expect(queryByText('invite-external-user')).not.toBeInTheDocument();
 	});
 
-	it('adds an email collaborator when pressing Enter on a valid email', async () => {
+	it('adds an external user collaborator when pressing Enter on a valid email', async () => {
 		const {container} = renderComponent();
 
 		const input = container.querySelector<HTMLInputElement>(
@@ -332,7 +332,7 @@ describe('ShareModalContent', () => {
 		});
 	});
 
-	it('does not offer the invite-by-email option when sharing an ObjectEntryFolder', async () => {
+	it('does not offer the invite-external-user option when sharing an ObjectEntryFolder', async () => {
 		const folderProps = {
 			...DEFAULT_PROPS,
 			entryClassName: OBJECT_ENTRY_FOLDER_CLASS_NAME,
@@ -354,10 +354,10 @@ describe('ShareModalContent', () => {
 			jest.advanceTimersByTime(300);
 		});
 
-		expect(queryByText('invite-by-email')).not.toBeInTheDocument();
+		expect(queryByText('invite-external-user')).not.toBeInTheDocument();
 	});
 
-	it('renders existing Email collaborators as invited', () => {
+	it('renders existing external user collaborators as invited', () => {
 		const emailProps = {
 			...DEFAULT_PROPS,
 			initialCollaborators: [
@@ -384,7 +384,7 @@ describe('ShareModalContent', () => {
 		).toHaveTextContent('external@example.com');
 	});
 
-	it('restricts permission options to view-and-download for existing Email collaborators', () => {
+	it('restricts permission options to view-and-download for existing external user collaborators', () => {
 		const emailProps = {
 			...DEFAULT_PROPS,
 			initialCollaborators: [
@@ -417,7 +417,7 @@ describe('ShareModalContent', () => {
 		).not.toBeInTheDocument();
 	});
 
-	it('sends type="Email" and the email as id when saving an email invite', async () => {
+	it('sends type="Email" and the email as id when saving an external user invite', async () => {
 		const apiPostSpy = jest
 			.spyOn(ApiHelper, 'post')
 			.mockResolvedValue({data: {}, error: null});

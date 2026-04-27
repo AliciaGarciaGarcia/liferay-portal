@@ -9,7 +9,7 @@ import React from 'react';
 import {SharingPermission} from '../../../common/types/SharingPermission';
 import {OBJECT_ENTRY_FOLDER_CLASS_NAME} from '../../../common/utils/constants';
 
-const EMAIL_PERMISSION_OPTIONS = [
+const EXTERNAL_USER_PERMISSION_OPTIONS = [
 	{
 		label: Liferay.Language.get('view-and-download'),
 		value: SharingPermission.View,
@@ -45,18 +45,18 @@ const PERMISSION_OPTIONS = [
 export default function PermissionSelector({
 	actionIds,
 	entryClassName,
-	isEmail = false,
+	isExternalUser = false,
 	onChange,
 }: {
 	actionIds?: string;
 	entryClassName: string;
-	isEmail?: boolean;
+	isExternalUser?: boolean;
 	onChange: (value: object) => void;
 }) {
 	let items = PERMISSION_OPTIONS;
 
-	if (isEmail) {
-		items = EMAIL_PERMISSION_OPTIONS;
+	if (isExternalUser) {
+		items = EXTERNAL_USER_PERMISSION_OPTIONS;
 	}
 	else if (entryClassName === OBJECT_ENTRY_FOLDER_CLASS_NAME) {
 		items = FOLDER_PERMISSION_OPTIONS;

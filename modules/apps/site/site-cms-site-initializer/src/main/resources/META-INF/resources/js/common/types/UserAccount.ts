@@ -26,7 +26,7 @@ export interface UserGroup {
 	roles: UserRole[];
 }
 
-export interface Email {
+export interface ExternalUser {
 	id: string;
 	name: string;
 }
