@@ -27,6 +27,7 @@ export interface UserGroup {
 }
 
 export interface ExternalUser {
+	emailAddress: string;
 	id: string;
 	name: string;
 }

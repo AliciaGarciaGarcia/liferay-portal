@@ -366,7 +366,7 @@ describe('ShareModalContent', () => {
 					share: false,
 					type: 'Email',
 					user: {
-						id: 'external@example.com',
+						emailAddress: 'external@example.com',
 						name: 'external@example.com',
 					},
 				},
@@ -393,7 +393,7 @@ describe('ShareModalContent', () => {
 					share: false,
 					type: 'Email',
 					user: {
-						id: 'external@example.com',
+						emailAddress: 'external@example.com',
 						name: 'external@example.com',
 					},
 				},
@@ -430,7 +430,7 @@ describe('ShareModalContent', () => {
 					share: false,
 					type: 'Email',
 					user: {
-						id: 'external@example.com',
+						emailAddress: 'external@example.com',
 						name: 'external@example.com',
 					},
 				},
@@ -461,7 +461,7 @@ describe('ShareModalContent', () => {
 			[
 				{
 					actionIds: ['VIEW'],
-					id: 'external@example.com',
+					emailAddress: 'external@example.com',
 					share: true,
 					type: 'Email',
 				},

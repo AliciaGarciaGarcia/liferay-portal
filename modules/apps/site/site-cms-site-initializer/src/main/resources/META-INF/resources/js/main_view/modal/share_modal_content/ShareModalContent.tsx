@@ -374,7 +374,9 @@ export default function ShareModalContent({
 					...(!!dateExpired && {
 						dateExpired: formatDateToISO(dateExpired),
 					}),
-					id: user.id,
+					...(type === COLLABORATOR_TYPE.EXTERNAL_USER
+						? {emailAddress: (user as ExternalUser).emailAddress}
+						: {id: Number(user.id)}),
 					share,
 					type,
 				})
@@ -455,7 +457,11 @@ export default function ShareModalContent({
 		if (shouldOfferExternalUserInvite) {
 			resultItems.push({
 				type: COLLABORATOR_TYPE.EXTERNAL_USER,
-				user: {id: trimmedValue, name: trimmedValue},
+				user: {
+					emailAddress: trimmedValue,
+					id: trimmedValue,
+					name: trimmedValue,
+				},
 			});
 		}
 
@@ -513,6 +519,7 @@ export default function ShareModalContent({
 
 									handleAddUser(
 										{
+											emailAddress: trimmedValue,
 											id: trimmedValue,
 											name: trimmedValue,
 										},
