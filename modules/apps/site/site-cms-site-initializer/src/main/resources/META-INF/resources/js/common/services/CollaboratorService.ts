@@ -19,7 +19,7 @@ async function getCollaborators(collaboratorURL: string, itemId: number) {
 			};
 			dateExpired?: string;
 			externalReferenceCode: string;
-			id: number;
+			id: number | string;
 			name: string;
 			portrait?: string;
 			share: boolean;
