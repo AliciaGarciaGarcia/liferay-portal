@@ -37,7 +37,8 @@
 		}
 
 		margin-top: calc(
-			var(--control-menu-container-height) + #{$contentEditorToolbarHeight}
+			var(--control-menu-container-height) +
+				#{$contentEditorToolbarHeight}
 		);
 
 		.form-control.lfr-ck {
