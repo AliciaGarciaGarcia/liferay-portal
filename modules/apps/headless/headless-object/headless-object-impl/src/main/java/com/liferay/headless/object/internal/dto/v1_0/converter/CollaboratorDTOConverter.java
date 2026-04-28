@@ -13,9 +13,12 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.model.Ticket;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserGroup;
+import com.liferay.portal.kernel.security.auth.GuestOrUserUtil;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.service.TicketLocalService;
 import com.liferay.portal.kernel.service.UserGroupLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.service.permission.UserPermissionUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
@@ -48,7 +51,12 @@ public class CollaboratorDTOConverter
 
 		User user = _getUser(sharingEntry);
 		UserGroup userGroup = _getUserGroup(sharingEntry);
+
 		Ticket ticket = _getTicket(sharingEntry);
+
+		String ticketEmailAddress = _getEmailAddress(ticket);
+
+		boolean hasViewPermission = _hasViewPermission(user);
 
 		return new Collaborator() {
 			{
@@ -60,16 +68,16 @@ public class CollaboratorDTOConverter
 				setCreator(
 					() -> CreatorUtil.toCreator(
 						dtoConverterContext, _portal,
-						_userLocalService.getUser(sharingEntry.getUserId())));
+						_userLocalService.fetchUser(sharingEntry.getUserId())));
 				setDateExpired(sharingEntry::getExpirationDate);
 				setEmailAddress(
 					() -> {
-						if (ticket != null) {
-							JSONObject jsonObject =
-								_jsonFactory.createJSONObject(
-									ticket.getExtraInfo());
+						if (ticketEmailAddress != null) {
+							return ticketEmailAddress;
+						}
 
-							return jsonObject.getString("emailAddress");
+						if ((user != null) && !hasViewPermission) {
+							return user.getEmailAddress();
 						}
 
 						return null;
@@ -77,6 +85,10 @@ public class CollaboratorDTOConverter
 				setExternalReferenceCode(
 					() -> {
 						if (user != null) {
+							if (!hasViewPermission) {
+								return null;
+							}
+
 							return user.getExternalReferenceCode();
 						}
 
@@ -88,6 +100,10 @@ public class CollaboratorDTOConverter
 					});
 				setId(
 					() -> {
+						if (ticket != null) {
+							return ticket.getTicketId();
+						}
+
 						if (user != null) {
 							return user.getUserId();
 						}
@@ -96,15 +112,15 @@ public class CollaboratorDTOConverter
 							return userGroup.getUserGroupId();
 						}
 
-						if (ticket != null) {
-							return ticket.getTicketId();
-						}
-
 						return null;
 					});
 				setName(
 					() -> {
 						if (user != null) {
+							if (!hasViewPermission) {
+								return user.getEmailAddress();
+							}
+
 							return user.getFullName();
 						}
 
@@ -112,38 +128,28 @@ public class CollaboratorDTOConverter
 							return userGroup.getName();
 						}
 
-						if (ticket != null) {
-							JSONObject jsonObject =
-								_jsonFactory.createJSONObject(
-									ticket.getExtraInfo());
-
-							return jsonObject.getString("emailAddress");
-						}
-
-						return null;
+						return ticketEmailAddress;
 					});
 				setPortrait(
 					() -> {
-						if (user != null) {
-							if (user.getPortraitId() == 0) {
-								return null;
-							}
+						if ((user == null) || !hasViewPermission ||
+							(user.getPortraitId() == 0)) {
 
-							ThemeDisplay themeDisplay = new ThemeDisplay() {
-								{
-									setPathImage(_portal.getPathImage());
-								}
-							};
-
-							return user.getPortraitURL(themeDisplay);
+							return null;
 						}
 
-						return null;
+						ThemeDisplay themeDisplay = new ThemeDisplay() {
+							{
+								setPathImage(_portal.getPathImage());
+							}
+						};
+
+						return user.getPortraitURL(themeDisplay);
 					});
 				setShare(sharingEntry::isShareable);
 				setType(
 					() -> {
-						if (user != null) {
+						if ((user != null) && hasViewPermission) {
 							return "User";
 						}
 
@@ -157,31 +163,51 @@ public class CollaboratorDTOConverter
 		};
 	}
 
-	private Ticket _getTicket(SharingEntry sharingEntry) throws Exception {
+	private String _getEmailAddress(Ticket ticket) throws Exception {
+		if (ticket == null) {
+			return null;
+		}
+
+		JSONObject jsonObject = _jsonFactory.createJSONObject(
+			ticket.getExtraInfo());
+
+		return jsonObject.getString("emailAddress");
+	}
+
+	private Ticket _getTicket(SharingEntry sharingEntry) {
 		if (sharingEntry.getToTicketId() > 0) {
-			return _ticketLocalService.getTicket(sharingEntry.getToTicketId());
+			return _ticketLocalService.fetchTicket(
+				sharingEntry.getToTicketId());
 		}
 
 		return null;
 	}
 
-	private User _getUser(SharingEntry sharingEntry) throws Exception {
+	private User _getUser(SharingEntry sharingEntry) {
 		if (sharingEntry.getToUserId() > 0) {
-			return _userLocalService.getUser(sharingEntry.getToUserId());
+			return _userLocalService.fetchUser(sharingEntry.getToUserId());
 		}
 
 		return null;
 	}
 
-	private UserGroup _getUserGroup(SharingEntry sharingEntry)
-		throws Exception {
-
+	private UserGroup _getUserGroup(SharingEntry sharingEntry) {
 		if (sharingEntry.getToUserGroupId() > 0) {
-			return _userGroupLocalService.getUserGroup(
+			return _userGroupLocalService.fetchUserGroup(
 				sharingEntry.getToUserGroupId());
 		}
 
 		return null;
+	}
+
+	private boolean _hasViewPermission(User user) throws Exception {
+		if (user == null) {
+			return false;
+		}
+
+		return UserPermissionUtil.contains(
+			GuestOrUserUtil.getPermissionChecker(), user.getUserId(),
+			ActionKeys.VIEW);
 	}
 
 	@Reference

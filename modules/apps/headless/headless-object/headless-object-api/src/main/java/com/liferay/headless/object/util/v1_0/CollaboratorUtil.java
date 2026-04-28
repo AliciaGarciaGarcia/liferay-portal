@@ -74,20 +74,13 @@ public class CollaboratorUtil {
 				companyId, collaborator.getEmailAddress());
 
 			if (existingUser != null) {
-				_addOrUpdateSharingEntry(
-					classNameId, classPK, collaborator,
-					existingUser.getUserId(), groupId, sharingEntryService,
-					"User", userGroupLocalService, userLocalService);
-
-				return new Collaborator() {
-					{
-						setActionIds(collaborator::getActionIds);
-						setEmailAddress(collaborator::getEmailAddress);
-						setId(existingUser::getUserId);
-						setShare(collaborator::getShare);
-						setType(() -> "Email");
-					}
-				};
+				return toCollaborator(
+					acceptLanguage, dtoConverter, dtoConverterRegistry,
+					_addOrUpdateSharingEntry(
+						classNameId, classPK, collaborator,
+						existingUser.getUserId(), groupId, sharingEntryService,
+						"User", userGroupLocalService, userLocalService),
+					uriInfo, user);
 			}
 
 			Ticket ticket = _addOrUpdateTicket(

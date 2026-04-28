@@ -8,21 +8,26 @@ package com.liferay.headless.object.internal.dto.v1_0.converter.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.headless.object.dto.v1_0.Collaborator;
 import com.liferay.object.constants.ObjectDefinitionConstants;
-import com.liferay.object.constants.ObjectEntryFolderConstants;
-import com.liferay.object.constants.ObjectFieldConstants;
-import com.liferay.object.field.util.ObjectFieldUtil;
+import com.liferay.object.field.builder.TextObjectFieldBuilder;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectEntry;
 import com.liferay.object.service.ObjectEntryLocalService;
 import com.liferay.object.test.util.ObjectDefinitionTestUtil;
 import com.liferay.portal.kernel.json.JSONUtil;
+import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Ticket;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserGroup;
+import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
+import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
-import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.TicketLocalService;
+import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.test.TestInfo;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
@@ -31,8 +36,10 @@ import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.test.util.UserGroupTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.test.rule.FeatureFlag;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
@@ -40,10 +47,13 @@ import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
 import com.liferay.portal.vulcan.dto.converter.DTOConverterRegistry;
 import com.liferay.portal.vulcan.dto.converter.DefaultDTOConverterContext;
+import com.liferay.portal.vulcan.util.LocalizedMapUtil;
 import com.liferay.sharing.constants.SharingTicketConstants;
 import com.liferay.sharing.model.SharingEntry;
 import com.liferay.sharing.security.permission.SharingEntryAction;
 import com.liferay.sharing.service.SharingEntryLocalService;
+
+import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,17 +88,17 @@ public class CollaboratorDTOConverterTest {
 
 		_objectDefinition = _addObjectDefinition();
 
-		_objectEntry = _addObjectEntry(
-			_objectDefinition.getObjectDefinitionId());
+		_objectEntry = _addObjectEntry();
 	}
 
 	@Test
+	@TestInfo("LPD-48130")
 	public void testToDTOEmail() throws Exception {
 		String emailAddress =
 			StringUtil.toLowerCase(RandomTestUtil.randomString()) +
 				"@liferay.com";
 
-		Date expirationDate = RandomTestUtil.nextDate();
+		Date expirationDate = new Date(System.currentTimeMillis() + Time.DAY);
 
 		Ticket ticket = _ticketLocalService.addTicket(
 			TestPropsValues.getCompanyId(), _objectEntry.getModelClassName(),
@@ -135,13 +145,14 @@ public class CollaboratorDTOConverterTest {
 	}
 
 	@Test
+	@TestInfo("LPD-48130")
 	public void testToDTOUser() throws Exception {
-		User user = UserTestUtil.addUser();
+		User user1 = UserTestUtil.addUser();
 
-		Date expirationDate = RandomTestUtil.nextDate();
+		Date expirationDate = new Date(System.currentTimeMillis() + Time.DAY);
 
 		SharingEntry sharingEntry = _sharingEntryLocalService.addSharingEntry(
-			null, TestPropsValues.getUserId(), 0, 0, user.getUserId(),
+			null, TestPropsValues.getUserId(), 0, 0, user1.getUserId(),
 			_classNameLocalService.getClassNameId(
 				_objectEntry.getModelClassName()),
 			_objectEntry.getObjectEntryId(), _group.getGroupId(), true,
@@ -155,11 +166,11 @@ public class CollaboratorDTOConverterTest {
 
 		Assert.assertEquals("User", collaborator.getType());
 		Assert.assertNull(collaborator.getEmailAddress());
-		Assert.assertEquals(user.getFullName(), collaborator.getName());
+		Assert.assertEquals(user1.getFullName(), collaborator.getName());
 		Assert.assertEquals(
-			Long.valueOf(user.getUserId()), collaborator.getId());
+			Long.valueOf(user1.getUserId()), collaborator.getId());
 		Assert.assertEquals(
-			user.getExternalReferenceCode(),
+			user1.getExternalReferenceCode(),
 			collaborator.getExternalReferenceCode());
 		Assert.assertNull(collaborator.getPortrait());
 		Assert.assertTrue(collaborator.getShare());
@@ -167,13 +178,59 @@ public class CollaboratorDTOConverterTest {
 		Assert.assertArrayEquals(
 			new String[] {SharingEntryAction.VIEW.getActionId()},
 			collaborator.getActionIds());
+
+		Company company = _companyLocalService.getCompany(
+			TestPropsValues.getCompanyId());
+
+		User user2 = company.getGuestUser();
+
+		String name = PrincipalThreadLocal.getName();
+		PermissionChecker permissionChecker =
+			PermissionThreadLocal.getPermissionChecker();
+
+		try {
+			PrincipalThreadLocal.setName(user2.getUserId());
+
+			PermissionThreadLocal.setPermissionChecker(
+				PermissionCheckerFactoryUtil.create(user2));
+
+			collaborator = _toDTO(sharingEntry);
+
+			Assert.assertEquals("Email", collaborator.getType());
+			Assert.assertEquals(
+				user1.getEmailAddress(), collaborator.getEmailAddress());
+			Assert.assertEquals(
+				user1.getEmailAddress(), collaborator.getName());
+			Assert.assertEquals(
+				Long.valueOf(user1.getUserId()), collaborator.getId());
+			Assert.assertNull(collaborator.getExternalReferenceCode());
+			Assert.assertNull(collaborator.getPortrait());
+			Assert.assertTrue(collaborator.getShare());
+			Assert.assertEquals(expirationDate, collaborator.getDateExpired());
+			Assert.assertArrayEquals(
+				new String[] {SharingEntryAction.VIEW.getActionId()},
+				collaborator.getActionIds());
+		}
+		finally {
+			PermissionThreadLocal.setPermissionChecker(permissionChecker);
+			PrincipalThreadLocal.setName(name);
+		}
+
+		user1.setPortraitId(RandomTestUtil.nextLong());
+
+		_userLocalService.updateUser(user1);
+
+		collaborator = _toDTO(sharingEntry);
+
+		Assert.assertNotNull(collaborator.getPortrait());
 	}
 
 	@Test
+	@TestInfo("LPD-48130")
 	public void testToDTOUserGroup() throws Exception {
 		UserGroup userGroup = UserGroupTestUtil.addUserGroup();
 
-		Date expirationDate = RandomTestUtil.nextDate();
+		Date expirationDate = new Date(System.currentTimeMillis() + Time.DAY);
 
 		SharingEntry sharingEntry = _sharingEntryLocalService.addSharingEntry(
 			null, TestPropsValues.getUserId(), 0, userGroup.getUserGroupId(), 0,
@@ -206,26 +263,33 @@ public class CollaboratorDTOConverterTest {
 
 	private ObjectDefinition _addObjectDefinition() throws Exception {
 		return ObjectDefinitionTestUtil.publishObjectDefinition(
+			"A" + RandomTestUtil.randomString(),
 			Collections.singletonList(
-				ObjectFieldUtil.createObjectField(
-					ObjectFieldConstants.BUSINESS_TYPE_TEXT,
-					ObjectFieldConstants.DB_TYPE_STRING,
-					RandomTestUtil.randomString(), "fieldName")),
-			ObjectDefinitionConstants.SCOPE_SITE);
+				new TextObjectFieldBuilder(
+				).labelMap(
+					LocalizedMapUtil.getLocalizedMap(
+						RandomTestUtil.randomString())
+				).indexed(
+					true
+				).indexedAsKeyword(
+					true
+				).name(
+					"title"
+				).localized(
+					false
+				).build()),
+			ObjectDefinitionConstants.SCOPE_SITE, TestPropsValues.getUserId());
 	}
 
-	private ObjectEntry _addObjectEntry(long objectDefinitionId)
-		throws Exception {
-
-		ServiceContext serviceContext =
-			ServiceContextTestUtil.getServiceContext(
-				_group, TestPropsValues.getUserId());
-
+	private ObjectEntry _addObjectEntry() throws Exception {
 		return _objectEntryLocalService.addObjectEntry(
-			TestPropsValues.getUserId(), _group.getGroupId(),
-			objectDefinitionId,
-			ObjectEntryFolderConstants.PARENT_OBJECT_ENTRY_FOLDER_ID_DEFAULT,
-			null, Collections.emptyMap(), serviceContext);
+			_group.getGroupId(), TestPropsValues.getUserId(),
+			_objectDefinition.getObjectDefinitionId(), 0, null,
+			HashMapBuilder.<String, Serializable>put(
+				"title", RandomTestUtil.randomString()
+			).build(),
+			ServiceContextTestUtil.getServiceContext(
+				_group.getGroupId(), TestPropsValues.getUserId()));
 	}
 
 	private Collaborator _toDTO(SharingEntry sharingEntry) throws Exception {
@@ -243,6 +307,9 @@ public class CollaboratorDTOConverterTest {
 
 	@Inject
 	private ClassNameLocalService _classNameLocalService;
+
+	@Inject
+	private CompanyLocalService _companyLocalService;
 
 	@Inject
 	private DTOConverterRegistry _dtoConverterRegistry;
@@ -268,5 +335,8 @@ public class CollaboratorDTOConverterTest {
 
 	@DeleteAfterTestRun
 	private final List<Ticket> _tickets = new ArrayList<>();
+
+	@Inject
+	private UserLocalService _userLocalService;
 
 }
