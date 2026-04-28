@@ -116,7 +116,7 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 			_classNameLocalService.getClassNameId(
 				ObjectEntryFolder.class.getName()),
 			objectEntryFolder.getObjectEntryFolderId(), collaboratorId,
-			_collaboratorDTOConverter, _dtoConverterRegistry, _jsonFactory,
+			_collaboratorDTOConverter, _dtoConverterRegistry,
 			_sharingEntryService, _ticketLocalService, type, contextUriInfo,
 			contextUser);
 	}
@@ -175,7 +175,7 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 			_classNameLocalService.getClassNameId(
 				ObjectEntryFolder.class.getName()),
 			objectEntryFolder.getObjectEntryFolderId(), collaboratorId,
-			_collaboratorDTOConverter, _dtoConverterRegistry, _jsonFactory,
+			_collaboratorDTOConverter, _dtoConverterRegistry,
 			_sharingEntryService, _ticketLocalService, type, contextUriInfo,
 			contextUser);
 	}
@@ -306,11 +306,11 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 			_classNameLocalService.getClassNameId(
 				ObjectEntryFolder.class.getName()),
 			objectEntryFolder.getObjectEntryFolderId(), collaborator,
-			collaboratorId, _collaboratorDTOConverter,
-			contextCompany.getCompanyId(), _dtoConverterRegistry,
+			collaboratorId, contextCompany.getCompanyId(),
+			_collaboratorDTOConverter, _dtoConverterRegistry,
 			objectEntryFolder.getGroupId(), _jsonFactory, _sharingEntryService,
-			_ticketLocalService, type, _userGroupLocalService, contextUriInfo,
-			contextUser, _userLocalService);
+			_ticketLocalService, type, contextUriInfo, contextUser,
+			_userGroupLocalService, _userLocalService);
 	}
 
 	@Override
@@ -341,11 +341,11 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 			_classNameLocalService.getClassNameId(
 				ObjectEntryFolder.class.getName()),
 			objectEntryFolder.getObjectEntryFolderId(), collaborator,
-			collaboratorId, _collaboratorDTOConverter,
-			contextCompany.getCompanyId(), _dtoConverterRegistry,
+			collaboratorId, contextCompany.getCompanyId(),
+			_collaboratorDTOConverter, _dtoConverterRegistry,
 			objectEntryFolder.getGroupId(), _jsonFactory, _sharingEntryService,
-			_ticketLocalService, type, _userGroupLocalService, contextUriInfo,
-			contextUser, _userLocalService);
+			_ticketLocalService, type, contextUriInfo, contextUser,
+			_userGroupLocalService, _userLocalService);
 	}
 
 	@Reference
