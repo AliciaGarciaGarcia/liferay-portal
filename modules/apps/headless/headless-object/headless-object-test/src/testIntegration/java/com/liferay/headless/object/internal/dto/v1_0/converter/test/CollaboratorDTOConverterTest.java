@@ -133,8 +133,7 @@ public class CollaboratorDTOConverterTest {
 		Assert.assertEquals("Email", collaborator.getType());
 		Assert.assertEquals(emailAddress, collaborator.getEmailAddress());
 		Assert.assertEquals(emailAddress, collaborator.getName());
-		Assert.assertEquals(
-			Long.valueOf(ticket.getTicketId()), collaborator.getId());
+		Assert.assertNull(collaborator.getId());
 		Assert.assertNull(collaborator.getExternalReferenceCode());
 		Assert.assertNull(collaborator.getPortrait());
 		Assert.assertTrue(collaborator.getShare());
@@ -201,8 +200,7 @@ public class CollaboratorDTOConverterTest {
 				user1.getEmailAddress(), collaborator.getEmailAddress());
 			Assert.assertEquals(
 				user1.getEmailAddress(), collaborator.getName());
-			Assert.assertEquals(
-				Long.valueOf(user1.getUserId()), collaborator.getId());
+			Assert.assertNull(collaborator.getId());
 			Assert.assertNull(collaborator.getExternalReferenceCode());
 			Assert.assertNull(collaborator.getPortrait());
 			Assert.assertTrue(collaborator.getShare());

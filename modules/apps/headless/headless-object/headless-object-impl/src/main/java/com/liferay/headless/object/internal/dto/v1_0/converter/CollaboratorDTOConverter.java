@@ -52,9 +52,7 @@ public class CollaboratorDTOConverter
 		User user = _getUser(sharingEntry);
 		UserGroup userGroup = _getUserGroup(sharingEntry);
 
-		Ticket ticket = _getTicket(sharingEntry);
-
-		String ticketEmailAddress = _getEmailAddress(ticket);
+		String ticketEmailAddress = _getEmailAddress(_getTicket(sharingEntry));
 
 		boolean hasViewPermission = _hasViewPermission(user);
 
@@ -100,11 +98,7 @@ public class CollaboratorDTOConverter
 					});
 				setId(
 					() -> {
-						if (ticket != null) {
-							return ticket.getTicketId();
-						}
-
-						if (user != null) {
+						if ((user != null) && hasViewPermission) {
 							return user.getUserId();
 						}
 
