@@ -263,7 +263,7 @@ public class CollaboratorResourceTest {
 			Collections.singletonList(SharingEntryAction.VIEW), null,
 			new ServiceContext());
 
-		String endpoint = StringBundler.concat(
+		String endpoint1 = StringBundler.concat(
 			_objectDefinition.getRESTContextPath(), StringPool.SLASH,
 			objectEntry.getObjectEntryId(), "/collaborators/by-email-address/",
 			user1.getEmailAddress());
@@ -274,7 +274,7 @@ public class CollaboratorResourceTest {
 		).apply(
 			() -> {
 				JSONObject jsonObject = HTTPTestUtil.invokeToJSONObject(
-					null, endpoint, Http.Method.DELETE);
+					null, endpoint1, Http.Method.DELETE);
 
 				Assert.assertEquals(
 					"NOT_FOUND", jsonObject.getString("status"));
@@ -299,13 +299,53 @@ public class CollaboratorResourceTest {
 			user2.getEmailAddress(), password
 		).apply(
 			() -> HTTPTestUtil.invokeToJSONObject(
-				null, endpoint, Http.Method.DELETE)
+				null, endpoint1, Http.Method.DELETE)
+		);
+
+		Assert.assertNotNull(
+			_sharingEntryLocalService.fetchSharingEntry(
+				0, 0, user1.getUserId(), classNameId,
+				objectEntry.getObjectEntryId()));
+
+		_sharingEntryLocalService.deleteSharingEntry(
+			_sharingEntryLocalService.fetchSharingEntry(
+				0, 0, user1.getUserId(), classNameId,
+				objectEntry.getObjectEntryId()));
+
+		objectEntry = _objectEntryLocalService.addObjectEntry(
+			_group.getGroupId(), user2.getUserId(),
+			_objectDefinition.getObjectDefinitionId(), 0, null,
+			HashMapBuilder.<String, Serializable>put(
+				"title", RandomTestUtil.randomString()
+			).build(),
+			ServiceContextTestUtil.getServiceContext(
+				_group.getGroupId(), user2.getUserId()));
+
+		_sharingEntryLocalService.addSharingEntry(
+			null, user2.getUserId(), 0, 0, user1.getUserId(), classNameId,
+			objectEntry.getObjectEntryId(), objectEntry.getGroupId(), false,
+			Collections.singletonList(SharingEntryAction.VIEW), null,
+			new ServiceContext());
+
+		String endpoint2 = StringBundler.concat(
+			_objectDefinition.getRESTContextPath(), StringPool.SLASH,
+			objectEntry.getObjectEntryId(), "/collaborators/by-email-address/",
+			user1.getEmailAddress());
+
+		HTTPTestUtil.customize(
+		).withCredentials(
+			user2.getEmailAddress(), password
+		).apply(
+			() -> HTTPTestUtil.invokeToJSONObject(
+				null, endpoint2, Http.Method.DELETE)
 		);
 
 		Assert.assertNull(
 			_sharingEntryLocalService.fetchSharingEntry(
 				0, 0, user1.getUserId(), classNameId,
 				objectEntry.getObjectEntryId()));
+
+		_objectEntryLocalService.deleteObjectEntry(objectEntry);
 	}
 
 	@Test
