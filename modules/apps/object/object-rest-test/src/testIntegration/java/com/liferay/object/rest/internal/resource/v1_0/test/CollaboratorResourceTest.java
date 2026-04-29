@@ -313,83 +313,26 @@ public class CollaboratorResourceTest {
 	public void testDeleteObjectEntryCollaboratorByTypeCollaborator()
 		throws Exception {
 
-		ObjectEntry objectEntry1 = _addObjectEntry();
+		ObjectEntry objectEntry = _addObjectEntry();
 
 		User user = _addUser();
 
 		_assertDeleteObjectEntryCollaborator(
 			StringBundler.concat(
 				_objectDefinition.getRESTContextPath(), StringPool.SLASH,
-				objectEntry1.getObjectEntryId(), "/collaborators/by-type/User/",
+				objectEntry.getObjectEntryId(), "/collaborators/by-type/User/",
 				user.getUserId()),
 			user);
-
-		String emailAddress1 =
-			StringUtil.toLowerCase(RandomTestUtil.randomString()) +
-				"@liferay.com";
-
-		HTTPTestUtil.invokeToJSONObject(
-			JSONUtil.put(
-				_getEmailCollaboratorJSONObject(emailAddress1)
-			).toString(),
-			StringBundler.concat(
-				_objectDefinition.getRESTContextPath(), StringPool.SLASH,
-				objectEntry1.getObjectEntryId(), "/collaborators"),
-			Http.Method.POST);
-
-		Ticket ticket1 = _fetchTicketByEmailAddress(
-			objectEntry1.getModelClassName(), objectEntry1.getObjectEntryId(),
-			emailAddress1);
-
-		HTTPTestUtil.invokeToJSONObject(
-			null,
-			StringBundler.concat(
-				_objectDefinition.getRESTContextPath(), StringPool.SLASH,
-				objectEntry1.getObjectEntryId(),
-				"/collaborators/by-type/Email/", ticket1.getTicketId()),
-			Http.Method.DELETE);
-
-		Assert.assertNull(
-			_ticketLocalService.fetchTicket(ticket1.getTicketId()));
-
-		Assert.assertNull(
-			_sharingEntryLocalService.fetchSharingEntry(
-				ticket1.getTicketId(), 0, 0,
-				_classNameLocalService.getClassNameId(
-					objectEntry1.getModelClassName()),
-				objectEntry1.getObjectEntryId()));
-
-		String emailAddress2 =
-			StringUtil.toLowerCase(RandomTestUtil.randomString()) +
-				"@liferay.com";
-
-		ObjectEntry objectEntry2 = _addObjectEntry();
-
-		HTTPTestUtil.invokeToJSONObject(
-			JSONUtil.put(
-				_getEmailCollaboratorJSONObject(emailAddress2)
-			).toString(),
-			StringBundler.concat(
-				_objectDefinition.getRESTContextPath(), StringPool.SLASH,
-				objectEntry2.getObjectEntryId(), "/collaborators"),
-			Http.Method.POST);
-
-		Ticket ticket2 = _fetchTicketByEmailAddress(
-			objectEntry2.getModelClassName(), objectEntry2.getObjectEntryId(),
-			emailAddress2);
 
 		JSONObject jsonObject = HTTPTestUtil.invokeToJSONObject(
 			null,
 			StringBundler.concat(
 				_objectDefinition.getRESTContextPath(), StringPool.SLASH,
-				objectEntry1.getObjectEntryId(),
-				"/collaborators/by-type/Email/", ticket2.getTicketId()),
+				objectEntry.getObjectEntryId(), "/collaborators/by-type/Email/",
+				user.getUserId()),
 			Http.Method.DELETE);
 
-		Assert.assertEquals("NOT_FOUND", jsonObject.getString("status"));
-
-		Assert.assertNotNull(
-			_ticketLocalService.fetchTicket(ticket2.getTicketId()));
+		Assert.assertEquals("BAD_REQUEST", jsonObject.getString("status"));
 	}
 
 	@Test
@@ -444,6 +387,17 @@ public class CollaboratorResourceTest {
 				objectEntry.getExternalReferenceCode(),
 				"/collaborators/by-type/User/", user.getUserId()),
 			user);
+
+		JSONObject jsonObject = HTTPTestUtil.invokeToJSONObject(
+			null,
+			StringBundler.concat(
+				_objectDefinition.getRESTContextPath(), "/scopes/",
+				_group.getGroupId(), "/by-external-reference-code/",
+				objectEntry.getExternalReferenceCode(),
+				"/collaborators/by-type/Email/", user.getUserId()),
+			Http.Method.DELETE);
+
+		Assert.assertEquals("BAD_REQUEST", jsonObject.getString("status"));
 	}
 
 	@Test
@@ -551,75 +505,26 @@ public class CollaboratorResourceTest {
 	public void testGetObjectEntryCollaboratorByTypeCollaborator()
 		throws Exception {
 
-		ObjectEntry objectEntry1 = _addObjectEntry();
+		ObjectEntry objectEntry = _addObjectEntry();
 
 		User user = _addUser();
 
 		_assertGetObjectEntryCollaborator(
 			StringBundler.concat(
 				_objectDefinition.getRESTContextPath(), StringPool.SLASH,
-				objectEntry1.getObjectEntryId(), "/collaborators/by-type/User/",
+				objectEntry.getObjectEntryId(), "/collaborators/by-type/User/",
 				user.getUserId()),
 			user);
-
-		String emailAddress =
-			StringUtil.toLowerCase(RandomTestUtil.randomString()) +
-				"@liferay.com";
-
-		HTTPTestUtil.invokeToJSONObject(
-			JSONUtil.put(
-				_getEmailCollaboratorJSONObject(emailAddress)
-			).toString(),
-			StringBundler.concat(
-				_objectDefinition.getRESTContextPath(), StringPool.SLASH,
-				objectEntry1.getObjectEntryId(), "/collaborators"),
-			Http.Method.POST);
-
-		Ticket ticket = _fetchTicketByEmailAddress(
-			objectEntry1.getModelClassName(), objectEntry1.getObjectEntryId(),
-			emailAddress);
 
 		JSONObject jsonObject = HTTPTestUtil.invokeToJSONObject(
 			null,
 			StringBundler.concat(
 				_objectDefinition.getRESTContextPath(), StringPool.SLASH,
-				objectEntry1.getObjectEntryId(),
-				"/collaborators/by-type/Email/", ticket.getTicketId()),
+				objectEntry.getObjectEntryId(), "/collaborators/by-type/Email/",
+				user.getUserId()),
 			Http.Method.GET);
 
-		Assert.assertEquals("Email", jsonObject.getString("type"));
-		Assert.assertEquals(emailAddress, jsonObject.getString("emailAddress"));
-		Assert.assertEquals(
-			String.valueOf(ticket.getTicketId()), jsonObject.getString("id"));
-
-		ObjectEntry objectEntry2 = _addObjectEntry();
-
-		jsonObject = HTTPTestUtil.invokeToJSONObject(
-			null,
-			StringBundler.concat(
-				_objectDefinition.getRESTContextPath(), StringPool.SLASH,
-				objectEntry2.getObjectEntryId(),
-				"/collaborators/by-type/Email/", ticket.getTicketId()),
-			Http.Method.GET);
-
-		Assert.assertEquals("NOT_FOUND", jsonObject.getString("status"));
-
-		_sharingEntryLocalService.deleteSharingEntry(
-			_sharingEntryLocalService.fetchSharingEntry(
-				ticket.getTicketId(), 0, 0,
-				_classNameLocalService.getClassNameId(
-					objectEntry1.getModelClassName()),
-				objectEntry1.getObjectEntryId()));
-
-		jsonObject = HTTPTestUtil.invokeToJSONObject(
-			null,
-			StringBundler.concat(
-				_objectDefinition.getRESTContextPath(), StringPool.SLASH,
-				objectEntry1.getObjectEntryId(),
-				"/collaborators/by-type/Email/", ticket.getTicketId()),
-			Http.Method.GET);
-
-		Assert.assertEquals("NOT_FOUND", jsonObject.getString("status"));
+		Assert.assertEquals("BAD_REQUEST", jsonObject.getString("status"));
 	}
 
 	@Test
@@ -731,6 +636,17 @@ public class CollaboratorResourceTest {
 				objectEntry.getExternalReferenceCode(),
 				"/collaborators/by-type/User/", user.getUserId()),
 			user);
+
+		JSONObject jsonObject = HTTPTestUtil.invokeToJSONObject(
+			null,
+			StringBundler.concat(
+				_objectDefinition.getRESTContextPath(), "/scopes/",
+				_group.getGroupId(), "/by-external-reference-code/",
+				objectEntry.getExternalReferenceCode(),
+				"/collaborators/by-type/Email/", user.getUserId()),
+			Http.Method.GET);
+
+		Assert.assertEquals("BAD_REQUEST", jsonObject.getString("status"));
 	}
 
 	@Test
@@ -1181,112 +1097,17 @@ public class CollaboratorResourceTest {
 	public void testPutObjectEntryCollaboratorByTypeCollaborator()
 		throws Exception {
 
-		ObjectEntry objectEntry1 = _addObjectEntry();
+		ObjectEntry objectEntry = _addObjectEntry();
 
 		UserGroup userGroup = _addUserGroup();
 
 		_assertPutObjectEntryCollaborator(
 			StringBundler.concat(
 				_objectDefinition.getRESTContextPath(), StringPool.SLASH,
-				objectEntry1.getObjectEntryId(),
+				objectEntry.getObjectEntryId(),
 				"/collaborators/by-type/UserGroup/",
 				userGroup.getUserGroupId()),
 			userGroup);
-
-		String emailAddress1 =
-			StringUtil.toLowerCase(RandomTestUtil.randomString()) +
-				"@liferay.com";
-
-		HTTPTestUtil.invokeToJSONObject(
-			JSONUtil.put(
-				"actionIds", JSONUtil.put("INVALID_ACTION")
-			).put(
-				"emailAddress", emailAddress1
-			).put(
-				"share", true
-			).put(
-				"type", "Email"
-			).toString(),
-			StringBundler.concat(
-				_objectDefinition.getRESTContextPath(), StringPool.SLASH,
-				objectEntry1.getObjectEntryId(),
-				"/collaborators/by-type/Email/0"),
-			Http.Method.PUT);
-
-		Assert.assertNull(
-			_fetchTicketByEmailAddress(
-				objectEntry1.getModelClassName(),
-				objectEntry1.getObjectEntryId(), emailAddress1));
-
-		HTTPTestUtil.invokeToJSONObject(
-			JSONUtil.put(
-				_getEmailCollaboratorJSONObject(emailAddress1)
-			).toString(),
-			StringBundler.concat(
-				_objectDefinition.getRESTContextPath(), StringPool.SLASH,
-				objectEntry1.getObjectEntryId(), "/collaborators"),
-			Http.Method.POST);
-
-		Ticket ticket1 = _fetchTicketByEmailAddress(
-			objectEntry1.getModelClassName(), objectEntry1.getObjectEntryId(),
-			emailAddress1);
-
-		JSONObject jsonObject = HTTPTestUtil.invokeToJSONObject(
-			_getEmailCollaboratorJSONObject(
-				emailAddress1
-			).toString(),
-			StringBundler.concat(
-				_objectDefinition.getRESTContextPath(), StringPool.SLASH,
-				objectEntry1.getObjectEntryId(),
-				"/collaborators/by-type/Email/", ticket1.getTicketId()),
-			Http.Method.PUT);
-
-		Assert.assertEquals("Email", jsonObject.getString("type"));
-		Assert.assertEquals(
-			String.valueOf(ticket1.getTicketId()), jsonObject.getString("id"));
-
-		List<Ticket> tickets = _ticketLocalService.getTickets(
-			TestPropsValues.getCompanyId(), objectEntry1.getModelClassName(),
-			objectEntry1.getObjectEntryId(),
-			SharingTicketConstants.TYPE_INVITE_COLLABORATOR);
-
-		Assert.assertEquals(tickets.toString(), 1, tickets.size());
-
-		String emailAddress2 =
-			StringUtil.toLowerCase(RandomTestUtil.randomString()) +
-				"@liferay.com";
-
-		ObjectEntry objectEntry2 = _addObjectEntry();
-
-		HTTPTestUtil.invokeToJSONObject(
-			JSONUtil.put(
-				_getEmailCollaboratorJSONObject(emailAddress2)
-			).toString(),
-			StringBundler.concat(
-				_objectDefinition.getRESTContextPath(), StringPool.SLASH,
-				objectEntry2.getObjectEntryId(), "/collaborators"),
-			Http.Method.POST);
-
-		Ticket ticket2 = _fetchTicketByEmailAddress(
-			objectEntry2.getModelClassName(), objectEntry2.getObjectEntryId(),
-			emailAddress2);
-
-		_addUser(emailAddress2);
-
-		HTTPTestUtil.invokeToJSONObject(
-			_getEmailCollaboratorJSONObject(
-				emailAddress2
-			).toString(),
-			StringBundler.concat(
-				_objectDefinition.getRESTContextPath(), StringPool.SLASH,
-				objectEntry2.getObjectEntryId(),
-				"/collaborators/by-type/Email/", ticket2.getTicketId()),
-			Http.Method.PUT);
-
-		Assert.assertNull(
-			_fetchTicketByEmailAddress(
-				objectEntry2.getModelClassName(),
-				objectEntry2.getObjectEntryId(), emailAddress2));
 	}
 
 	@Test

@@ -280,19 +280,19 @@ public class CollaboratorUtil {
 	}
 
 	public static void deleteCollaborator(
-			String className, long classNameId, long classPK,
-			Long collaboratorId, SharingEntryService sharingEntryService,
-			TicketLocalService ticketLocalService, String type)
+			long classNameId, long classPK, Long collaboratorId,
+			SharingEntryService sharingEntryService, String type)
 		throws Exception {
 
 		_validateType(type);
 
 		if (StringUtil.equals("Email", type)) {
-			_deleteCollaboratorTicket(
-				className, classNameId, classPK, collaboratorId,
-				sharingEntryService, ticketLocalService);
+			throw new IllegalArgumentException(
+				"Use deleteCollaboratorByEmailAddress to delete a " +
+					"collaborator of type \"Email\"");
 		}
-		else if (StringUtil.equals("User", type)) {
+
+		if (StringUtil.equals("User", type)) {
 			sharingEntryService.deleteSharingEntry(
 				0, 0, collaboratorId, classNameId, classPK);
 		}
@@ -349,39 +349,20 @@ public class CollaboratorUtil {
 	}
 
 	public static Collaborator getCollaborator(
-			AcceptLanguage acceptLanguage, String className, long classNameId,
-			long classPK, Long collaboratorId,
+			AcceptLanguage acceptLanguage, long classNameId, long classPK,
+			Long collaboratorId,
 			DTOConverter<SharingEntry, Collaborator> dtoConverter,
 			DTOConverterRegistry dtoConverterRegistry,
-			SharingEntryService sharingEntryService,
-			TicketLocalService ticketLocalService, String type, UriInfo uriInfo,
-			User user)
+			SharingEntryService sharingEntryService, String type,
+			UriInfo uriInfo, User user)
 		throws Exception {
 
 		_validateType(type);
 
 		if (StringUtil.equals("Email", type)) {
-			Ticket ticket = ticketLocalService.fetchTicket(collaboratorId);
-
-			if ((ticket == null) ||
-				!Objects.equals(className, ticket.getClassName()) ||
-				(classPK != ticket.getClassPK()) ||
-				(ticket.getType() !=
-					SharingTicketConstants.TYPE_INVITE_COLLABORATOR)) {
-
-				throw new NoSuchModelException();
-			}
-
-			SharingEntry sharingEntry = sharingEntryService.fetchSharingEntry(
-				collaboratorId, 0, 0, classNameId, classPK);
-
-			if (sharingEntry == null) {
-				throw new NoSuchModelException();
-			}
-
-			return toCollaborator(
-				acceptLanguage, dtoConverter, dtoConverterRegistry,
-				sharingEntry, uriInfo, user);
+			throw new IllegalArgumentException(
+				"Use getCollaboratorByEmailAddress to retrieve a " +
+					"collaborator of type \"Email\"");
 		}
 
 		if (StringUtil.equals("User", type)) {
@@ -599,33 +580,6 @@ public class CollaboratorUtil {
 		ticket.setExtraInfo(extraInfo);
 
 		return ticketLocalService.updateTicket(ticket);
-	}
-
-	private static void _deleteCollaboratorTicket(
-			String className, long classNameId, long classPK,
-			Long collaboratorId, SharingEntryService sharingEntryService,
-			TicketLocalService ticketLocalService)
-		throws Exception {
-
-		Ticket ticket = ticketLocalService.fetchTicket(collaboratorId);
-
-		if ((ticket == null) ||
-			!Objects.equals(className, ticket.getClassName()) ||
-			(classPK != ticket.getClassPK()) ||
-			(ticket.getType() !=
-				SharingTicketConstants.TYPE_INVITE_COLLABORATOR)) {
-
-			throw new NoSuchModelException();
-		}
-
-		SharingEntry sharingEntry = sharingEntryService.fetchSharingEntry(
-			collaboratorId, 0, 0, classNameId, classPK);
-
-		if (sharingEntry != null) {
-			sharingEntryService.deleteSharingEntry(sharingEntry);
-		}
-
-		ticketLocalService.deleteTicket(ticket.getTicketId());
 	}
 
 	private static Ticket _fetchTicketByEmailAddress(

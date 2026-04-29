@@ -95,11 +95,10 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 			objectEntryId);
 
 		CollaboratorUtil.deleteCollaborator(
-			objectEntry.getModelClassName(),
 			_classNameLocalService.getClassNameId(
 				objectEntry.getModelClassName()),
 			objectEntry.getObjectEntryId(), collaboratorId,
-			_sharingEntryService, _ticketLocalService, type);
+			_sharingEntryService, type);
 	}
 
 	@Override
@@ -150,11 +149,10 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 			_objectDefinition.getObjectDefinitionId());
 
 		CollaboratorUtil.deleteCollaborator(
-			objectEntry.getModelClassName(),
 			_classNameLocalService.getClassNameId(
 				objectEntry.getModelClassName()),
 			objectEntry.getObjectEntryId(), collaboratorId,
-			_sharingEntryService, _ticketLocalService, type);
+			_sharingEntryService, type);
 	}
 
 	@Override
@@ -196,13 +194,12 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 			objectEntryId);
 
 		return CollaboratorUtil.getCollaborator(
-			contextAcceptLanguage, objectEntry.getModelClassName(),
+			contextAcceptLanguage,
 			_classNameLocalService.getClassNameId(
 				objectEntry.getModelClassName()),
 			objectEntry.getObjectEntryId(), collaboratorId,
 			_collaboratorDTOConverter, _dtoConverterRegistry,
-			_sharingEntryService, _ticketLocalService, type, contextUriInfo,
-			contextUser);
+			_sharingEntryService, type, contextUriInfo, contextUser);
 	}
 
 	@Override
@@ -278,13 +275,12 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 			_objectDefinition.getObjectDefinitionId());
 
 		return CollaboratorUtil.getCollaborator(
-			contextAcceptLanguage, objectEntry.getModelClassName(),
+			contextAcceptLanguage,
 			_classNameLocalService.getClassNameId(
 				objectEntry.getModelClassName()),
 			objectEntry.getObjectEntryId(), collaboratorId,
 			_collaboratorDTOConverter, _dtoConverterRegistry,
-			_sharingEntryService, _ticketLocalService, type, contextUriInfo,
-			contextUser);
+			_sharingEntryService, type, contextUriInfo, contextUser);
 	}
 
 	@Override
