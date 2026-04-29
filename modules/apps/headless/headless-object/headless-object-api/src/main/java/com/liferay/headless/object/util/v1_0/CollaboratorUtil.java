@@ -7,6 +7,7 @@ package com.liferay.headless.object.util.v1_0;
 
 import com.liferay.headless.object.dto.v1_0.Collaborator;
 import com.liferay.petra.function.transform.TransformUtil;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.NoSuchModelException;
@@ -36,6 +37,7 @@ import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
 import com.liferay.portal.vulcan.util.GroupUtil;
 import com.liferay.sharing.constants.SharingTicketConstants;
+import com.liferay.sharing.exception.DuplicateSharingEntryException;
 import com.liferay.sharing.model.SharingEntry;
 import com.liferay.sharing.security.permission.SharingEntryAction;
 import com.liferay.sharing.service.SharingEntryLocalService;
@@ -110,7 +112,20 @@ public class CollaboratorUtil {
 			companyId, emailAddress, userLocalService);
 
 		if (userId > 0) {
-			SharingEntry sharingEntry = _addOrUpdateSharingEntry(
+			SharingEntry sharingEntry = sharingEntryService.fetchSharingEntry(
+				0, 0, userId, classNameId, classPK);
+
+			if ((sharingEntry != null) &&
+				(sharingEntry.getUserId() != user.getUserId())) {
+
+				throw new DuplicateSharingEntryException(
+					StringBundler.concat(
+						"A sharing entry already exists for user ", userId,
+						" with classNameId ", classNameId, " and classPK ",
+						classPK));
+			}
+
+			sharingEntry = _addOrUpdateSharingEntry(
 				classNameId, classPK, collaborator, userId, groupId,
 				sharingEntryService, "User", userGroupLocalService,
 				userLocalService);
@@ -178,6 +193,19 @@ public class CollaboratorUtil {
 					userLocalService);
 
 				if (userId > 0) {
+					sharingEntry = sharingEntryService.fetchSharingEntry(
+						0, 0, userId, classNameId, classPK);
+
+					if ((sharingEntry != null) &&
+						(sharingEntry.getUserId() != user.getUserId())) {
+
+						throw new DuplicateSharingEntryException(
+							StringBundler.concat(
+								"A sharing entry already exists for user ",
+								userId, " with classNameId ", classNameId,
+								" and classPK ", classPK));
+					}
+
 					sharingEntry = _addOrUpdateSharingEntry(
 						classNameId, classPK, collaborator, userId, groupId,
 						sharingEntryService, "User", userGroupLocalService,
