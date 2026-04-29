@@ -77,7 +77,7 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 				objectEntry.getModelClassName()),
 			objectEntry.getObjectEntryId(), contextCompany.getCompanyId(),
 			emailAddress, _jsonFactory, _sharingEntryService,
-			_ticketLocalService, _userLocalService);
+			_ticketLocalService, contextUser.getUserId(), _userLocalService);
 	}
 
 	@Override
@@ -127,7 +127,7 @@ public class CollaboratorResourceImpl extends BaseCollaboratorResourceImpl {
 				objectEntry.getModelClassName()),
 			objectEntry.getObjectEntryId(), contextCompany.getCompanyId(),
 			emailAddress, _jsonFactory, _sharingEntryService,
-			_ticketLocalService, _userLocalService);
+			_ticketLocalService, contextUser.getUserId(), _userLocalService);
 	}
 
 	@Override
