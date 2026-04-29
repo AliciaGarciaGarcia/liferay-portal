@@ -186,10 +186,10 @@ public class CollaboratorUtil {
 				else {
 					Ticket ticket = _addOrUpdateTicket(
 						className, classPK, collaborator, companyId,
-						_fetchTicket(
-							className, classPK, collaborator,
-							GetterUtil.getLong(collaborator.getId()), companyId,
-							jsonFactory, ticketLocalService),
+						_fetchTicketByEmailAddress(
+							className, classPK, companyId,
+							collaborator.getEmailAddress(), jsonFactory,
+							ticketLocalService),
 						ticketLocalService, collaborator.getType());
 
 					sharingEntry = _addOrUpdateSharingEntry(
@@ -598,23 +598,6 @@ public class CollaboratorUtil {
 		}
 
 		ticketLocalService.deleteTicket(ticket.getTicketId());
-	}
-
-	private static Ticket _fetchTicket(
-			String className, long classPK, Collaborator collaborator,
-			long collaboratorId, long companyId, JSONFactory jsonFactory,
-			TicketLocalService ticketLocalService)
-		throws Exception {
-
-		Ticket ticket = ticketLocalService.fetchTicket(collaboratorId);
-
-		if (ticket != null) {
-			return ticket;
-		}
-
-		return _fetchTicketByEmailAddress(
-			className, classPK, companyId, collaborator.getEmailAddress(),
-			jsonFactory, ticketLocalService);
 	}
 
 	private static Ticket _fetchTicketByEmailAddress(
