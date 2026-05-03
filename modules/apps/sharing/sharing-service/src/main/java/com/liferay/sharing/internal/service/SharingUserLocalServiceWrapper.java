@@ -9,6 +9,8 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONFactory;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Ticket;
@@ -21,6 +23,7 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
 import com.liferay.portal.kernel.service.TicketLocalService;
 import com.liferay.portal.kernel.service.UserLocalServiceWrapper;
 import com.liferay.portal.kernel.transaction.TransactionCommitCallbackUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.sharing.model.SharingEntry;
 import com.liferay.sharing.service.SharingEntryLocalService;
 import com.liferay.sharing.service.persistence.SharingEntryPersistence;
@@ -84,6 +87,16 @@ public class SharingUserLocalServiceWrapper extends UserLocalServiceWrapper {
 
 		actionableDynamicQuery.setPerformActionMethod(
 			(Ticket ticket) -> {
+				JSONObject jsonObject = _jsonFactory.createJSONObject(
+					ticket.getExtraInfo());
+
+				if (!StringUtil.equalsIgnoreCase(
+						jsonObject.getString("emailAddress"),
+						user.getEmailAddress())) {
+
+					return;
+				}
+
 				_updateSharingEntries(ticket, user);
 
 				_ticketLocalService.deleteTicket(ticket);
@@ -150,6 +163,9 @@ public class SharingUserLocalServiceWrapper extends UserLocalServiceWrapper {
 
 	@Reference
 	private IndexerRegistry _indexerRegistry;
+
+	@Reference
+	private JSONFactory _jsonFactory;
 
 	@Reference
 	private SharingEntryLocalService _sharingEntryLocalService;
