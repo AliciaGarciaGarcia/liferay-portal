@@ -7,7 +7,6 @@ package com.liferay.sharing.internal.service;
 
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
-import com.liferay.portal.kernel.dao.orm.DefaultActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -38,7 +37,7 @@ import org.osgi.service.component.annotations.Reference;
 public class SharingUserLocalServiceWrapper extends UserLocalServiceWrapper {
 
 	@Override
-	public User addUser(
+	public User addUserWithWorkflow(
 			long creatorUserId, long companyId, boolean autoPassword,
 			String password1, String password2, boolean autoScreenName,
 			String screenName, String emailAddress, Locale locale,
@@ -50,7 +49,7 @@ public class SharingUserLocalServiceWrapper extends UserLocalServiceWrapper {
 			ServiceContext serviceContext)
 		throws PortalException {
 
-		User user = super.addUser(
+		User user = super.addUserWithWorkflow(
 			creatorUserId, companyId, autoPassword, password1, password2,
 			autoScreenName, screenName, emailAddress, locale, firstName,
 			middleName, lastName, prefixListTypeId, suffixListTypeId, male,
