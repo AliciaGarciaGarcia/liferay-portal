@@ -268,6 +268,13 @@ public class SharingEntryPersistenceTest {
 	}
 
 	@Test
+	public void testCountByToUserGroupId() throws Exception {
+		_persistence.countByToUserGroupId(RandomTestUtil.nextLong());
+
+		_persistence.countByToUserGroupId(0L);
+	}
+
+	@Test
 	public void testCountByToUserId() throws Exception {
 		_persistence.countByToUserId(RandomTestUtil.nextLong());
 
@@ -725,4 +732,4 @@ public class SharingEntryPersistenceTest {
 	private ClassLoader _dynamicQueryClassLoader;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1957922974
+// LIFERAY-SERVICE-BUILDER-HASH:-1087120718
