@@ -44,7 +44,7 @@ public class UserModelListener extends BaseModelListener<User> {
 			return;
 		}
 
-		_updateSharingEntries(user);
+		_convertTicketSharingEntries(user);
 	}
 
 	@Override
@@ -55,12 +55,57 @@ public class UserModelListener extends BaseModelListener<User> {
 			return;
 		}
 
-		_updateSharingEntries(user);
+		_convertTicketSharingEntries(user);
 	}
 
 	@Override
 	public void onBeforeRemove(User user) {
 		_sharingEntryLocalService.deleteToUserSharingEntries(user.getUserId());
+	}
+
+	private void _convertTicketSharingEntries(User user) {
+		Date date = new Date();
+
+		TransactionCommitCallbackUtil.registerCallback(
+			() -> {
+				IntervalActionProcessor<Void> intervalActionProcessor =
+					new IntervalActionProcessor<>(
+						_ticketLocalService.dslQueryCount(
+							_createCountDSLQuery(date, user)));
+
+				intervalActionProcessor.setPerformIntervalActionMethod(
+					(start, end) -> {
+						List<Long> ticketIds =
+							(List<Long>)_ticketLocalService.dslQuery(
+								_createDSLQuery(date, end, start, user));
+
+						for (Long ticketId : ticketIds) {
+							Ticket ticket = _ticketLocalService.fetchTicket(
+								ticketId);
+
+							if (!_isTicketForUser(ticket, user)) {
+								intervalActionProcessor.incrementStart();
+
+								continue;
+							}
+
+							for (SharingEntry sharingEntry :
+									_sharingEntryLocalService.
+										getToTicketSharingEntries(ticketId)) {
+
+								_updateSharingEntry(sharingEntry, user);
+							}
+
+							_ticketLocalService.deleteTicket(ticket);
+						}
+
+						return null;
+					});
+
+				intervalActionProcessor.performIntervalActions();
+
+				return null;
+			});
 	}
 
 	private DSLQuery _createCountDSLQuery(Date date, User user) {
@@ -91,17 +136,6 @@ public class UserModelListener extends BaseModelListener<User> {
 		);
 	}
 
-	private boolean _hasUserEmailAddress(Ticket ticket, User user) {
-		if ((ticket == null) ||
-			!StringUtil.equalsIgnoreCase(
-				ticket.getExtraInfo(), user.getEmailAddress())) {
-
-			return false;
-		}
-
-		return true;
-	}
-
 	private Predicate _innerJoinPredicate() {
 		return SharingEntryTable.INSTANCE.classNameId.eq(
 			TicketTable.INSTANCE.classNameId
@@ -113,49 +147,15 @@ public class UserModelListener extends BaseModelListener<User> {
 		);
 	}
 
-	private void _updateSharingEntries(User user) {
-		Date date = new Date();
+	private boolean _isTicketForUser(Ticket ticket, User user) {
+		if ((ticket == null) ||
+			!StringUtil.equalsIgnoreCase(
+				ticket.getExtraInfo(), user.getEmailAddress())) {
 
-		TransactionCommitCallbackUtil.registerCallback(
-			() -> {
-				IntervalActionProcessor<Void> intervalActionProcessor =
-					new IntervalActionProcessor<>(
-						_ticketLocalService.dslQueryCount(
-							_createCountDSLQuery(date, user)));
+			return false;
+		}
 
-				intervalActionProcessor.setPerformIntervalActionMethod(
-					(start, end) -> {
-						List<Long> ticketIds =
-							(List<Long>)_ticketLocalService.dslQuery(
-								_createDSLQuery(date, end, start, user));
-
-						for (Long ticketId : ticketIds) {
-							Ticket ticket = _ticketLocalService.fetchTicket(
-								ticketId);
-
-							if (!_hasUserEmailAddress(ticket, user)) {
-								intervalActionProcessor.incrementStart();
-
-								continue;
-							}
-
-							for (SharingEntry sharingEntry :
-									_sharingEntryLocalService.
-										getToTicketSharingEntries(ticketId)) {
-
-								_updateSharingEntry(sharingEntry, user);
-							}
-
-							_ticketLocalService.deleteTicket(ticket);
-						}
-
-						return null;
-					});
-
-				intervalActionProcessor.performIntervalActions();
-
-				return null;
-			});
+		return true;
 	}
 
 	private void _updateSharingEntry(SharingEntry sharingEntry, User user) {

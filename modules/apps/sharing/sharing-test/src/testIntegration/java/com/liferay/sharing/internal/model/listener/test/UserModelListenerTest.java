@@ -91,11 +91,11 @@ public class UserModelListenerTest {
 		Ticket ticket3 = _addInviteCollaboratorTicket(
 			_group1.getGroupId(), emailAddress2);
 
-		SharingEntry sharingEntry1 = _addToTicketIdSharingEntry(
+		SharingEntry sharingEntry1 = _addTicketSharingEntry(
 			_group1.getGroupId(), ticket1.getTicketId());
-		SharingEntry sharingEntry2 = _addToTicketIdSharingEntry(
+		SharingEntry sharingEntry2 = _addTicketSharingEntry(
 			_group2.getGroupId(), ticket2.getTicketId());
-		SharingEntry sharingEntry3 = _addToTicketIdSharingEntry(
+		SharingEntry sharingEntry3 = _addTicketSharingEntry(
 			_group1.getGroupId(), ticket3.getTicketId());
 
 		User user1 = _addUser(emailAddress1);
@@ -133,7 +133,7 @@ public class UserModelListenerTest {
 		ticket1 = _addInviteCollaboratorTicket(
 			_group1.getGroupId(), StringUtil.toUpperCase(emailAddress1));
 
-		sharingEntry1 = _addToTicketIdSharingEntry(
+		sharingEntry1 = _addTicketSharingEntry(
 			_group1.getGroupId(), ticket1.getTicketId());
 
 		User user2 = _addUser(emailAddress1);
@@ -156,8 +156,8 @@ public class UserModelListenerTest {
 		ticket2 = _addInviteCollaboratorTicket(
 			_group1.getGroupId(), emailAddress1);
 
-		_addToTicketIdSharingEntry(_group1.getGroupId(), ticket1.getTicketId());
-		_addToTicketIdSharingEntry(_group1.getGroupId(), ticket2.getTicketId());
+		_addTicketSharingEntry(_group1.getGroupId(), ticket1.getTicketId());
+		_addTicketSharingEntry(_group1.getGroupId(), ticket2.getTicketId());
 
 		List<SharingEntry> toTicketSharingEntries =
 			_sharingEntryLocalService.getToTicketSharingEntries(
@@ -220,11 +220,11 @@ public class UserModelListenerTest {
 		ticket3 = _addInviteCollaboratorTicket(
 			_group1.getGroupId(), emailAddress1);
 
-		sharingEntry1 = _addToTicketIdSharingEntry(
+		sharingEntry1 = _addTicketSharingEntry(
 			_group1.getGroupId(), ticket1.getTicketId());
-		sharingEntry2 = _addToTicketIdSharingEntry(
+		sharingEntry2 = _addTicketSharingEntry(
 			_group1.getGroupId(), ticket2.getTicketId());
-		sharingEntry3 = _addToTicketIdSharingEntry(
+		sharingEntry3 = _addTicketSharingEntry(
 			_group1.getGroupId(), ticket3.getTicketId());
 
 		User user4 = _addUser(emailAddress1);
@@ -273,7 +273,7 @@ public class UserModelListenerTest {
 			ServiceContextTestUtil.getServiceContext(
 				_group1.getGroupId(), TestPropsValues.getUserId()));
 
-		_addToTicketIdSharingEntry(_group1.getGroupId(), ticket1.getTicketId());
+		_addTicketSharingEntry(_group1.getGroupId(), ticket1.getTicketId());
 
 		_userLocalService.updateStatus(
 			user5.getUserId(), WorkflowConstants.STATUS_INACTIVE,
@@ -325,11 +325,11 @@ public class UserModelListenerTest {
 		Ticket ticket3 = _addInviteCollaboratorTicket(
 			_group1.getGroupId(), emailAddress2);
 
-		SharingEntry sharingEntry1 = _addToTicketIdSharingEntry(
+		SharingEntry sharingEntry1 = _addTicketSharingEntry(
 			_group1.getGroupId(), ticket1.getTicketId());
-		SharingEntry sharingEntry2 = _addToTicketIdSharingEntry(
+		SharingEntry sharingEntry2 = _addTicketSharingEntry(
 			_group2.getGroupId(), ticket2.getTicketId());
-		SharingEntry sharingEntry3 = _addToTicketIdSharingEntry(
+		SharingEntry sharingEntry3 = _addTicketSharingEntry(
 			_group1.getGroupId(), ticket3.getTicketId());
 
 		User user = _addUserWithWorkflow(emailAddress1);
@@ -438,7 +438,7 @@ public class UserModelListenerTest {
 			Ticket ticket = _addInviteCollaboratorTicket(
 				_group1.getGroupId(), emailAddress);
 
-			SharingEntry sharingEntry = _addToTicketIdSharingEntry(
+			SharingEntry sharingEntry = _addTicketSharingEntry(
 				_group1.getGroupId(), ticket.getTicketId());
 
 			User user = _addUserWithWorkflow(emailAddress);
@@ -494,8 +494,7 @@ public class UserModelListenerTest {
 			new ServiceContext());
 	}
 
-	private SharingEntry _addToTicketIdSharingEntry(
-			long classPK, long toTicketId)
+	private SharingEntry _addTicketSharingEntry(long classPK, long toTicketId)
 		throws Exception {
 
 		return _sharingEntryLocalService.addSharingEntry(
