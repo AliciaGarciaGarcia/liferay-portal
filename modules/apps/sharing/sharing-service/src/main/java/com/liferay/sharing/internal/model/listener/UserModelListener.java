@@ -49,8 +49,7 @@ public class UserModelListener extends BaseModelListener<User> {
 
 	@Override
 	public void onAfterUpdate(User originalUser, User user) {
-		if ((originalUser.getStatus() == user.getStatus()) ||
-			(originalUser.getStatus() == WorkflowConstants.STATUS_APPROVED) ||
+		if ((originalUser.getStatus() == WorkflowConstants.STATUS_APPROVED) ||
 			(user.getStatus() != WorkflowConstants.STATUS_APPROVED)) {
 
 			return;
