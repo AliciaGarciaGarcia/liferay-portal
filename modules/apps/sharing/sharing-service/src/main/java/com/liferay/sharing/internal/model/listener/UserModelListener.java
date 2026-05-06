@@ -9,7 +9,6 @@ import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
 import com.liferay.petra.sql.dsl.expression.Predicate;
 import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.petra.string.StringBundler;
-import com.liferay.portal.kernel.exception.ModelListenerException;
 import com.liferay.portal.kernel.interval.IntervalActionProcessor;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -40,7 +39,7 @@ import org.osgi.service.component.annotations.Reference;
 public class UserModelListener extends BaseModelListener<User> {
 
 	@Override
-	public void onAfterCreate(User user) throws ModelListenerException {
+	public void onAfterCreate(User user) {
 		if (user.getStatus() != WorkflowConstants.STATUS_APPROVED) {
 			return;
 		}
@@ -49,9 +48,7 @@ public class UserModelListener extends BaseModelListener<User> {
 	}
 
 	@Override
-	public void onAfterUpdate(User originalUser, User user)
-		throws ModelListenerException {
-
+	public void onAfterUpdate(User originalUser, User user) {
 		if ((originalUser.getStatus() == user.getStatus()) ||
 			(originalUser.getStatus() == WorkflowConstants.STATUS_APPROVED) ||
 			(user.getStatus() != WorkflowConstants.STATUS_APPROVED)) {
