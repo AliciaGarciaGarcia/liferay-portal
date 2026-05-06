@@ -72,8 +72,7 @@ public class CollaboratorUtil {
 
 			User existingUser = userLocalService.fetchUserByEmailAddress(
 				companyId,
-				StringUtil.toLowerCase(
-					StringUtil.trim(collaborator.getEmailAddress())));
+				_normalizeEmailAddress(collaborator.getEmailAddress()));
 
 			if (existingUser != null) {
 				return toCollaborator(
@@ -138,8 +137,7 @@ public class CollaboratorUtil {
 
 				User existingUser = userLocalService.fetchUserByEmailAddress(
 					companyId,
-					StringUtil.toLowerCase(
-						StringUtil.trim(collaborator.getEmailAddress())));
+					_normalizeEmailAddress(collaborator.getEmailAddress()));
 
 				if (existingUser == null) {
 					Ticket ticket = _addOrUpdateTicket(
@@ -394,8 +392,8 @@ public class CollaboratorUtil {
 			throw new NoSuchModelException();
 		}
 
-		String extraInfo = StringUtil.toLowerCase(
-			StringUtil.trim(collaborator.getEmailAddress()));
+		String extraInfo = _normalizeEmailAddress(
+			collaborator.getEmailAddress());
 
 		if (ticket == null) {
 			return ticketLocalService.addTicket(
@@ -446,6 +444,10 @@ public class CollaboratorUtil {
 		}
 
 		ticketLocalService.deleteTicket(ticket.getTicketId());
+	}
+
+	private static String _normalizeEmailAddress(String emailAddress) {
+		return StringUtil.toLowerCase(StringUtil.trim(emailAddress));
 	}
 
 	private static void _validateEmailAddress(String emailAddress) {
