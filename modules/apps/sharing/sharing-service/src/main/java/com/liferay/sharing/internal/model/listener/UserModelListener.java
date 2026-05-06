@@ -68,7 +68,8 @@ public class UserModelListener extends BaseModelListener<User> {
 	}
 
 	private DSLQuery _createCountDSLQuery(Date date, User user) {
-		return DSLQueryFactoryUtil.count(
+		return DSLQueryFactoryUtil.countDistinct(
+			TicketTable.INSTANCE.ticketId
 		).from(
 			TicketTable.INSTANCE
 		).innerJoinON(
@@ -79,7 +80,7 @@ public class UserModelListener extends BaseModelListener<User> {
 	}
 
 	private DSLQuery _createDSLQuery(Date date, int end, int start, User user) {
-		return DSLQueryFactoryUtil.select(
+		return DSLQueryFactoryUtil.selectDistinct(
 			TicketTable.INSTANCE.ticketId
 		).from(
 			TicketTable.INSTANCE
