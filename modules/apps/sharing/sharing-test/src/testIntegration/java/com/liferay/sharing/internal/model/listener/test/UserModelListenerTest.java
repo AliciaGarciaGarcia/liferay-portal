@@ -303,11 +303,11 @@ public class UserModelListenerTest {
 		Assert.assertEquals(
 			toUserSharingEntries.toString(), 1, toUserSharingEntries.size());
 
+		SharingEntry toUserSharingEntry = toUserSharingEntries.get(0);
+
 		Assert.assertEquals(
 			sharingEntry1.getSharingEntryId(),
-			toUserSharingEntries.get(
-				0
-			).getSharingEntryId());
+			toUserSharingEntry.getSharingEntryId());
 	}
 
 	@Test
