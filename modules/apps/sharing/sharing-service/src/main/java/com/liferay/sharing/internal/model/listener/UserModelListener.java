@@ -70,19 +70,19 @@ public class UserModelListener extends BaseModelListener<User> {
 		).from(
 			TicketTable.INSTANCE
 		).innerJoinON(
-			SharingEntryTable.INSTANCE, _innerJoinPredicate()
+			SharingEntryTable.INSTANCE, _getPredicate()
 		).where(
 			_wherePredicate(date, user)
 		);
 	}
 
-	private DSLQuery _createDSLQuery(Date date, int end, int start, User user) {
+	private DSLQuery _getDSLQuery(Date date, int end, int start, User user) {
 		return DSLQueryFactoryUtil.selectDistinct(
 			TicketTable.INSTANCE
 		).from(
 			TicketTable.INSTANCE
 		).innerJoinON(
-			SharingEntryTable.INSTANCE, _innerJoinPredicate()
+			SharingEntryTable.INSTANCE, _getPredicate()
 		).where(
 			_wherePredicate(date, user)
 		).orderBy(
@@ -92,7 +92,7 @@ public class UserModelListener extends BaseModelListener<User> {
 		);
 	}
 
-	private Predicate _innerJoinPredicate() {
+	private Predicate _getPredicate() {
 		return SharingEntryTable.INSTANCE.classNameId.eq(
 			TicketTable.INSTANCE.classNameId
 		).and(
@@ -117,7 +117,7 @@ public class UserModelListener extends BaseModelListener<User> {
 					(start, end) -> {
 						List<Ticket> tickets =
 							(List<Ticket>)_ticketLocalService.dslQuery(
-								_createDSLQuery(date, end, start, user));
+								_getDSLQuery(date, end, start, user));
 
 						for (Ticket ticket : tickets) {
 							if ((ticket == null) ||
