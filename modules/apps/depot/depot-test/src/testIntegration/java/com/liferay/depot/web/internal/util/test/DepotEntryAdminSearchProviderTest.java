@@ -17,6 +17,7 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
+import com.liferay.portal.kernel.test.TestInfo;
 import com.liferay.portal.kernel.test.portlet.MockLiferayPortletActionRequest;
 import com.liferay.portal.kernel.test.portlet.MockLiferayPortletRenderRequest;
 import com.liferay.portal.kernel.test.portlet.MockLiferayPortletRenderResponse;
@@ -33,6 +34,7 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
+import com.liferay.site.search.GroupSearch;
 
 import jakarta.portlet.PortletRequest;
 import jakarta.portlet.PortletResponse;
@@ -130,30 +132,210 @@ public class DepotEntryAdminSearchProviderTest {
 				new MockLiferayPortletURL()));
 	}
 
-	private void _addDepotEntries() throws Exception {
-		_keywords = RandomTestUtil.randomString();
+	@Test
+	@TestInfo("LPD-89764")
+	public void testGetGroupSearchWithKeywordsAndUnconnectedDepotEntry()
+		throws Exception {
 
-		for (int i = 0; i < 3; i++) {
-			_addDepotEntry(_keywords + i);
-		}
-
-		_addDepotEntry(RandomTestUtil.randomString());
-
-		DepotEntry stagedDepotEntry = _addDepotEntry(
-			RandomTestUtil.randomString());
-
-		GroupTestUtil.enableLocalStaging(stagedDepotEntry.getGroup());
-	}
-
-	private DepotEntry _addDepotEntry(String depotEntryName) throws Exception {
 		DepotEntry depotEntry = _depotEntryLocalService.addDepotEntry(
-			Collections.singletonMap(LocaleUtil.getDefault(), depotEntryName),
+			Collections.singletonMap(LocaleUtil.getDefault(), _keywords),
 			Collections.singletonMap(
 				LocaleUtil.getDefault(), RandomTestUtil.randomString()),
 			DepotConstants.TYPE_ASSET_LIBRARY,
 			ServiceContextTestUtil.getServiceContext());
 
-		_initialDepotEntries.add(depotEntry);
+		_depotEntries.add(depotEntry);
+
+		GroupItemSelectorCriterion groupItemSelectorCriterion =
+			new GroupItemSelectorCriterion();
+
+		groupItemSelectorCriterion.setIncludeAllVisibleGroups(false);
+
+		MockLiferayPortletActionRequest mockLiferayPortletActionRequest =
+			new MockLiferayPortletActionRequest();
+
+		mockLiferayPortletActionRequest.setAttribute(
+			WebKeys.THEME_DISPLAY, _getThemeDisplay());
+
+		mockLiferayPortletActionRequest.setParameter("keywords", _keywords);
+
+		_assertDepotEntries(
+			3,
+			ReflectionTestUtil.invoke(
+				_depotEntryAdminSearchProvider, "getDepotEntrySearch",
+				new Class<?>[] {
+					GroupItemSelectorCriterion.class, PortletRequest.class,
+					PortletResponse.class, PortletURL.class
+				},
+				groupItemSelectorCriterion, mockLiferayPortletActionRequest,
+				new MockLiferayPortletRenderResponse(),
+				new MockLiferayPortletURL()));
+	}
+
+	@Test
+	@TestInfo("LPD-89764")
+	public void testGetGroupSearchWithKeywordsAndUnconnectedSpaceDepotEntry()
+		throws Exception {
+
+		DepotEntry depotEntry1 = _addDepotEntry(
+			_keywords, DepotConstants.TYPE_SPACE);
+
+		DepotEntry depotEntry2 = _depotEntryLocalService.addDepotEntry(
+			Collections.singletonMap(
+				LocaleUtil.getDefault(),
+				_keywords + RandomTestUtil.randomString()),
+			Collections.singletonMap(
+				LocaleUtil.getDefault(), RandomTestUtil.randomString()),
+			DepotConstants.TYPE_SPACE,
+			ServiceContextTestUtil.getServiceContext());
+
+		_depotEntries.add(depotEntry2);
+
+		GroupItemSelectorCriterion groupItemSelectorCriterion =
+			new GroupItemSelectorCriterion();
+
+		groupItemSelectorCriterion.setDepotEntryType(DepotConstants.TYPE_SPACE);
+		groupItemSelectorCriterion.setIncludeAllVisibleGroups(false);
+
+		MockLiferayPortletActionRequest mockLiferayPortletActionRequest =
+			new MockLiferayPortletActionRequest();
+
+		mockLiferayPortletActionRequest.setAttribute(
+			WebKeys.THEME_DISPLAY, _getThemeDisplay());
+
+		mockLiferayPortletActionRequest.setParameter("keywords", _keywords);
+
+		GroupSearch groupSearch = ReflectionTestUtil.invoke(
+			_depotEntryAdminSearchProvider, "getGroupSearch",
+			new Class<?>[] {
+				GroupItemSelectorCriterion.class, PortletRequest.class,
+				PortletResponse.class, PortletURL.class
+			},
+			groupItemSelectorCriterion, mockLiferayPortletActionRequest,
+			new MockLiferayPortletRenderResponse(),
+			new MockLiferayPortletURL());
+
+		Assert.assertEquals(1, groupSearch.getTotal());
+
+		List<Group> groups = groupSearch.getResults();
+
+		Assert.assertTrue(groups.contains(depotEntry1.getGroup()));
+		Assert.assertFalse(groups.contains(depotEntry2.getGroup()));
+	}
+
+	@Test
+	@TestInfo("LPD-89764")
+	public void testGetGroupSearchWithUnconnectedDepotEntries()
+		throws Exception {
+
+		DepotEntry depotEntry = _depotEntryLocalService.addDepotEntry(
+			Collections.singletonMap(
+				LocaleUtil.getDefault(), RandomTestUtil.randomString()),
+			Collections.singletonMap(
+				LocaleUtil.getDefault(), RandomTestUtil.randomString()),
+			DepotConstants.TYPE_ASSET_LIBRARY,
+			ServiceContextTestUtil.getServiceContext());
+
+		_depotEntries.add(depotEntry);
+
+		GroupItemSelectorCriterion groupItemSelectorCriterion =
+			new GroupItemSelectorCriterion();
+
+		groupItemSelectorCriterion.setIncludeAllVisibleGroups(false);
+
+		MockLiferayPortletActionRequest mockLiferayPortletActionRequest =
+			new MockLiferayPortletActionRequest();
+
+		mockLiferayPortletActionRequest.setAttribute(
+			WebKeys.THEME_DISPLAY, _getThemeDisplay());
+
+		_assertDepotEntries(
+			5,
+			ReflectionTestUtil.invoke(
+				_depotEntryAdminSearchProvider, "getDepotEntrySearch",
+				new Class<?>[] {
+					GroupItemSelectorCriterion.class, PortletRequest.class,
+					PortletResponse.class, PortletURL.class
+				},
+				groupItemSelectorCriterion, mockLiferayPortletActionRequest,
+				new MockLiferayPortletRenderResponse(),
+				new MockLiferayPortletURL()));
+	}
+
+	@Test
+	@TestInfo("LPD-89764")
+	public void testGetGroupSearchWithUnconnectedSpaceDepotEntries()
+		throws Exception {
+
+		DepotEntry depotEntry1 = _addDepotEntry(
+			RandomTestUtil.randomString(), DepotConstants.TYPE_SPACE);
+
+		DepotEntry depotEntry2 = _depotEntryLocalService.addDepotEntry(
+			Collections.singletonMap(
+				LocaleUtil.getDefault(), RandomTestUtil.randomString()),
+			Collections.singletonMap(
+				LocaleUtil.getDefault(), RandomTestUtil.randomString()),
+			DepotConstants.TYPE_SPACE,
+			ServiceContextTestUtil.getServiceContext());
+
+		_depotEntries.add(depotEntry2);
+
+		GroupItemSelectorCriterion groupItemSelectorCriterion =
+			new GroupItemSelectorCriterion();
+
+		groupItemSelectorCriterion.setDepotEntryType(DepotConstants.TYPE_SPACE);
+		groupItemSelectorCriterion.setIncludeAllVisibleGroups(false);
+
+		MockLiferayPortletActionRequest mockLiferayPortletActionRequest =
+			new MockLiferayPortletActionRequest();
+
+		mockLiferayPortletActionRequest.setAttribute(
+			WebKeys.THEME_DISPLAY, _getThemeDisplay());
+
+		GroupSearch groupSearch = ReflectionTestUtil.invoke(
+			_depotEntryAdminSearchProvider, "getGroupSearch",
+			new Class<?>[] {
+				GroupItemSelectorCriterion.class, PortletRequest.class,
+				PortletResponse.class, PortletURL.class
+			},
+			groupItemSelectorCriterion, mockLiferayPortletActionRequest,
+			new MockLiferayPortletRenderResponse(),
+			new MockLiferayPortletURL());
+
+		Assert.assertEquals(1, groupSearch.getTotal());
+
+		List<Group> groups = groupSearch.getResults();
+
+		Assert.assertTrue(groups.contains(depotEntry1.getGroup()));
+		Assert.assertFalse(groups.contains(depotEntry2.getGroup()));
+	}
+
+	private void _addDepotEntries() throws Exception {
+		_keywords = RandomTestUtil.randomString();
+
+		for (int i = 0; i < 3; i++) {
+			_addDepotEntry(_keywords + i, DepotConstants.TYPE_ASSET_LIBRARY);
+		}
+
+		_addDepotEntry(
+			RandomTestUtil.randomString(), DepotConstants.TYPE_ASSET_LIBRARY);
+
+		DepotEntry stagedDepotEntry = _addDepotEntry(
+			RandomTestUtil.randomString(), DepotConstants.TYPE_ASSET_LIBRARY);
+
+		GroupTestUtil.enableLocalStaging(stagedDepotEntry.getGroup());
+	}
+
+	private DepotEntry _addDepotEntry(String depotEntryName, int type)
+		throws Exception {
+
+		DepotEntry depotEntry = _depotEntryLocalService.addDepotEntry(
+			Collections.singletonMap(LocaleUtil.getDefault(), depotEntryName),
+			Collections.singletonMap(
+				LocaleUtil.getDefault(), RandomTestUtil.randomString()),
+			type, ServiceContextTestUtil.getServiceContext());
+
+		_depotEntries.add(depotEntry);
 
 		_depotEntryGroupRelLocalService.addDepotEntryGroupRel(
 			depotEntry.getDepotEntryId(), _group.getGroupId());
@@ -169,7 +351,7 @@ public class DepotEntryAdminSearchProviderTest {
 		List<DepotEntry> curDepotEntries = depotEntrySearch.getResults();
 
 		for (int i = 0; i < total; i++) {
-			DepotEntry depotEntry1 = _initialDepotEntries.get(i);
+			DepotEntry depotEntry1 = _depotEntries.get(i);
 
 			DepotEntry depotEntry2 = curDepotEntries.get(i);
 
@@ -220,6 +402,9 @@ public class DepotEntryAdminSearchProviderTest {
 	@Inject
 	private CompanyLocalService _companyLocalService;
 
+	@DeleteAfterTestRun
+	private final List<DepotEntry> _depotEntries = new ArrayList<>();
+
 	private Object _depotEntryAdminSearchProvider;
 
 	@Inject
@@ -229,10 +414,6 @@ public class DepotEntryAdminSearchProviderTest {
 	private DepotEntryLocalService _depotEntryLocalService;
 
 	private Group _group;
-
-	@DeleteAfterTestRun
-	private final List<DepotEntry> _initialDepotEntries = new ArrayList<>();
-
 	private String _keywords;
 
 	@Inject(
