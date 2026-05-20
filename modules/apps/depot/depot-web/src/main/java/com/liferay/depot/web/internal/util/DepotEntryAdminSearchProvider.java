@@ -11,8 +11,10 @@ import com.liferay.depot.search.DepotEntrySearch;
 import com.liferay.depot.service.DepotEntryService;
 import com.liferay.item.selector.criteria.group.criterion.GroupItemSelectorCriterion;
 import com.liferay.petra.function.transform.TransformUtil;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.Language;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
 import com.liferay.portal.kernel.search.BooleanClause;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
@@ -28,7 +30,9 @@ import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.TermsFilter;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.site.search.GroupSearch;
@@ -37,7 +41,9 @@ import jakarta.portlet.PortletRequest;
 import jakarta.portlet.PortletResponse;
 import jakarta.portlet.PortletURL;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -54,9 +60,7 @@ public class DepotEntryAdminSearchProvider {
 			PortletURL portletURL)
 		throws PortalException {
 
-		if (Validator.isNull(ParamUtil.getString(portletRequest, "keywords")) &&
-			!groupItemSelectorCriterion.isIncludeAllVisibleGroups()) {
-
+		if (!groupItemSelectorCriterion.isIncludeAllVisibleGroups()) {
 			return _getGroupConnectedDepotEntrySearch(
 				groupItemSelectorCriterion.getDepotEntryType(), portletRequest,
 				portletResponse, portletURL);
@@ -97,6 +101,28 @@ public class DepotEntryAdminSearchProvider {
 			depotEntrySearch.getTotal());
 
 		return groupSearch;
+	}
+
+	private List<DepotEntry> _filterDepotEntries(
+			List<DepotEntry> depotEntries, String keywords, Locale locale)
+		throws PortalException {
+
+		List<DepotEntry> filteredDepotEntries = new ArrayList<>();
+
+		keywords = StringUtil.toLowerCase(keywords);
+
+		for (DepotEntry depotEntry : depotEntries) {
+			Group group = depotEntry.getGroup();
+
+			String descriptiveName = StringUtil.toLowerCase(
+				group.getDescriptiveName(locale));
+
+			if (descriptiveName.contains(keywords)) {
+				filteredDepotEntries.add(depotEntry);
+			}
+		}
+
+		return filteredDepotEntries;
 	}
 
 	private BooleanClause[] _getBooleanClauses() {
@@ -151,12 +177,31 @@ public class DepotEntryAdminSearchProvider {
 				portletRequest.getLocale(),
 				(depotEntryType == DepotConstants.TYPE_SPACE) ?
 					"no-spaces-were-found" : "no-asset-libraries-were-found"));
-		depotEntrySearch.setResultsAndTotal(
-			() -> _depotEntryService.getGroupConnectedDepotEntries(
+
+		String keywords = ParamUtil.getString(portletRequest, "keywords");
+
+		if (Validator.isNull(keywords)) {
+			depotEntrySearch.setResultsAndTotal(
+				() -> _depotEntryService.getGroupConnectedDepotEntries(
+					themeDisplay.getScopeGroupId(), depotEntryType,
+					depotEntrySearch.getStart(), depotEntrySearch.getEnd()),
+				_depotEntryService.getGroupConnectedDepotEntriesCount(
+					themeDisplay.getScopeGroupId(), depotEntryType));
+
+			return depotEntrySearch;
+		}
+
+		List<DepotEntry> depotEntries = _filterDepotEntries(
+			_depotEntryService.getGroupConnectedDepotEntries(
 				themeDisplay.getScopeGroupId(), depotEntryType,
-				depotEntrySearch.getStart(), depotEntrySearch.getEnd()),
-			_depotEntryService.getGroupConnectedDepotEntriesCount(
-				themeDisplay.getScopeGroupId(), depotEntryType));
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS),
+			keywords, themeDisplay.getLocale());
+
+		depotEntrySearch.setResultsAndTotal(
+			() -> ListUtil.subList(
+				depotEntries, depotEntrySearch.getStart(),
+				depotEntrySearch.getEnd()),
+			depotEntries.size());
 
 		return depotEntrySearch;
 	}
