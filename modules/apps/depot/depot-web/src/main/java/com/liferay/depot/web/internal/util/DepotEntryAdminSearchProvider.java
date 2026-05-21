@@ -7,14 +7,15 @@ package com.liferay.depot.web.internal.util;
 
 import com.liferay.depot.constants.DepotConstants;
 import com.liferay.depot.model.DepotEntry;
+import com.liferay.depot.model.DepotEntryGroupRel;
 import com.liferay.depot.search.DepotEntrySearch;
+import com.liferay.depot.service.DepotEntryGroupRelLocalService;
 import com.liferay.depot.service.DepotEntryService;
 import com.liferay.item.selector.criteria.group.criterion.GroupItemSelectorCriterion;
 import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.Language;
-import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
 import com.liferay.portal.kernel.search.BooleanClause;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
@@ -29,10 +30,9 @@ import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.TermsFilter;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.site.search.GroupSearch;
@@ -41,9 +41,8 @@ import jakarta.portlet.PortletRequest;
 import jakarta.portlet.PortletResponse;
 import jakarta.portlet.PortletURL;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -103,38 +102,27 @@ public class DepotEntryAdminSearchProvider {
 		return groupSearch;
 	}
 
-	private List<DepotEntry> _filterDepotEntries(
-			List<DepotEntry> depotEntries, String keywords, Locale locale)
-		throws PortalException {
-
-		List<DepotEntry> filteredDepotEntries = new ArrayList<>();
-
-		keywords = StringUtil.toLowerCase(keywords);
-
-		for (DepotEntry depotEntry : depotEntries) {
-			Group group = depotEntry.getGroup();
-
-			String descriptiveName = StringUtil.toLowerCase(
-				group.getDescriptiveName(locale));
-
-			if (descriptiveName.contains(keywords)) {
-				filteredDepotEntries.add(depotEntry);
-			}
-		}
-
-		return filteredDepotEntries;
-	}
-
-	private BooleanClause[] _getBooleanClauses() {
+	private BooleanClause[] _getBooleanClauses(long[] depotEntryIds) {
 		BooleanQuery booleanQuery = new BooleanQuery();
 
 		BooleanFilter booleanFilter = new BooleanFilter();
 
-		TermsFilter termsFilter = new TermsFilter(Field.STAGING_GROUP);
+		if (ArrayUtil.isNotEmpty(depotEntryIds)) {
+			TermsFilter entryClassPKTermsFilter = new TermsFilter(
+				Field.ENTRY_CLASS_PK);
 
-		termsFilter.addValue("false");
+			entryClassPKTermsFilter.addValues(
+				ArrayUtil.toStringArray(depotEntryIds));
 
-		booleanFilter.add(termsFilter, BooleanClauseOccur.MUST);
+			booleanFilter.add(entryClassPKTermsFilter, BooleanClauseOccur.MUST);
+		}
+
+		TermsFilter stagingGroupTermsFilter = new TermsFilter(
+			Field.STAGING_GROUP);
+
+		stagingGroupTermsFilter.addValue("false");
+
+		booleanFilter.add(stagingGroupTermsFilter, BooleanClauseOccur.MUST);
 
 		booleanQuery.setPreBooleanFilter(booleanFilter);
 
@@ -157,8 +145,9 @@ public class DepotEntryAdminSearchProvider {
 				(depotEntryType == DepotConstants.TYPE_SPACE) ?
 					"no-spaces-were-found" : "no-asset-libraries-were-found"));
 		depotEntrySearch.setResultsAndTotal(
-			() -> _getResults(depotEntryType, depotEntrySearch, portletRequest),
-			_getTotal(depotEntryType, portletRequest));
+			() -> _getResults(
+				null, depotEntrySearch, depotEntryType, portletRequest),
+			_getTotal(null, depotEntryType, portletRequest));
 
 		return depotEntrySearch;
 	}
@@ -193,31 +182,37 @@ public class DepotEntryAdminSearchProvider {
 			return depotEntrySearch;
 		}
 
-		List<DepotEntry> depotEntries = _filterDepotEntries(
-			_depotEntryService.getGroupConnectedDepotEntries(
+		long[] depotEntryIds = TransformUtil.transformToLongArray(
+			_depotEntryGroupRelLocalService.getDepotEntryGroupRels(
 				themeDisplay.getScopeGroupId(), depotEntryType,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS),
-			keywords, themeDisplay.getLocale());
+			DepotEntryGroupRel::getDepotEntryId);
+
+		if (ArrayUtil.isEmpty(depotEntryIds)) {
+			depotEntrySearch.setResultsAndTotal(Collections::emptyList, 0);
+
+			return depotEntrySearch;
+		}
 
 		depotEntrySearch.setResultsAndTotal(
-			() -> ListUtil.subList(
-				depotEntries, depotEntrySearch.getStart(),
-				depotEntrySearch.getEnd()),
-			depotEntries.size());
+			() -> _getResults(
+				depotEntryIds, depotEntrySearch, depotEntryType,
+				portletRequest),
+			_getTotal(depotEntryIds, depotEntryType, portletRequest));
 
 		return depotEntrySearch;
 	}
 
 	private List<DepotEntry> _getResults(
-			int depotEntryType, DepotEntrySearch depotEntrySearch,
-			PortletRequest portletRequest)
+			long[] depotEntryIds, DepotEntrySearch depotEntrySearch,
+			int depotEntryType, PortletRequest portletRequest)
 		throws PortalException {
 
 		Indexer<Object> indexer = IndexerRegistryUtil.getIndexer(
 			DepotEntry.class.getName());
 
 		SearchContext searchContext = _getSearchContext(
-			depotEntryType, portletRequest);
+			depotEntryIds, depotEntryType, portletRequest);
 
 		searchContext.setEnd(depotEntrySearch.getEnd());
 		searchContext.setSorts(new Sort(Field.NAME, false));
@@ -232,17 +227,21 @@ public class DepotEntryAdminSearchProvider {
 	}
 
 	private SearchContext _getSearchContext(
-		int depotEntryType, PortletRequest portletRequest) {
+		long[] depotEntryIds, int depotEntryType,
+		PortletRequest portletRequest) {
 
 		SearchContext searchContext = new SearchContext();
 
 		searchContext.setAttribute(Field.TYPE, depotEntryType);
-		searchContext.setBooleanClauses(_getBooleanClauses());
+
+		searchContext.setBooleanClauses(_getBooleanClauses(depotEntryIds));
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
 		searchContext.setCompanyId(themeDisplay.getCompanyId());
+
+		searchContext.setIncludeStagingGroups(false);
 
 		String keywords = ParamUtil.getString(portletRequest, "keywords");
 
@@ -253,15 +252,20 @@ public class DepotEntryAdminSearchProvider {
 		return searchContext;
 	}
 
-	private int _getTotal(int depotEntryType, PortletRequest portletRequest)
+	private int _getTotal(
+			long[] depotEntryIds, int depotEntryType,
+			PortletRequest portletRequest)
 		throws SearchException {
 
 		Indexer<Object> indexer = IndexerRegistryUtil.getIndexer(
 			DepotEntry.class.getName());
 
 		return (int)indexer.searchCount(
-			_getSearchContext(depotEntryType, portletRequest));
+			_getSearchContext(depotEntryIds, depotEntryType, portletRequest));
 	}
+
+	@Reference
+	private DepotEntryGroupRelLocalService _depotEntryGroupRelLocalService;
 
 	@Reference
 	private DepotEntryService _depotEntryService;
