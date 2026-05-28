@@ -237,6 +237,9 @@ components:
                     items:
                         type: string
                     type: array
+                modifiedBy:
+                    $ref: ../../headless/headless-delivery/headless-delivery-impl/rest-openapi.yaml#Creator
+                    readOnly: true
                 objectEntryFolderExternalReferenceCode:
                     type: string
                 objectEntryFolderId:
