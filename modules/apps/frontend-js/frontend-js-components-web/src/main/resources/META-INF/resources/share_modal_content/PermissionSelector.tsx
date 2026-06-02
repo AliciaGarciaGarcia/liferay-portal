@@ -10,10 +10,12 @@ import {PermissionOption} from './types';
 
 export default function PermissionSelector({
 	actionIds,
+	disabled = false,
 	onChange,
 	options,
 }: {
 	actionIds?: string;
+	disabled?: boolean;
 	onChange: (value: object) => void;
 	options: PermissionOption[];
 }) {
@@ -21,6 +23,7 @@ export default function PermissionSelector({
 		<Picker
 			aria-label={Liferay.Language.get('edit-permissions')}
 			className="border-0 c-py-0 permissions-picker text-2 text-secondary text-weight-semi-bold"
+			disabled={disabled}
 			items={options}
 			messages={{
 				itemDescribedby: Liferay.Language.get(

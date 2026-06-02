@@ -297,6 +297,23 @@ describe('ShareModalContent', () => {
 		).toBeInTheDocument();
 	});
 
+	it('disables the permission selector and hides the manage actions when the user cannot manage collaborators', () => {
+		const {getByLabelText, queryByLabelText} = renderComponent({
+			...DEFAULT_PROPS,
+			alwaysShowPermissionSelector: true,
+			canManageCollaborators: false,
+		});
+
+		expect(getByLabelText('edit-permissions')).toBeDisabled();
+		expect(queryByLabelText('more-options')).not.toBeInTheDocument();
+	});
+
+	it('enables the permission selector by default', () => {
+		const {getByLabelText} = renderComponent();
+
+		expect(getByLabelText('edit-permissions')).toBeEnabled();
+	});
+
 	it('hides the permission selector when only one option is provided', () => {
 		const {queryByLabelText} = renderComponent({
 			...DEFAULT_PROPS,

@@ -181,6 +181,7 @@ function CollaboratorListItem({
 						<div>
 							<PermissionSelector
 								actionIds={actionIds}
+								disabled={!canManageCollaborators}
 								onChange={handleChangeUserProperties}
 								options={permissionOptions}
 							/>
