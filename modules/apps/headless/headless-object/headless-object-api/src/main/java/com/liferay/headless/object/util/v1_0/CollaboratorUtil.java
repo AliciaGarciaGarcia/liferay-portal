@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.service.permission.UserPermissionUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
@@ -52,6 +53,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -513,16 +515,29 @@ public class CollaboratorUtil {
 			shareable = collaborator.getShare();
 		}
 
+		SharingEntry sharingEntry = sharingEntryService.fetchSharingEntry(
+			toTicketId, toUserGroupId, toUserId, classNameId, classPK);
+
+		List<SharingEntryAction> sharingEntryActions =
+			_processSharingEntryActions(
+				TransformUtil.transformToList(
+					collaborator.getActionIds(),
+					SharingEntryAction::parseFromActionId));
+
+		if ((sharingEntry != null) &&
+			_isSharingEntryUnchanged(
+				collaborator, shareable, sharingEntry, sharingEntryActions)) {
+
+			return sharingEntry;
+		}
+
 		ServiceContext serviceContext = new ServiceContext();
 
 		serviceContext.setRequest(httpServletRequest);
 
 		return sharingEntryService.addOrUpdateSharingEntry(
 			null, toTicketId, toUserGroupId, toUserId, classNameId, classPK,
-			groupId, shareable,
-			TransformUtil.transformToList(
-				collaborator.getActionIds(),
-				SharingEntryAction::parseFromActionId),
+			groupId, shareable, sharingEntryActions,
 			collaborator.getDateExpired(), serviceContext);
 	}
 
@@ -568,8 +583,42 @@ public class CollaboratorUtil {
 			ActionKeys.VIEW);
 	}
 
+	private static boolean _isSharingEntryUnchanged(
+		Collaborator collaborator, boolean shareable, SharingEntry sharingEntry,
+		List<SharingEntryAction> sharingEntryActions) {
+
+		Set<SharingEntryAction> existingSharingEntryActions = new HashSet<>(
+			SharingEntryAction.getSharingEntryActions(
+				sharingEntry.getActionIds()));
+
+		if ((sharingEntry.isShareable() == shareable) &&
+			existingSharingEntryActions.equals(
+				new HashSet<>(sharingEntryActions)) &&
+			Objects.equals(
+				Time.getShortTimestamp(sharingEntry.getExpirationDate()),
+				Time.getShortTimestamp(collaborator.getDateExpired()))) {
+
+			return true;
+		}
+
+		return false;
+	}
+
 	private static String _normalizeEmailAddress(String emailAddress) {
 		return StringUtil.toLowerCase(StringUtil.trim(emailAddress));
+	}
+
+	private static List<SharingEntryAction> _processSharingEntryActions(
+		List<SharingEntryAction> originalSharingEntryActions) {
+
+		Set<SharingEntryAction> sharingEntryActions = new HashSet<>(
+			originalSharingEntryActions);
+
+		if (originalSharingEntryActions.contains(SharingEntryAction.VIEW)) {
+			sharingEntryActions.add(SharingEntryAction.DOWNLOAD);
+		}
+
+		return new ArrayList<>(sharingEntryActions);
 	}
 
 	private static void _validateEmailActionIds(String[] actionIds) {
